@@ -1,0 +1,8 @@
+{
+  "Name": "Nepply.Internal.Preview",
+  "Publisher": "CN=Nepply Internal Preview",
+  "PublisherDisplayName": "Nepply Internal Preview",
+  "DisplayName": "Nepply Internal Preview",
+  "Version": "0.0.3.0",
+  "InternalOnly": true
+}

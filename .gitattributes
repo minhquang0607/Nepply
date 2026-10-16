@@ -1,0 +1,2 @@
+# Giữ nguyên byte notice được kiểm chứng bằng SHA256 trên mọi máy checkout.
+src/Nepply/Resources/Licenses/Mono.Posix-1.0.0-NOTICES.md -text

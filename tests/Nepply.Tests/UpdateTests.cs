@@ -1,0 +1,65 @@
+using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
+using Nepply.Modules.Updates;
+
+internal static class UpdateTests
+{
+    internal static void Run(Action<string, bool> check)
+    {
+        check("Update stable supersedes beta", ReleaseVersion.Parse("2.5.0").CompareTo(ReleaseVersion.Parse("2.5.0-beta.3")) > 0);
+        check("Update prerelease uses numeric ordering", ReleaseVersion.Parse("2.5.0-beta.10").CompareTo(ReleaseVersion.Parse("2.5.0-beta.9")) > 0);
+        check("Update ignores build metadata", ReleaseVersion.Parse("v2.5.0+a").CompareTo(ReleaseVersion.Parse("2.5.0+b")) == 0);
+        foreach (string invalid in new[] { "../1.0.0", "01.0.0", "1.0.0-beta.01", "1.0", "v1.0.0/evil" })
+        {
+            bool rejected = false; try { ReleaseVersion.Parse(invalid); } catch (FormatException) { rejected = true; }
+            check("Update rejects invalid version " + invalid, rejected);
+        }
+        foreach (string invalid in new[] { "http://github.com/minhquang0607/Nepply/releases/download/v3.0.0/x.exe", "https://github.com/other/Nepply/releases/download/v3.0.0/x.exe", "https://github.com.evil.test/minhquang0607/Nepply/releases/download/v3.0.0/x.exe", "https://user@github.com/minhquang0607/Nepply/releases/download/v3.0.0/x.exe", "https://github.com:444/minhquang0607/Nepply/releases/download/v3.0.0/x.exe" })
+            check("Update refuses foreign asset " + new Uri(invalid).Host, !UpdatePolicy.IsAssetUri(new Uri(invalid)));
+        check("Update refuses redirect to LAN", !UpdatePolicy.IsDownloadUri(new Uri("https://127.0.0.1/a")));
+        check("Update accepts GitHub asset CDN", UpdatePolicy.IsDownloadUri(new Uri("https://release-assets.githubusercontent.com/a?signature=test")));
+        byte[] Feed(string tag = "v3.0.0", bool draft = false, bool prerelease = false, string? digest = null, long size = 100, string? url = null) => JsonSerializer.SerializeToUtf8Bytes(new[] { new {
+            tag_name = tag, draft, prerelease, body = "<script>test</script>\nRelease notes", assets = new[] { new {
+                name = "Nepply-" + tag.TrimStart('v') + "-Setup.exe", size,
+                digest = digest ?? "sha256:" + new string('a', 64),
+                browser_download_url = url ?? $"https://github.com/{UpdatePolicy.Repository}/releases/download/{tag}/Nepply-{tag.TrimStart('v')}-Setup.exe"
+            } }
+        } });
+        var current = ReleaseVersion.Parse("2.5.0");
+        var release = UpdateService.ParseReleases(Feed(), current);
+        check("Update finds exact installer and keeps plain notes", release?.Tag == "v3.0.0" && release.Notes.StartsWith("<script>"));
+        check("Update never downgrades", UpdateService.ParseReleases(Feed("v2.4.0"), current) == null);
+        check("Update never reinstalls same version", UpdateService.ParseReleases(Feed("v2.5.0"), current) == null);
+        check("Update excludes drafts", UpdateService.ParseReleases(Feed(draft: true), current) == null);
+        check("Stable users exclude prerelease", UpdateService.ParseReleases(Feed("v3.0.0-beta.1", prerelease: true), current) == null);
+        check("Beta users accept newer beta", UpdateService.ParseReleases(Feed("v3.0.0-beta.1", prerelease: true), ReleaseVersion.Parse("2.5.0-beta.3")) != null);
+        check("Update requires SHA256", UpdateService.ParseReleases(Feed(digest: ""), current) == null);
+        check("Update rejects oversized installer", UpdateService.ParseReleases(Feed(size: UpdateService.MaximumInstallerBytes + 1), current) == null);
+        check("Update binds URL to exact version and filename", UpdateService.ParseReleases(Feed(url: $"https://github.com/{UpdatePolicy.Repository}/releases/download/v4.0.0/other.exe"), current) == null);
+        bool bounded = false;
+        try { UpdateService.CopyBoundedAsync(new MemoryStream(new byte[11]), new MemoryStream(), 10, null, CancellationToken.None).GetAwaiter().GetResult(); }
+        catch (IOException) { bounded = true; }
+        check("Update streaming enforces byte limit without ContentLength", bounded);
+        bool cancelled = false;
+        try { UpdateService.CopyBoundedAsync(new MemoryStream(new byte[1]), new MemoryStream(), 10, null, new CancellationToken(true)).GetAwaiter().GetResult(); }
+        catch (OperationCanceledException) { cancelled = true; }
+        check("Update streaming respects cancellation", cancelled);
+        bool policy = false;
+        try { AuthenticodeVerifier.Verify("not-used.exe", []); } catch (InvalidOperationException) { policy = true; }
+        check("Update fails closed without signer pins", policy);
+        using var client = new UpdateService(new FixtureHandler(Feed()));
+        check("Update check works with bounded HTTP fixture", client.CheckAsync(CancellationToken.None).GetAwaiter().GetResult()?.Tag == "v3.0.0");
+        using var denied = new UpdateService(new FixtureHandler([], HttpStatusCode.Forbidden));
+        bool rejectedResponse = false;
+        try { denied.CheckAsync(CancellationToken.None).GetAwaiter().GetResult(); } catch (HttpRequestException) { rejectedResponse = true; }
+        check("Update rate limiting is an error not up-to-date", rejectedResponse);
+    }
+    private sealed class FixtureHandler(byte[] content, HttpStatusCode status = HttpStatusCode.OK) : HttpMessageHandler
+    {
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+            => Task.FromResult(new HttpResponseMessage(status) { Content = new ByteArrayContent(content) });
+    }
+}

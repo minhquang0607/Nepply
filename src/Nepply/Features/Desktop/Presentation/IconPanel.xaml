@@ -1,0 +1,54 @@
+<UserControl x:Class="Nepply.Views.IconPanel" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:Nepply.Views" xmlns:primitives="clr-namespace:System.Windows.Controls.Primitives;assembly=PresentationFramework">
+ <Grid Margin="18,8,18,12">
+  <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+  <StackPanel Grid.Row="1">
+   <Border x:Name="LaunchNotice" Visibility="Collapsed" CornerRadius="10" Background="{DynamicResource AccentWashBrush}" Padding="10" Margin="0,8,0,0">
+    <DockPanel>
+     <Button Content="×" DockPanel.Dock="Right" Margin="8,0,0,0" VerticalAlignment="Top" Padding="5,0" Click="DismissLaunchError_Click" AutomationProperties.Name="{DynamicResource Loc.Close}"/>
+     <TextBlock x:Name="LaunchNoticeText" TextWrapping="Wrap" FontSize="12" AutomationProperties.LiveSetting="Polite"/>
+    </DockPanel>
+   </Border>
+   <DockPanel Margin="2,6,2,6"><TextBlock Text="{Binding ScanCaption}" FontSize="10" FontWeight="SemiBold" Foreground="{DynamicResource MutedBrush}" AutomationProperties.LiveSetting="Polite"/><TextBlock Text="{Binding CountText}" HorizontalAlignment="Right" Style="{StaticResource Caption}"/></DockPanel>
+   <Border CornerRadius="10" Background="{DynamicResource AccentWashBrush}" Padding="10" Margin="0,0,0,8" Visibility="{Binding HasScanError, Converter={StaticResource BoolToVis}}">
+    <DockPanel><Button Content="{DynamicResource Loc.DesktopRetry}" DockPanel.Dock="Right" Margin="8,0,0,0" VerticalAlignment="Center" Click="RetryScan_Click" IsEnabled="{Binding CanRefresh}" AutomationProperties.Name="{DynamicResource Loc.DesktopRetryHelp}"/><TextBlock Text="{Binding ScanError}" TextWrapping="Wrap" VerticalAlignment="Center" AutomationProperties.LiveSetting="Polite"/></DockPanel>
+   </Border>
+  </StackPanel>
+  <TextBlock Grid.Row="3" Text="{DynamicResource Loc.DesktopLoading}" Style="{StaticResource Caption}" HorizontalAlignment="Center" Margin="0,30" Visibility="{Binding IsLoading, Converter={StaticResource BoolToVis}}"/>
+  <StackPanel x:Name="EmptyState" Grid.Row="3" Panel.ZIndex="1" Margin="12" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsEmpty, Converter={StaticResource BoolToVis}}">
+   <TextBlock Text="{Binding EmptyTitle}" FontSize="14" TextAlignment="Center" TextWrapping="Wrap"/>
+   <TextBlock Text="{Binding EmptyHint}" Style="{StaticResource Caption}" Margin="0,6,0,0" TextAlignment="Center" TextWrapping="Wrap"/>
+  </StackPanel>
+  <ListBox x:Name="IconList" Grid.Row="3" ItemsSource="{Binding Icons}" SelectedItem="{Binding SelectedIcon, Mode=TwoWay}" Background="Transparent" BorderThickness="0" AutomationProperties.Name="{DynamicResource Loc.DesktopItems}"
+    ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible"
+    ScrollViewer.CanContentScroll="True" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling"
+    PreviewMouseMove="Icon_MouseMove" DragOver="Icon_DragOver" Drop="Icon_Drop" PreviewMouseLeftButtonDown="Icon_MouseDown" PreviewMouseLeftButtonUp="Icon_MouseUp" PreviewMouseRightButtonUp="Icon_RightClick" PreviewKeyDown="Icon_KeyDown">
+   <ListBox.ItemsPanel><ItemsPanelTemplate><local:IconGridPanel MotionEnabled="{DynamicResource HoverMotionEnabled}" Columns="{Binding GridColumns, RelativeSource={RelativeSource AncestorType=local:IconPanel}}" Rows="{Binding GridRows, RelativeSource={RelativeSource AncestorType=local:IconPanel}}"/></ItemsPanelTemplate></ListBox.ItemsPanel>
+   <ListBox.ItemContainerStyle><Style TargetType="ListBoxItem">
+    <Setter Property="FocusVisualStyle" Value="{StaticResource WidgetFocusVisual}"/>
+    <Setter Property="AutomationProperties.Name" Value="{Binding Name}"/><Setter Property="AutomationProperties.HelpText" Value="{Binding Path}"/>
+    <Setter Property="HorizontalContentAlignment" Value="Stretch"/><Setter Property="Padding" Value="5,5"/><Setter Property="Margin" Value="2,2"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+    <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="ListBoxItem">
+     <Grid MaxWidth="100" MaxHeight="90" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent" local:HoverLift.Distance="3" local:HoverLift.Enabled="{DynamicResource HoverMotionEnabled}" local:HoverLift.Hovered="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}">
+      <Border x:Name="ItemGlow" CornerRadius="11" BorderThickness="1" BorderBrush="{DynamicResource AccentBrush}" Effect="{DynamicResource IconNeonEffect}" Visibility="Collapsed" IsHitTestVisible="False"/>
+      <Border x:Name="ItemChrome" Padding="{TemplateBinding Padding}" CornerRadius="11" ClipToBounds="True" Background="Transparent" BorderThickness="0.6" BorderBrush="Transparent"><ContentPresenter/></Border>
+     </Grid>
+     <ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="ItemChrome" Property="Background" Value="{DynamicResource AccentWashBrush}"/><Setter TargetName="ItemGlow" Property="Visibility" Value="Visible"/></Trigger>
+      </ControlTemplate.Triggers>
+    </ControlTemplate></Setter.Value></Setter>
+   </Style></ListBox.ItemContainerStyle>
+   <ListBox.ItemTemplate><DataTemplate>
+     <StackPanel MaxWidth="76" ToolTip="{Binding SourceDescription, Converter={StaticResource UserMessageText}}">
+     <StackPanel.LayoutTransform><ScaleTransform ScaleX="{Binding ContentScale, RelativeSource={RelativeSource AncestorType=local:IconGridPanel}}" ScaleY="{Binding ContentScale, RelativeSource={RelativeSource AncestorType=local:IconGridPanel}}"/></StackPanel.LayoutTransform>
+     <Grid Width="{Binding IconPixels, RelativeSource={RelativeSource AncestorType=UserControl}}" Height="{Binding IconPixels, RelativeSource={RelativeSource AncestorType=UserControl}}" Margin="0,0,0,5">
+      <Image Source="{Binding Icon}" RenderOptions.BitmapScalingMode="HighQuality"/>
+      <TextBlock Text="&#xE8A5;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="24" Foreground="{DynamicResource MutedBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False">
+       <TextBlock.Style><Style TargetType="TextBlock"><Setter Property="Visibility" Value="Collapsed"/><Style.Triggers><DataTrigger Binding="{Binding Icon}" Value="{x:Null}"><Setter Property="Visibility" Value="Visible"/></DataTrigger></Style.Triggers></Style></TextBlock.Style>
+      </TextBlock>
+     </Grid>
+     <TextBlock Text="{Binding Name}" FontSize="11" TextAlignment="Center" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" MaxHeight="30" MinHeight="30" LineHeight="15"/>
+    </StackPanel>
+   </DataTemplate></ListBox.ItemTemplate>
+  </ListBox>
+ </Grid>
+</UserControl>

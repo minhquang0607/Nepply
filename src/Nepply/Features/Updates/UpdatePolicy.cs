@@ -1,0 +1,27 @@
+using Microsoft.Win32;
+using Nepply.Services;
+using System.IO;
+
+namespace Nepply.Modules.Updates;
+
+internal static class UpdatePolicy
+{
+    internal const string Repository = "minhquang0607/Nepply";
+    // Release gate: fill with the approved signer's SHA-256 certificate fingerprint,
+    // through reviewed source changes only. Never trust pins from downloaded metadata.
+    internal static readonly string[] SignerSha256 = [];
+    internal static string? InstalledDirectory()
+    {
+        if (ProcessPackageIdentity.IsPackaged) return null;
+        using var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Uninstall\{5E9F4A2B-1A8D-4C9C-8A5E-F7C4E8A1D3B2}_is1");
+        if (key?.GetValue("InstallLocation") is not string location) return null;
+        var full = Path.GetFullPath(location).TrimEnd(Path.DirectorySeparatorChar);
+        var executable = Path.GetFullPath(Path.Combine(full, "Nepply.exe"));
+        return string.Equals(executable, Environment.ProcessPath, StringComparison.OrdinalIgnoreCase) ? full : null;
+    }
+    internal static bool IsAssetUri(Uri uri) => uri.Scheme == "https" && uri.IsDefaultPort && uri.UserInfo.Length == 0
+        && uri.Host == "github.com" && uri.AbsolutePath.StartsWith("/" + Repository + "/releases/download/", StringComparison.Ordinal)
+        && uri.Query.Length == 0 && uri.Fragment.Length == 0;
+    internal static bool IsDownloadUri(Uri uri) => IsAssetUri(uri) ||
+        (uri.Scheme == "https" && uri.IsDefaultPort && uri.UserInfo.Length == 0 && uri.Host == "release-assets.githubusercontent.com");
+}

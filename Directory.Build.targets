@@ -1,0 +1,11 @@
+<Project>
+  <Target Name="PinNepplyRuntimePacks" BeforeTargets="ProcessFrameworkReferences"
+          Condition="'$(TargetFramework)' == 'net10.0-windows10.0.19041.0' And '$(UseWPF)' == 'true'">
+    <ItemGroup>
+      <FrameworkReference Update="Microsoft.NETCore.App;Microsoft.WindowsDesktop.App.WPF" RuntimeFrameworkVersion="$(NepplyRuntimeVersion)" />
+      <KnownFrameworkReference Update="Microsoft.WindowsDesktop.App;Microsoft.WindowsDesktop.App.WPF;Microsoft.WindowsDesktop.App.WindowsForms"
+        Condition="'%(KnownFrameworkReference.TargetFramework)' == 'net10.0'"
+        DefaultRuntimeFrameworkVersion="$(NepplyRuntimeVersion)" LatestRuntimeFrameworkVersion="$(NepplyRuntimeVersion)" />
+    </ItemGroup>
+  </Target>
+</Project>

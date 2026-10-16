@@ -1,0 +1,48 @@
+<ContextMenu x:Class="Nepply.Views.TrayMenu"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:views="clr-namespace:Nepply.Views"
+ Width="302" HasDropShadow="False" Opened="Menu_Opened" Closed="Menu_Closed"
+ AutomationProperties.Name="Menu Nepply">
+ <ContextMenu.Resources>
+  <Style TargetType="MenuItem">
+   <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+   <Setter Property="Padding" Value="11,9"/>
+   <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="MenuItem">
+    <Border x:Name="Row" CornerRadius="10" Padding="{TemplateBinding Padding}" Background="Transparent">
+     <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="30"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+      <ContentPresenter ContentSource="Icon" VerticalAlignment="Center" TextElement.Foreground="{DynamicResource AccentBrush}"/>
+      <ContentPresenter Grid.Column="1" ContentSource="Header" VerticalAlignment="Center" RecognizesAccessKey="True"/>
+      <TextBlock Grid.Column="2" x:Name="Gesture" Text="{TemplateBinding InputGestureText}" FontSize="10" Foreground="{DynamicResource MutedBrush}" VerticalAlignment="Center" Margin="8,0,0,0"/>
+      <TextBlock Grid.Column="2" x:Name="Check" Text="&#xE73E;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Foreground="{DynamicResource AccentBrush}" VerticalAlignment="Center" Visibility="Collapsed"/>
+     </Grid>
+    </Border>
+    <ControlTemplate.Triggers>
+     <Trigger Property="IsHighlighted" Value="True"><Setter TargetName="Row" Property="Background" Value="{DynamicResource AccentWashBrush}"/></Trigger>
+     <Trigger Property="IsChecked" Value="True"><Setter TargetName="Check" Property="Visibility" Value="Visible"/><Setter TargetName="Gesture" Property="Visibility" Value="Collapsed"/></Trigger>
+     <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value=".5"/></Trigger>
+    </ControlTemplate.Triggers>
+   </ControlTemplate></Setter.Value></Setter>
+  </Style>
+  <Style x:Key="Glyph" TargetType="TextBlock"><Setter Property="FontFamily" Value="Segoe Fluent Icons, Segoe MDL2 Assets"/><Setter Property="FontSize" Value="16"/></Style>
+ </ContextMenu.Resources>
+ <ContextMenu.Template><ControlTemplate TargetType="ContextMenu">
+  <Border x:Name="MenuSurface" Margin="12" views:MetallicSurface.Accent="{DynamicResource AccentSourceBrush}" Padding="9" CornerRadius="{DynamicResource RadiusTray}" Background="{DynamicResource IslandBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0.5">
+   <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle"/>
+  </Border>
+ </ControlTemplate></ContextMenu.Template>
+ <MenuItem IsEnabled="False" Focusable="False">
+  <MenuItem.Style><Style TargetType="MenuItem"><Setter Property="Template"><Setter.Value><ControlTemplate TargetType="MenuItem"><ContentPresenter ContentSource="Header" Margin="12,9,12,12"/></ControlTemplate></Setter.Value></Setter></Style></MenuItem.Style>
+  <MenuItem.Header><StackPanel>
+   <DockPanel><Image Width="32" Height="32" Margin="0,0,9,0" Source="/Nepply;component/Resources/nepply.png" RenderOptions.BitmapScalingMode="HighQuality"/><TextBlock Text="nepply" FontSize="21" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}"/><TextBlock x:Name="VersionLabel" FontSize="10" Foreground="{DynamicResource MutedBrush}" VerticalAlignment="Center" HorizontalAlignment="Right"/></DockPanel>
+   <StackPanel Orientation="Horizontal" Margin="0,6,0,0"><Ellipse Width="6" Height="6" Fill="{DynamicResource AccentBrush}" Margin="0,0,7,0"/><TextBlock x:Name="StatusLabel" FontSize="11" Foreground="{DynamicResource MutedBrush}" Text="{DynamicResource Loc.Running}"/></StackPanel>
+  </StackPanel></MenuItem.Header>
+ </MenuItem>
+ <Separator/>
+ <MenuItem x:Name="OpenItem" Header="{DynamicResource Loc.Open}" Click="Open_Click" AutomationProperties.Name="{DynamicResource Loc.Open}"><MenuItem.Icon><TextBlock Style="{StaticResource Glyph}" Text="&#xE80F;"/></MenuItem.Icon></MenuItem>
+ <MenuItem x:Name="PinItem" Header="{DynamicResource Loc.Pin}" IsCheckable="True" Click="Pin_Click" AutomationProperties.Name="{DynamicResource Loc.Pin}"><MenuItem.Icon><TextBlock Style="{StaticResource Glyph}" Text="&#xE718;"/></MenuItem.Icon></MenuItem>
+ <MenuItem Header="{DynamicResource Loc.Refresh}" Click="Refresh_Click"><MenuItem.Icon><TextBlock Style="{StaticResource Glyph}" Text="&#xE72C;"/></MenuItem.Icon></MenuItem>
+ <Separator/>
+ <MenuItem Click="Settings_Click" AutomationProperties.Name="{DynamicResource Loc.Settings}"><MenuItem.Icon><TextBlock Style="{StaticResource Glyph}" Text="&#xE713;"/></MenuItem.Icon><MenuItem.Header><StackPanel><TextBlock Text="{DynamicResource Loc.Settings}"/><TextBlock Text="{DynamicResource Loc.TraySettingsHint}" Foreground="{DynamicResource MutedBrush}" FontSize="10" Margin="0,3,0,0"/></StackPanel></MenuItem.Header></MenuItem>
+ <MenuItem Click="Logs_Click" AutomationProperties.Name="{DynamicResource Loc.Logs}"><MenuItem.Icon><TextBlock Style="{StaticResource Glyph}" Text="&#xE9D9;"/></MenuItem.Icon><MenuItem.Header><StackPanel><TextBlock Text="{DynamicResource Loc.Logs}"/><TextBlock Text="{DynamicResource Loc.TrayLogsHint}" Foreground="{DynamicResource MutedBrush}" FontSize="10" Margin="0,3,0,0"/></StackPanel></MenuItem.Header></MenuItem>
+ <Separator/>
+ <MenuItem Click="Exit_Click" AutomationProperties.Name="{DynamicResource Loc.Exit}"><MenuItem.Icon><TextBlock Style="{StaticResource Glyph}" Text="&#xE7E8;"/></MenuItem.Icon><MenuItem.Header><StackPanel><TextBlock Text="{DynamicResource Loc.Exit}"/><TextBlock Text="{DynamicResource Loc.TrayExitHint}" Foreground="{DynamicResource MutedBrush}" FontSize="10" Margin="0,3,0,0"/></StackPanel></MenuItem.Header></MenuItem>
+</ContextMenu>
