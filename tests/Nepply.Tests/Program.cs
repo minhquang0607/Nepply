@@ -1451,6 +1451,7 @@ internal static class Program
     }
     private static void VerifyPumpDeadline()
     {
+        Pump(1); // Complete WPF's first dispatcher/startup pass before measuring the deadline.
         bool running = true;
         int callbacks = 0;
         var dispatcher = System.Windows.Threading.Dispatcher.CurrentDispatcher;
@@ -1472,15 +1473,11 @@ internal static class Program
     private static void Pump(int milliseconds)
     {
         var frame = new System.Windows.Threading.DispatcherFrame();
-        // A Background-priority timer can starve behind continuous rendering on CI.
-        // Only the deadline gets Send priority; normal WPF work still runs until it expires.
-        var timer = new System.Windows.Threading.DispatcherTimer(System.Windows.Threading.DispatcherPriority.Send)
-            { Interval = TimeSpan.FromMilliseconds(milliseconds) };
-        EventHandler stop = (_, _) => frame.Continue = false;
-        timer.Tick += stop;
-        timer.Start();
-        try { System.Windows.Threading.Dispatcher.PushFrame(frame); }
-        finally { timer.Stop(); timer.Tick -= stop; }
+        // The deadline must not depend on dispatcher timers in the dispatcher under test.
+        // DispatcherFrame.Continue wakes its owning dispatcher when set from another thread.
+        using var deadline = new System.Threading.Timer(_ => frame.Continue = false,
+            null, milliseconds, System.Threading.Timeout.Infinite);
+        System.Windows.Threading.Dispatcher.PushFrame(frame);
     }
     private static bool PumpUntil(Func<bool> condition,int timeoutMs)
     {
