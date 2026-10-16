@@ -143,7 +143,11 @@ internal static class ErrorLocalizationTests
             check($"Language {language} localizes scan error at presentation boundary",vm.ScanError==LocalizationService.Get("DesktopReadError"));
             var stateText=vm.ScanError;
             string changed=language=="en" ? "ja" : "en";
-            LocalizationService.Apply(changed);pump(10);
+            Console.WriteLine($"TRACE {language}: apply notice language {changed}");
+            LocalizationService.Apply(changed);
+            Console.WriteLine($"TRACE {language}: pump notice language");
+            pump(10);
+            Console.WriteLine($"TRACE {language}: notice language pump returned");
             check($"Language {language} open notice and scan error update without new scan",
                 notice.Visibility==Visibility.Visible && text.Text.Contains(filename)
                 && text.Text.Contains(LocalizationService.Get("DesktopLaunchMissing"))
