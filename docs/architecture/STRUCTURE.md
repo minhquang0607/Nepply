@@ -2,7 +2,7 @@
 
 Repository chứa mã sản phẩm, kiểm thử, công cụ phát triển và tài liệu hiện hành. Nhật ký và đầu ra QA được lưu ngoài repository.
 
-Xem [bản đồ tài liệu](../README.md) để phân biệt hướng dẫn hiện hành với báo cáo lịch sử. Thử nghiệm nhiệt main/RPM đã gỡ theo yêu cầu; giữ telemetry CPU/RAM/GPU/mạng hiện có.
+Xem [bản đồ tài liệu](../README.md) để chọn hướng dẫn người dùng, phát triển hoặc phát hành. Telemetry hiện hỗ trợ CPU/RAM/GPU/mạng; không có nhiệt độ bo mạch chủ hoặc RPM.
 
 Nepply là modular monolith WPF: một assembly ứng dụng, nhóm mã theo tính năng và vòng đời. Mở `Nepply.slnx` ở root để làm việc với ứng dụng, bộ kiểm thử và công cụ chẩn đoán.
 
@@ -23,7 +23,7 @@ Nepply là modular monolith WPF: một assembly ứng dụng, nhóm mã theo tí
 | `tools/SensorDumper` | Công cụ chẩn đoán cảm biến độc lập; không thuộc payload ứng dụng |
 | `packaging/inno` | Cấu hình bộ cài chính và entry point tương thích |
 | `scripts` | Kiểm tra build, dependency, notice, manifest và ký mã |
-| `docs` | Architecture, research, release, legal và history |
+| `docs` | Hướng dẫn người dùng, xử lý sự cố, ảnh minh họa, architecture, release và legal |
 | `artifacts` | Kết quả build/test có thể tái tạo, không commit |
 
 ## Phạm vi chuyển đổi

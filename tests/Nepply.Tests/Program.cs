@@ -145,6 +145,7 @@ internal static class Program
         {
             _streamResults = true;
             var appearanceApp = new App(testHost: true); appearanceApp.InitializeComponent();
+            VerifyPumpDeadline();
             ButtonAppearanceTests.Run(Check,Pump);
             InputAppearanceTests.Run(Check,Pump,output,Render);
             StateAppearanceTests.Run(Check,Pump,output,Render);
@@ -1448,11 +1449,38 @@ internal static class Program
         foreach (var line in Results) Console.WriteLine(line);
         return _failures == 0 ? 0 : 1;
     }
+    private static void VerifyPumpDeadline()
+    {
+        bool running = true;
+        int callbacks = 0;
+        var dispatcher = System.Windows.Threading.Dispatcher.CurrentDispatcher;
+        Action busy = null!;
+        busy = () =>
+        {
+            if (!running) return;
+            callbacks++;
+            Thread.Sleep(2);
+            dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Render, busy);
+        };
+        dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Render, busy);
+        var elapsed = Stopwatch.StartNew();
+        try { Pump(40); }
+        finally { running = false; }
+        Check("Fixture pump deadline survives a continuously busy render queue", callbacks > 0 && elapsed.ElapsedMilliseconds < 2000);
+        Pump(1); // Drain the last no-op callback without retaining its closure.
+    }
     private static void Pump(int milliseconds)
     {
         var frame = new System.Windows.Threading.DispatcherFrame();
-        var timer = new System.Windows.Threading.DispatcherTimer { Interval = TimeSpan.FromMilliseconds(milliseconds) };
-        timer.Tick += (_, _) => { timer.Stop(); frame.Continue = false; }; timer.Start(); System.Windows.Threading.Dispatcher.PushFrame(frame);
+        // A Background-priority timer can starve behind continuous rendering on CI.
+        // Only the deadline gets Send priority; normal WPF work still runs until it expires.
+        var timer = new System.Windows.Threading.DispatcherTimer(System.Windows.Threading.DispatcherPriority.Send)
+            { Interval = TimeSpan.FromMilliseconds(milliseconds) };
+        EventHandler stop = (_, _) => frame.Continue = false;
+        timer.Tick += stop;
+        timer.Start();
+        try { System.Windows.Threading.Dispatcher.PushFrame(frame); }
+        finally { timer.Stop(); timer.Tick -= stop; }
     }
     private static bool PumpUntil(Func<bool> condition,int timeoutMs)
     {
