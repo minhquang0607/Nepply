@@ -13,6 +13,8 @@ internal static class LocalizationTests
         {
             check($"Language {language.Id} displays native name",language.ToString()==language.Name);
             var baseline=new AppSettings {Language="vi"};
+            // Fixture preconditions must not inherit the runner's accessibility preferences.
+            ThemeService.ApplyAccessibility(baseline,false,true);
             var settings=new SettingsWindow(baseline,_=>{}) {Left=-10000,Top=-10000,ShowActivated=false,ShowInTaskbar=false};
             var light=(MaterialLightScope)((FrameworkElement)settings.FindName("SettingsContent")).GetValue(MetallicSurface.LightScopeProperty);
             try
@@ -28,6 +30,10 @@ internal static class LocalizationTests
                     check("Hidden settings release material clock and pointer input",light.Clock==null && light.Pointer==null);
                     settings.Show();pump(20);
                     check("Shown settings resume their material field",light.Clock!=null);
+                    ThemeService.ApplyAccessibility(baseline,false,false);pump(20);
+                    check("Settings respect disabled system animations",light.Clock==null && light.Pointer==null);
+                    ThemeService.ApplyAccessibility(baseline,false,true);pump(20);
+                    check("Settings resume after system animations are enabled",light.Clock!=null);
                 }
                 ((ComboBox)settings.FindName("LanguageChoice")).SelectedValue=language.Id;
                 settings.FlushPreview();pump(25);settings.UpdateLayout();
