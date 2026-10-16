@@ -1,4 +1,12 @@
 <Project>
+  <!-- Match the SDK-injected single-file analyzer to packages.lock.json on every build host. -->
+  <Target Name="PinNepplyILLinkPack" BeforeTargets="ProcessFrameworkReferences">
+    <ItemGroup>
+      <KnownILLinkPack Update="Microsoft.NET.ILLink.Tasks"
+        Condition="'%(KnownILLinkPack.TargetFramework)' == 'net10.0'"
+        ILLinkPackVersion="$(NepplyILLinkVersion)" />
+    </ItemGroup>
+  </Target>
   <Target Name="PinNepplyRuntimePacks" BeforeTargets="ProcessFrameworkReferences"
           Condition="'$(TargetFramework)' == 'net10.0-windows10.0.19041.0' And '$(UseWPF)' == 'true'">
     <ItemGroup>

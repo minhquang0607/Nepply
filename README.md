@@ -1,47 +1,63 @@
+<p align="center"><img src="src/Nepply/Resources/nepply.png" width="96" alt="Biểu tượng Nepply"></p>
+
 # Nepply
 
-Ứng dụng Windows x64 dùng WPF / .NET 10: panel nổi ở cạnh màn hình để truy cập Desktop, tìm kiếm và theo dõi hệ thống. Nhà phát triển: Minh Quang.
+**Desktop gọn hơn. Ứng dụng và thông số hệ thống luôn trong tầm tay.**
 
-Hỗ trợ Windows 10 build 19041 trở lên và Windows 11 x64. Mã Nepply dùng [MIT](LICENSE); thư viện bên thứ ba giữ [giấy phép và notice riêng](docs/legal/THIRD_PARTY_NOTICES.md). Binary hiện chưa ký phát hành.
+Nepply là panel ở cạnh màn hình Windows, giúp bạn mở nhanh các mục trên Desktop, tìm kiếm và xem CPU, RAM, GPU cùng tốc độ mạng mà không cần quay về màn hình nền.
 
-## Sử dụng
+> **Đang chuẩn bị phát hành.** Chưa có bản tải chính thức đã ký số. Mã nguồn hiện có để tham khảo và tự build; không nên xem bản build thử là bản ổn định cho sử dụng rộng rãi.
 
-- Chạm cạnh đã chọn hoặc nhấn Ctrl + Space để mở; ghim để giữ mở, Esc để thu.
-- Truy cập mục Desktop, tìm kiếm, menu Shell; không di chuyển file Desktop.
-- Settings xem trước trực tiếp; Apply lưu và giữ mở, OK lưu và đóng, Hủy hoàn tác phần chưa lưu.
-- Monitor CPU/RAM/GPU/mạng có thể tắt; số đo phụ thuộc phần cứng/provider/quyền truy cập.
-- Kiểm tra cập nhật tại Settings → Ứng dụng. Tự cài EXE còn khóa đến khi cấu hình signer tin cậy và nghiệm thu; portable chưa tự thay file, Store cập nhật riêng.
-- Thoát qua tray để khôi phục icon do app ẩn. Guardian hỗ trợ khi app chết đột ngột, không bảo đảm khi cả guardian cũng bị kết thúc hoặc Explorer không khả dụng.
+## Bạn có thể làm gì với Nepply?
 
-Cấu hình: `%APPDATA%/Nepply/settings.json`. Log: `%LOCALAPPDATA%/Nepply/Logs`. App hỗ trợ nhập cấu hình HoverBox cũ, giữ nguyên bản gốc. Journal EXE/portable giữ `%LOCALAPPDATA%/HoverBox/desktop-visibility.lease` để tương thích; không xóa journal khi Desktop chưa phục hồi.
+- **Mở nhanh từ cạnh màn hình:** chọn cạnh đặt panel, dùng phím tắt hoặc ghim panel khi cần.
+- **Tìm và mở mục Desktop:** xem icon, tìm theo tên và sử dụng menu chuột phải của Windows. Nepply không di chuyển file Desktop sang một nơi khác.
+- **Sắp xếp vừa mắt:** chọn số cột × hàng bằng lưới chấm tròn; cuộn để xem các mục vượt vùng hiển thị.
+- **Xem hoạt động của máy:** theo dõi CPU, RAM, GPU/iGPU và tốc độ tải xuống/tải lên. Số đo cảm biến tùy phần cứng và khả năng truy cập của Windows.
+- **Tùy chỉnh giao diện:** nền sáng/tối/theo hệ thống, bảng màu, neon và ánh kim; xem thay đổi trên panel trước khi lưu.
+- **Hạn chế làm phiền khi chơi game:** không tự mở từ cạnh khi con trỏ đang bị ẩn để điều khiển nhân vật. Khả năng nhận biết còn tùy trò chơi.
 
-## Phát triển
+Giao diện có tiếng Việt, Anh, Nhật, Đức, Trung giản thể, Nga, Pháp và Thái.
 
-Mở `Nepply.slnx`. App ở `src/Nepply`, helper phục hồi ở `src/Nepply.DesktopGuardian`, test ở `tests/Nepply.Tests`, công cụ dev ở `tools/SensorDumper` (không thuộc payload phát hành).
+## Xem giao diện
 
-```powershell
-dotnet restore Nepply.slnx --locked-mode
-dotnet build Nepply.slnx -c Release --no-restore
-./scripts/Test-BuildBoundary.ps1
-dotnet run --project tests/Nepply.Tests/Nepply.Tests.csproj -c Release --no-build --no-restore -- artifacts/current/core --core-only
-dotnet run --project tests/Nepply.Tests/Nepply.Tests.csproj -c Release --no-build --no-restore -- artifacts/current/ui --ui-only
-```
+<p><img src="docs/images/panel-preview.png" width="260" alt="Panel Nepply với thẻ hệ thống và danh sách Desktop"> <img src="docs/images/grid-settings.png" width="360" alt="Chọn lưới icon bằng chấm tròn trong Cài đặt"></p>
 
-Test suite là executable có exit code, không dùng `dotnet test`. Fixture không thay thế sensor thật, DPI nhiều màn hình, chạy dài hoặc nghiệm thu bộ cài. Không tắt bảo vệ Windows để vượt chặn.
+Ảnh chụp giao diện ứng dụng với dữ liệu mẫu; tên mục Desktop và số đo chỉ để minh họa, không phải kết quả đo hiệu năng.
 
-## Đóng gói
+## Tải và cài đặt
 
-```powershell
-./scripts/Build-Distribution.ps1 -OutputDirectory artifacts/internal-build -InternalOnly
-```
+Nepply dành cho **Windows 10 phiên bản 2004 (build 19041) trở lên và Windows 11, kiến trúc x64**.
 
-Cần Inno Setup; mỗi lần dùng folder mới. Pipeline đóng gói guardian, notices và manifest. Build app đơn lẻ không tạo đầy đủ guardian. Giữ cả `Directory.Build.props` và `Directory.Build.targets` để pin runtime.
+Khi bản chính thức sẵn sàng, các tệp tải sẽ xuất hiện tại [GitHub Releases](https://github.com/minhquang0607/Nepply/releases):
 
-`artifacts`, `bin`, `obj` là đầu ra sinh tự động, không commit. Nhật ký làm việc và bằng chứng QA local không thuộc source sản phẩm.
+| Bản | Dành cho bạn khi… |
+| --- | --- |
+| Setup | Muốn cài đặt và gỡ qua Windows như ứng dụng thông thường. |
+| Portable | Muốn giải nén rồi chạy, không dùng bộ cài. Cấu hình vẫn được lưu trong tài khoản Windows. |
 
-## Tài liệu
+Không tải các bản đóng gói lại không rõ nguồn gốc. Nếu Windows chặn một tệp, hãy kiểm tra nguồn tải và thông tin bản phát hành; **không tắt bảo vệ Windows để chạy Nepply**.
 
-- [Bản đồ tài liệu](docs/README.md), [cấu trúc](docs/architecture/STRUCTURE.md), [module](docs/architecture/MODULES.md).
-- [Đóng gói](packaging/README.md), [ký mã](docs/release/RELEASE_SIGNING.md), [chính sách ký](docs/release/CODE_SIGNING_POLICY.md), [cập nhật EXE](docs/release/EXE_UPDATES.md).
-- [Đóng góp](CONTRIBUTING.md), [thay đổi](CHANGELOG.md), [quyền riêng tư](docs/legal/PRIVACY.md), [bảo mật](docs/legal/SECURITY.md).
-- [Hỗ trợ](https://github.com/minhquang0607/Nepply/issues).
+## Bắt đầu sử dụng
+
+1. Mở Nepply và chọn cạnh màn hình bạn muốn dùng.
+2. Đưa chuột tới cạnh đã chọn, hoặc nhấn **Ctrl + Space** nếu chưa đổi phím tắt.
+3. Chọn một mục Desktop để mở; dùng ô tìm kiếm khi cần tìm nhanh.
+4. Mở **Cài đặt**, thử giao diện và bố cục ngay trên panel. **Apply** lưu và giữ cửa sổ mở; **OK** lưu rồi đóng; **Hủy** bỏ những thay đổi chưa lưu.
+5. Khi muốn thoát hẳn, chọn **Thoát** từ biểu tượng Nepply ở khay hệ thống.
+
+Đọc [hướng dẫn sử dụng](docs/USER_GUIDE.md) để chỉnh lưới, monitor, tự khởi động và cập nhật; xem [xử lý sự cố](docs/TROUBLESHOOTING.md) nếu có điều gì chưa hoạt động như mong đợi.
+
+## Quyền riêng tư và hỗ trợ
+
+Nepply không có quảng cáo, analytics hay tự gửi báo cáo lỗi. Kiểm tra cập nhật kết nối tới GitHub khi bạn chủ động yêu cầu. Xem [chính sách quyền riêng tư](docs/legal/PRIVACY.md).
+
+- Gặp lỗi hoặc muốn đề xuất tính năng? [Tạo issue](https://github.com/minhquang0607/Nepply/issues), kèm phiên bản, các bước tái hiện và ảnh đã che dữ liệu cá nhân.
+- Vấn đề bảo mật: dùng [kênh báo cáo riêng](docs/legal/SECURITY.md), không đăng cách khai thác hoặc thông tin nhạy cảm vào issue công khai.
+- Xem [những thay đổi](CHANGELOG.md) và [bản đồ tài liệu](docs/README.md).
+
+## Mã nguồn và giấy phép
+
+Nepply được phát triển bởi **Minh Quang** bằng WPF / .NET. Mã do dự án sở hữu được cung cấp theo [MIT License](LICENSE); thư viện bên thứ ba giữ [giấy phép và thông báo riêng](docs/legal/THIRD_PARTY_NOTICES.md).
+
+Muốn tự build hoặc đóng góp? Bắt đầu tại [CONTRIBUTING](CONTRIBUTING.md). Thông tin ký phát hành: [Code signing policy](docs/release/CODE_SIGNING_POLICY.md).

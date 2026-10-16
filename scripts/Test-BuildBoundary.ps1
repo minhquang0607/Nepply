@@ -22,3 +22,15 @@ foreach ($kind in $items.PSObject.Properties) {
 }
 if ($count -eq 0) { throw 'Build input inspection returned no items.' }
 Write-Output "PASS: $count first-party build inputs; no reference/research/test source in Nepply."
+
+# SDK patch differences must not silently change the implicit single-file tool dependency.
+$toolRaw = & dotnet msbuild $projectFile -nologo -target:PinNepplyILLinkPack -getItem:KnownILLinkPack
+if ($LASTEXITCODE -ne 0) { throw 'Could not evaluate the ILLink build-tool pin.' }
+$packs = ($toolRaw -join "`n" | ConvertFrom-Json).Items.KnownILLinkPack
+$net10 = @($packs | Where-Object { $_.TargetFramework -eq 'net10.0' })
+$lock = Get-Content -LiteralPath (Join-Path $sourceRoot 'packages.lock.json') -Raw | ConvertFrom-Json
+$locked = $lock.dependencies.'net10.0-windows10.0.19041'.'Microsoft.NET.ILLink.Tasks'.resolved
+if ($net10.Count -ne 1 -or !$locked -or $net10[0].ILLinkPackVersion -ne $locked) {
+    throw 'ILLink build-tool pin and packages.lock.json must agree.'
+}
+Write-Output "PASS: ILLink build-tool pin matches locked dependency $locked."
