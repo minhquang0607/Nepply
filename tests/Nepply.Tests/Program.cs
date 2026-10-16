@@ -18,9 +18,11 @@ internal static class Program
     private static readonly List<string> Results = [];
     private static int _failures;
     private static int _passed;
+    private static bool _streamResults;
     private static void Check(string name, bool valid)
     {
         Results.Add($"{(valid ? "PASS" : "FAIL")} {name}");
+        if (_streamResults) Console.WriteLine(Results[^1]);
         if (!valid) _failures++;
         else _passed++;
     }
@@ -141,6 +143,7 @@ internal static class Program
         }
         if(args.Contains("--appearance-only"))
         {
+            _streamResults = true;
             var appearanceApp = new App(testHost: true); appearanceApp.InitializeComponent();
             ButtonAppearanceTests.Run(Check,Pump);
             InputAppearanceTests.Run(Check,Pump,output,Render);

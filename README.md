@@ -23,7 +23,7 @@ Giao diện có tiếng Việt, Anh, Nhật, Đức, Trung giản thể, Nga, Ph
 
 <p><img src="docs/images/panel-preview.png" width="260" alt="Panel Nepply với thẻ hệ thống và danh sách Desktop"> <img src="docs/images/grid-settings.png" width="360" alt="Chọn lưới icon bằng chấm tròn trong Cài đặt"></p>
 
-Ảnh chụp giao diện ứng dụng với dữ liệu mẫu; tên mục Desktop và số đo chỉ để minh họa, không phải kết quả đo hiệu năng.
+Ảnh render từ mã nguồn `859025f` với dữ liệu mẫu. Icon thư mục đơn giản, tên mục Desktop và số đo dùng để kiểm thử giao diện, không phải ảnh Desktop sử dụng thực tế hay kết quả đo hiệu năng.
 
 ## Tải và cài đặt
 
