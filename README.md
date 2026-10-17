@@ -21,9 +21,9 @@ Giao diện có tiếng Việt, Anh, Nhật, Đức, Trung giản thể, Nga, Ph
 
 ## Xem giao diện
 
-<p><img src="docs/images/settings-current.png" width="800" alt="Cài đặt Nepply với menu dọc và tùy chọn giao diện"></p>
+<p><img src="docs/images/settings-1.0.0-wide.png" width="800" alt="Cài đặt Nepply 1.0.0 với menu dọc, render từ build Release hiện hành"></p>
 
-Ảnh cửa sổ ứng dụng do chủ dự án cung cấp ngày 17/10/2026, giữ nguyên nội dung. Settings dùng menu dọc ở chiều rộng thông thường và chuyển thành tab ngang khi cửa sổ hẹp. Ảnh này minh họa giao diện, không phải bằng chứng xác nhận phiên bản binary hoặc kết quả QA.
+Ảnh render mới từ `SettingsWindow` của build Release **1.0.0**, commit `055c5cc`, ngày 17/10/2026, ở 820 × 740 DIP với màu Champagne. Đây là giao diện ứng dụng thật được dựng trong fixture UI cô lập, không phải ảnh người dùng hoặc ảnh chụp Desktop đang chạy. Settings chuyển thành tab ngang khi cửa sổ hẹp. Xem [nguồn và cách tái tạo ảnh](docs/images/README.md).
 
 ## Tải và cài đặt
 
