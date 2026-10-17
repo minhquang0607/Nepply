@@ -38,6 +38,14 @@ CI chạy thêm appearance, tray, DPI, crash, kiểm tra dependency/notice và h
 
 `Directory.Build.props` và `Directory.Build.targets` khóa runtime và ILLink theo dependency lock. Giữ hai file này khi build; không bỏ `--locked-mode` để che lỗi lệch dependency. Khi nâng phiên bản, cập nhật pin và lock có chủ đích rồi kiểm tra trên máy sạch/CI.
 
+## Ảnh minh họa và bằng chứng kiểm thử
+
+- Trước mỗi lượt kiểm chứng, đối chiếu repository, commit hiện tại, thay đổi chưa commit và đường dẫn binary thực sự chạy. Không suy ra phiên bản từ tên thư mục hay tên file.
+- Build từ nguồn hiện tại trước khi test; dùng thư mục kết quả mới và ghi commit/cấu hình/lệnh chạy cùng báo cáo. Kết quả của commit cũ chỉ là lịch sử, không xác nhận bản mới.
+- Ảnh giới thiệu ưu tiên cửa sổ app thật ở bố cục mặc định. Ảnh fixture kích thước hẹp hoặc dữ liệu giả phải được ghi rõ và không dùng làm ảnh đại diện mặc định.
+- Ảnh người dùng cung cấp phải ghi nguồn/ngày; nếu chưa đối chiếu binary thì không gán commit hoặc phiên bản đã xác minh. Không lấy ảnh QA cũ chỉ vì tên file giống nhau.
+- Thay ảnh tài liệu không phải thay đổi ứng dụng và không thay thế nghiệm thu bộ cài cuối.
+
 ## Đóng gói thử
 
 ```powershell

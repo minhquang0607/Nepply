@@ -21,9 +21,9 @@ Giao diện có tiếng Việt, Anh, Nhật, Đức, Trung giản thể, Nga, Ph
 
 ## Xem giao diện
 
-<p><img src="docs/images/panel-preview.png" width="260" alt="Panel Nepply với thẻ hệ thống và danh sách Desktop"> <img src="docs/images/grid-settings.png" width="360" alt="Chọn lưới icon bằng chấm tròn trong Cài đặt"></p>
+<p><img src="docs/images/settings-current.png" width="800" alt="Cài đặt Nepply với menu dọc và tùy chọn giao diện"></p>
 
-Ảnh render từ mã nguồn `859025f` với dữ liệu mẫu. Icon thư mục đơn giản, tên mục Desktop và số đo dùng để kiểm thử giao diện, không phải ảnh Desktop sử dụng thực tế hay kết quả đo hiệu năng.
+Ảnh cửa sổ ứng dụng do chủ dự án cung cấp ngày 17/10/2026, giữ nguyên nội dung. Settings dùng menu dọc ở chiều rộng thông thường và chuyển thành tab ngang khi cửa sổ hẹp. Ảnh này minh họa giao diện, không phải bằng chứng xác nhận phiên bản binary hoặc kết quả QA.
 
 ## Tải và cài đặt
 
