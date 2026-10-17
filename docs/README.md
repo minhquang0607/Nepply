@@ -1,24 +1,46 @@
-# Tài liệu Nepply
+# 📚 Nepply documentation · Tài liệu
 
-Tài liệu hiện hành cho **1.0.0**, rà soát ngày **17/10/2026**. Changelog tổng hợp tính năng; hướng dẫn phát hành phân biệt mã đã có với các bước ký và nghiệm thu chưa hoàn tất. Ngày/phiên bản trong hồ sơ nguồn thư viện là bằng chứng lịch sử, không phải phiên bản Nepply.
+**1.0.0 · 17 October / tháng 10 năm 2026**
 
-## Dành cho người dùng
+Choose your language below. Both user-facing editions describe the same release status.
 
-- [Giới thiệu và tải ứng dụng](../README.md)
-- [Hướng dẫn sử dụng](USER_GUIDE.md): panel, lưới icon, giao diện, monitor và cập nhật.
-- [Xử lý sự cố](TROUBLESHOOTING.md): không mở được panel, thiếu số đo, icon Desktop và báo lỗi.
-- [Những thay đổi](../CHANGELOG.md)
-- [Quyền riêng tư](legal/PRIVACY.md) và [báo lỗi bảo mật](legal/SECURITY.md)
+Chọn ngôn ngữ bên dưới. Hai bản hướng dẫn người dùng giữ cùng trạng thái phát hành.
 
-## Dành cho người đóng góp
+## 🚀 For users · Dành cho người dùng
 
-- [Build, kiểm thử và đóng góp](../CONTRIBUTING.md)
-- [Cấu trúc source](architecture/STRUCTURE.md) và [ranh giới module](architecture/MODULES.md)
-- [Giấy phép thư viện bên thứ ba](legal/THIRD_PARTY_NOTICES.md)
+| Topic / Chủ đề | English | Tiếng Việt |
+| --- | --- | --- |
+| Overview & downloads / Giới thiệu & tải | [Home](../README.md) | [Trang chính](../README.vi.md) |
+| Getting started / Sử dụng | [User guide](USER_GUIDE.en.md) | [Hướng dẫn](USER_GUIDE.md) |
+| Help / Trợ giúp | [Troubleshooting](TROUBLESHOOTING.en.md) | [Xử lý sự cố](TROUBLESHOOTING.md) |
+| What's new / Thay đổi | [Changelog](../CHANGELOG.en.md) | [Changelog](../CHANGELOG.md) |
+| Privacy / Quyền riêng tư | [English](legal/PRIVACY.md#english) | [Tiếng Việt](legal/PRIVACY.md#tiếng-việt) |
+| Security / Bảo mật | [English](legal/SECURITY.md#english) | [Tiếng Việt](legal/SECURITY.md#tiếng-việt) |
 
-## Dành cho người duy trì bản phát hành
+## 🧩 For contributors · Dành cho người đóng góp
 
-- [Nội dung trang tải 1.0.0 (bản nháp)](release/RELEASE_1.0.0.md)
-- [Đóng gói](../packaging/README.md)
-- [Ký mã và nghiệm thu](release/RELEASE_SIGNING.md), [Code signing policy](release/CODE_SIGNING_POLICY.md)
-- [Thiết kế cập nhật EXE](release/EXE_UPDATES.md)
+[Contributing — English](../CONTRIBUTING.en.md) · [Đóng góp — Tiếng Việt](../CONTRIBUTING.md)
+
+Detailed implementation references below are currently in Vietnamese. Dependency notices retain their original license language.
+
+Các tài liệu triển khai chi tiết dưới đây hiện bằng tiếng Việt. Thông báo thư viện giữ nguyên ngôn ngữ giấy phép gốc.
+
+| Reference / Tài liệu | Purpose / Nội dung |
+| --- | --- |
+| [Structure / Cấu trúc](architecture/STRUCTURE.md) | Source folders & ownership / Thư mục và trách nhiệm |
+| [Modules / Module](architecture/MODULES.md) | Boundaries & lifecycle / Ranh giới và vòng đời |
+| [Image provenance / Nguồn ảnh](images/README.md) | Build, render sizes & hashes / Build, kích thước và hash |
+| [Third-party notices / Thư viện](legal/THIRD_PARTY_NOTICES.md) | Dependencies & license evidence / Dependency và bằng chứng giấy phép |
+
+## 📦 For maintainers · Dành cho người phát hành
+
+- [Release 1.0.0 draft — English / Tiếng Việt](release/RELEASE_1.0.0.md)
+- [Packaging / Đóng gói](../packaging/README.md) · [MSIX / Store](../packaging/msix/README.md)
+- [Signing & acceptance / Ký và nghiệm thu](release/RELEASE_SIGNING.md) · [Signing policy](release/CODE_SIGNING_POLICY.md)
+- [EXE updates / Cập nhật EXE](release/EXE_UPDATES.md)
+
+## 🔄 Keep docs current · Giữ tài liệu đồng bộ
+
+Change user-facing English/Vietnamese pages together when functionality or release status changes. Update images only from a verified current build; record the source and distinguish fixtures from actual usage. Dates in historical provenance are not product versions. Do not rewrite upstream license texts.
+
+Cập nhật cả bản Anh–Việt khi tính năng hoặc trạng thái phát hành đổi. Ảnh phải từ build hiện tại đã đối chiếu; ghi nguồn và phân biệt fixture với sử dụng thật. Ngày trong bằng chứng lịch sử không phải phiên bản sản phẩm. Không viết lại văn bản giấy phép upstream.

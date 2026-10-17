@@ -1,6 +1,6 @@
-# Xử lý sự cố
+# 🛠️ Xử lý sự cố
 
-[Về trang chính](../README.md) · [Hướng dẫn sử dụng](USER_GUIDE.md)
+[English](TROUBLESHOOTING.en.md) · **Tiếng Việt** · [Trang chính](../README.vi.md) · [Hướng dẫn sử dụng](USER_GUIDE.md)
 
 ## Không mở được panel
 

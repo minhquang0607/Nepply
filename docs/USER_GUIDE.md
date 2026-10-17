@@ -1,6 +1,6 @@
-# Sử dụng Nepply
+# 📖 Sử dụng Nepply
 
-[Về trang chính](../README.md) · [Xử lý sự cố](TROUBLESHOOTING.md)
+[English](USER_GUIDE.en.md) · **Tiếng Việt** · [Trang chính](../README.vi.md) · [Xử lý sự cố](TROUBLESHOOTING.md)
 
 Hướng dẫn cho **Nepply 1.0.0** đang chuẩn bị phát hành; chưa có bộ tải chính thức đã ký số.
 

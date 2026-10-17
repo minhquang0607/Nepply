@@ -1,5 +1,9 @@
 # Quyền riêng tư của Nepply
 
+[English](#english) · [Tiếng Việt](#tiếng-việt)
+
+## Tiếng Việt
+
 Cập nhật: 17/10/2026 · Nepply 1.0.0
 
 Nhà phát triển: Minh Quang  
@@ -46,3 +50,49 @@ Khi bạn bấm **Kiểm tra cập nhật**, bản EXE/portable gửi yêu cầu
 Chỉ khi bạn chọn **Cập nhật ngay**, bản cài EXE mới tải Setup từ GitHub/CDN GitHub vào `%LOCALAPPDATA%/Nepply/Updates`. Windows có thể kết nối tới dịch vụ chứng thư để kiểm tra độ tin cậy/thu hồi chữ ký. Việc tự cài bị khóa nếu chưa cấu hình nhà phát hành tin cậy. Bản Store dùng cơ chế của Microsoft Store; portable chưa tự thay file.
 
 Hiện không có kiểm tra nền theo lịch, analytics hoặc crash upload. Đóng cửa sổ cập nhật hủy yêu cầu đang chờ/tải; xác minh chữ ký Windows đang chạy có thể cần thêm thời gian để kết thúc. Gói tải bị hủy/lỗi được dọn theo khả năng truy cập; Setup đã bắt đầu chạy được giữ lại để tránh xóa file nó đang cần. Lần tải tiếp theo dọn các gói cache do updater tạo đã cũ hơn 7 ngày, không xóa nội dung lạ hoặc file đang khóa.
+
+## English
+
+Updated: 17 October 2026 · Nepply 1.0.0. Developer: Minh Quang. Support: https://github.com/minhquang0607/Nepply/issues
+
+### Summary
+
+Nepply processes data on your computer to display Desktop icons and system metrics. The current application has no analytics, advertising, crash uploader, cloud accounts or synchronization server. Data is not automatically sent to Minh Quang.
+
+### Locally processed data
+
+- Names, paths, attributes and images of items directly on the user's/Public Desktop, plus enabled system Desktop icons.
+- Shortcut targets, arguments and working directories when needed to identify or open shortcuts. Nepply does not read document contents merely to display the grid.
+- Device names/identifiers, CPU, RAM, GPU/iGPU readings and network counters when the relevant feature is enabled.
+- Network counters record bytes sent/received by the selected adapter, not packet contents, website addresses or browsing history.
+- Panel/Settings search terms are used in memory and are not saved as search history.
+
+Desktop and sensor helpers communicate through local named pipes restricted to the current Windows account, not Internet connections.
+
+### Stored data
+
+`%APPDATA%/Nepply` settings may include appearance preferences, hotkeys, display/network/GPU IDs, widget order and paths of arranged icons. Exported `.nepply-layout` files contain presentation settings only, not icon paths, device IDs, startup or Desktop-hiding state. First launch may import `%APPDATA%/HoverBox` settings without deleting or overwriting the original. Legacy `.hoverbox-layout` files remain importable.
+
+Logs are in `%LOCALAPPDATA%/Nepply/Logs`. The Desktop recovery marker retains `%LOCALAPPDATA%/HoverBox/desktop-visibility.lease` for compatibility. Error logs may include device names, paths, account names within paths and exception text. Each process role keeps one file of about 5 MiB and up to three rotated copies, about 20 MiB per role. The in-memory queue is bounded and drops older entries when full.
+
+Monitoring retains the latest readings, not a sensor-history database. Sensor diagnostic reports are generated when their window is opened; only Copy places the allowed content on the clipboard. Reports exclude Desktop paths, network names, drive labels, device IDs and raw logs, but retain hardware names for troubleshooting.
+
+### Access and system changes
+
+Nepply runs as the ordinary user. It can read the Desktop, register hotkeys, add startup when enabled and ask Explorer to hide/show Desktop icons. A recovery marker is written before hiding. Nepply does not automatically install drivers, elevate itself or require disabling Vanguard, antivirus, Secure Boot or Memory Integrity.
+
+Opening files, shortcuts, URLs or Shell menus is user-requested. Launched programs/websites have their own policies outside Nepply's scope.
+
+### Removal and sharing
+
+After Nepply exits and Desktop icons are restored, configuration and log folders can be removed to reset local data. Uninstall currently retains settings for reinstallation. Do not delete the recovery marker while icons are hidden; reopen Nepply or show icons through Windows first.
+
+Sending logs, screenshots or reports through GitHub Issues is voluntary and also subject to GitHub policies. Redact paths, account names and personal data; never send passwords, tokens, signing keys or private documents.
+
+### Update checks and downloads
+
+Choosing Check for updates sends an HTTPS request from the EXE/portable app to the GitHub API for `minhquang0607/Nepply`, retrieving versions, release notes and installer metadata. It does not send settings, Desktop inventory, hardware readings or logs. GitHub receives your IP address and `Nepply-Updater/1.0` User-Agent through normal networking. Version comparison is local.
+
+Only choosing Update now starts a Setup download for the installed EXE edition from GitHub/CDN into `%LOCALAPPDATA%/Nepply/Updates`. Windows may contact certificate services for trust/revocation checks. Automatic installation is blocked without a configured trusted publisher. Store packages use Microsoft Store updates; portable does not replace its own files.
+
+There are no scheduled background checks, analytics or crash uploads. Closing the update window cancels pending requests/downloads; a Windows signature check already running may take longer to finish. Cancelled/failed downloads are removed where access permits; a running Setup is retained. A subsequent download removes updater-owned cache packages older than seven days, not unknown contents or locked files.

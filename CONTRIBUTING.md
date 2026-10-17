@@ -1,4 +1,6 @@
-# Phát triển Nepply
+# 🧩 Phát triển Nepply
+
+[English](CONTRIBUTING.en.md) · **Tiếng Việt** · [Tài liệu](docs/README.md)
 
 Tài liệu này dành cho người muốn tự build hoặc đóng góp mã nguồn. Nếu bạn chỉ muốn sử dụng ứng dụng, xem [hướng dẫn người dùng](docs/USER_GUIDE.md). Mã do Nepply sở hữu dùng [MIT License](LICENSE); dependency giữ giấy phép riêng.
 
@@ -40,6 +42,7 @@ CI chạy thêm appearance, tray, DPI, crash, kiểm tra dependency/notice và h
 
 ## Ảnh minh họa và bằng chứng kiểm thử
 
+- Cập nhật đồng thời bản Anh–Việt khi hành vi, phiên bản, tải xuống hoặc giới hạn thay đổi; giữ liên kết chuyển ngôn ngữ. Không sửa văn bản giấy phép gốc hoặc ngày bằng chứng lịch sử chỉ để đồng bộ hình thức.
 - Trước mỗi lượt kiểm chứng, đối chiếu repository, commit hiện tại, thay đổi chưa commit và đường dẫn binary thực sự chạy. Không suy ra phiên bản từ tên thư mục hay tên file.
 - Build từ nguồn hiện tại trước khi test; dùng thư mục kết quả mới và ghi commit/cấu hình/lệnh chạy cùng báo cáo. Kết quả của commit cũ chỉ là lịch sử, không xác nhận bản mới.
 - Ảnh giới thiệu ưu tiên cửa sổ app thật ở bố cục mặc định. Ảnh fixture kích thước hẹp hoặc dữ liệu giả phải được ghi rõ và không dùng làm ảnh đại diện mặc định.

@@ -1,4 +1,6 @@
-# Những thay đổi của Nepply
+# 📝 Những thay đổi của Nepply
+
+[English](CHANGELOG.en.md) · **Tiếng Việt** · [Trang chính](README.vi.md)
 
 ## 1.0.0 — Chưa phát hành
 
