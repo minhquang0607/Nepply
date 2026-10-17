@@ -64,17 +64,17 @@ The official annotated Mono tag `mono-5.8.0.127` resolves through tag object `ed
 
 The newer [build.cake](https://github.com/xamarin/XamarinComponents/blob/5db2091df75abc988bb097d6298950efcab246cc/XPlat/Mono.Posix/build.cake) describes `5.20.1-preview`; it is not evidence for the installed 1.0.0 binary.
 
-## Outstanding verification
+## Hạng mục tại thời điểm rà soát ban đầu (26/09/2026)
 
 1. Inspect the license/attribution scope of the historical managed source and patch, and the native helper sources/build 46; retain the required copyright notices.
 2. Establish how the NuGet managed/native payload corresponds to the historical build. A matching package version in a Makefile is not reproducible-build proof.
 3. Produce the redistribution notice bundle with explicit provenance, then review obligations before enabling `-RequireComplete` for public release.
 
-Until those checks are resolved, the collector continues to report missing license text. Do not rename this review document to LICENSE or count it as a replacement license text.
+At that time the collector reported missing license text. The notice bundle added on 12/10 resolves that missing-text state; binary-to-source verification remains outstanding. Do not rename this review document to LICENSE or count it as a replacement license text.
 
 ## Additional source inspection
 
-The historical commit's `mcs/class/Mono.Posix/Mono.Unix.Native/Syscall.cs` was retrieved directly and has a permissive permission header plus Novell/Jonathan Pryor attribution. `support/dirent.c` carries Jonathan Pryor attribution; `support/map.c` identifies itself as generated from Mono.Posix.dll. The root LICENSE describes different scopes for runtime, class libraries, build-time and documentation code. These samples narrow the investigation but do not establish the full managed/native package contents or Jenkins native build 46. The unresolved inventory flag remains unchanged; no monitor dependency was replaced.
+The historical commit's `mcs/class/Mono.Posix/Mono.Unix.Native/Syscall.cs` was retrieved directly and has a permissive permission header plus Novell/Jonathan Pryor attribution. `support/dirent.c` carries Jonathan Pryor attribution; `support/map.c` identifies itself as generated from Mono.Posix.dll. The root LICENSE describes different scopes for runtime, class libraries, build-time and documentation code. These samples narrowed the initial investigation but did not establish the full managed/native package contents or Jenkins native build 46. No monitor dependency was replaced; see the 12/10 update above for the subsequent notice resolution.
 
 ## Xác minh tính toàn vẹn ngày 02/10/2026
 
@@ -90,4 +90,4 @@ SHA512 của toàn bộ archive là `RtGiutQZJAmajvQ0QvBvh73VJye85iW9f9tjZlzF88i
 | MonoPosixHelper.dll | A57141B26D6EA3326B165BDCB15CA2BCD34737370F52358E12FFC8DF41B92C62 | Có |
 | libMonoPosixHelper.dll | B16F77C155A36559A44DA32E17E0BF63D899DB0BB48C6590BC8EBA7BB0FF87A8 | Có |
 
-Đã thử đọc hai native artifact build 46 theo URL Makefile upstream. Host `xamjenkinsartifact.blob.core.windows.net` không phân giải được trong lượt này; không lấy được byte để đối chiếu. Chưa chứng minh native DLL tương ứng chính xác source/build lịch sử. Chữ ký repository chứng minh kết quả kiểm tra tính toàn vẹn package, **không** thay thế nghĩa vụ giấy phép hoặc xác nhận source-to-binary. Gate notice vẫn chưa đạt.
+Đã thử đọc hai native artifact build 46 theo URL Makefile upstream. Host `xamjenkinsartifact.blob.core.windows.net` không phân giải được trong lượt này; không lấy được byte để đối chiếu. Chưa chứng minh native DLL tương ứng chính xác source/build lịch sử. Chữ ký repository chứng minh kết quả kiểm tra tính toàn vẹn package, **không** thay thế nghĩa vụ giấy phép hoặc xác nhận source-to-binary. Gate notice chưa đạt tại thời điểm 02/10; bundle 12/10 sau đó giải quyết văn bản thiếu, không giải quyết chứng minh source-to-binary.

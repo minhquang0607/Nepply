@@ -12,6 +12,10 @@ internal static class UpdateTests
         check("Update stable supersedes beta", ReleaseVersion.Parse("2.5.0").CompareTo(ReleaseVersion.Parse("2.5.0-beta.3")) > 0);
         check("Update prerelease uses numeric ordering", ReleaseVersion.Parse("2.5.0-beta.10").CompareTo(ReleaseVersion.Parse("2.5.0-beta.9")) > 0);
         check("Update ignores build metadata", ReleaseVersion.Parse("v2.5.0+a").CompareTo(ReleaseVersion.Parse("2.5.0+b")) == 0);
+        var dated = ReleaseVersion.Parse("1.0.0-17.10.26");
+        check("Dated release retains prerelease label", dated.Pre == "17.10.26");
+        check("Stable 1.0.0 supersedes dated release", ReleaseVersion.Parse("1.0.0").CompareTo(dated) > 0);
+        check("Next patch supersedes dated release across month boundary", ReleaseVersion.Parse("1.0.1-1.11.26").CompareTo(dated) > 0);
         foreach (string invalid in new[] { "../1.0.0", "01.0.0", "1.0.0-beta.01", "1.0", "v1.0.0/evil" })
         {
             bool rejected = false; try { ReleaseVersion.Parse(invalid); } catch (FormatException) { rejected = true; }
@@ -32,6 +36,8 @@ internal static class UpdateTests
         var release = UpdateService.ParseReleases(Feed(), current);
         check("Update finds exact installer and keeps plain notes", release?.Tag == "v3.0.0" && release.Notes.StartsWith("<script>"));
         check("Update never downgrades", UpdateService.ParseReleases(Feed("v2.4.0"), current) == null);
+        check("Dated release is not a downgrade path from old internal builds", UpdateService.ParseReleases(Feed("v1.0.0-17.10.26", prerelease: true), ReleaseVersion.Parse("2.5.0-beta.3")) == null);
+        check("Dated release accepts subsequent stable release", UpdateService.ParseReleases(Feed("v1.0.0"), dated) != null);
         check("Update never reinstalls same version", UpdateService.ParseReleases(Feed("v2.5.0"), current) == null);
         check("Update excludes drafts", UpdateService.ParseReleases(Feed(draft: true), current) == null);
         check("Stable users exclude prerelease", UpdateService.ParseReleases(Feed("v3.0.0-beta.1", prerelease: true), current) == null);

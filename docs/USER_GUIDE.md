@@ -2,7 +2,7 @@
 
 [Về trang chính](../README.md) · [Xử lý sự cố](TROUBLESHOOTING.md)
 
-Nepply đang chuẩn bị phát hành. Hướng dẫn mô tả tính năng của mã nguồn hiện tại; chưa có bộ tải chính thức đã ký số.
+Hướng dẫn cho **Nepply 1.0.0** đang chuẩn bị phát hành; chưa có bộ tải chính thức đã ký số.
 
 ## Mở và đóng panel
 

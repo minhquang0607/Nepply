@@ -26,11 +26,11 @@ Nepply là modular monolith WPF: một assembly ứng dụng, nhóm mã theo tí
 | `docs` | Hướng dẫn người dùng, xử lý sự cố, ảnh minh họa, architecture, release và legal |
 | `artifacts` | Kết quả build/test có thể tái tạo, không commit |
 
-## Phạm vi chuyển đổi
+## Định danh và tương thích
 
-Đợt sắp xếp 30/09/2026 giữ namespace, tên type, assembly, AppId, settings schema và thuật toán runtime. Việc chuyển file không đồng nghĩa mọi lớp đã tách trách nhiệm hoàn chỉnh. MainWindow và DesktopIconService vẫn cần refactor theo các boundary đã ghi trong [MODULES.md](MODULES.md).
+Phiên bản hiện hành là `1.0.0`. Việc nhóm file theo feature không đồng nghĩa mọi lớp đã tách trách nhiệm hoàn chỉnh; xem các boundary và giới hạn trong [MODULES.md](MODULES.md).
 
-Ngày 02/10/2026, đổi thương hiệu sang Nepply đã đổi namespace/assembly, solution, project và đường dẫn source tương ứng. Cách nhóm `Services`, `Views`, `Modules` được giữ; các namespace đó chưa phải boundary assembly riêng. Khóa phiên chạy và journal Desktop giữ định danh HoverBox để tương thích nâng cấp.
+Namespace gốc/assembly, solution, project và source dùng tên Nepply. Các namespace `Services`, `Views`, `Modules` chưa phải boundary assembly riêng. Khóa phiên chạy và journal Desktop giữ định danh HoverBox để tương thích; không đổi chúng chỉ để đồng bộ thương hiệu hoặc số phiên bản.
 
 ## Quy tắc phát triển
 

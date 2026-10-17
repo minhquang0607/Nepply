@@ -1,6 +1,7 @@
 # Quyền riêng tư của Nepply
 
-Cập nhật: 15/10/2026  
+Cập nhật: 17/10/2026 · Nepply 1.0.0
+
 Nhà phát triển: Minh Quang  
 Hỗ trợ: https://github.com/minhquang0607/Nepply/issues
 

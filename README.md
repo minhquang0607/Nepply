@@ -6,7 +6,7 @@
 
 Nepply là panel ở cạnh màn hình Windows, giúp bạn mở nhanh các mục trên Desktop, tìm kiếm và xem CPU, RAM, GPU cùng tốc độ mạng mà không cần quay về màn hình nền.
 
-> **Đang chuẩn bị phát hành.** Chưa có bản tải chính thức đã ký số. Mã nguồn hiện có để tham khảo và tự build; không nên xem bản build thử là bản ổn định cho sử dụng rộng rãi.
+> **1.0.0 · Đang chuẩn bị phát hành.** Chưa có bản tải chính thức đã ký số. Mã nguồn hiện có để tham khảo và tự build; không nên xem bản build thử là bản ổn định cho sử dụng rộng rãi.
 
 ## Bạn có thể làm gì với Nepply?
 
@@ -31,10 +31,12 @@ Nepply dành cho **Windows 10 phiên bản 2004 (build 19041) trở lên và Win
 
 Khi bản chính thức sẵn sàng, các tệp tải sẽ xuất hiện tại [GitHub Releases](https://github.com/minhquang0607/Nepply/releases):
 
-| Bản | Dành cho bạn khi… |
-| --- | --- |
-| Setup | Muốn cài đặt và gỡ qua Windows như ứng dụng thông thường. |
-| Portable | Muốn giải nén rồi chạy, không dùng bộ cài. Cấu hình vẫn được lưu trong tài khoản Windows. |
+| Bản | Tệp tải dự kiến cho 1.0.0 | Cách dùng |
+| --- | --- | --- |
+| **Setup — khuyên dùng** | `Nepply-1.0.0-Setup.exe` | Chạy bộ cài; gỡ qua danh sách ứng dụng của Windows. |
+| **Portable** | `Nepply-1.0.0-win-x64-portable.zip` | Giải nén toàn bộ rồi chạy `Nepply.exe`. Giữ thư mục `guardian` và các file đi kèm. |
+
+**Chưa mở tải:** các tên trên là tệp dự kiến, không phải liên kết tới bản đã phát hành. Khi release được công bố, chọn tệp trong mục **Assets**; `Source code (zip/tar.gz)` là mã nguồn, không phải ứng dụng để chạy. Portable không cần cài đặt nhưng vẫn lưu cấu hình trong tài khoản Windows. Cả hai bản dự kiến đóng gói sẵn .NET, không yêu cầu cài SDK.
 
 Không tải các bản đóng gói lại không rõ nguồn gốc. Nếu Windows chặn một tệp, hãy kiểm tra nguồn tải và thông tin bản phát hành; **không tắt bảo vệ Windows để chạy Nepply**.
 

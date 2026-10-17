@@ -1,8 +1,8 @@
 # Những thay đổi của Nepply
 
-## Chưa phát hành
+## 1.0.0 — Chưa phát hành
 
-Các tính năng dưới đây thuộc bản đang chuẩn bị, chưa phải thông báo có bản tải ổn định.
+Bản tổng hợp ngày **17/10/2026**, gom các thay đổi trong giai đoạn phát triển thành một mốc phiên bản. Các tính năng dưới đây thuộc bản đang chuẩn bị, chưa phải thông báo có bản tải ổn định. Số phiên bản đã chốt; ngày tổng hợp không phải ngày công bố. Việc chốt phiên bản không có nghĩa binary đã ký hoặc đã phát hành.
 
 ### Desktop và thao tác
 

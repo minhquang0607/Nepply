@@ -9,4 +9,4 @@
 
 Collector kèm nguyên bản RTF và tài liệu nguồn này trong notices, ghi hash hai DLL projection từ package đã restore. Việc đánh dấu đủ văn bản chỉ nói rằng đã có license text, không phải xác nhận mọi nghĩa vụ phát hành đã được đáp ứng.
 
-Trước public cần rà điều khoản phân phối, thông báo bản quyền và điều khoản áp dụng cho thành phần Microsoft đối với người nhận; first-party license của Nepply không thay thế điều khoản SDK. Chưa tự chọn license Nepply, chưa coi đây là tư vấn pháp lý hoặc phê duyệt phát hành.
+Trước public cần rà điều khoản phân phối, thông báo bản quyền và điều khoản áp dụng cho thành phần Microsoft đối với người nhận; MIT của Nepply không thay thế điều khoản SDK. Đây không phải tư vấn pháp lý hoặc phê duyệt phát hành.

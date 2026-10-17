@@ -60,5 +60,18 @@ Setup cũ không chứa giao thức update này không được dùng làm relea
   thử app chưa thoát, journal recovery thất bại, restart Explorer, cài lỗi.
 - Kiểm tra UI trên máy và phiên bản Windows khác; bản này chưa chứng minh mọi cấu hình.
 
-Chưa push nguồn, publish release, cấu hình ký hoặc cài nâng cấp trên máy thật chỉ
-bằng việc thêm module. Thực thi các bước đó cần nghiệm thu riêng theo artifact.
+Mã nguồn đã được đưa lên GitHub; việc đó không đồng nghĩa đã publish binary,
+cấu hình ký hoặc nghiệm thu cập nhật có chữ ký trên máy thật.
+
+## Phiên bản hiện hành
+
+Phiên bản đã chốt là `1.0.0`, metadata Windows `1.0.0.0`. Ngày 17/10/2026
+được giữ trong changelog, không nằm trong version. Nhãn dự kiến trước đó
+`1.0.0-17.10.26` chưa được phát hành và thấp hơn `1.0.0` theo SemVer.
+Tag dự kiến là `v1.0.0`, asset là `Nepply-1.0.0-Setup.exe`.
+Chỉ bật `-RequireStable` khi mọi điều kiện ký và nghiệm thu đều đạt.
+
+Đây là lần đặt lại mốc trước phát hành, thấp hơn các bản thử `2.5.0-*` cũ.
+Updater giữ nguyên nguyên tắc không downgrade: bản thử cũ cần chuyển thủ công,
+không nhận mốc này như bản mới hơn. Các bản sau phải tăng phiên bản SemVer;
+không dùng ngày/tháng làm thứ tự cập nhật (ví dụ bản vá tiếp theo là `1.0.1`).

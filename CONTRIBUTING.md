@@ -10,6 +10,8 @@ Tài liệu này dành cho người muốn tự build hoặc đóng góp mã ngu
 
 ## Quy tắc thay đổi
 
+Phiên bản nguồn hiện tại là `1.0.0` trong `src/Nepply/Nepply.csproj`; metadata Windows dùng `1.0.0.0`. Không thay phiên bản thư viện hoặc các dữ liệu test giả lập khi đổi phiên bản sản phẩm. Quy tắc tag/prerelease và chuyển từ bản thử cũ nằm trong [chính sách cập nhật](docs/release/EXE_UPDATES.md#phiên-bản-hiện-hành).
+
 - Mã nghiệp vụ đặt trong feature sở hữu nó; interop ở `Platform/Windows`, giao diện dùng chung ở `Presentation`.
 - Không thêm dependency, timer, process hay project chỉ để chia thư mục.
 - Test hồi quy nằm trong `tests/Nepply.Tests`. Công cụ chẩn đoán không nằm trong payload phát hành.
@@ -31,6 +33,8 @@ dotnet run --project tests/Nepply.Tests/Nepply.Tests.csproj -c Release --no-buil
 ```
 
 Test giao diện cần phiên Windows desktop phù hợp. Fixture không thay thế thử phần cứng thật, DPI nhiều màn hình hoặc nghiệm thu bộ cài. Không báo pass cho kiểm tra chưa chạy được.
+
+CI chạy thêm appearance, tray, DPI, crash, kiểm tra dependency/notice và hợp đồng đóng gói. Appearance fixture đặt rõ tùy chọn animation thay vì phụ thuộc mặc định của runner. Xem cấu hình hiện hành trong `.github/workflows`; kết quả CI của commit trước không tự chứng minh commit mới đã đạt.
 
 `Directory.Build.props` và `Directory.Build.targets` khóa runtime và ILLink theo dependency lock. Giữ hai file này khi build; không bỏ `--locked-mode` để che lỗi lệch dependency. Khi nâng phiên bản, cập nhật pin và lock có chủ đích rồi kiểm tra trên máy sạch/CI.
 

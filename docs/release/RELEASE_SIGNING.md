@@ -16,14 +16,14 @@ Trạng thái: chưa có chứng thư của nhà phát hành; không có artifac
 
 Khi có nhà cung cấp ký, cần tích hợp quy trình `SignedUninstaller` của Inno với chính nhà cung cấp đó trước khi mở public mode. Ký riêng Setup không ký tự động uninstaller. File truyền vào `-Uninstaller` phải lấy từ một lượt cài cô lập của đúng Setup đang duyệt; validator kiểm chữ ký/hash nhưng không tự chứng minh quan hệ nguồn gốc giữa hai file độc lập. Lưu hash Setup, log cài và hash uninstaller cùng hồ sơ nghiệm thu; không chạy một EXE uninstaller chỉ để đọc metadata.
 
-Hiện chưa có chứng thư/dịch vụ ký thật được cấu hình; bản nội bộ unsigned tiếp tục dựng được, public mode vẫn bị khóa. Thay đổi validator ngày 08/10 có fixture sai publisher, thiếu timestamp, thiếu policy và rollover; không thay thế kiểm chữ ký thực tế. Policy này dành cho kênh EXE/Inno, không áp nguyên xi lên chữ ký MSIX do Store xử lý.
+Hiện chưa có chứng thư/dịch vụ ký thật được cấu hình; bản nội bộ unsigned tiếp tục dựng được, public mode vẫn bị khóa. Validator có fixture sai publisher, thiếu timestamp, thiếu policy và rollover; không thay thế kiểm chữ ký thực tế. Policy này dành cho kênh EXE/Inno, không áp nguyên xi lên chữ ký MSIX do Store xử lý.
 
 ## Kết quả kiểm tra hiện tại
 
 - Không tìm thấy chứng thư Code Signing trong CurrentUser/My ở lượt kiểm tra trước. Không suy ra rằng máy không có chứng thư tại các kho khác hoặc dịch vụ ký từ xa.
 - Script hỗ trợ ký một artifact bằng thumbprint do nhà phát hành cung cấp, xác minh đúng signer, timestamp và Authenticode. Chưa kiểm thử ký thật vì chưa có chứng thư.
 - Ngày 12/10/2026 đã bổ sung bundle notice Mono.Posix.NETStandard 1.0.0, gồm managed/native/toolchain và provenance; collector chỉ chấp nhận đúng payload đã băm. Không gán MIT cho toàn bộ payload. Binary-to-source của helper Jenkins lịch sử chưa được chứng minh; xem hồ sơ đi kèm. Việc đủ notice không thay thế ký mã hoặc phê duyệt phát hành.
-- EULA_DRAFT.md vẫn là dự thảo, chưa tự động trở thành điều khoản ràng buộc hoặc được nối vào installer.
+- Mã Nepply dùng MIT; không có EULA riêng được nối vào installer. Bản dự thảo cũ không nằm trong repository sản phẩm và không phải điều khoản phát hành.
 - Inno Setup 7 tại máy hiển thị “Non-commercial use only”. Cần đối chiếu mục đích sử dụng và điều kiện của nhà cung cấp trước phát hành; “phần mềm miễn phí” không tự chứng minh mọi trường hợp sử dụng công cụ đều phi thương mại.
 
 ## Phạm vi giấy phép thư viện
