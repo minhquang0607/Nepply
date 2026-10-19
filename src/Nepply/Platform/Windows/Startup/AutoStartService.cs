@@ -17,14 +17,19 @@ internal static class AutoStartService
         using var key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run");
         var existing = key.GetValue("Nepply", null, RegistryValueOptions.DoNotExpandEnvironmentNames);
         if (existing != null && !MatchesRunCommand(existing, executable))
-            return UserMessage.FromKey("AutoStartDifferentEntry");
+        {
+            if (!IsDeadRunCommand(existing, ProductIdentity.Name + ".exe")) return UserMessage.FromKey("AutoStartDifferentEntry");
+            AppLogger.Info("Replacing startup entry of a moved or deleted Nepply copy.");
+        }
         string previousExecutable = Path.Combine(Path.GetDirectoryName(executable)!, ProductIdentity.LegacyName + ".exe");
         var previous = key.GetValue(ProductIdentity.LegacyName, null, RegistryValueOptions.DoNotExpandEnvironmentNames);
         if (enabled) key.SetValue("Nepply", "\"" + executable + "\"", RegistryValueKind.String);
         else key.DeleteValue("Nepply", false);
-        // Only migrate an exact, argument-free entry in this installation directory.
-        // Separate portable installations and customized commands belong to the user.
-        if (MatchesRunCommand(previous, previousExecutable)) key.DeleteValue(ProductIdentity.LegacyName, false);
+        // Only migrate an exact, argument-free entry in this installation directory, or
+        // retire one whose executable is gone. Live portable installations and
+        // customized commands belong to the user.
+        if (MatchesRunCommand(previous, previousExecutable) || IsDeadRunCommand(previous, ProductIdentity.LegacyName + ".exe"))
+            key.DeleteValue(ProductIdentity.LegacyName, false);
         else if (previous != null)
             return UserMessage.FromKey("AutoStartLegacyEntry");
 
@@ -74,6 +79,28 @@ internal static class AutoStartService
     internal static bool MatchesRunCommand(object? command, string executable) =>
         command is string text && Path.IsPathFullyQualified(executable)
         && string.Equals(text, "\"" + executable + "\"", StringComparison.OrdinalIgnoreCase);
+
+    internal static bool IsDeadRunCommand(object? command, string fileName) =>
+        IsDeadRunCommand(command, fileName, File.Exists, IsPresentFixedRoot);
+
+    // Stale entry of a moved/deleted copy: exactly the format Apply writes, the expected
+    // file name, and a missing file on a fixed local drive that is present right now.
+    // Removable, network and absent drives may hold a live copy that is merely offline.
+    internal static bool IsDeadRunCommand(object? command, string fileName, Func<string, bool> fileExists, Func<string, bool> isPresentFixedRoot)
+    {
+        if (command is not string text || text.Length < 3 || text[0] != '"' || text[^1] != '"') return false;
+        string path = text[1..^1];
+        if (path.Contains('"') || !Path.IsPathFullyQualified(path) || path.StartsWith(@"\\", StringComparison.Ordinal)) return false;
+        if (!string.Equals(Path.GetFileName(path), fileName, StringComparison.OrdinalIgnoreCase)) return false;
+        string? root = Path.GetPathRoot(path);
+        return !string.IsNullOrEmpty(root) && isPresentFixedRoot(root) && !fileExists(path);
+    }
+
+    private static bool IsPresentFixedRoot(string root)
+    {
+        try { var drive = new DriveInfo(root); return drive.DriveType == DriveType.Fixed && drive.IsReady; }
+        catch (Exception ex) when (ex is ArgumentException or IOException or UnauthorizedAccessException) { return false; }
+    }
 
     internal static bool MatchesCurrentApplication(string target, string arguments, string executable)
     {

@@ -32,6 +32,21 @@ internal static class ReleaseHardeningTests
         check("Startup Run command with arguments is preserved",!AutoStartService.MatchesRunCommand("\"C:\\Apps\\Nepply.exe\" --custom",@"C:\Apps\Nepply.exe"));
         check("Non-string Startup Run value is not owned",!AutoStartService.MatchesRunCommand(42,@"C:\Apps\Nepply.exe"));
         check("Unquoted Startup Run command is not claimed",!AutoStartService.MatchesRunCommand(@"C:\Apps\Nepply.exe",@"C:\Apps\Nepply.exe"));
+        Func<string,bool> missing = _ => false, present = _ => true, fixedDrive = _ => true, offlineDrive = _ => false;
+        check("Dead Startup Run entry of moved copy can be retired",AutoStartService.IsDeadRunCommand("\"D:\\Old\\Nepply.exe\"","Nepply.exe",missing,fixedDrive));
+        check("Dead legacy Startup Run entry can be retired",AutoStartService.IsDeadRunCommand("\"D:\\Old\\HoverBox.exe\"","HoverBox.exe",missing,fixedDrive));
+        check("Live Startup Run entry of another copy is preserved",!AutoStartService.IsDeadRunCommand("\"D:\\Other\\Nepply.exe\"","Nepply.exe",present,fixedDrive));
+        check("Startup Run entry on offline or removable drive is preserved",!AutoStartService.IsDeadRunCommand("\"E:\\Usb\\Nepply.exe\"","Nepply.exe",missing,offlineDrive));
+        check("Startup Run entry on network share is preserved",!AutoStartService.IsDeadRunCommand("\"\\\\server\\apps\\Nepply.exe\"","Nepply.exe",missing,fixedDrive));
+        check("Missing Startup Run entry with arguments is preserved",!AutoStartService.IsDeadRunCommand("\"D:\\Old\\Nepply.exe\" --custom","Nepply.exe",missing,fixedDrive));
+        check("Missing unquoted Startup Run entry is preserved",!AutoStartService.IsDeadRunCommand(@"D:\Old\Nepply.exe","Nepply.exe",missing,fixedDrive));
+        check("Missing Startup Run entry for another program is preserved",!AutoStartService.IsDeadRunCommand("\"D:\\Old\\Other.exe\"","Nepply.exe",missing,fixedDrive));
+        check("Missing relative Startup Run entry is preserved",!AutoStartService.IsDeadRunCommand("\"Old\\Nepply.exe\"","Nepply.exe",missing,fixedDrive));
+        check("Non-string Startup Run value is never dead",!AutoStartService.IsDeadRunCommand(42,"Nepply.exe",missing,fixedDrive));
+        string vanished = Path.Combine(Path.GetTempPath(), "nepply-moved-" + Guid.NewGuid().ToString("N"), "Nepply.exe");
+        check("Default dead-entry probe detects missing copy on fixed drive",
+            Path.GetPathRoot(vanished) is not { } tempRoot || new DriveInfo(tempRoot).DriveType != DriveType.Fixed || AutoStartService.IsDeadRunCommand("\""+vanished+"\"","Nepply.exe"));
+        check("Default dead-entry probe keeps this live executable",!AutoStartService.IsDeadRunCommand("\""+Environment.ProcessPath+"\"",Path.GetFileName(Environment.ProcessPath!)));
         check("Startup shortcut requires exact application path",AutoStartService.MatchesCurrentApplication(@"C:\Apps\Nepply.exe","",@"c:\apps\Nepply.exe"));
         check("Startup shortcut with custom arguments is preserved",!AutoStartService.MatchesCurrentApplication(@"C:\Apps\Nepply.exe","--custom",@"C:\Apps\Nepply.exe"));
         check("Startup shortcut for another install is preserved",!AutoStartService.MatchesCurrentApplication(@"D:\Other\Nepply.exe","",@"C:\Apps\Nepply.exe"));
