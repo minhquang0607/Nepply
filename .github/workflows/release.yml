@@ -1,0 +1,108 @@
+name: Release build
+# Tag push (vX.Y.Z) builds the distribution on a GitHub-hosted runner and
+# attaches it to a DRAFT release; a maintainer reviews and publishes it by hand.
+# workflow_dispatch is a dry run: it builds and uploads the artifact only.
+#
+# Artifacts are UNSIGNED until SignPath (or another approved signer) is
+# integrated. Signing goes between the build and draft-release jobs: submit the
+# unsigned artifact for signing, rebuild Setup with -SignedUninstallerDirectory,
+# then sign Setup and regenerate checksums. See docs/release/PUBLIC_RELEASE_CHECKLIST.md.
+on:
+  push:
+    tags: ['v*.*.*']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  INNO_VERSION: 7.1.0
+  INNO_URL: https://github.com/jrsoftware/issrc/releases/download/is-7_1_0/innosetup-7.1.0-x64.exe
+  INNO_PUBLISHER: CN=Pyrsys B.V., O=Pyrsys B.V., S=Noord-Holland, C=NL
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
+        with:
+          global-json-file: global.json
+      - name: Tag matches project version
+        if: github.ref_type == 'tag'
+        run: |
+          [xml]$project = Get-Content src/Nepply/Nepply.csproj -Raw
+          $expected = 'v' + [string]$project.Project.PropertyGroup.Version
+          if ('${{ github.ref_name }}' -cne $expected) { throw "Tag ${{ github.ref_name }} does not match project version $expected." }
+      - name: Install Inno Setup ${{ env.INNO_VERSION }} (signature verified)
+        run: |
+          $installer = Join-Path $env:RUNNER_TEMP 'innosetup.exe'
+          Invoke-WebRequest -Uri $env:INNO_URL -OutFile $installer
+          $signature = Get-AuthenticodeSignature -LiteralPath $installer
+          if ($signature.Status -ne 'Valid' -or $signature.SignerCertificate.Subject -cne $env:INNO_PUBLISHER) {
+            throw "Inno Setup installer signature rejected: $($signature.Status) $($signature.SignerCertificate.Subject)"
+          }
+          $process = Start-Process -FilePath $installer -ArgumentList '/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART','/ALLUSERS','/SP-' -Wait -PassThru
+          if ($process.ExitCode -ne 0) { throw "Inno Setup install failed: $($process.ExitCode)" }
+          $compiler = 'C:\Program Files\Inno Setup 7\ISCC.exe'
+          if ((Get-AuthenticodeSignature -LiteralPath $compiler).Status -ne 'Valid') { throw 'Installed compiler signature is not valid.' }
+      - run: dotnet restore Nepply.slnx --locked-mode
+      - run: ./scripts/Test-BuildBoundary.ps1
+      - run: ./scripts/Test-PublicSource.ps1
+      - run: ./scripts/Test-LanguageResources.ps1
+      - run: ./scripts/Test-InstallerContract.ps1
+      - name: Build Setup and portable
+        run: ./scripts/Build-Distribution.ps1 -OutputDirectory artifacts/release-ci -InternalOnly
+      - name: Collect release files
+        run: |
+          $out = 'artifacts/release-upload'
+          New-Item -ItemType Directory -Path $out | Out-Null
+          Copy-Item artifacts/release-ci/installer/*.exe, artifacts/release-ci/*.zip, artifacts/release-ci/SHA256.json -Destination $out
+          Get-ChildItem $out | ForEach-Object { Get-FileHash $_.FullName -Algorithm SHA256 } | Format-Table -AutoSize | Out-String | Write-Output
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: nepply-release-unsigned
+          path: artifacts/release-upload/
+          if-no-files-found: error
+          retention-days: 14
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: nepply-release-logs
+          path: artifacts/release-ci/inno-compile.log
+          if-no-files-found: warn
+          retention-days: 14
+
+  draft-release:
+    needs: build
+    if: github.ref_type == 'tag'
+    runs-on: windows-latest
+    timeout-minutes: 10
+    # Add a required reviewer to this environment in repository settings.
+    environment: release
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - name: Attach to draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          $files = Join-Path $env:RUNNER_TEMP 'release'
+          gh run download '${{ github.run_id }}' --name nepply-release-unsigned --dir $files
+          if ($LASTEXITCODE -ne 0) { throw 'Could not download the build artifact.' }
+          $assets = @(Get-ChildItem -LiteralPath $files -File | ForEach-Object FullName)
+          $existing = gh release view $env:TAG --json isDraft 2>$null | ConvertFrom-Json
+          if ($null -eq $existing) {
+            gh release create $env:TAG @assets --draft --verify-tag --title "Nepply $($env:TAG.TrimStart('v'))" --notes 'UNSIGNED build. Review the assets and CHANGELOG before publishing.'
+          } elseif ($existing.isDraft) {
+            gh release upload $env:TAG @assets --clobber
+          } else {
+            throw "Release $env:TAG is already published; refusing to replace its assets."
+          }
+          if ($LASTEXITCODE -ne 0) { throw 'Could not attach assets to the draft release.' }

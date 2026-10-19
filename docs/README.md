@@ -36,7 +36,8 @@ Các tài liệu triển khai chi tiết dưới đây hiện bằng tiếng Vi�
 
 - [Release 1.0.0 draft — English / Tiếng Việt](release/RELEASE_1.0.0.md)
 - [Packaging / Đóng gói](../packaging/README.md) · [MSIX / Store](../packaging/msix/README.md)
-- [Signing & acceptance / Ký và nghiệm thu](release/RELEASE_SIGNING.md) · [Signing policy](release/CODE_SIGNING_POLICY.md)
+- [Public release checklist / Checklist phát hành công khai](release/PUBLIC_RELEASE_CHECKLIST.md)
+- [Signing & acceptance / Ký và nghiệm thu](release/RELEASE_SIGNING.md) · Signing policy: [English](release/CODE_SIGNING_POLICY.en.md) · [Tiếng Việt](release/CODE_SIGNING_POLICY.md)
 - [EXE updates / Cập nhật EXE](release/EXE_UPDATES.md)
 
 ## 🔄 Keep docs current · Giữ tài liệu đồng bộ
