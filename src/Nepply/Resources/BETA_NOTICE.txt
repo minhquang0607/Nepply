@@ -9,9 +9,18 @@ Xem LICENSE và THIRD_PARTY_NOTICES.md cùng thư mục để biết điều kho
 Kết quả nghiệm thu chỉ áp dụng cho đúng hash artifact trong biên bản tương ứng.
 
 Hardware sensor availability depends on your hardware, driver and permissions.
-Motherboard temperature is not yet available on the development test machine.
-This installer does not install PawnIO or any other hardware monitoring driver.
-Do not disable Windows security protections to obtain sensor readings.
+CPU temperature is unavailable on many Intel/AMD PCs; motherboard temperature
+and fan speed are not supported. This installer does not install PawnIO or any
+other hardware monitoring driver. Do not disable Windows security protections
+to obtain sensor readings.
+
+Desktop icons: Nepply can hide the Windows Desktop icons only if you turn that
+option on (first-run screen or Settings > Desktop). Files are never moved or
+deleted; icons are restored when Nepply exits. If they stay hidden, right-click
+the Desktop and choose View > Show desktop icons.
+Biểu tượng Desktop: Nepply chỉ ẩn icon Desktop khi bạn bật tùy chọn này; file
+không bị di chuyển hay xóa và icon được khôi phục khi thoát Nepply. Nếu icon
+vẫn ẩn: chuột phải Desktop > Xem > Hiển thị biểu tượng màn hình nền.
 
 Mã Nepply: MIT License, Copyright (c) 2026 Minh Quang.
 Thư viện bên thứ ba giữ giấy phép riêng. Thông báo này không thay thế LICENSE.

@@ -19,6 +19,14 @@ Nếu mục đã bị xóa hoặc đổi tên bên ngoài app, không thể mở
 
 Không phải máy nào cũng cung cấp đủ cảm biến. Kiểm tra tùy chọn monitor/cảm biến và GPU đang chọn. Phần trăm sử dụng và nhiệt độ có thể đến từ các nguồn khác nhau, nên có phần trăm không đồng nghĩa chắc chắn có nhiệt độ.
 
+### Vì sao nhiệt độ CPU hiện "chưa khả dụng"?
+
+Đây là giới hạn đã biết, không phải lỗi cài đặt. Trên nhiều CPU Intel và AMD, nhiệt độ CPU chỉ đọc được qua driver cấp nhân (LibreHardwareMonitor dùng PawnIO), thường cần quyền quản trị. Nepply chạy bằng quyền người dùng thông thường và **không cài driver**, nên trên các máy này thẻ CPU vẫn hiện mức sử dụng và xung nhịp nhưng không có nhiệt độ.
+
+- Một số máy AMD có đồ họa Radeon tích hợp (APU) đọc được nhiệt độ qua AMD ADL; nguồn này được ghi là *dự phòng* trong chi tiết thẻ.
+- Nhiệt độ GPU thường đến từ API của driver đồ họa, nên có thể có nhiệt độ GPU dù thiếu nhiệt độ CPU.
+- Không chạy Nepply bằng quyền quản trị và không cài driver lạ chỉ để có nhiệt độ. Dùng công cụ của hãng mainboard/CPU nếu cần theo dõi nhiệt độ CPU.
+
 Không tắt Vanguard, antivirus hoặc bảo vệ Windows, và không tự cài driver để ép cảm biến hoạt động. Khi báo lỗi, gửi mẫu CPU/GPU, phiên bản Windows và trường dữ liệu bị thiếu. Nhiệt độ bo mạch chủ/RPM không thuộc tính năng hiện tại.
 
 ## Tốc độ mạng bằng 0 hoặc khác ứng dụng tải xuống

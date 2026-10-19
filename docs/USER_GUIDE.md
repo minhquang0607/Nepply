@@ -43,7 +43,7 @@ Có thể bật/tắt neon và ánh kim. Nếu muốn giao diện tĩnh, giảm 
 
 ## Theo dõi hệ thống
 
-Các thẻ hiển thị mức sử dụng CPU, RAM, GPU/iGPU và tốc độ mạng. Nhiệt độ, xung nhịp chỉ có khi hệ thống cung cấp dữ liệu phù hợp. Nepply không hiển thị nhiệt độ bo mạch chủ hay tốc độ quạt trong bản hiện tại.
+Các thẻ hiển thị mức sử dụng CPU, RAM, GPU/iGPU và tốc độ mạng. Nhiệt độ, xung nhịp chỉ có khi hệ thống cung cấp dữ liệu phù hợp; trên nhiều máy Intel/AMD nhiệt độ CPU không khả dụng vì Nepply không cài driver ([giải thích](TROUBLESHOOTING.md#vì-sao-nhiệt-độ-cpu-hiện-chưa-khả-dụng)). Nepply không hiển thị nhiệt độ bo mạch chủ hay tốc độ quạt trong bản hiện tại.
 
 Trong Cài đặt, có thể tắt monitor hoặc tốc độ mạng khi không cần. Phần nâng cao cho phép chỉnh chu kỳ cập nhật và tạm ngừng đo khi panel ẩn. Chọn đúng adapter mạng nếu máy có nhiều kết nối hoặc VPN.
 

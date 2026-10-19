@@ -43,7 +43,7 @@ Neon and metallic effects can be toggled. Reduce or disable motion for a static 
 
 ## 📊 System monitoring
 
-Cards show CPU, RAM, GPU/iGPU and network rates. Temperature and clock readings require suitable system data. Motherboard temperature and fan RPM are not supported in this version.
+Cards show CPU, RAM, GPU/iGPU and network rates. Temperature and clock readings require suitable system data; on many Intel/AMD machines CPU temperature is unavailable because Nepply installs no driver ([why](TROUBLESHOOTING.en.md#why-does-cpu-temperature-show-unavailable)). Motherboard temperature and fan RPM are not supported in this version.
 
 Disable monitoring or network rates when not needed. Advanced options control sampling interval and pausing while the panel is hidden. Select the appropriate network adapter, especially with VPNs or multiple connections.
 
