@@ -487,8 +487,9 @@ internal static class Program
         Check("Panel search starts collapsed to an icon",desktopSearchEditor.Visibility==Visibility.Collapsed);
         desktopSearchVm.SearchQuery="test"; Pump(30);
         Check("Panel search stays expanded while a filter exists",desktopSearchEditor.Visibility==Visibility.Visible);
-        desktopSearchVm.SearchQuery=""; Pump(300);
-        Check("Empty inactive panel search collapses",desktopSearchEditor.Visibility==Visibility.Collapsed);
+        // Collapse is a 240 ms dismiss delay plus the reveal animation; wait for it, bounded.
+        desktopSearchVm.SearchQuery="";
+        Check("Empty inactive panel search collapses",PumpUntil(()=>desktopSearchEditor.Visibility==Visibility.Collapsed,2000));
         desktopSearchVm.SearchQuery="test";
         ((FrameworkElement)preview.FindName("MainPanel")).RaiseEvent(new System.Windows.Input.MouseButtonEventArgs(System.Windows.Input.Mouse.PrimaryDevice,0,System.Windows.Input.MouseButton.Left){RoutedEvent=System.Windows.Input.Mouse.PreviewMouseDownEvent});
         Pump(250);
