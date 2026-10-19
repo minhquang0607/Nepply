@@ -83,6 +83,18 @@ Filename: "{app}\Nepply.exe"; Parameters: "--show"; Flags: nowait skipifnotsilen
 #endif
 
 [Code]
+const
+  DesktopLease = '{localappdata}\HoverBox\desktop-visibility.lease';
+  DesktopLeaseMarker = 'restore-visible-v1';
+  ExplorerAdvancedKey = 'Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced';
+  RecoveryAppRunning = 2;
+
+{ HWND-typed WindowName keeps the NULL title pointer-sized on every Setup architecture. }
+function FindWindowEx(Parent, ChildAfter: HWND; ClassName: String; WindowName: HWND): HWND;
+  external 'FindWindowExW@user32.dll stdcall';
+function IsWindowVisible(Wnd: HWND): Boolean;
+  external 'IsWindowVisible@user32.dll stdcall';
+
 function IsNepplyUpdate(): Boolean;
 begin
   Result := ExpandConstant('{param:NEPPLYUPDATE|0}') = '1';
@@ -106,6 +118,103 @@ begin
     MsgBox('Nepply has not exited safely. No update was installed. Close Nepply and retry.', mbError, MB_OK);
 end;
 
+function LocateDesktopView(var View, List: HWND): Boolean;
+var
+  Worker: HWND;
+begin
+  { Same lookup as ExplorerDesktopVisibility.Locate. }
+  View := FindWindowEx(FindWindowByClassName('Progman'), 0, 'SHELLDLL_DefView', 0);
+  Worker := 0;
+  while View = 0 do
+  begin
+    Worker := FindWindowEx(0, Worker, 'WorkerW', 0);
+    if Worker = 0 then Break;
+    View := FindWindowEx(Worker, 0, 'SHELLDLL_DefView', 0);
+  end;
+  List := 0;
+  if View <> 0 then List := FindWindowEx(View, 0, 'SysListView32', 0);
+  Result := List <> 0;
+end;
+
+function RestoreDesktopIconsNatively(): Boolean;
+var
+  View: HWND;
+  List: HWND;
+  Attempts: Integer;
+begin
+  Result := False;
+  if not LocateDesktopView(View, List) then
+  begin
+    Log('Desktop icon view was not found; Explorer may not be running.');
+    Exit;
+  end;
+  { Explorer exposes a toggle, not a setter: post it only while icons are hidden,
+    asynchronously so a hung Explorer cannot hang Setup, then verify. }
+  if not IsWindowVisible(List) then
+  begin
+    if not PostMessage(View, $0111, $7402, 0) then Exit;
+    Attempts := 0;
+    while (not IsWindowVisible(List)) and (Attempts < 30) do
+    begin
+      Sleep(100);
+      Attempts := Attempts + 1;
+    end;
+  end;
+  Result := IsWindowVisible(List);
+end;
+
+{ Fallback when Windows blocks Nepply.exe (Smart App Control, App Control, AppLocker)
+  or it is missing: restore from Setup itself, but only for a lease Nepply wrote. }
+function RecoverDesktopWithoutApp(): Boolean;
+var
+  Marker: AnsiString;
+begin
+  Result := False;
+  if not LoadStringFromFile(ExpandConstant(DesktopLease), Marker) or (Marker <> DesktopLeaseMarker) then
+  begin
+    Log('Desktop lease has no restore marker; Setup will not toggle Desktop icons.');
+    Exit;
+  end;
+  Result := RestoreDesktopIconsNatively();
+  if Result then
+  begin
+    Log('Setup restored Desktop icons without Nepply.exe.');
+    if not DeleteFile(ExpandConstant(DesktopLease)) then Log('Could not remove the completed Desktop lease.');
+  end;
+end;
+
+{ Last resort: Explorer reads HideIcons at sign-in, so icons return then even if
+  the live toggle failed. The lease is kept for Nepply to reconcile later. }
+procedure ClearPersistedHiddenDesktop();
+var
+  Hidden: Cardinal;
+begin
+  if RegQueryDWordValue(HKCU, ExplorerAdvancedKey, 'HideIcons', Hidden) and (Hidden <> 0) then
+    if not RegWriteDWordValue(HKCU, ExplorerAdvancedKey, 'HideIcons', 0) then
+      Log('Could not reset the persisted HideIcons value.');
+end;
+
+{ True only when Nepply ran and restored Desktop. ExitCode is -1 when it could not start. }
+function RunAppRecovery(var ExitCode: Integer): Boolean;
+begin
+  Result := False;
+  ExitCode := -1;
+  if not FileExists(ExpandConstant('{app}\Nepply.exe')) then
+  begin
+    Log('Nepply.exe is missing; Desktop recovery falls back to Setup.');
+    Exit;
+  end;
+  if not Exec(ExpandConstant('{app}\Nepply.exe'), '--restore-desktop', '', SW_HIDE,
+    ewWaitUntilTerminated, ExitCode) then
+  begin
+    Log('Nepply.exe could not start Desktop recovery: ' + SysErrorMessage(ExitCode));
+    ExitCode := -1;
+    Exit;
+  end;
+  Log('Nepply Desktop recovery exit code: ' + IntToStr(ExitCode));
+  Result := ExitCode = 0;
+end;
+
 function PrepareToInstall(var NeedsRestart: Boolean): String;
 var
   RecoveryExitCode: Integer;
@@ -114,19 +223,20 @@ begin
 #ifdef InstallerQA
   Exit;
 #endif
-  { Recovery is mandatory for every upgrade with an outstanding owned lease,
-    including a manual upgrade after a previous crash. Never overwrite first. }
-  if not FileExists(ExpandConstant('{localappdata}\HoverBox\desktop-visibility.lease')) then Exit;
-  if not FileExists(ExpandConstant('{app}\Nepply.exe')) then
+  { Recovery runs for every upgrade with an outstanding owned lease, including a
+    manual upgrade after a previous crash, before any file is overwritten. }
+  if not FileExists(ExpandConstant(DesktopLease)) then Exit;
+  if RunAppRecovery(RecoveryExitCode) then Exit;
+  if RecoveryExitCode = RecoveryAppRunning then
   begin
-    Result := 'Desktop recovery is pending. Restore Desktop icons with the previous Nepply installation before continuing.';
+    Result := 'Nepply is still running and owns your Desktop icons. Close Nepply and retry. No update was installed.';
     Exit;
   end;
-  if not Exec(ExpandConstant('{app}\Nepply.exe'), '--restore-desktop', '', SW_HIDE,
-    ewWaitUntilTerminated, RecoveryExitCode) then
-    Result := 'Nepply could not start Desktop recovery. No update was installed.';
-  if (Result = '') and (RecoveryExitCode <> 0) then
-    Result := 'Nepply could not restore Desktop icons. No update was installed.';
+  if RecoverDesktopWithoutApp() then Exit;
+  { Never strand the user on a blocked old build: the new Nepply restores the
+    retained lease at its next start (App.OnStartup). }
+  ClearPersistedHiddenDesktop();
+  SuppressibleMsgBox('Setup could not restore your Desktop icons right now. The update will continue and Nepply restores them when it next starts. If they stay hidden, right-click the Desktop and choose View > Show desktop icons.', mbInformation, MB_OK, IDOK);
 end;
 
 procedure RetireLegacyShortcut(const ShortcutPath: String);
@@ -178,14 +288,19 @@ begin
   { Packaging-only fixture: never read or restore the production Desktop lease. }
   Exit;
 #endif
-  if not FileExists(ExpandConstant('{localappdata}\HoverBox\desktop-visibility.lease')) then
+  if not FileExists(ExpandConstant(DesktopLease)) then
     Exit;
-  Result := Exec(ExpandConstant('{app}\Nepply.exe'), '--restore-desktop', '',
-    SW_HIDE, ewWaitUntilTerminated, RecoveryExitCode);
-  if Result then
-    Result := RecoveryExitCode = 0;
-  if not Result then
-    MsgBox('Nepply could not safely restore your Desktop icons. Close Nepply and try again. If Windows blocked Nepply, do not disable protection: obtain an approved build, or restore icons through Desktop > View > Show desktop icons and contact support. No application files have been removed.', mbError, MB_OK);
+  if RunAppRecovery(RecoveryExitCode) then Exit;
+  if RecoveryExitCode = RecoveryAppRunning then
+  begin
+    MsgBox('Nepply is still running and owns your Desktop icons. Close Nepply and try again. No application files have been removed.', mbError, MB_OK);
+    Result := False;
+    Exit;
+  end;
+  if RecoverDesktopWithoutApp() then Exit;
+  { A blocked or broken Nepply.exe must never make uninstall impossible. }
+  ClearPersistedHiddenDesktop();
+  Result := SuppressibleMsgBox('Nepply could not restore your Desktop icons automatically. Windows may have blocked Nepply.exe; do not disable protection. You can still uninstall: afterwards, right-click the Desktop and choose View > Show desktop icons (icons also return after you sign out and back in).' + #13#10#13#10 + 'Continue uninstalling?', mbConfirmation, MB_YESNO, IDYES) = IDYES;
 end;
 
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);

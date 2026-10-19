@@ -5,18 +5,32 @@ $repo=Split-Path $PSScriptRoot -Parent
 [xml]$packageManifest=Get-Content -LiteralPath (Join-Path $repo 'packaging/msix/AppxManifest.xml') -Raw
 $minimumMatch=[regex]::Match($source,'(?m)^MinVersion=(\d+\.\d+\.\d+)\s*$')
 $minimum=if($minimumMatch.Success){[version]($minimumMatch.Groups[1].Value+'.0')}else{$null}
+function Get-PascalRoutine([string]$header) {
+    $match=[regex]::Match($source,'(?ms)^'+[regex]::Escape($header)+'.*?^end;')
+    if($match.Success){$match.Value}else{''}
+}
+$uninstall=Get-PascalRoutine 'function InitializeUninstall(): Boolean;'
+$prepare=Get-PascalRoutine 'function PrepareToInstall(var NeedsRestart: Boolean): String;'
+$fallback=Get-PascalRoutine 'function RecoverDesktopWithoutApp(): Boolean;'
+$native=Get-PascalRoutine 'function RestoreDesktopIconsNatively(): Boolean;'
 $checks=[ordered]@{
     'Installer OS minimum matches app and MSIX'=$null -ne $minimum -and $minimum -eq [version]$appProject.Project.PropertyGroup.SupportedOSPlatformVersion -and $minimum -eq [version]$packageManifest.Package.Dependencies.TargetDeviceFamily.MinVersion
     'Installer runs per user'=$source.Contains('PrivilegesRequired=lowest')
     'QA uses a separate app identity'=$source.Contains('AppId=Nepply.Internal.InstallerQA')
-    'Production recovery executes before removal'=$source.Contains('function InitializeUninstall(): Boolean;') -and $source.Contains("'--restore-desktop'")
-    'Recovery failure blocks uninstall'=$source.Contains('Result := RecoveryExitCode = 0;')
-    'Recovery only applies to owned journal'=$source.Contains('desktop-visibility.lease')
+    'Production recovery executes before removal'=$uninstall.Contains('RunAppRecovery(RecoveryExitCode)') -and $source.Contains("'--restore-desktop'")
+    'Running app still blocks uninstall'=$uninstall.Contains('if RecoveryExitCode = RecoveryAppRunning then') -and $uninstall.Contains('Result := False;')
+    'Blocked app falls back to Setup recovery on uninstall'=$uninstall.Contains('if RecoverDesktopWithoutApp() then Exit;')
+    'Failed recovery never makes uninstall impossible'=$uninstall.Contains('SuppressibleMsgBox(') -and $uninstall.Contains('MB_YESNO, IDYES) = IDYES') -and $uninstall.Contains('View > Show desktop icons')
+    'Fallback only toggles a lease Nepply wrote'=$fallback.Contains('(Marker <> DesktopLeaseMarker)') -and $source.Contains("DesktopLeaseMarker = 'restore-visible-v1';")
+    'Fallback toggles only while hidden and verifies'=$native.Contains('if not IsWindowVisible(List) then') -and $native.Contains('PostMessage(View, $0111, $7402, 0)') -and $native.Contains('Result := IsWindowVisible(List);')
+    'Failed recovery resets persisted HideIcons'=$source.Contains("RegWriteDWordValue(HKCU, ExplorerAdvancedKey, 'HideIcons', 0)") -and $uninstall.Contains('ClearPersistedHiddenDesktop();') -and $prepare.Contains('ClearPersistedHiddenDesktop();')
+    'Recovery only applies to owned journal'=$source.Contains("DesktopLease = '{localappdata}\HoverBox\desktop-visibility.lease';")
     'Manifest and optional symbols are both packaged'=$source.Contains('release-manifest.json') -and $source.Contains('*.pdb')
     'Guardian executable is required in its own directory'=$source.Contains('Source: "{#PayloadRoot}\guardian\Nepply.DesktopGuardian.exe"; DestDir: "{app}\guardian"; Flags: ignoreversion')
     'Startup cleanup checks ownership'=$source.Contains('CompareText(CurrentCommand, OwnedCommand) = 0')
     'Update waits for normal exit without killing app'=$source.Contains("CheckForMutexes('Local\HoverBox-SetupGuard')") -and $source.Contains('Attempts < 600') -and $source.Contains('CloseApplications=no')
-    'Upgrade recovery runs before copying'=$source.Contains('function PrepareToInstall(var NeedsRestart: Boolean): String;') -and $source.Contains("'--restore-desktop'")
+    'Upgrade recovery runs before copying'=$prepare.Contains('RunAppRecovery(RecoveryExitCode)') -and $prepare.Contains('RecoverDesktopWithoutApp()')
+    'Running app still blocks upgrade'=$prepare.Contains('if RecoveryExitCode = RecoveryAppRunning then') -and $prepare.Contains('No update was installed.')
     'Automatic relaunch is update-only'=$source.Contains('Flags: nowait skipifnotsilent; Check: IsNepplyUpdate')
 }
 foreach($entry in $checks.GetEnumerator()) { if(-not $entry.Value) { throw "FAIL $($entry.Key)" }; Write-Output "PASS $($entry.Key)" }
