@@ -41,7 +41,7 @@ Mở file, shortcut, URL hoặc menu Shell là hành động do người dùng y
 
 Khi Nepply đã đóng và icon Desktop đã được khôi phục, người dùng có thể xóa thư mục cấu hình và Logs để đặt lại dữ liệu cục bộ. Việc gỡ cài đặt hiện giữ cấu hình để hỗ trợ cài lại. Không xóa `desktop-visibility.lease` nếu icon Desktop đang bị ẩn; hãy mở lại Nepply hoặc bật lại icon trong Windows trước.
 
-Nếu người dùng tự gửi log, ảnh chụp hoặc báo cáo qua GitHub Issues, việc truyền dữ liệu do người dùng chủ động và còn chịu chính sách của GitHub. Hãy che đường dẫn, tên tài khoản và dữ liệu cá nhân; không gửi mật khẩu, token, khóa ký số hoặc tài liệu riêng tư.
+Nếu người dùng tự gửi log, ảnh chụp hoặc báo cáo qua GitHub Issues hoặc GitHub Private vulnerability reporting, việc truyền dữ liệu do người dùng chủ động và còn chịu chính sách của GitHub. Issue là công khai. Hãy che đường dẫn, tên tài khoản và dữ liệu cá nhân; không gửi mật khẩu, token, khóa ký số hoặc tài liệu riêng tư.
 
 ## Kiểm tra và tải cập nhật
 
@@ -87,7 +87,7 @@ Opening files, shortcuts, URLs or Shell menus is user-requested. Launched progra
 
 After Nepply exits and Desktop icons are restored, configuration and log folders can be removed to reset local data. Uninstall currently retains settings for reinstallation. Do not delete the recovery marker while icons are hidden; reopen Nepply or show icons through Windows first.
 
-Sending logs, screenshots or reports through GitHub Issues is voluntary and also subject to GitHub policies. Redact paths, account names and personal data; never send passwords, tokens, signing keys or private documents.
+Sending logs, screenshots or reports through GitHub Issues or GitHub Private vulnerability reporting is voluntary and also subject to GitHub policies. Issues are public. Redact paths, account names and personal data; never send passwords, tokens, signing keys or private documents.
 
 ### Update checks and downloads
 

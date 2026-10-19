@@ -4,7 +4,7 @@
 
 ## Tiếng Việt
 
-Liên hệ riêng Minh Quang: https://github.com/minhquang0607/Nepply/issues
+Báo cáo riêng qua GitHub Private vulnerability reporting: https://github.com/minhquang0607/Nepply/security/advisories/new (không mở Issue công khai cho lỗ hổng bảo mật). Lỗi thông thường: https://github.com/minhquang0607/Nepply/issues
 
 Gửi phiên bản Nepply, phiên bản Windows, bước tái hiện và tác động. Không đăng công khai dữ liệu cá nhân, khóa ký số hoặc cách khai thác trước khi trao đổi hướng khắc phục. Không có cam kết thời gian phản hồi hoặc chương trình thưởng lỗi ở giai đoạn hiện tại.
 
@@ -12,7 +12,7 @@ Bản phát hành hiện chưa ký số. Không yêu cầu người dùng tắt 
 
 ## English
 
-Contact Minh Quang privately: https://github.com/minhquang0607/Nepply/issues
+Report privately through GitHub Private vulnerability reporting: https://github.com/minhquang0607/Nepply/security/advisories/new (do not open a public issue for a vulnerability). Ordinary bugs: https://github.com/minhquang0607/Nepply/issues
 
 Include the Nepply version, Windows version, reproduction steps and impact. Do not publicly post personal data, signing keys or exploit instructions before discussing remediation. There is currently no guaranteed response time or bug bounty program.
 
