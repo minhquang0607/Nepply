@@ -1,0 +1,21 @@
+name: Feature request · Đề xuất tính năng
+description: Suggest an improvement. · Đề xuất cải tiến.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or use case · Vấn đề hoặc nhu cầu
+      description: What are you trying to do, and what gets in the way? · Bạn muốn làm gì và điều gì đang cản trở?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior · Hành vi đề xuất
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered · Phương án khác đã cân nhắc

@@ -1,5 +1,7 @@
 # Code signing policy
 
+[English](CODE_SIGNING_POLICY.en.md) · **Tiếng Việt**
+
 ## Trạng thái
 
 Nepply dùng MIT cho mã do dự án sở hữu; dependency giữ giấy phép riêng.

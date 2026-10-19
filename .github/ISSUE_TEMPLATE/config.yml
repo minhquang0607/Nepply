@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability · Lỗ hổng bảo mật
+    url: https://github.com/minhquang0607/Nepply/security/advisories/new
+    about: Report privately; never in a public issue. · Báo riêng, không đăng trong Issue công khai.
+  - name: User guide & troubleshooting · Hướng dẫn và xử lý sự cố
+    url: https://github.com/minhquang0607/Nepply/blob/main/docs/TROUBLESHOOTING.en.md
+    about: Common problems such as missing sensor readings or hidden Desktop icons. · Các sự cố thường gặp.

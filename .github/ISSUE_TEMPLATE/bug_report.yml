@@ -1,0 +1,68 @@
+name: Bug report · Báo lỗi
+description: Something does not work as described. · Ứng dụng không chạy như mô tả.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Redact paths, account names and personal data from logs and screenshots. Security issues: use private reporting instead.
+        Hãy che đường dẫn, tên tài khoản và dữ liệu cá nhân trong log/ảnh. Lỗ hổng bảo mật: dùng kênh báo riêng.
+  - type: input
+    id: version
+    attributes:
+      label: Nepply version · Phiên bản Nepply
+      description: Settings → App → About. · Cài đặt → Ứng dụng → Giới thiệu.
+      placeholder: "1.0.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: distribution
+    attributes:
+      label: Distribution · Kiểu cài
+      options:
+        - Setup (installer)
+        - Portable
+    validations:
+      required: true
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version · Phiên bản Windows
+      description: "Run winver. · Chạy winver."
+      placeholder: "Windows 11 24H2 (26100)"
+    validations:
+      required: true
+  - type: input
+    id: hardware
+    attributes:
+      label: CPU / GPU (for sensor issues) · CPU / GPU (nếu lỗi cảm biến)
+      placeholder: "AMD Ryzen 5 4600G / integrated Radeon"
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce · Các bước tái hiện
+      placeholder: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual result · Kết quả mong đợi và thực tế
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs (optional, redacted) · Log (tùy chọn, đã che)
+      description: "%LOCALAPPDATA%\\Nepply\\Logs"
+      render: text
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Confirmation · Xác nhận
+      options:
+        - label: I removed personal data and did not disable Windows protection to reproduce this. · Tôi đã che dữ liệu cá nhân và không tắt bảo vệ Windows để tái hiện.
+          required: true

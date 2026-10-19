@@ -72,4 +72,4 @@ Không quảng cáo, analytics hay tự gửi báo cáo lỗi. Kiểm tra cập 
 
 Phát triển bởi **Minh Quang** bằng WPF / .NET. Mã Nepply sở hữu dùng [MIT License](LICENSE); thư viện giữ [giấy phép và thông báo riêng](docs/legal/THIRD_PARTY_NOTICES.md).
 
-[Đóng góp / tự build](CONTRIBUTING.md) · [Tài liệu](docs/README.md) · [Chính sách ký mã](docs/release/CODE_SIGNING_POLICY.md)
+[Đóng góp / tự build](CONTRIBUTING.md) · [Tài liệu](docs/README.md) · [Chính sách ký mã](docs/release/CODE_SIGNING_POLICY.md) · [Quy tắc ứng xử](CODE_OF_CONDUCT.md)

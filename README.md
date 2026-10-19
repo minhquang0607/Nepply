@@ -72,4 +72,4 @@ No ads, analytics or automatic crash uploads. Update checks contact GitHub only 
 
 Built by **Minh Quang** with WPF / .NET. Nepply-owned code uses the [MIT License](LICENSE); dependencies retain their [own licenses and notices](docs/legal/THIRD_PARTY_NOTICES.md).
 
-[Contribute / build](CONTRIBUTING.en.md) · [Documentation](docs/README.md) · [Code signing policy](docs/release/CODE_SIGNING_POLICY.md)
+[Contribute / build](CONTRIBUTING.en.md) · [Documentation](docs/README.md) · [Code signing policy](docs/release/CODE_SIGNING_POLICY.en.md) · [Code of conduct](CODE_OF_CONDUCT.md)
