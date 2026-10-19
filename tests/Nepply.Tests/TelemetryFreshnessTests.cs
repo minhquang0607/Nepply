@@ -26,9 +26,9 @@ internal static class TelemetryFreshnessTests
         check("Invalid monotonic age does not look fresh",TelemetryFreshness.IsExpired(TimeSpan.FromSeconds(-1),1500));
         var original=new HardwareReading(DateTimeOffset.UtcNow,"CPU fixture","GPU fixture",50,3500,40,60,1500,1600,null)
         { Gpus=[new("gpu-1","GPU fixture",40,60,1500,"fixture")],MonotonicTimestamp=System.Diagnostics.Stopwatch.GetTimestamp() };
-        var expired=TelemetryFreshness.Unavailable(original,"Test expired");
+        var expired=TelemetryFreshness.Unavailable(original,"SensorExpired");
         check("Expired native snapshot clears every measurement",expired.CpuTemp==null && expired.CpuClockMHz==null && expired.GpuLoad==null && expired.GpuTemp==null && expired.GpuClockMHz==null && expired.MemoryClockMHz==null);
-        check("Expired GPU keeps identity without stale numbers",expired.Gpus.Length==1 && expired.Gpus[0].Id=="gpu-1" && expired.Gpus[0].Load==null && expired.Gpus[0].Temperature==null && expired.Gpus[0].ClockMHz==null && expired.Gpus[0].Source=="Test expired");
+        check("Expired GPU keeps identity without stale numbers",expired.Gpus.Length==1 && expired.Gpus[0].Id=="gpu-1" && expired.Gpus[0].Load==null && expired.Gpus[0].Temperature==null && expired.Gpus[0].ClockMHz==null && expired.Gpus[0].Source=="" && expired.Gpus[0].SourceInfo==null);
         check("Expired explicit GPU selection stays visible as unavailable",HardwareMonitorService.SelectGpus(expired.Gpus,new AppSettings { GpuDisplay=GpuDisplayMode.Primary,GpuIdentifier="gpu-1" }).Length==1);
         check("Expiring snapshot does not mutate original",original.CpuTemp==50 && original.Gpus[0].Temperature==60);
         check("Fresh snapshot is reused without allocation",ReferenceEquals(TelemetryFreshness.ExpireIfNeeded(original,1500),original));
@@ -64,14 +64,14 @@ internal static class TelemetryFreshnessTests
         service.Configure(new AppSettings {EcoMode=false,MonitorUpdateIntervalMs=1000},true);
         service.HardwareUpdated+=frame=>
         {
-            if(frame.Hardware.Error==HelperFailure.PolicyMessage) notified.Set();
+            if(frame.Hardware.Error==HelperFailure.PolicyMessageKey) notified.Set();
         };
         service.Start();
         check("Policy-blocked sensor source reports actionable status",notified.Wait(6000));
         long sequence=service.GetSnapshot().Sequence;
         check("Windows metrics continue across policy retry deadline",SpinWait.SpinUntil(()=>service.GetSnapshot().Sequence>=sequence+12,16000));
         check("Policy denial suppresses automatic helper relaunch",Volatile.Read(ref attempts)==1);
-        check("Policy status is not overwritten by stale sensor warning",service.GetSnapshot().Hardware.Error==HelperFailure.PolicyMessage);
+        check("Policy status is not overwritten by stale sensor warning",service.GetSnapshot().Hardware.Error==HelperFailure.PolicyMessageKey);
     }
     private static void RunToggleRecovery(Action<string,bool> check)
     {
@@ -87,7 +87,7 @@ internal static class TelemetryFreshnessTests
         {
             if(snapshot.Hardware.CpuTemp==41) initial.Set();
             if(snapshot.Hardware.CpuTemp==42) recovered.Set();
-            if(snapshot.Hardware.Error=="Cảm biến nâng cao đã tắt") disabled.Set();
+            if(snapshot.Hardware.Error=="SensorDisabled") disabled.Set();
         };
         service.Start();
         check("Toggle fixture produces initial sensor sample",initial.Wait(6000));

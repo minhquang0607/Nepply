@@ -18,14 +18,31 @@ try {
         }
     }
     $consumerCount = 0
+    $keyCount = 0
+    # Vietnamese is one of eight languages: user-facing text lives only in Strings.json.
+    # Allowed: the bilingual settings search index and each language's own name.
+    $vietnameseAllowed = @('Features/Search/SettingsSearch.cs', 'Presentation/Localization/LocalizationService.cs')
+    $vietnameseLiteral = '"(?:[^"\\\r\n]|\\.)*[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđĐ](?:[^"\\\r\n]|\\.)*"'
+    $keyedCall = '(?:FromKey|LocalizationService\.Get|WithUserMessage|ShowActionNotice|DismissActionNotice)\(\s*"([A-Za-z][A-Za-z0-9_]*)"'
     foreach ($file in Get-ChildItem -LiteralPath $sourceRoot -Recurse -File) {
         if ($file.Extension -notin '.cs','.xaml' -or $file.FullName -match '[\\/](bin|obj)[\\/]') { continue }
-        foreach ($match in [regex]::Matches([IO.File]::ReadAllText($file.FullName),'Loc\.([A-Za-z][A-Za-z0-9_]*)')) {
+        $text = [IO.File]::ReadAllText($file.FullName)
+        foreach ($match in [regex]::Matches($text,'Loc\.([A-Za-z][A-Za-z0-9_]*)')) {
             if (-not $keys.Contains($match.Groups[1].Value)) { throw "Missing resource $($match.Value) in $($file.FullName)" }
             $consumerCount++
         }
+        if ($file.Extension -ne '.cs') { continue }
+        foreach ($match in [regex]::Matches($text,$keyedCall)) {
+            if (-not $keys.Contains($match.Groups[1].Value)) { throw "Missing resource key `"$($match.Groups[1].Value)`" in $($file.FullName)" }
+            $keyCount++
+        }
+        $relative = [IO.Path]::GetRelativePath($sourceRoot,$file.FullName).Replace('\','/')
+        if ($relative -notin $vietnameseAllowed -and ($found = [regex]::Match($text,$vietnameseLiteral)).Success) {
+            throw "Hard-coded Vietnamese text in ${relative}: $($found.Value). Add a Strings.json key instead."
+        }
     }
-    Write-Output "PASS: $($keys.Count) resources × 8 languages; $consumerCount literal Loc.* references."
+    Write-Output "PASS: $($keys.Count) resources × 8 languages; $consumerCount literal Loc.* references; $keyCount literal resource keys in code."
+    Write-Output 'PASS: no hard-coded Vietnamese text outside Strings.json and the allowlisted search index/language names.'
     Write-Output 'Static structure only; dynamic lookup, translation quality and rendered UI still require tests.'
 }
 finally { $document.Dispose() }

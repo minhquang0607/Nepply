@@ -18,7 +18,7 @@ public partial class SettingsWindow : Window
     private void SetOperationError(string key, Exception error)
     {
         Services.AppLogger.Error(error,"Settings operation: " + key);
-        SetError(UserMessage.Join([UserMessage.FromKey(key),UserMessage.FromText(error.Message)],""));
+        SetError(UserMessage.Join([UserMessage.FromKey(key),UserMessage.From(error)],""));
     }
     private EdgePosition _gridEdge;
     private void StoreGrid()
@@ -65,18 +65,18 @@ public partial class SettingsWindow : Window
             PresentSettingsSearch);
         PresetCards.ItemsSource = Services.LayoutPresets.All;
         EdgeChoice.ItemsSource = Enum.GetNames<EdgePosition>().Select(Services.LocalizationService.Get).ToArray();
-        ThemeChoice.ItemsSource = new[] { "Graphite tối", "Ivory sáng", "Theo Windows" };
-        MotionChoice.ItemsSource = new[] { "Mượt · chuyển động mềm", "Nhanh · phản hồi gọn", "Tắt · hiển thị tức thời" };
+        ThemeChoice.ItemsSource = new[] { "Dark", "Light", "System" }.Select(Services.LocalizationService.Get).ToArray();
+        MotionChoice.ItemsSource = new[] { "Smooth", "Quick", "Off" }.Select(Services.LocalizationService.Get).ToArray();
         AccentChoice.ItemsSource = Services.ThemeService.Palettes.Keys.ToArray();
-        GpuModeChoice.ItemsSource = new[] { "Tất cả GPU / iGPU", "Chỉ GPU được chọn", "Chỉ iGPU được chọn" };
-        var gpuChoices = new List<Choice> { new("", "Chọn thiết bị…") };
+        GpuModeChoice.ItemsSource = new[] { "AllGpu", "SelectedGpu", "SelectedIGpu" }.Select(Services.LocalizationService.Get).ToArray();
+        var gpuChoices = new List<Choice> { new("", Services.LocalizationService.Get("ChooseDevice")) };
         gpuChoices.AddRange((gpus ?? []).Select(g => new Choice(g.Id, g.Name)));
         foreach (var id in new[] { settings.GpuIdentifier, settings.IntegratedGpuIdentifier })
             if (id.Length > 0 && !gpuChoices.Any(g => g.Id == id)) gpuChoices.Add(Choice.FromMessage(id,UserMessage.FromKey("DisconnectedDevice",id)));
         GpuChoice.ItemsSource = gpuChoices; IntegratedGpuChoice.ItemsSource = gpuChoices;
         PaletteSwatches.ItemsSource = Services.ThemeService.Palettes.Where(p => p.Key != "Custom" && p.Key != "Blue" && p.Key != "Violet" && p.Key != "Jade").Select(p => new Palette(p.Key, p.Value)).ToArray();
         ScreenChoice.ItemsSource = BuildScreenChoices(ScreenManager.GetScreens(),settings.MonitorDevice);
-        var adapters = new List<Choice> { new("", "Tự chọn kết nối chính") };
+        var adapters = new List<Choice> { new("", Services.LocalizationService.Get("AutoNetwork")) };
         try { adapters.AddRange(NetworkInterface.GetAllNetworkInterfaces().Select(n => new Choice(n.Id, n.Name))); }
         catch (NetworkInformationException ex) { Services.AppLogger.Error(ex,"Enumerate network choices"); }
         if (!string.IsNullOrEmpty(settings.NetworkInterfaceId) && !adapters.Any(a=>a.Id==settings.NetworkInterfaceId))
@@ -346,9 +346,8 @@ public partial class SettingsWindow : Window
             GridContext.Text=Services.LocalizationService.Get(_gridEdge.IsHorizontal() ? "TopGrid" : "SideGrid");
             var version=typeof(App).Assembly.GetCustomAttributes(typeof(System.Reflection.AssemblyInformationalVersionAttribute),false).OfType<System.Reflection.AssemblyInformationalVersionAttribute>().FirstOrDefault()?.InformationalVersion ?? "";
             AboutVersion.Text=string.Format(Services.LocalizationService.Get("AboutVersion"),version);
-            PresetCards.ItemsSource=Services.LayoutPresets.All.Select(p=>p with {
-                Name=Services.LocalizationService.Get(p.Id switch {"compact"=>"CompactPreset","spacious"=>"SpaciousPreset",_=>"RibbonPreset"}),
-                Description=Services.LocalizationService.Get(p.Id switch {"compact"=>"CompactPresetDescription","spacious"=>"SpaciousPresetDescription",_=>"RibbonPresetDescription"})}).ToArray();
+            // A new collection regenerates the cards so their localized bindings are read again.
+            PresetCards.ItemsSource=Services.LayoutPresets.All.ToArray();
             SetAccessibleNames();
             ErrorText.Text=Services.LocalizationService.Render(_errorMessage);
             RefreshSearchResults();
@@ -553,13 +552,13 @@ public partial class SettingsWindow : Window
     private void Diagnostics_Click(object sender, RoutedEventArgs e)
     {
 #if DEBUG
-        string privilege="chưa xác định", driver="không đọc được trạng thái đăng ký";
+        string privilege="PrivilegeUnknown", driver="DriverUnknown";
         try
         {
             using var identity=System.Security.Principal.WindowsIdentity.GetCurrent();
-            privilege=new System.Security.Principal.WindowsPrincipal(identity).IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator) ? "quản trị" : "người dùng";
+            privilege=new System.Security.Principal.WindowsPrincipal(identity).IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator) ? "PrivilegeAdmin" : "PrivilegeUser";
             using var driverKey=Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Services\PawnIO");
-            driver=driverKey==null ? "chưa thấy đăng ký driver" : "có đăng ký; chưa xác minh hoạt động";
+            driver=driverKey==null ? "DriverAbsent" : "DriverRegistered";
         }
         catch(Exception ex) when(ex is System.Security.SecurityException or UnauthorizedAccessException) { }
         long capturedAt=System.Diagnostics.Stopwatch.GetTimestamp();

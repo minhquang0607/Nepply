@@ -54,16 +54,20 @@ internal static class ErrorLocalizationTests
                 ((ItemsControl)settings.FindName("PresetCards")).Items.Cast<LayoutPreset>().All(p=>p.Description==LocalizationService.Get(
                     p.Id switch {"compact"=>"CompactPresetDescription","spacious"=>"SpaciousPresetDescription",_=>"RibbonPresetDescription"})));
             check($"Language {language} shortcut guidance has no XML character reference",!LocalizationService.Get("ShortcutsHint").Contains("&#10;"));
-            foreach(var (key,original) in new[]{("ProtectedSettingsError","Không thể ghi đè cấu hình đang được bảo vệ. Kiểm tra phiên bản và quyền truy cập."),
-                ("SettingsTooLargeError","Cấu hình vượt giới hạn 2 MiB; chưa ghi đè bản đang dùng."),
-                ("LayoutVersionError","Phiên bản bố cục chưa được hỗ trợ."),
-                ("LayoutTooLargeError","File bố cục quá lớn (tối đa 64 KiB)."),
-                ("LayoutFormatError","File không phải bố cục Nepply phiên bản được hỗ trợ."),
-                ("LayoutEmptyError","File bố cục trống.")})
-                check($"Language {language} translates known operation error {key}",
-                    LocalizationService.Render(UserMessage.FromText(original))==LocalizationService.Get(key) && LocalizationService.Get(key)!=key);
+            Exception Thrown(Action action) { try { action(); } catch(Exception ex) { return ex; } throw new InvalidOperationException("Fixture did not throw."); }
+            foreach(var (key,thrown) in new (string,Exception)[]{
+                ("LayoutVersionError",Thrown(()=>(LayoutProfile.Capture(new AppSettings()) with {Version=2}).ApplyTo(new AppSettings()))),
+                ("LayoutTooLargeError",Thrown(()=>LayoutProfile.Parse(new string(' ',65537)))),
+                ("LayoutFormatError",Thrown(()=>LayoutProfile.Parse("{}"))),
+                ("LayoutEmptyError",new System.Text.Json.JsonException("Empty layout file.").WithUserMessage("LayoutEmptyError")),
+                ("ProtectedSettingsError",new System.IO.IOException("Protected settings cannot be overwritten.").WithUserMessage("ProtectedSettingsError")),
+                ("SettingsTooLargeError",new System.IO.InvalidDataException("Settings exceed the 2 MiB limit.").WithUserMessage("SettingsTooLargeError"))})
+                check($"Language {language} renders operation error {key} from its key",
+                    LocalizationService.Render(UserMessage.From(thrown))==LocalizationService.Get(key) && LocalizationService.Get(key)!=key && !thrown.Message.Contains(LocalizationService.Get(key)));
             const string unknownError="OS detail {0}: C:\\日本語\\file.txt";
-            check($"Language {language} preserves unknown OS exception detail",LocalizationService.Render(UserMessage.FromText(unknownError))==unknownError);
+            check($"Language {language} preserves unknown OS exception detail",LocalizationService.Render(UserMessage.From(new System.IO.IOException(unknownError)))==unknownError);
+            const string vietnameseDetail="Chưa thể ẩn icon Desktop. Hãy thử lại khi Windows Explorer sẵn sàng.";
+            check($"Language {language} verbatim text is never looked up as a translation",LocalizationService.Render(UserMessage.FromText(vietnameseDetail))==vietnameseDetail);
             var displayChoices=SettingsWindow.BuildScreenChoices([new Nepply.Helpers.DisplayScreen("DISPLAY1",0,0,1920,1080,1,true)],"missing {0} 日本語");
             var missingChoice=displayChoices.Single(choice=>choice.Id=="missing {0} 日本語");
             check($"Language {language} disconnected display preserves identity and translates label",
@@ -95,10 +99,28 @@ internal static class ErrorLocalizationTests
             check($"Language {language} GPU source labels preserve APIs and device name",
                 gpuCard.Details.Contains("GPU {1}") && gpuCard.Details.Contains("AMD ADL PMLog EDGE")
                 && gpuCard.Details.Contains(LocalizationService.Get("SourceD3dLoad")));
-            var unavailable=Nepply.Services.Telemetry.TelemetryFreshness.Unavailable(roundTrip,"Cảm biến chưa phản hồi · dữ liệu đã hết hạn");
+            var unavailable=Nepply.Services.Telemetry.TelemetryFreshness.Unavailable(roundTrip,"SensorExpired");
             check($"Language {language} expired sensor metadata is cleared with its measurements",
                 unavailable.CpuSourceInfo==null && unavailable.Gpus[0].SourceInfo==null
                 && !TelemetrySourceText.Cpu(unavailable).Contains("sensor {0}") && unavailable.Gpus[0].Temperature==null);
+            check($"Language {language} expired sensor source shows the localized status",
+                TelemetrySourceText.Cpu(unavailable)==LocalizationService.Get("SensorExpired")
+                && TelemetrySourceText.Gpu(unavailable.Gpus[0])==LocalizationService.Get("ReportUnavailable"));
+            var provided=HardwareReading.Empty with {CpuTelemetrySource="Temperature: LibreHardwareMonitor · Core (Tctl/Tdie)"};
+            check($"Language {language} language-neutral provider source is shown unchanged",
+                TelemetrySourceText.Cpu(provided)==provided.CpuTelemetrySource);
+            var monitorSource=new FixedMonitor(HardwareInfoSnapshot.Empty with {Sequence=1,NetworkName="",NetworkStatus="NetworkReadError"});
+            var monitor=new HardwareMonitorViewModel();
+            try
+            {
+                // Frames are applied at Background priority; pump until delivered, bounded.
+                bool PumpUntil(Func<bool> done) { for(int i=0;i<100 && !done();i++) pump(2); return done(); }
+                monitor.Initialize(monitorSource); monitor.SetActive(true);
+                check($"Language {language} network status renders from its key",PumpUntil(()=>monitor.NetworkName==LocalizationService.Get("NetworkReadError")));
+                monitorSource.Publish(HardwareInfoSnapshot.Empty with {Sequence=2,NetworkName="Wi-Fi {0} 日本語",NetworkStatus=null});
+                check($"Language {language} adapter name is shown verbatim",PumpUntil(()=>monitor.NetworkName=="Wi-Fi {0} 日本語"));
+            }
+            finally {monitor.Cleanup();}
             var groupedIcon=new DesktopIcon {Path="C:\\日本語\\{0}.lnk",SourcePaths=["C:\\日本語\\{0}.lnk","C:\\Public\\{1}.lnk"]};
             vm.Icons.Add(groupedIcon);
             int tooltipChanges=0;
@@ -152,18 +174,18 @@ internal static class ErrorLocalizationTests
                 notice.Visibility==Visibility.Visible && text.Text.Contains(filename)
                 && text.Text.Contains(LocalizationService.Get("DesktopLaunchMissing"))
                 && vm.ScanError==LocalizationService.Get("DesktopReadError") && vm.ScanError!=stateText);
-            panel.ShowActionNotice("Chưa thể ẩn icon Desktop. Hãy thử lại khi Windows Explorer sẵn sàng.");
+            panel.ShowActionNotice("DesktopHideError");
             LocalizationService.Apply(language);pump(10);
             check($"Language {language} translates fixed service notice",text.Text==LocalizationService.Get("DesktopHideError"));
-            panel.DismissActionNotice("another notice");
+            panel.DismissActionNotice("DesktopRestoreError");
             check($"Language {language} unrelated dismissal keeps notice",notice.Visibility==Visibility.Visible);
-            panel.DismissActionNotice("Chưa thể ẩn icon Desktop. Hãy thử lại khi Windows Explorer sẵn sàng.");
+            panel.DismissActionNotice("DesktopHideError");
             LocalizationService.Apply(changed);
             check($"Language {language} dismissal uses original identity and stays dismissed",notice.Visibility==Visibility.Collapsed && text.Text=="");
 
             var notices=new List<UserMessage> {
                 UserMessage.FromKey("AutoStartUpdateError"),
-                UserMessage.FromText("Chưa thể ẩn icon Desktop. Hãy thử lại khi Windows Explorer sẵn sàng.") };
+                UserMessage.FromKey("DesktopHideError") };
             var combined=UserMessage.Join(notices,Environment.NewLine);
             notices.Clear();
             panel.ShowActionFailure(combined);
@@ -227,7 +249,7 @@ internal static class ErrorLocalizationTests
         var sample=HardwareInfoSnapshot.Empty with {Sequence=1,MonotonicTimestamp=now,NetworkName="PRIVATE_NETWORK",
             Hardware=HardwareReading.Empty with {CpuName="CPU {0} 日本語",Error="PRIVATE_ERROR",
                 MonotonicTimestamp=now,Gpus=[new("PRIVATE_GPU_ID","GPU {1}",25,null,1000,"API source")]} };
-        string Build()=>Nepply.Services.Telemetry.SensorDiagnosticReport.Build(sample,"người dùng","chưa thấy đăng ký driver",now);
+        string Build()=>Nepply.Services.Telemetry.SensorDiagnosticReport.Build(sample,"PrivilegeUser","DriverAbsent",now);
         int subscribers=LanguageSubscribers();
         var dialog=new SensorDiagnosticsWindow(Build) {Left=-10000,Top=-10000,ShowInTaskbar=false,ShowActivated=false};
         try
@@ -256,9 +278,19 @@ internal static class ErrorLocalizationTests
     private sealed class Catalog : IDesktopCatalog
     {
         public IReadOnlyList<DesktopIcon> GetIcons()=>[];
-        public DesktopScanState ScanState => new(false,false,"Chưa đọc được Desktop. Bạn có thể thử lại.");
+        public DesktopScanState ScanState => new(false,false,"DesktopReadError");
         public event Action? IconsChanged {add {} remove {}}
         public event Action? ScanStateChanged {add {} remove {}}
+    }
+    private sealed class FixedMonitor(HardwareInfoSnapshot initial) : Nepply.Services.Telemetry.IHardwareMonitor
+    {
+        private HardwareInfoSnapshot _snapshot=initial;
+        public event Action<HardwareInfoSnapshot>? HardwareUpdated;
+        public void Publish(HardwareInfoSnapshot snapshot) {_snapshot=snapshot;HardwareUpdated?.Invoke(snapshot);}
+        public void Configure(AppSettings settings,bool visible) {}
+        public HardwareInfoSnapshot GetSnapshot()=>_snapshot;
+        public void Start() {}
+        public void Dispose() {}
     }
     private sealed class Actions : IDesktopActions
     {

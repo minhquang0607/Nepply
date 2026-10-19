@@ -3,7 +3,6 @@ namespace Nepply.Helpers;
 
 public sealed record DisplayScreen(string Device, int Left, int Top, int Right, int Bottom, double Scale, bool Primary)
 {
-    public string Label => Device.Replace(@"\\.\", "") + (Primary ? " · Chính" : "");
     public int Width => Right - Left;
     public int Height => Bottom - Top;
     public bool Contains(int x, int y) => x >= Left && x < Right && y >= Top && y < Bottom;
@@ -45,7 +44,7 @@ public static class ScreenManager
     }
     public static DisplayScreen Select(string device)
     {
-        return SelectAvailable(GetScreens(),device) ?? throw new InvalidOperationException("Windows chưa cung cấp màn hình khả dụng.");
+        return SelectAvailable(GetScreens(),device) ?? throw new InvalidOperationException("Windows reported no usable display.");
     }
     internal static DisplayScreen? SelectAvailable(IEnumerable<DisplayScreen> screens,string device)
     {

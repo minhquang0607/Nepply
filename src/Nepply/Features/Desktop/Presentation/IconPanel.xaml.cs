@@ -84,8 +84,8 @@ public partial class IconPanel : UserControl
     {
         ShowActionFailure(_service?.LaunchIcon(icon));
     }
-    internal void ShowActionNotice(string? message)
-        => ShowActionFailure(message == null ? null : UserMessage.FromText(message));
+    internal void ShowActionNotice(string? key)
+        => ShowActionFailure(key == null ? null : UserMessage.FromKey(key));
     internal void ShowActionFailure(UserMessage? message)
     {
         _actionNotice=message;
@@ -96,9 +96,9 @@ public partial class IconPanel : UserControl
         LaunchNoticeText.Text=LocalizationService.Render(_actionNotice);
         LaunchNotice.Visibility=_actionNotice == null ? Visibility.Collapsed : Visibility.Visible;
     }
-    internal void DismissActionNotice(string message)
+    internal void DismissActionNotice(string key)
     {
-        if (_actionNotice?.OriginalText == message) ShowActionFailure(null);
+        if (_actionNotice?.Key == key && _actionNotice.Arguments.IsEmpty) ShowActionFailure(null);
     }
     internal void DismissActionFailure(UserMessage message)
     {

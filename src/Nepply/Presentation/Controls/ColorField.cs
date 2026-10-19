@@ -136,7 +136,7 @@ internal sealed class ColorFieldAutomationPeer(ColorField owner) : FrameworkElem
     public void SetValue(string value)
     {
         if (!IsEnabled()) throw new ElementNotEnabledException();
-        if (!Models.AppSettings.IsHexColor(value)) throw new ArgumentException("Màu phải có dạng #RRGGBB.", nameof(value));
+        if (!Models.AppSettings.IsHexColor(value)) throw new ArgumentException("Color must use the #RRGGBB format.", nameof(value));
         ((ColorField)Owner).SetCurrentValue(ColorField.SelectedColorProperty, (Color)ColorConverter.ConvertFromString(value));
     }
 }

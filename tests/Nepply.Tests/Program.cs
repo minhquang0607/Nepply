@@ -171,6 +171,7 @@ internal static class Program
         }
         UpdateTests.Run(Check);
         SignerRuleTests.Run(Check);
+        LocalizationKeyTests.Run(Check);
         PointerActivationTests.Run(Check);
         DesktopRecoverySessionTests.Run(Check);
         GuardedDesktopVisibilityTests.Run(output,Check);
@@ -1104,7 +1105,7 @@ internal static class Program
         searchBox.Clear(); settingsWindow.ShowSettingsSection(0);
         var diagnosticReport=Nepply.Services.Telemetry.SensorDiagnosticReport.Build(HardwareInfoSnapshot.Empty with
         {Sequence=1,MonotonicTimestamp=Stopwatch.GetTimestamp(),Hardware=HardwareReading.Empty with
-        {CpuName="CPU minh họa"}},"người dùng","chưa thấy đăng ký",Stopwatch.GetTimestamp());
+        {CpuName="CPU minh họa"}},"PrivilegeUser","DriverAbsent",Stopwatch.GetTimestamp());
         var diagnosticWindow=new SensorDiagnosticsWindow(diagnosticReport);
         Render((FrameworkElement)diagnosticWindow.Content,460,440,Path.Combine(output,"diagnostics-small.png"));
         var diagnosticText=(System.Windows.Controls.TextBox)diagnosticWindow.FindName("ReportText");

@@ -49,7 +49,7 @@ public sealed record LayoutProfile
     };
     public AppSettings ApplyTo(AppSettings source)
     {
-        if(Version!=1) throw new NotSupportedException("Phiên bản bố cục chưa được hỗ trợ.");
+        if(Version!=1) throw new NotSupportedException("Unsupported layout version.").WithUserMessage("LayoutVersionError");
         var result=source.Clone();
         result.EdgePosition=Edge; result.Theme=Theme; result.Accent=Accent; result.CustomAccent=CustomAccent;
         result.PanelWidth=Width; result.TopPanelWidth=TopWidth; result.PanelHeight=TopHeight; result.LayoutVersion=1;
@@ -75,12 +75,12 @@ public sealed record LayoutProfile
     }
     public static LayoutProfile Parse(string json)
     {
-        if(System.Text.Encoding.UTF8.GetByteCount(json)>65536) throw new System.IO.InvalidDataException("File bố cục quá lớn (tối đa 64 KiB).");
+        if(System.Text.Encoding.UTF8.GetByteCount(json)>65536) throw TooLarge();
         using var doc=JsonDocument.Parse(json);
         if(doc.RootElement.ValueKind!=JsonValueKind.Object || !doc.RootElement.TryGetProperty(nameof(Version),out var version)
             || !version.TryGetInt32(out var value) || value!=1)
-            throw new NotSupportedException("File không phải bố cục Nepply phiên bản được hỗ trợ.");
-        return doc.RootElement.Deserialize<LayoutProfile>() ?? throw new JsonException("File bố cục trống.");
+            throw new NotSupportedException("Not a supported Nepply layout.").WithUserMessage("LayoutFormatError");
+        return doc.RootElement.Deserialize<LayoutProfile>() ?? throw new JsonException("Empty layout file.").WithUserMessage("LayoutEmptyError");
     }
     public static LayoutProfile Parse(System.IO.Stream stream)
     {
@@ -89,9 +89,11 @@ public sealed record LayoutProfile
         byte[] bytes=new byte[65537];
         int length=0,read;
         while(length<bytes.Length && (read=stream.Read(bytes,length,bytes.Length-length))>0) length+=read;
-        if(length>65536) throw new System.IO.InvalidDataException("File bố cục quá lớn (tối đa 64 KiB).");
+        if(length>65536) throw TooLarge();
         using var buffer=new System.IO.MemoryStream(bytes,0,length,false);
         using var reader=new System.IO.StreamReader(buffer,new System.Text.UTF8Encoding(false,true),detectEncodingFromByteOrderMarks:true);
         return Parse(reader.ReadToEnd());
     }
+    private static System.IO.InvalidDataException TooLarge()
+        => new System.IO.InvalidDataException("Layout file exceeds 64 KiB.").WithUserMessage("LayoutTooLargeError");
 }

@@ -16,20 +16,22 @@ internal static class TelemetryFreshness
     {
         if (reading.MonotonicTimestamp == 0) return reading;
         return IsExpired(Stopwatch.GetElapsedTime(reading.MonotonicTimestamp),intervalMs)
-            ? Unavailable(reading,"Cảm biến chưa phản hồi · dữ liệu đã hết hạn") : reading;
+            ? Unavailable(reading,"SensorExpired") : reading;
     }
     internal static bool IsExpired(TimeSpan elapsed,int intervalMs)
         => elapsed < TimeSpan.Zero || elapsed > TimeSpan.FromMilliseconds(Math.Max(10000L,(long)intervalMs*3));
 
-    public static HardwareReading Unavailable(HardwareReading previous,string reason)
+    /// <param name="reasonKey">Resource key of the status shown while measurements are unavailable.</param>
+    public static HardwareReading Unavailable(HardwareReading previous,string reasonKey)
     {
-        // Identity is retained only as last-known inventory; every measurement is cleared.
-        var gpus=previous.Gpus.Select(g=>g with { Load=null,Temperature=null,ClockMHz=null,Source=reason,SourceInfo=null }).ToImmutableArray();
+        // Identity is retained only as last-known inventory; every measurement and
+        // its source description is cleared.
+        var gpus=previous.Gpus.Select(g=>g with { Load=null,Temperature=null,ClockMHz=null,Source="",SourceInfo=null }).ToImmutableArray();
         return previous with
         {
             CpuTemp=null,CpuClockMHz=null,GpuLoad=null,GpuTemp=null,GpuClockMHz=null,
             MemoryClockMHz=null,Gpus=gpus,VisibleGpus=[],
-            Error=reason,CpuTelemetrySource=reason,CpuSourceInfo=null
+            Error=reasonKey,CpuTelemetrySource="",CpuSourceInfo=null
         };
     }
 }

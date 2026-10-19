@@ -13,7 +13,7 @@ internal static class AutoStartService
         // HKCU Run/Startup shortcut migration belongs only to unpackaged installs.
         // The MSIX adapter must use StartupTask; never persist a versioned WindowsApps path.
         EnsureUnpackaged(ProcessPackageIdentity.IsPackaged);
-        string executable = Environment.ProcessPath ?? throw new InvalidOperationException("Không xác định được đường dẫn ứng dụng.");
+        string executable = Environment.ProcessPath ?? throw new InvalidOperationException("Application path is unavailable.");
         using var key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run");
         var existing = key.GetValue("Nepply", null, RegistryValueOptions.DoNotExpandEnvironmentNames);
         if (existing != null && !MatchesRunCommand(existing, executable))

@@ -15,18 +15,20 @@ public sealed record GpuReading(string Id, string Name, float? Load, float? Temp
     public string TemperatureText => Temperature is { } value ? $"{value:F0}°C" : "";
     public string ClockText => TelemetryDisplay.Clock(ClockMHz);
     public string Label { get; init; } = "GPU";
-    public string Details => Name + "\n" + Source + "\n" + (Temperature == null ? "Nhiệt độ chưa khả dụng" : "Nhiệt độ GPU core/edge");
 }
 public sealed record DiskDriveInfo(string Letter, string Name, double UsedGB, double TotalGB)
 {
     public double UsagePercent => TotalGB > 0 ? UsedGB / TotalGB * 100 : 0;
     public string CapacityText => $"{UsedGB:F1} / {TotalGB:F0} GiB";
 }
+/// <param name="Error">Resource key of the user-facing sensor status, never display text.</param>
 public sealed record HardwareReading(
     DateTimeOffset SampledAt, string CpuName, string GpuName,
     float? CpuTemp, float? CpuClockMHz, float? GpuLoad, float? GpuTemp, float? GpuClockMHz,
     float? MemoryClockMHz, string? Error)
 {
+    // CpuTelemetrySource and GpuReading.Source are language-neutral diagnostics;
+    // the UI renders CpuSourceInfo/SourceInfo instead.
     public ImmutableArray<GpuReading> Gpus { get; init; } = [];
     public long MonotonicTimestamp { get; init; }
     public string CpuTelemetrySource { get; init; } = "LibreHardwareMonitor";
@@ -42,6 +44,8 @@ public sealed record HardwareInfoSnapshot(
     HardwareReading Hardware, ImmutableArray<DiskDriveInfo> Drives)
 {
     public double? RamInstalledGB { get; init; }
+    /// <summary>Resource key shown instead of NetworkName when no adapter is being read.</summary>
+    public string? NetworkStatus { get; init; }
     public long MonotonicTimestamp { get; init; } = System.Diagnostics.Stopwatch.GetTimestamp();
-    public static HardwareInfoSnapshot Empty { get; } = new(0, default, null, null, null, null, null, null, "Chưa có kết nối", HardwareReading.Empty, []) { MonotonicTimestamp=0 };
+    public static HardwareInfoSnapshot Empty { get; } = new(0, default, null, null, null, null, null, null, "", HardwareReading.Empty, []) { MonotonicTimestamp=0, NetworkStatus="NoNetwork" };
 }

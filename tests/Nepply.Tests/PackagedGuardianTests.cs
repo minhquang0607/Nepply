@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
+using Nepply;
 using Nepply.Services;
 
 // Package-only integration of the real deployment and Desktop service.
@@ -21,9 +22,9 @@ internal static class PackagedGuardianTests
         {
             if(initial!=true || File.Exists(journal))throw new IOException("Desktop not available for isolated packaged QA.");
             service=new DesktopIconService();
-            string? notice=await service.SetDesktopIconsHiddenAsync(true);
+            UserMessage? notice=await service.SetDesktopIconsHiddenAsync(true);
             hidden=notice is null && desktop.IsVisible()==false && File.Exists(journal);
-            if(!hidden)throw new IOException(notice ?? "Packaged guarded hide failed.");
+            if(!hidden)throw new IOException(notice?.Key ?? "Packaged guarded hide failed.");
             if(waitForRemoval)
             {
                 var helpers=Process.GetProcessesByName("Nepply.DesktopGuardian");
@@ -42,7 +43,7 @@ internal static class PackagedGuardianTests
             }
             notice=await service.SetDesktopIconsHiddenAsync(false);
             restored=notice is null && desktop.IsVisible()==true && !File.Exists(journal);
-            if(!restored)throw new IOException(notice ?? "Packaged restoration verification failed.");
+            if(!restored)throw new IOException(notice?.Key ?? "Packaged restoration verification failed.");
         }
         catch(Exception ex){error=ex.ToString();}
         finally

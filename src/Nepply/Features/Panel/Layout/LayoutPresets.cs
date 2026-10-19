@@ -2,15 +2,19 @@ using Nepply.Models;
 
 namespace Nepply.Services;
 
-public sealed record LayoutPreset(string Id, string Name, string Description, double PreviewWidth, double PreviewHeight);
+public sealed record LayoutPreset(string Id, string NameKey, string DescriptionKey, double PreviewWidth, double PreviewHeight)
+{
+    public string Name => LocalizationService.Get(NameKey);
+    public string Description => LocalizationService.Get(DescriptionKey);
+}
 
 internal static class LayoutPresets
 {
     internal static IReadOnlyList<LayoutPreset> All { get; } = Array.AsReadOnly(new[]
     {
-        new LayoutPreset("compact", "Gọn", "Cạnh bên · gọn", 28, 44),
-        new LayoutPreset("spacious", "Thoáng", "Cạnh bên · thoáng", 42, 44),
-        new LayoutPreset("ribbon", "Dải ngang", "Cạnh trên / dưới · thấp rộng", 88, 22)
+        new LayoutPreset("compact", "CompactPreset", "CompactPresetDescription", 28, 44),
+        new LayoutPreset("spacious", "SpaciousPreset", "SpaciousPresetDescription", 42, 44),
+        new LayoutPreset("ribbon", "RibbonPreset", "RibbonPresetDescription", 88, 22)
     });
 
     internal static AppSettings Apply(string id, AppSettings source)
@@ -26,7 +30,7 @@ internal static class LayoutPresets
                 MonitorHeight=400, SummaryColumns=2, GpuColumns=2 },
             "ribbon" => profile with { Edge=source.EdgePosition.IsHorizontal() ? source.EdgePosition : EdgePosition.Top, TopWidth=1520, TopHeight=280,
                 MonitorWidth=420, SummaryColumns=2, GpuColumns=2 },
-            _ => throw new ArgumentOutOfRangeException(nameof(id), "Bố cục mẫu không tồn tại.")
+            _ => throw new ArgumentOutOfRangeException(nameof(id), "Unknown layout preset.")
         };
         return profile.ApplyTo(source);
     }

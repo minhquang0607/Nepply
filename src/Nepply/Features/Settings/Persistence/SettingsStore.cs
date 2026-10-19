@@ -115,14 +115,14 @@ public sealed class SettingsStore(string path, string? legacyPath = null)
     {
         lock (_gate)
         {
-            if (_readOnly) throw new IOException("Không thể ghi đè cấu hình đang được bảo vệ. Kiểm tra phiên bản và quyền truy cập.");
+            if (_readOnly) throw new IOException("Protected settings cannot be overwritten.").WithUserMessage("ProtectedSettingsError");
             value.Validate(); value.SchemaVersion = CurrentSchema;
             Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(path))!);
             var temporary = path + ".tmp-" + Guid.NewGuid().ToString("N");
             try
             {
                 var bytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(value, new JsonSerializerOptions { WriteIndented = true }));
-                if (bytes.Length > MaximumBytes) throw new InvalidDataException("Cấu hình vượt giới hạn 2 MiB; chưa ghi đè bản đang dùng.");
+                if (bytes.Length > MaximumBytes) throw new InvalidDataException("Settings exceed the 2 MiB limit.").WithUserMessage("SettingsTooLargeError");
                 using (var stream = new FileStream(temporary, FileMode.CreateNew, FileAccess.Write, FileShare.None))
                 { stream.Write(bytes); stream.Flush(true); }
                 if (File.Exists(path)) File.Replace(temporary,path,path + ".bak");

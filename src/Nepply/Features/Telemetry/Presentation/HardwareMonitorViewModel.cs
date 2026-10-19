@@ -122,7 +122,7 @@ public sealed class HardwareMonitorViewModel : INotifyPropertyChanged
         + (_display.RamInstalledGB is { } installed && _display.RamTotalGB is { } usable
             ? "\n"+string.Format(LocalizationService.Get("RamInstalled"),installed,Math.Max(0,installed-usable)) : "")
         + "\n"+LocalizationService.Get("RamPercentageHint");
-    public string NetworkName => LocalizationService.Translate(_display.NetworkName);
+    public string NetworkName => _display.NetworkStatus is {} status ? LocalizationService.Get(status) : _display.NetworkName;
     private void LanguageChanged()
     {
         Changed(nameof(NetworkName)); Changed(nameof(StatusText));
@@ -132,7 +132,7 @@ public sealed class HardwareMonitorViewModel : INotifyPropertyChanged
     }
     public string NetUploadText => FormatSpeed(_display.NetUpload);
     public string NetDownloadText => FormatSpeed(_display.NetDownload);
-    public string SensorNote => _display.Hardware.Error is {} error ? LocalizationService.Translate(error)
+    public string SensorNote => _display.Hardware.Error is {} error ? LocalizationService.Get(error)
         : LocalizationService.Get(_display.Hardware.CpuTemp == null && !_display.Hardware.Gpus.Any(g => g.Temperature != null)
             ? "TemperatureUnavailable" : "SensorLiveHint");
     public ObservableCollection<GpuCardViewModel> Gpus { get; } = [];

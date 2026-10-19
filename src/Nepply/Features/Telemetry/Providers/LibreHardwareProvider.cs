@@ -39,9 +39,9 @@ public sealed class LibreHardwareProvider : IHardwareProvider
     }
     var gpus = gpuHardware.Select(h => new GpuReading(h.Identifier.ToString(), h.Name,
         GpuLoad(h), Sensor(h, SensorType.Temperature, 1, 130, SensorSelection.GpuCoreNames),
-        Sensor(h, SensorType.Clock, 1, 15000, "GPU Core", "Core"), "LibreHardwareMonitor · " + h.HardwareType + " · " + (HasGpuEngines(h) ? "tải: engine D3D bận nhất" : "tải: GPU Core"))
+        Sensor(h, SensorType.Clock, 1, 15000, "GPU Core", "Core"), "LibreHardwareMonitor · " + h.HardwareType + " · " + (HasGpuEngines(h) ? "load: busiest D3D engine" : "load: GPU Core"))
         { Kind = _gpuKinds.GetValueOrDefault(h.Identifier.ToString()), SourceInfo = new(h.HardwareType.ToString(),HasGpuEngines(h),false) })
-        .Select(g => g.Temperature == null && amdSamples.GetValueOrDefault(g.Id)?.GpuTemperature is { } temperature ? g with { Temperature = temperature, Source = g.Source + " · nhiệt: AMD ADL PMLog EDGE", SourceInfo = g.SourceInfo! with {AdlTemperature=true} } : g)
+        .Select(g => g.Temperature == null && amdSamples.GetValueOrDefault(g.Id)?.GpuTemperature is { } temperature ? g with { Temperature = temperature, Source = g.Source + " · temperature: AMD ADL PMLog EDGE", SourceInfo = g.SourceInfo! with {AdlTemperature=true} } : g)
         .DistinctBy(g => g.Id).ToImmutableArray();
     var gpu = available.FirstOrDefault(h => h.Identifier.ToString() == settings.GpuIdentifier && IsGpu(h))
         ?? available.FirstOrDefault(IsGpu);
@@ -65,11 +65,11 @@ public sealed class LibreHardwareProvider : IHardwareProvider
             cpuClock == null && cpuFallback?.CpuClockMHz != null),
         CpuTemperatureSourceId = cpuTemperatureSensor != null ? "lhm:" + cpuTemperatureSensor.Id
             : cpuFallback?.CpuTemperature != null ? "adl:cpu:" + cpu?.Identifier : "",
-        CpuTelemetrySource = "Nhiệt: " + (cpuTemperatureSensor != null
+        CpuTelemetrySource = "Temperature: " + (cpuTemperatureSensor != null
             ? "LibreHardwareMonitor · " + cpuTemperatureSensor.Name
-            : cpuFallback?.CpuTemperature != null ? "AMD ADL PMLog · CPU temperature (dự phòng)" : "chưa khả dụng")
-            + " · Xung: " + (cpuClock != null ? "LibreHardwareMonitor · reported clock"
-                : cpuFallback?.CpuClockMHz != null ? "AMD ADL PMLog · reported clock (dự phòng)" : "chưa khả dụng")
+            : cpuFallback?.CpuTemperature != null ? "AMD ADL PMLog · CPU temperature (fallback)" : "unavailable")
+            + " · Clock: " + (cpuClock != null ? "LibreHardwareMonitor · reported clock"
+                : cpuFallback?.CpuClockMHz != null ? "AMD ADL PMLog · reported clock (fallback)" : "unavailable")
     };
 
         return reading;

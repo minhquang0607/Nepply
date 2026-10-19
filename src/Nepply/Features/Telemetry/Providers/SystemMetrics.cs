@@ -37,14 +37,15 @@ public sealed class SystemMetrics
         return ((memory.Total - memory.Available) / gib, memory.Total / gib,
             (float)(100d * (memory.Total - memory.Available) / memory.Total));
     }
-    public (double? Upload, double? Download, string Name) ReadNetwork(string selectedId, bool enabled = true)
+    // Status is a resource key, set only when no adapter name can be shown.
+    public (double? Upload, double? Download, string Name, string? Status) ReadNetwork(string selectedId, bool enabled = true)
     {
         if (!enabled)
         {
             _previousNetwork = null;
             _networks = [];
             _lastInventory = 0;
-            return (null, null, "");
+            return (null, null, "", null);
         }
         NetworkSampleCount++;
         try
@@ -57,14 +58,14 @@ public sealed class SystemMetrics
                 : _networks.Where(n => n.OperationalStatus == OperationalStatus.Up && n.NetworkInterfaceType is NetworkInterfaceType.Ethernet or NetworkInterfaceType.Wireless80211)
                     .Where(n => !n.Description.Contains("virtual", StringComparison.OrdinalIgnoreCase) && !n.Name.Contains("vEthernet", StringComparison.OrdinalIgnoreCase))
                     .OrderByDescending(n => n.GetIPProperties().GatewayAddresses.Count > 0).ThenByDescending(n => n.Speed).FirstOrDefault();
-            if (adapter == null) { _previousNetwork = null; return (null, null, "Không có kết nối"); }
+            if (adapter == null) { _previousNetwork = null; return (null, null, "", "NoNetwork"); }
             var stats = adapter.GetIPStatistics(); var previous = _previousNetwork;
             _previousNetwork = (adapter.Id, stats.BytesSent, stats.BytesReceived, now);
-            if (previous == null || previous.Value.Id != adapter.Id) return (null, null, adapter.Name);
+            if (previous == null || previous.Value.Id != adapter.Id) return (null, null, adapter.Name, null);
             double elapsed = Stopwatch.GetElapsedTime(previous.Value.Timestamp, now).TotalSeconds;
-            return (CalculateRate(stats.BytesSent, previous.Value.Sent, elapsed), CalculateRate(stats.BytesReceived, previous.Value.Received, elapsed), adapter.Name);
+            return (CalculateRate(stats.BytesSent, previous.Value.Sent, elapsed), CalculateRate(stats.BytesReceived, previous.Value.Received, elapsed), adapter.Name, null);
         }
-        catch (Exception ex) { _previousNetwork = null; AppLogger.Error(ex, "Network sample"); return (null, null, "Không đọc được mạng"); }
+        catch (Exception ex) { _previousNetwork = null; AppLogger.Error(ex, "Network sample"); return (null, null, "", "NetworkReadError"); }
     }
     public static double? CalculateRate(long current, long previous, double elapsed) =>
         elapsed is <= 0 or > 30 || current < previous || !double.IsFinite(elapsed) ? null : (current - previous) / elapsed;

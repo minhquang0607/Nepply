@@ -95,7 +95,7 @@ public partial class App : Application
             Helpers.CleanupSequence.Run(("UI failure cleanup", () => (MainWindow as MainWindow)?.Cleanup()));
             try
             {
-                MessageBox.Show(ErrorMessage("FatalUiError", "Nepply gặp lỗi và cần đóng để tránh tiếp tục trong trạng thái không ổn định. Thay đổi chưa lưu sẽ không được lưu tự động. Chi tiết đã được ghi vào nhật ký; bạn có thể mở lại ứng dụng."), "Nepply", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ErrorMessage("FatalUiError", "Nepply encountered an error and must close to avoid continuing in an unstable state. Unsaved changes will not be saved automatically. Details were logged; you can reopen the app."), "Nepply", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally { Shutdown(1); }
         };
@@ -131,7 +131,7 @@ public partial class App : Application
             Helpers.CleanupSequence.Run(("Failed startup",()=> (MainWindow as MainWindow)?.Cleanup()));
             try
             {
-                MessageBox.Show(ErrorMessage("StartupError", "Nepply chưa khởi động được. Bạn có thể mở lại ứng dụng; chi tiết lỗi đã được ghi vào nhật ký."),
+                MessageBox.Show(ErrorMessage("StartupError", "Nepply could not start. You can reopen the app; error details were logged."),
                     "Nepply",MessageBoxButton.OK,MessageBoxImage.Error);
             }
             finally { Shutdown(1); }
@@ -208,7 +208,7 @@ public partial class App : Application
         catch(Exception ex)
         {
             AppLogger.Error(ex,"Open log directory");
-            MessageBox.Show(ErrorMessage("OpenLogsError", "Không mở được thư mục nhật ký. Bạn có thể thử lại sau."),"Nepply",MessageBoxButton.OK,MessageBoxImage.Information);
+            MessageBox.Show(ErrorMessage("OpenLogsError", "Could not open the log folder. You can try again later."),"Nepply",MessageBoxButton.OK,MessageBoxImage.Information);
         }
     }
     // Keep this guard outside LocalizationService: its type initializer itself may fail.

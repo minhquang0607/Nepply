@@ -7,15 +7,17 @@ namespace Nepply.Services.Telemetry;
 
 internal static class SensorDiagnosticReport
 {
-    internal static string Build(HardwareInfoSnapshot? snapshot, string privilege, string driver, long now)
+    /// <param name="privilegeKey">Resource key of the process privilege state.</param>
+    /// <param name="driverKey">Resource key of the PawnIO registration state.</param>
+    internal static string Build(HardwareInfoSnapshot? snapshot, string privilegeKey, string driverKey, long now)
     {
         string Format(string key,params object?[] arguments)=>string.Format(LocalizationService.Get(key),arguments);
         string Temperature(float? value)=>value is {} number ? $"{number:F1}°C" : LocalizationService.Get("ReportUnavailable");
         var report=new StringBuilder();
         report.AppendLine(LocalizationService.Get("ReportTitle"));
         report.AppendLine(Format("ReportVersion",typeof(SensorDiagnosticReport).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion));
-        report.AppendLine(Format("ReportPrivilege",LocalizationService.Translate(privilege)));
-        report.AppendLine("PawnIO: " + LocalizationService.Translate(driver));
+        report.AppendLine(Format("ReportPrivilege",LocalizationService.Get(privilegeKey)));
+        report.AppendLine("PawnIO: " + LocalizationService.Get(driverKey));
         report.AppendLine(LocalizationService.Get("ReportCapture"));
         if (snapshot == null || snapshot.Sequence == 0) { report.AppendLine(LocalizationService.Get("ReportNoSample")); return report.ToString(); }
         double age=snapshot.MonotonicTimestamp>0 && now>=snapshot.MonotonicTimestamp

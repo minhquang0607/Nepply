@@ -76,11 +76,11 @@ public sealed class HardwareMonitorService : IHardwareMonitor
                     var net = system.ReadNetwork(settings.NetworkInterfaceId,settings.ShowNetwork);
                     Interlocked.Add(ref _networkSamples,system.NetworkSampleCount-networkBefore);
                     var native = Volatile.Read(ref _hardware);
-                    if (!settings.HardwareSensorsEnabled) native = HardwareReading.Empty with { Error = "Cảm biến nâng cao đã tắt" };
+                    if (!settings.HardwareSensorsEnabled) native = HardwareReading.Empty with { Error = "SensorDisabled" };
                     else native = TelemetryFreshness.ExpireIfNeeded(native,Period(settings));
                     var snapshot = new HardwareInfoSnapshot(Interlocked.Increment(ref _sequence), DateTimeOffset.UtcNow,
                         cpu, ram.Used, ram.Total, ram.Load, net.Upload, net.Download, net.Name,
-                        native with { VisibleGpus = SelectGpus(native.Gpus, settings) }, []) { RamInstalledGB = installedMemory };
+                        native with { VisibleGpus = SelectGpus(native.Gpus, settings) }, []) { RamInstalledGB = installedMemory, NetworkStatus = net.Status };
                     Volatile.Write(ref _snapshot, snapshot);
                     if (!token.IsCancellationRequested && Volatile.Read(ref _settings).ShowMonitor)
                     {
@@ -133,7 +133,7 @@ public sealed class HardwareMonitorService : IHardwareMonitor
                 catch (Exception ex)
                 {
                     policyBlocked = HelperFailure.IsPolicyBlocked(ex);
-                    var unavailable = TelemetryFreshness.Unavailable(Volatile.Read(ref _hardware),policyBlocked ? HelperFailure.PolicyMessage : "Nguồn cảm biến đang kết nối lại · thiết bị được nhận diện ở lần đọc trước");
+                    var unavailable = TelemetryFreshness.Unavailable(Volatile.Read(ref _hardware),policyBlocked ? HelperFailure.PolicyMessageKey : "SensorReconnecting");
                     Volatile.Write(ref _hardware,policyBlocked ? unavailable with { MonotonicTimestamp=0 } : unavailable);
                     AppLogger.Error(ex, "Telemetry provider");
                     ReleaseProvider(ref provider);

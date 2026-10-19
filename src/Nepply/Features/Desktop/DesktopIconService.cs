@@ -173,9 +173,8 @@ public class DesktopIconService : IDisposable, IDesktopCatalog, IDesktopActions
             lock(_scanRequests) _rawSnapshot=null; // Next request repairs the complete baseline.
             Volatile.Write(ref _scanFailureDiagnostic, AppLogger.LimitText(ex.ToString()));
             AppLogger.Error(ex, "Desktop scan");
-            SetScanState(new(false, HasScanned, HelperFailure.IsPolicyBlocked(ex) ? HelperFailure.PolicyMessage : HasScanned
-                ? "Chưa cập nhật được Desktop. Đang giữ danh sách trước đó."
-                : "Chưa đọc được Desktop. Bạn có thể thử lại."));
+            SetScanState(new(false, HasScanned, HelperFailure.IsPolicyBlocked(ex) ? HelperFailure.PolicyMessageKey
+                : HasScanned ? "DesktopRefreshError" : "DesktopReadError"));
         }
         finally { _scanGate.Release(); }
     }
@@ -228,22 +227,21 @@ public class DesktopIconService : IDisposable, IDesktopCatalog, IDesktopActions
 
     #region Desktop Icon Visibility
 
-    internal string? HideDesktopIcons() => ToggleDesktopIcons(hide: true);
-    internal string? ShowDesktopIcons() => ToggleDesktopIcons(hide: false);
+    internal UserMessage? HideDesktopIcons() => ToggleDesktopIcons(hide: true);
+    internal UserMessage? ShowDesktopIcons() => ToggleDesktopIcons(hide: false);
 
-    public async Task<string?> SetDesktopIconsHiddenAsync(bool hide)
+    public async Task<UserMessage?> SetDesktopIconsHiddenAsync(bool hide)
     {
-        if(_disposed) return "Nepply đang đóng; không thay đổi Desktop.";
+        if(_disposed) return UserMessage.FromKey("DesktopClosingNotice");
         if(_guardedVisibility is null) return ToggleDesktopIcons(hide);
         bool success=hide ? await _guardedVisibility.HideAsync().ConfigureAwait(false)
             : await _guardedVisibility.RestoreAsync().ConfigureAwait(false);
         _ownsDesktopVisibility=_desktopVisibility.OwnsChange;
         if(success) return null;
-        return hide ? "Chưa thể khởi tạo bảo vệ và ẩn icon Desktop. Hãy kiểm tra bản cài đặt rồi thử lại."
-            : "Chưa thể khôi phục icon Desktop. Nepply vẫn giữ quyền phục hồi để thử lại.";
+        return UserMessage.FromKey(hide ? "DesktopGuardHideError" : "DesktopGuardRestoreError");
     }
 
-    private string? ToggleDesktopIcons(bool hide)
+    private UserMessage? ToggleDesktopIcons(bool hide)
     {
         try
         {
@@ -260,9 +258,7 @@ public class DesktopIconService : IDisposable, IDesktopCatalog, IDesktopActions
             // durable recovery intent even when the native operation throws.
             _ownsDesktopVisibility = _desktopVisibility.OwnsChange;
         }
-        return hide
-            ? "Chưa thể ẩn icon Desktop. Hãy thử lại khi Windows Explorer sẵn sàng."
-            : "Chưa thể khôi phục icon Desktop. Nepply sẽ giữ thông tin để thử khôi phục lần sau.";
+        return UserMessage.FromKey(hide ? "DesktopHideError" : "DesktopRestoreError");
     }
 
     public bool AreDesktopIconsHidden => _ownsDesktopVisibility;

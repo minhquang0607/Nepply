@@ -497,7 +497,7 @@ public partial class MainWindow : Window
     {
         if (_editingLayout || _finishingLayout) return;
         try { if (!_preview) _settings.Save(); }
-        catch (Exception ex) { AppLogger.Error(ex,"Save layout"); MessageBox.Show(LocalizationService.Get("LayoutSaveError") + LocalizationService.Translate(ex.Message)); }
+        catch (Exception ex) { AppLogger.Error(ex,"Save layout"); MessageBox.Show(LocalizationService.Get("LayoutSaveError") + LocalizationService.Render(UserMessage.From(ex))); }
     }
     private void EditLayout_Click(object sender, RoutedEventArgs e)
     {
@@ -645,13 +645,13 @@ public partial class MainWindow : Window
     {
         try
         {
-            string? notice=await _icons.SetDesktopIconsHiddenAsync(hide);
-            if(!_cleaned && notice is not null) IconPanelView.ShowActionFailure(UserMessage.FromText(notice));
+            var notice=await _icons.SetDesktopIconsHiddenAsync(hide);
+            if(!_cleaned && notice is not null) IconPanelView.ShowActionFailure(notice);
         }
         catch(Exception ex)
         {
             AppLogger.Error(ex,"Apply Desktop visibility");
-            if(!_cleaned) IconPanelView.ShowActionFailure(UserMessage.FromText("Chưa thể thay đổi trạng thái icon Desktop."));
+            if(!_cleaned) IconPanelView.ShowActionFailure(UserMessage.FromKey("DesktopVisibilityError"));
         }
     }
     public void SuppressHide() { _suppress++; _hideTimer.Stop(); }

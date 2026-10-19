@@ -31,9 +31,14 @@ public static class LocalizationService
         return values;
     }
     public static string Get(string key)=>Strings.TryGetValue(key,out var row)?row[_index]:key;
-    public static string Translate(string original)=>Strings.Values.FirstOrDefault(row=>row[0]==original)?[_index] ?? original;
+    internal static bool TryGet(string key,out string text)
+    {
+        bool found=Strings.TryGetValue(key,out var row);
+        text=found ? row![_index] : "";
+        return found;
+    }
     public static string Render(UserMessage? message) => message == null ? "" : message.Key == null
-        ? message.OriginalText is {} text ? Translate(text) : string.Join(message.Separator,message.Arguments.Cast<UserMessage>().Select(Render))
+        ? message.OriginalText ?? string.Join(message.Separator,message.Arguments.Cast<UserMessage>().Select(Render))
         : string.Format(Get(message.Key),message.Arguments.Select(value=>value is UserMessage nested ? Render(nested) : value).ToArray());
     public static void Apply(string language)
     {

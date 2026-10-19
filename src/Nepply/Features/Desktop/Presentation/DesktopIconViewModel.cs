@@ -45,7 +45,7 @@ public sealed class DesktopIconViewModel : INotifyPropertyChanged
     public string SearchQuery { get => _search; set { if (_search == value) return; _search = value; Changed(); Filter(); } }
     public bool IsLoading { get => _loading; private set { _loading = value; Changed(); Changed(nameof(IsEmpty)); } }
     private string? _scanError;
-    public string? ScanError { get=>_scanError == null ? null : LocalizationService.Translate(_scanError); private set=>_scanError=value; }
+    public string? ScanError { get=>_scanError == null ? null : LocalizationService.Get(_scanError); private set=>_scanError=value; }
     public bool HasScanError => ScanError != null;
     public bool IsEmpty => !IsLoading && !HasScanError && Icons.Count == 0;
     public bool HasSearch => !string.IsNullOrWhiteSpace(_search);
