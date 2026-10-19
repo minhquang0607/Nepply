@@ -21,6 +21,9 @@ foreach ($name in @('Microsoft.NETCore.App.Runtime.win-x64','Microsoft.WindowsDe
 $count = Assert-NepplyRuntimePayload -Directory $Directory -RuntimeConfig (Join-Path $Directory $RuntimeConfigName) -Version $version `
     -CorePack $packs['Microsoft.NETCore.App.Runtime.win-x64'] -DesktopPack $packs['Microsoft.WindowsDesktop.App.Runtime.win-x64']
 Write-Output "PASS: $count runtime files match pinned $version packs; required Core/WPF files present. Multifile payload only, not runtime execution or vulnerability audit."
+. (Join-Path $PSScriptRoot 'Test-ExcludedPackages.ps1')
+Assert-NepplyExcludedPackages -Graph $graph -Directory $Directory
+Write-Output "PASS: excluded packages ($($NepplyExcludedPackages -join ', ')) are absent from the graph's Windows assets and the payload."
 . (Join-Path $PSScriptRoot 'Get-WindowsSdkNoticePackage.ps1')
 . (Join-Path $PSScriptRoot 'Test-SdkProjectionPayload.ps1')
 $sdkKey=Get-WindowsSdkNoticePackage $graph

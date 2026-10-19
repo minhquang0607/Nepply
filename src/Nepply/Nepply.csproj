@@ -30,6 +30,10 @@
   <ItemGroup>
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1" />
     <PackageReference Include="LibreHardwareMonitorLib" Version="0.9.6" />
+    <!-- Linux-only transitive dependency of LibreHardwareMonitorLib. Its win-x64 build and
+         every other shipped assembly reference no Mono.Posix type, so ship none of its
+         managed or native assets (Test-RuntimePayload.ps1 enforces the absence). -->
+    <PackageReference Include="Mono.Posix.NETStandard" Version="1.0.0" ExcludeAssets="all" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>

@@ -29,6 +29,12 @@
         "resolved": "10.0.10",
         "contentHash": "f5VCIE7AJpd5YvzNTeMGVzQIgyE9tX+AreTYwQF+REbu+DZo/2Ae+jNSwhPEYrVz6RRkd7y8ubXjk6Nn6Ka+Cg=="
       },
+      "Mono.Posix.NETStandard": {
+        "type": "Direct",
+        "requested": "[1.0.0, )",
+        "resolved": "1.0.0",
+        "contentHash": "vSN/L1uaVwKsiLa95bYu2SGkF0iY3xMblTfxc8alSziPuVfJpj3geVqHGAA75J7cZkMuKpFVikz82Lo6y6LLdA=="
+      },
       "BlackSharp.Core": {
         "type": "Transitive",
         "resolved": "1.0.7",
@@ -46,11 +52,6 @@
         "type": "Transitive",
         "resolved": "2.6.4",
         "contentHash": "UcGvtnXFcatwHBXr+ei8GEXvg//wjGmDGQ6Xvb+7M4vHjURAhSLIJ+dSZv0BnAhQEpNlH8G4P7JxYnMH8Aph4g=="
-      },
-      "Mono.Posix.NETStandard": {
-        "type": "Transitive",
-        "resolved": "1.0.0",
-        "contentHash": "vSN/L1uaVwKsiLa95bYu2SGkF0iY3xMblTfxc8alSziPuVfJpj3geVqHGAA75J7cZkMuKpFVikz82Lo6y6LLdA=="
       },
       "RAMSPDToolkit-NDD": {
         "type": "Transitive",
@@ -200,7 +201,8 @@
         }
       },
       "Mono.Posix.NETStandard": {
-        "type": "Transitive",
+        "type": "Direct",
+        "requested": "[1.0.0, )",
         "resolved": "1.0.0",
         "contentHash": "vSN/L1uaVwKsiLa95bYu2SGkF0iY3xMblTfxc8alSziPuVfJpj3geVqHGAA75J7cZkMuKpFVikz82Lo6y6LLdA=="
       },

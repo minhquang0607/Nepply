@@ -37,29 +37,33 @@ foreach ($scenario in @('wrong-target','wrong-runtime','empty','omitted','unknow
 }
 Write-Output "RESULT: $checks notice inventory fixture checks passed. This does not validate legal obligations or actual release files."
 
-. (Join-Path $PSScriptRoot 'Test-MonoPosixNoticeEvidence.ps1')
-$monoHash='vSN/L1uaVwKsiLa95bYu2SGkF0iY3xMblTfxc8alSziPuVfJpj3geVqHGAA75J7cZkMuKpFVikz82Lo6y6LLdA=='
-$noticeHash=(Get-FileHash -LiteralPath (Join-Path (Split-Path $PSScriptRoot -Parent) 'src/Nepply/Resources/Licenses/Mono.Posix-1.0.0-NOTICES.md') -Algorithm SHA256).Hash
-$monoAssets=@(
-    @{Asset='runtimes/win-x64/lib/netstandard2.0/Mono.Posix.NETStandard.dll';SHA256='BE0215D90462ADBAE5F03D6E5C3A969C9842A866B013DF7A395769C5C352FA7E'},
-    @{Asset='runtimes/win-x64/native/MonoPosixHelper.dll';SHA256='A57141B26D6EA3326B165BDCB15CA2BCD34737370F52358E12FFC8DF41B92C62'},
-    @{Asset='runtimes/win-x64/native/libMonoPosixHelper.dll';SHA256='B16F77C155A36559A44DA32E17E0BF63D899DB0BB48C6590BC8EBA7BB0FF87A8'}
-)
-Assert-MonoPosixNoticeEvidence -PackageSha512 $monoHash -Assets $monoAssets -NoticeSha256 $noticeHash
-foreach ($scenario in @('package','asset','missing','extra','notice')) {
-    $assets=@($monoAssets | ForEach-Object {$_.Clone()})
-    $ph=$monoHash; $nh=$noticeHash
-    switch ($scenario) {
-        'package' {$ph='wrong'}
-        'asset' {$assets[0].SHA256='0'*64}
-        'missing' {$assets=@($assets | Select-Object -Skip 1)}
-        'extra' {$assets+=$assets[0]}
-        'notice' {$nh='0'*64}
-    }
-    $rejected=$false
-    try {Assert-MonoPosixNoticeEvidence -PackageSha512 $ph -Assets $assets -NoticeSha256 $nh}
-    catch {$rejected=$true}
-    if (-not $rejected) {throw "FAIL Mono.Posix accepted $scenario"}
-    Write-Output "PASS Mono.Posix rejects $scenario"
+. (Join-Path $PSScriptRoot 'Test-ExcludedPackages.ps1')
+function New-ExcludedFixture([string]$Runtime, [string]$Native) {
+    @{ targets=@{ 'net10.0-windows10.0.19041.0/win-x64'=@{
+        'Mono.Posix.NETStandard/1.0.0'=@{ runtime=@{ $Runtime=@{} }; native=@{ $Native=@{} } } } } }
 }
-Write-Output 'RESULT: 6 Mono.Posix notice evidence checks passed.'
+Assert-NepplyExcludedPackages -Graph (New-ExcludedFixture 'runtimes/win-x64/lib/netstandard2.0/_._' 'runtimes/win-x64/native/_._')
+Write-Output 'PASS excluded package gate accepts placeholder-only assets'
+foreach ($scenario in @('managed','native')) {
+    $graph = if ($scenario -eq 'managed') { New-ExcludedFixture 'runtimes/win-x64/lib/netstandard2.0/Mono.Posix.NETStandard.dll' 'runtimes/win-x64/native/_._' }
+        else { New-ExcludedFixture 'runtimes/win-x64/lib/netstandard2.0/_._' 'runtimes/win-x64/native/libMonoPosixHelper.dll' }
+    $rejected=$false
+    try {Assert-NepplyExcludedPackages -Graph $graph}
+    catch {$rejected=$true}
+    if (-not $rejected) {throw "FAIL excluded package gate accepted $scenario asset"}
+    Write-Output "PASS excluded package gate rejects $scenario asset"
+}
+$leakRoot = Join-Path ([IO.Path]::GetTempPath()) ('nepply-excluded-' + [guid]::NewGuid().ToString('N'))
+New-Item -ItemType Directory -Path $leakRoot | Out-Null
+try {
+    Set-Content -LiteralPath (Join-Path $leakRoot 'libMonoPosixHelper.dll') -Value 'fixture'
+    $rejected=$false
+    try {Assert-NepplyExcludedPackages -Graph (New-ExcludedFixture 'runtimes/win-x64/lib/netstandard2.0/_._' 'runtimes/win-x64/native/_._') -Directory $leakRoot}
+    catch {$rejected=$true}
+    if (-not $rejected) {throw 'FAIL excluded package gate accepted leaked payload file'}
+    Write-Output 'PASS excluded package gate rejects leaked payload file'
+} finally { Remove-Item -LiteralPath $leakRoot -Recurse -Force }
+$restored = Get-Content -LiteralPath (Join-Path (Split-Path $PSScriptRoot -Parent) 'src/Nepply/obj/project.assets.json') -Raw | ConvertFrom-Json -AsHashtable
+Assert-NepplyExcludedPackages -Graph $restored
+Write-Output 'PASS restored Windows graph ships no excluded package assets'
+Write-Output 'RESULT: 5 excluded package checks passed.'

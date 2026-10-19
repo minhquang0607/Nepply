@@ -11,6 +11,8 @@ if (-not $outputPath.StartsWith($projectRoot + [IO.Path]::DirectorySeparatorChar
 $graph = Get-Content -LiteralPath $assetsPath -Raw | ConvertFrom-Json -AsHashtable
 $target = $graph.targets['net10.0-windows10.0.19041.0/win-x64']
 if (-not $target) { throw 'Restore the Windows x64 target first.' }
+. (Join-Path $PSScriptRoot 'Test-ExcludedPackages.ps1')
+Assert-NepplyExcludedPackages -Graph $graph
 New-Item -ItemType Directory -Path $outputPath -Force | Out-Null
 $entries = [Collections.Generic.List[object]]::new()
 $packageKeys = @($target.Keys | Where-Object {
@@ -92,18 +94,6 @@ foreach ($packageKey in ($packageKeys | Sort-Object -Unique)) {
             $file = Get-Item -LiteralPath $assetPath
             $assetEvidence.Add([ordered]@{ Asset=$asset; Bytes=$file.Length; SHA256=(Get-FileHash -LiteralPath $assetPath -Algorithm SHA256).Hash })
         }
-    }
-    if ($packageKey -eq 'Mono.Posix.NETStandard/1.0.0') {
-        . (Join-Path $PSScriptRoot 'Test-MonoPosixNoticeEvidence.ps1')
-        $monoNotice = Join-Path $projectRoot 'src/Nepply/Resources/Licenses/Mono.Posix-1.0.0-NOTICES.md'
-        Assert-MonoPosixNoticeEvidence -PackageSha512 $graph.libraries[$packageKey].sha512 -Assets $assetEvidence.ToArray() -NoticeSha256 (Get-FileHash -LiteralPath $monoNotice -Algorithm SHA256).Hash
-        foreach ($name in @('Mono.Posix-1.0.0-NOTICES.md','Mono.Posix-1.0.0-PROVENANCE.md')) {
-            Copy-Item -LiteralPath (Join-Path $projectRoot ('src/Nepply/Resources/Licenses/'+$name)) -Destination (Join-Path $packageOutput $name) -Force
-            $copied.Add($name)
-        }
-        $license = 'MIT; zlib/minizip; Info-ZIP; libxml2; MinGW-w64 ZPL/BSD/PD; libgcc GPL-3.0-or-later WITH GCC-exception-3.1 (reviewed historical scope)'
-        $hasLicense = $true
-        # Không điền RepositoryCommit/HasPinnedSource: nuspec không khai báo commit.
     }
     $licenseUrlNode = $metadata.SelectSingleNode('*[local-name()="licenseUrl"]')
     $projectUrlNode = $metadata.SelectSingleNode('*[local-name()="projectUrl"]')
