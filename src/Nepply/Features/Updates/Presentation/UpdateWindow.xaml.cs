@@ -9,7 +9,7 @@ internal sealed partial class UpdateWindow : Window
     private readonly UpdateService _service;
     private readonly CancellationTokenSource _cancel = new();
     private UpdateRelease? _release;
-    private bool _closed, _busy;
+    private bool _closed, _busy, _released;
     internal PreparedUpdate? Prepared { get; private set; }
     internal string StatusText => _status.Text + " " + ReleaseVersionLabel.Text;
     internal string ReleaseNotes => _notes.Text;
@@ -21,7 +21,15 @@ internal sealed partial class UpdateWindow : Window
         InitializeComponent();
         CurrentVersionLabel.Text = LocalizationService.Get("UpdateCurrent") + "  " + UpdateService.CurrentVersion.Split('+')[0];
         Loaded += (_, e) => { Nepply.Helpers.DialogPlacement.FitInitial(this); Check(this, e); };
-        Closed += (_, _) => { _closed = true; _cancel.Cancel(); _service.Dispose(); _cancel.Dispose(); };
+        // Closing only cancels. A check or download still awaiting owns the service and
+        // token until it unwinds, so it observes cancellation rather than disposal.
+        Closed += (_, _) => { _closed = true; _cancel.Cancel(); if (!_busy) ReleaseResources(); };
+    }
+    private void ReleaseResources()
+    {
+        if (_released) return;
+        _released = true;
+        _service.Dispose(); _cancel.Dispose();
     }
     private void DragTitle(object sender, MouseButtonEventArgs e)
     {
@@ -67,7 +75,12 @@ internal sealed partial class UpdateWindow : Window
         }
         catch (OperationCanceledException) { if (!_closed) Failed(checking: true); }
         catch (Exception ex) { AppLogger.Error(ex, "Check updates"); if (!_closed) Failed(checking: true); }
-        finally { _busy = false; if (!_closed) { ProgressSection.Visibility = Visibility.Collapsed; _progress.IsIndeterminate = false; } }
+        finally
+        {
+            _busy = false;
+            if (_closed) ReleaseResources();
+            else { ProgressSection.Visibility = Visibility.Collapsed; _progress.IsIndeterminate = false; }
+        }
     }
     internal void PresentDownloadProgress(double value)
     {
@@ -95,7 +108,8 @@ internal sealed partial class UpdateWindow : Window
         finally
         {
             prepared?.Dispose(); _busy = false;
-            if (!_closed) { _install.IsEnabled = true; _progress.IsIndeterminate = false; LaterButton.SetResourceReference(System.Windows.Controls.ContentControl.ContentProperty, "Loc.UpdateLater"); }
+            if (_closed) ReleaseResources();
+            else { _install.IsEnabled = true; _progress.IsIndeterminate = false; LaterButton.SetResourceReference(System.Windows.Controls.ContentControl.ContentProperty, "Loc.UpdateLater"); }
         }
     }
 }

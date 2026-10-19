@@ -43,8 +43,15 @@ internal static class UpdateUiTests
         finally { window.Close(); }
         var slow = new Handler([], delay: true);
         var cancelled = new UpdateWindow(new UpdateService(slow));
-        cancelled.Show(); pump(50); cancelled.Close(); pump(100);
+        cancelled.Show(); pump(50); cancelled.Close();
+        check("Updater UI close keeps service alive while a request is pending", !slow.Disposed);
+        pump(100);
         check("Updater UI close cancels pending request", slow.Cancelled);
+        check("Updater UI releases service only after the request unwinds", slow.Disposed && !slow.DisposedDuringSend);
+        var idle = new Handler("[]"u8.ToArray());
+        var finished = new UpdateWindow(new UpdateService(idle));
+        finished.Show(); pump(100); finished.Close();
+        check("Updater UI releases an idle service on close", idle.Disposed);
         var error = new UpdateWindow(new UpdateService(new Handler([], status: HttpStatusCode.ServiceUnavailable)));
         try { error.Show(); pump(100); check("Updater error offers retry without install", error.CanRetry && !error.CanInstall); Capture(error, output, "update-error.png"); }
         finally { error.Close(); }
@@ -61,15 +68,26 @@ internal static class UpdateUiTests
     }
     private sealed class Handler(byte[] content, bool delay = false, HttpStatusCode status = HttpStatusCode.OK) : HttpMessageHandler
     {
-        internal bool Cancelled;
+        internal bool Cancelled, Disposed, DisposedDuringSend;
+        private int _sending;
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken token)
         {
-            if (delay)
+            Interlocked.Increment(ref _sending);
+            try
             {
-                try { await Task.Delay(Timeout.Infinite, token); }
-                catch (OperationCanceledException) { Cancelled = true; throw; }
+                if (delay)
+                {
+                    try { await Task.Delay(Timeout.Infinite, token); }
+                    catch (OperationCanceledException) { Cancelled = true; throw; }
+                }
+                return new(status) { Content = new ByteArrayContent(content) };
             }
-            return new(status) { Content = new ByteArrayContent(content) };
+            finally { Interlocked.Decrement(ref _sending); }
+        }
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) { Disposed = true; DisposedDuringSend |= Volatile.Read(ref _sending) > 0; }
+            base.Dispose(disposing);
         }
     }
 }
