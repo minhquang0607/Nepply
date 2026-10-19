@@ -62,7 +62,7 @@ internal sealed partial class UpdateWindow : Window
             NotesSection.Visibility = _install.Visibility = Visibility.Visible;
             _install.IsEnabled = false;
             if (UpdatePolicy.InstalledDirectory() == null) Notice("UpdatePortable");
-            else if (UpdatePolicy.SignerSha256.Length == 0) Notice("UpdateSigningPending");
+            else if (UpdatePolicy.Signers.Length == 0) Notice("UpdateSigningPending");
             else _install.IsEnabled = true;
         }
         catch (OperationCanceledException) { if (!_closed) Failed(checking: true); }

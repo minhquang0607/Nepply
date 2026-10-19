@@ -7,9 +7,10 @@ namespace Nepply.Modules.Updates;
 internal static class UpdatePolicy
 {
     internal const string Repository = "minhquang0607/Nepply";
-    // Release gate: fill with the approved signer's SHA-256 certificate fingerprint,
-    // through reviewed source changes only. Never trust pins from downloaded metadata.
-    internal static readonly string[] SignerSha256 = [];
+    // Release gate: fill with the approved publisher (scripts/Get-SignerPolicy.ps1 on a
+    // signed Setup), through reviewed source changes only. Never trust policy from
+    // downloaded metadata. During an issuing-CA key rollover list both issuer pins.
+    internal static readonly SignerRule[] Signers = [];
     internal static string? InstalledDirectory()
     {
         if (ProcessPackageIdentity.IsPackaged) return null;

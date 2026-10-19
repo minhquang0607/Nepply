@@ -48,7 +48,7 @@ internal static class Program
         if (args.Contains("--update-signature"))
         {
             int index = Array.IndexOf(args, "--update-signature");
-            UpdateSignatureTests.Run(output, args[index + 1], args[index + 2], Check);
+            UpdateSignatureTests.Run(output, args[index + 1], args[index + 2], args[index + 3], args[index + 4], Check);
             Results.Add($"RESULT: {_passed} passed; {_failures} failed. Scope: Authenticode verifier only, not Nepply release signing.");
             File.WriteAllLines(Path.Combine(output,"verification.txt"), Results);
             foreach (var result in Results) Console.WriteLine(result);
@@ -170,6 +170,7 @@ internal static class Program
             return _failures==0 ? 0 : 1;
         }
         UpdateTests.Run(Check);
+        SignerRuleTests.Run(Check);
         PointerActivationTests.Run(Check);
         DesktopRecoverySessionTests.Run(Check);
         GuardedDesktopVisibilityTests.Run(output,Check);

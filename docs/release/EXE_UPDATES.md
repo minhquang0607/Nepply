@@ -18,14 +18,22 @@ chỉ HTTPS tới GitHub repo hoặc `release-assets.githubusercontent.com`.
 
 ## Chốt chữ ký — CHƯA BẬT CÀI TỰ ĐỘNG CÔNG KHAI
 
-`UpdatePolicy.SignerSha256` hiện rỗng. Không nhận fingerprint qua feed, registry,
-environment hoặc file cấu hình người dùng. Sau khi nhà cung cấp ký duyệt,
-review/bổ sung SHA-256 certificate fingerprint vào nguồn, build và ký bản đầu.
-Phải có kế hoạch overlap chứng thư cũ/mới trước khi đổi chứng thư.
+`UpdatePolicy.Signers` hiện rỗng. Không nhận policy qua feed, registry,
+environment hoặc file cấu hình người dùng. Sau khi nhà cung cấp ký duyệt, chạy
+`scripts/Get-SignerPolicy.ps1 -File <Setup-đã-ký>`, review rồi đưa `SignerRule`
+vào nguồn, build và ký bản đầu.
 
-SHA256 asset chỉ kiểm tra toàn vẹn; quyền chạy dựa thêm WinVerifyTrust với
-Authenticode, kiểm tra revocation và pin đúng chứng thư của signer đã được
-provider xác minh. ProductName/ProductVersion phải khớp Nepply và phiên bản
+Không pin chứng thư lá: SignPath gia hạn chứng thư, Azure Artifact Signing đổi
+chứng thư liên tục, nên pin lá sẽ làm mọi bản cài từ chối cập nhật. Mỗi
+`SignerRule` gồm CN và O chính xác của chứng thư lá (một giá trị duy nhất, phân
+biệt hoa thường) cộng với pin SHA-256 của khóa công khai (SPKI) của **CA phát hành
+trực tiếp**. Pin khóa thay vì chứng thư CA nên vẫn đúng khi CA cấp lại chứng thư
+hoặc chuỗi đi qua cross-sign. Khi CA đổi khóa hoặc đổi nhà cung cấp ký, phát hành
+trước một bản chứa cả pin/rule cũ và mới, chỉ bỏ rule cũ ở bản sau đó.
+
+SHA256 asset (trường `digest` của GitHub) chỉ kiểm tra toàn vẹn; quyền chạy dựa
+thêm WinVerifyTrust với Authenticode, kiểm tra revocation và khớp `SignerRule`
+trên chuỗi signer đã được provider xác minh. ProductName/ProductVersion phải khớp Nepply và phiên bản
 đã chọn. Mở file không cho ghi/xóa từ lúc hash/signature tới CreateProcess.
 Không dùng shell, PowerShell hay arguments từ release notes để chạy Setup.
 Không có đường bỏ qua chữ ký cho bản production hoặc test.
@@ -53,7 +61,9 @@ Setup cũ không chứa giao thức update này không được dùng làm relea
 ## Các kiểm chứng bắt buộc trước bật
 
 - Fixture: phiên bản, prerelease, URL/digest/size, cancel, HTTP lỗi, ghi chú text.
-- Native verifier: chữ ký tin cậy, sai pin, không ký, file bị sửa; không đổi trust store.
+- Native verifier: chữ ký tin cậy, sai CA phát hành, sai publisher, không ký, file bị sửa;
+  không đổi trust store (`Nepply.Tests.exe <out> --update-signature <file> <CN> <O> <issuer-spki>`
+  với giá trị từ `Get-SignerPolicy.ps1`). Logic `SignerRule` có test chứng thư trong bộ nhớ ở core.
 - Gói Nepply ký thật: tải đúng/sai digest, sai signer/version, revoked/unreachable trust,
   đóng cửa sổ khi tải, thao tác lặp, thiếu disk, file khóa và chuyển hướng lạ.
 - Cài bản ký A → app tự nâng B → tự mở B, giữ Settings/startup, phục hồi Desktop;

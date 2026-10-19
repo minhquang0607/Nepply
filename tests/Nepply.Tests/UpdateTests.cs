@@ -55,7 +55,7 @@ internal static class UpdateTests
         check("Update streaming respects cancellation", cancelled);
         bool policy = false;
         try { AuthenticodeVerifier.Verify("not-used.exe", []); } catch (InvalidOperationException) { policy = true; }
-        check("Update fails closed without signer pins", policy);
+        check("Update fails closed without signer policy", policy);
         using var client = new UpdateService(new FixtureHandler(Feed()));
         check("Update check works with bounded HTTP fixture", client.CheckAsync(CancellationToken.None).GetAwaiter().GetResult()?.Tag == "v3.0.0");
         using var denied = new UpdateService(new FixtureHandler([], HttpStatusCode.Forbidden));

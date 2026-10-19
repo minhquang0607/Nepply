@@ -88,7 +88,7 @@ internal sealed class UpdateService : IDisposable
     }
     internal async Task<PreparedUpdate> DownloadAsync(UpdateRelease release, IProgress<double> progress, CancellationToken cancellation)
     {
-        if (UpdatePolicy.SignerSha256.Length == 0) throw new InvalidOperationException("Signing policy has not been configured.");
+        if (UpdatePolicy.Signers.Length == 0) throw new InvalidOperationException("Signing policy has not been configured.");
         string installed = UpdatePolicy.InstalledDirectory() ?? throw new InvalidOperationException("Not an installed EXE distribution.");
         if (!UpdatePolicy.IsAssetUri(release.Asset) || release.Bytes <= 0 || release.Bytes > MaximumInstallerBytes) throw new FormatException("Invalid asset.");
         using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellation);
@@ -115,7 +115,7 @@ internal sealed class UpdateService : IDisposable
             guard = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
             string actual = Convert.ToHexString(await SHA256.HashDataAsync(guard, token).ConfigureAwait(false));
             if (!actual.Equals(release.Sha256, StringComparison.OrdinalIgnoreCase)) throw new CryptographicException("Installer checksum mismatch.");
-            await Task.Run(() => { AuthenticodeVerifier.Verify(path, UpdatePolicy.SignerSha256); VerifyVersion(path, release.Version); }, token).ConfigureAwait(false);
+            await Task.Run(() => { AuthenticodeVerifier.Verify(path, UpdatePolicy.Signers); VerifyVersion(path, release.Version); }, token).ConfigureAwait(false);
             token.ThrowIfCancellationRequested();
             var prepared = new PreparedUpdate(path, installed, guard); guard = null;
             return prepared;
