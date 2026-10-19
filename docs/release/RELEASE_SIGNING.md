@@ -14,7 +14,13 @@ Trạng thái: chưa có chứng thư của nhà phát hành; không có artifac
 
 ### Uninstaller và giới hạn cổng ký
 
-Khi có nhà cung cấp ký, cần tích hợp quy trình `SignedUninstaller` của Inno với chính nhà cung cấp đó trước khi mở public mode. Ký riêng Setup không ký tự động uninstaller. File truyền vào `-Uninstaller` phải lấy từ một lượt cài cô lập của đúng Setup đang duyệt; validator kiểm chữ ký/hash nhưng không tự chứng minh quan hệ nguồn gốc giữa hai file độc lập. Lưu hash Setup, log cài và hash uninstaller cùng hồ sơ nghiệm thu; không chạy một EXE uninstaller chỉ để đọc metadata.
+Ký riêng Setup không ký uninstaller. Uninstaller được ký theo hai lượt biên dịch bằng `SignedUninstallerDir` của Inno, hợp với dịch vụ ký từ xa (SignPath) vì Inno không cần gọi công cụ ký:
+
+1. Chạy `Build-Distribution.ps1 ... -SignedUninstallerDirectory <thư-mục-cố-định>`. Lượt đầu Inno tạo `uninst-<phiên-bản-Inno>-<hash>.e32` chưa ký trong thư mục đó rồi dừng; script báo `SIGNATURE PENDING` kèm đường dẫn và không tạo Setup.
+2. Ký và timestamp đúng file `.e32` đó (gửi SignPath, hoặc `Sign-Artifact.ps1`), giữ nguyên tên và thư mục.
+3. Chạy lại với `-OutputDirectory` mới. Inno nhúng chữ ký vào uninstaller của Setup; script kiểm chữ ký file đã dùng và ghi `signed-uninstaller.json`. Sau đó mới ký Setup.
+
+Đổi phiên bản Inno, `VersionInfoVersion` (mỗi bản phát hành), icon hay `WizardStyle` sinh tên `.e32` mới nên phải ký lại. Bản build không truyền thư mục này vẫn đặt `SignedUninstaller=no` (CI, bản nội bộ). Bản nội bộ chấp nhận chữ ký chứng thư thử nghiệm có root không tin cậy; chữ ký hỏng/bị sửa luôn bị từ chối. File truyền vào `-Uninstaller` phải lấy từ một lượt cài cô lập của đúng Setup đang duyệt; validator kiểm chữ ký/hash nhưng không tự chứng minh quan hệ nguồn gốc giữa hai file độc lập. Lưu hash Setup, log cài và hash uninstaller cùng hồ sơ nghiệm thu; không chạy một EXE uninstaller chỉ để đọc metadata.
 
 Hiện chưa có chứng thư/dịch vụ ký thật được cấu hình; bản nội bộ unsigned tiếp tục dựng được, public mode vẫn bị khóa. Validator có fixture sai publisher, thiếu timestamp, thiếu policy và rollover; không thay thế kiểm chữ ký thực tế. Policy này dành cho kênh EXE/Inno, không áp nguyên xi lên chữ ký MSIX do Store xử lý.
 

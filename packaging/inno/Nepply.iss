@@ -34,6 +34,14 @@ ArchitecturesAllowed=x64compatible
 OutputDir={#ReleaseOutputDir}
 InfoBeforeFile=..\..\src\Nepply\Resources\BETA_NOTICE.txt
 SetupIconFile=..\..\src\Nepply\Resources\icon.ico
+#ifdef SignedUninstallerDir
+; Two-pass external signing (remote signers such as SignPath): the first compile
+; writes an unsigned uninst-*.e32 here and aborts; sign it, then compile again.
+SignedUninstaller=yes
+SignedUninstallerDir={#SignedUninstallerDir}
+#else
+SignedUninstaller=no
+#endif
 UninstallDisplayIcon={app}\Nepply.exe
 Compression=lzma2
 SolidCompression=yes

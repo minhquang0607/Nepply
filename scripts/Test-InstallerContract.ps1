@@ -13,7 +13,11 @@ $uninstall=Get-PascalRoutine 'function InitializeUninstall(): Boolean;'
 $prepare=Get-PascalRoutine 'function PrepareToInstall(var NeedsRestart: Boolean): String;'
 $fallback=Get-PascalRoutine 'function RecoverDesktopWithoutApp(): Boolean;'
 $native=Get-PascalRoutine 'function RestoreDesktopIconsNatively(): Boolean;'
+$distribution=Get-Content -LiteralPath (Join-Path $repo 'scripts/Build-Distribution.ps1') -Raw
 $checks=[ordered]@{
+    'Uninstaller signing is opt-in through SignedUninstallerDir'=$source -match '(?ms)^#ifdef SignedUninstallerDir\r?\n(;[^\r\n]*\r?\n)*SignedUninstaller=yes\r?\nSignedUninstallerDir=\{#SignedUninstallerDir\}\r?\n#else\r?\nSignedUninstaller=no\r?\n#endif'
+    'Installer does not invoke a signing tool itself'=$source -notmatch '(?m)^\s*SignTool\s*='
+    'Distribution passes and verifies the signed uninstaller'=$distribution.Contains('"/DSignedUninstallerDir=$signedUninstaller"') -and $distribution.Contains('SIGNATURE PENDING') -and $distribution.Contains('Assert-UninstallerSignature $usedPath')
     'Installer OS minimum matches app and MSIX'=$null -ne $minimum -and $minimum -eq [version]$appProject.Project.PropertyGroup.SupportedOSPlatformVersion -and $minimum -eq [version]$packageManifest.Package.Dependencies.TargetDeviceFamily.MinVersion
     'Installer runs per user'=$source.Contains('PrivilegesRequired=lowest')
     'QA uses a separate app identity'=$source.Contains('AppId=Nepply.Internal.InstallerQA')
