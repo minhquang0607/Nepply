@@ -22,7 +22,7 @@ public partial class MainWindow : Window
     private readonly DesktopIconService _icons;
     private DesktopUpdateCoordinator? _desktopUpdates;
     private readonly Services.Telemetry.IHardwareMonitor _monitor;
-    private readonly DispatcherTimer _edgeTimer = new() { Interval = TimeSpan.FromMilliseconds(80) };
+    private readonly DispatcherTimer _edgeTimer = new() { Interval = EdgePolling.Responsive };
     private readonly DispatcherTimer _hideTimer = new();
     private readonly DispatcherTimer _displayTimer = new() {Interval=TimeSpan.FromMilliseconds(250)};
     private Modules.Search.SearchSession? _searchSession;
@@ -408,6 +408,7 @@ public partial class MainWindow : Window
         if (_cleaned || _screen == null || _displayTimer.IsEnabled) return;
         var context = ReadPointerContext();
         if (context is not {} point) { _edgeGate.Disarm(); return; }
+        AdjustEdgePolling(point);
         if (_animation.IsVisible && PointerActivationGate.ShouldYield(context, (uint)Environment.ProcessId,
             _suppress > 0 || _openingSettings || _editingLayout ||
             _settingsWindow is { IsVisible: true } || _layoutDecision != null || KeyboardInteractionActive))
@@ -439,6 +440,16 @@ public partial class MainWindow : Window
             if (PointerActivationGate.CanCommit(point, current, current is {} latest && InZone(latest, zone))) ShowPanel();
             else _edgeGate.Disarm();
         }
+    }
+    private void AdjustEdgePolling(PointerContext point)
+    {
+        var screen = _screen!;
+        int nearBand = (int)Math.Ceiling((_settings.TriggerZoneSize + EdgePolling.NearBandDip) * screen.Scale);
+        var interval = EdgePolling.Interval(_animation.IsVisible || _animation.IsAnimating || _suppress > 0,
+            EdgeHitTest.DistanceToEdge(_settings.EdgePosition, point.X, point.Y, screen.Left, screen.Top, screen.Right, screen.Bottom),
+            nearBand);
+        // Assigning Interval restarts a DispatcherTimer; change it only on transitions.
+        if (_edgeTimer.Interval != interval) _edgeTimer.Interval = interval;
     }
     private bool PointerInsidePanel(int screenX,int screenY)
     {

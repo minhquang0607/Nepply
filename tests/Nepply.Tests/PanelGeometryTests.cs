@@ -12,6 +12,16 @@ internal static class PanelGeometryTests
         check("Ribbon preset retains bottom anchor",Nepply.Services.LayoutPresets.Apply("ribbon",bottomSettings).EdgePosition==EdgePosition.Bottom);
         check("Bottom hit test accepts last work-area pixel",EdgeHitTest.Contains(EdgePosition.Bottom,-100,879,-1920,-200,0,880,4));
         check("Bottom hit test rejects taskbar and other display",!EdgeHitTest.Contains(EdgePosition.Bottom,-100,880,-1920,-200,0,880,4) && !EdgeHitTest.Contains(EdgePosition.Bottom,1,879,-1920,-200,0,880,4));
+        check("Edge distance counts from each trigger edge",
+            EdgeHitTest.DistanceToEdge(EdgePosition.Left,-1910,0,-1920,-200,0,880)==10
+            && EdgeHitTest.DistanceToEdge(EdgePosition.Right,-1,0,-1920,-200,0,880)==0
+            && EdgeHitTest.DistanceToEdge(EdgePosition.Top,-100,-195,-1920,-200,0,880)==5
+            && EdgeHitTest.DistanceToEdge(EdgePosition.Bottom,-100,879,-1920,-200,0,880)==0);
+        check("Edge distance is unknown on another display",EdgeHitTest.DistanceToEdge(EdgePosition.Bottom,1,879,-1920,-200,0,880)==null);
+        check("Edge polling stays responsive near the edge",EdgePolling.Interval(false,100,164)==EdgePolling.Responsive);
+        check("Edge polling stays responsive while the panel is active",EdgePolling.Interval(true,null,164)==EdgePolling.Responsive);
+        check("Edge polling idles far from the edge",EdgePolling.Interval(false,165,164)==EdgePolling.Idle
+            && EdgePolling.Interval(false,null,164)==EdgePolling.Idle && EdgePolling.Idle>EdgePolling.Responsive);
         check("Bottom hit test uses exact zone depth",EdgeHitTest.Contains(EdgePosition.Bottom,-100,876,-1920,-200,0,880,4) && !EdgeHitTest.Contains(EdgePosition.Bottom,-100,875,-1920,-200,0,880,4));
         foreach(int pixels in new[] {1280,1920,2560,3840})
         foreach(double dpi in new[] {1d,1.25,1.5,2d})
