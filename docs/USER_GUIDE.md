@@ -2,7 +2,7 @@
 
 [English](USER_GUIDE.en.md) · **Tiếng Việt** · [Trang chính](../README.vi.md) · [Xử lý sự cố](TROUBLESHOOTING.md)
 
-Hướng dẫn cho **Nepply 1.0.0** đang chuẩn bị phát hành; chưa có bộ tải chính thức đã ký số.
+Hướng dẫn cho **Nepply 1.0.0-beta.1**, bản beta công khai đầu tiên (chưa ký) đang chuẩn bị; chưa có bộ tải chính thức đã ký số.
 
 ## Mở và đóng panel
 

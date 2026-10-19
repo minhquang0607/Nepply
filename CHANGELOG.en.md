@@ -2,7 +2,7 @@
 
 **English** · [Tiếng Việt](CHANGELOG.md) · [Home](README.md)
 
-## 1.0.0 — Unreleased
+## 1.0.0-beta.1 — Unreleased
 
 Consolidated **17 October 2026**. This is a summary of development changes, not a download announcement. The version is finalized; the summary date is not a publication date, and does not imply signed binaries are available.
 

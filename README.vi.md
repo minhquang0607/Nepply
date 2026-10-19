@@ -4,7 +4,7 @@
 <p align="center"><a href="README.md">English</a> · <strong>Tiếng Việt</strong></p>
 <p align="center"><a href="#-tải-ứng-dụng">Tải ứng dụng</a> · <a href="docs/USER_GUIDE.md">Hướng dẫn</a> · <a href="CHANGELOG.md">Có gì mới</a> · <a href="docs/README.md">Tài liệu</a></p>
 
-> **1.0.0 · Đang chuẩn bị phát hành**
+> **1.0.0-beta.1 · Đang chuẩn bị bản beta công khai đầu tiên (chưa ký)**
 >
 > Chưa có bản tải chính thức đã ký số. Release trên GitHub vẫn là bản nháp; bản build nội bộ không phải binary phát hành công khai.
 
@@ -41,8 +41,8 @@ Nepply nằm ở cạnh màn hình Windows. Mở mục Desktop, tìm theo tên v
 
 | Lựa chọn | Tệp dự kiến | Cách dùng |
 | --- | --- | --- |
-| **Setup — khuyên dùng** | `Nepply-1.0.0-Setup.exe` | Chạy bộ cài; gỡ qua danh sách ứng dụng của Windows. |
-| **Portable** | `Nepply-1.0.0-win-x64-portable.zip` | Giải nén toàn bộ rồi chạy `Nepply.exe`. Giữ `guardian` và các file đi kèm. |
+| **Setup — khuyên dùng** | `Nepply-1.0.0-beta.1-Setup.exe` | Chạy bộ cài; gỡ qua danh sách ứng dụng của Windows. |
+| **Portable** | `Nepply-1.0.0-beta.1-win-x64-portable.zip` | Giải nén toàn bộ rồi chạy `Nepply.exe`. Giữ `guardian` và các file đi kèm. |
 
 [Mở GitHub Releases →](https://github.com/minhquang0607/Nepply/releases)
 

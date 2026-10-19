@@ -4,7 +4,7 @@
 <p align="center"><strong>English</strong> · <a href="README.vi.md">Tiếng Việt</a></p>
 <p align="center"><a href="#-download">Download</a> · <a href="docs/USER_GUIDE.en.md">User guide</a> · <a href="CHANGELOG.en.md">What's new</a> · <a href="docs/README.md">Documentation</a></p>
 
-> **1.0.0 · Preparing for release**
+> **1.0.0-beta.1 · First public beta (unsigned) in preparation**
 >
 > Signed downloads are not available yet. The GitHub release is a draft; internal builds are not public release binaries.
 
@@ -41,8 +41,8 @@ Fresh renders from the same **1.0.0 Release build**, source `15cdbb2`. These are
 
 | Choose | Planned file | How to use |
 | --- | --- | --- |
-| **Setup — recommended** | `Nepply-1.0.0-Setup.exe` | Run the installer. Uninstall through Windows Installed apps. |
-| **Portable** | `Nepply-1.0.0-win-x64-portable.zip` | Extract everything, then run `Nepply.exe`. Keep `guardian` and all companion files. |
+| **Setup — recommended** | `Nepply-1.0.0-beta.1-Setup.exe` | Run the installer. Uninstall through Windows Installed apps. |
+| **Portable** | `Nepply-1.0.0-beta.1-win-x64-portable.zip` | Extract everything, then run `Nepply.exe`. Keep `guardian` and all companion files. |
 
 [Open GitHub Releases →](https://github.com/minhquang0607/Nepply/releases)
 

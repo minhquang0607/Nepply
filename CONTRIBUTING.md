@@ -12,7 +12,7 @@ Tài liệu này dành cho người muốn tự build hoặc đóng góp mã ngu
 
 ## Quy tắc thay đổi
 
-Phiên bản nguồn hiện tại là `1.0.0` trong `src/Nepply/Nepply.csproj`; metadata Windows dùng `1.0.0.0`. Không thay phiên bản thư viện hoặc các dữ liệu test giả lập khi đổi phiên bản sản phẩm. Quy tắc tag/prerelease và chuyển từ bản thử cũ nằm trong [chính sách cập nhật](docs/release/EXE_UPDATES.md#phiên-bản-hiện-hành).
+Phiên bản nguồn hiện tại là `1.0.0-beta.1` trong `src/Nepply/Nepply.csproj`; metadata Windows dùng `1.0.0.0`. Không thay phiên bản thư viện hoặc các dữ liệu test giả lập khi đổi phiên bản sản phẩm. Quy tắc tag/prerelease và chuyển từ bản thử cũ nằm trong [chính sách cập nhật](docs/release/EXE_UPDATES.md#phiên-bản-hiện-hành).
 
 - Mã nghiệp vụ đặt trong feature sở hữu nó; interop ở `Platform/Windows`, giao diện dùng chung ở `Presentation`.
 - Không thêm dependency, timer, process hay project chỉ để chia thư mục.

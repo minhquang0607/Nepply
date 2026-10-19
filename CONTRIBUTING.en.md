@@ -10,7 +10,7 @@ Use Windows x64 and the .NET SDK pinned in `global.json`. Open `Nepply.slnx`. Co
 
 ## Change guidelines
 
-- Product version `1.0.0` and Windows file version `1.0.0.0` come from `src/Nepply/Nepply.csproj`. Do not change dependency versions or simulated test versions just to match the product.
+- Product version `1.0.0-beta.1` and Windows file version `1.0.0.0` come from `src/Nepply/Nepply.csproj`. Do not change dependency versions or simulated test versions just to match the product.
 - Put logic in its owning feature, interop in Platform/Windows and shared UI in Presentation. Do not add projects, timers, processes or dependencies solely to split folders.
 - Keep regression tests in tests/Nepply.Tests. Diagnostic tools do not belong in the release payload.
 - Never commit bin/obj/artifacts, personal logs/settings, signing keys or private certificates.

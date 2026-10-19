@@ -27,8 +27,8 @@ Trạng thái ngày 19/10/2026. Đánh dấu từng mục khi hoàn tất; khôn
 
 SignPath Foundation yêu cầu dự án **đã phát hành** ở dạng sẽ được ký. Quyết định số phiên bản trước:
 
-- Khuyến nghị: phát hành `1.0.0-beta.1` (prerelease) chưa ký, để bản ký đầu tiên vẫn là `1.0.0` và updater không nhận nhầm thứ tự. Cần đổi `<Version>` trong `src/Nepply/Nepply.csproj`, CHANGELOG và README.
-- Thay thế: phát hành `1.0.0` chưa ký, rồi bản ký đầu tiên là `1.0.1`.
+- **Đã chốt (20/10/2026):** phát hành `1.0.0-beta.1` (prerelease) chưa ký, để bản ký đầu tiên vẫn là `1.0.0` và updater không nhận nhầm thứ tự. Cần đổi `<Version>` trong `src/Nepply/Nepply.csproj`, CHANGELOG và README.
+- (Phương án không chọn: phát hành `1.0.0` chưa ký, rồi bản ký đầu tiên là `1.0.1`.)
 
 Quy trình:
 

@@ -75,11 +75,13 @@ cấu hình ký hoặc nghiệm thu cập nhật có chữ ký trên máy thật
 
 ## Phiên bản hiện hành
 
-Phiên bản đã chốt là `1.0.0`, metadata Windows `1.0.0.0`. Ngày 17/10/2026
-được giữ trong changelog, không nằm trong version. Nhãn dự kiến trước đó
-`1.0.0-17.10.26` chưa được phát hành và thấp hơn `1.0.0` theo SemVer.
-Tag dự kiến là `v1.0.0`, asset là `Nepply-1.0.0-Setup.exe`.
-Chỉ bật `-RequireStable` khi mọi điều kiện ký và nghiệm thu đều đạt.
+Phiên bản hiện tại là `1.0.0-beta.1` (chốt 20/10/2026), metadata Windows
+`1.0.0.0`: bản beta công khai **chưa ký**, đáp ứng điều kiện "đã phát hành"
+của SignPath. Tag `v1.0.0-beta.1`, asset `Nepply-1.0.0-beta.1-Setup.exe`,
+đánh dấu prerelease trên GitHub. Bản ký đầu tiên dự kiến là `1.0.0`, cao hơn
+`1.0.0-beta.1` theo SemVer nên updater nhận đúng thứ tự. Nhãn cũ
+`1.0.0-17.10.26` chưa từng phát hành. Chỉ bật `-RequireStable` khi mọi điều
+kiện ký và nghiệm thu đều đạt.
 
 Đây là lần đặt lại mốc trước phát hành, thấp hơn các bản thử `2.5.0-*` cũ.
 Updater giữ nguyên nguyên tắc không downgrade: bản thử cũ cần chuyển thủ công,

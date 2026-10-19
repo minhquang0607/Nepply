@@ -15,6 +15,9 @@ internal static class UpdateTests
         var dated = ReleaseVersion.Parse("1.0.0-17.10.26");
         check("Dated release retains prerelease label", dated.Pre == "17.10.26");
         check("Stable 1.0.0 supersedes dated release", ReleaseVersion.Parse("1.0.0").CompareTo(dated) > 0);
+        check("First signed 1.0.0 supersedes public beta", ReleaseVersion.Parse("1.0.0").CompareTo(ReleaseVersion.Parse("1.0.0-beta.1")) > 0
+            && ReleaseVersion.Parse("1.0.0-beta.2").CompareTo(ReleaseVersion.Parse("1.0.0-beta.1")) > 0);
+        check("Beta build accepts the first signed stable release", UpdateService.ParseReleases(Feed("v1.0.0"), ReleaseVersion.Parse("1.0.0-beta.1")) != null);
         check("Next patch supersedes dated release across month boundary", ReleaseVersion.Parse("1.0.1-1.11.26").CompareTo(dated) > 0);
         foreach (string invalid in new[] { "../1.0.0", "01.0.0", "1.0.0-beta.01", "1.0", "v1.0.0/evil" })
         {
