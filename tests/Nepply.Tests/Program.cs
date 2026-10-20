@@ -1425,6 +1425,11 @@ internal static class Program
         edgeTick.Invoke(lifecycle,[null,EventArgs.Empty]);
         Check("Protected interaction keeps actual panel open",lifecycle.IsVisible);
         suppressField.SetValue(lifecycle,0);
+        // Typing in another app hides the cursor too (Windows "hide pointer while typing").
+        lifecycle.TogglePin();
+        edgeTick.Invoke(lifecycle,[null,EventArgs.Empty]);
+        Check("Pinned panel stays open when typing elsewhere hides the cursor",lifecycle.IsVisible && lifecycle.IsPinned);
+        lifecycle.TogglePin();
         lifecycle.ReadPointerContext=()=>null;
         edgeTick.Invoke(lifecycle,[null,EventArgs.Empty]);
         Check("Unknown pointer does not forcibly hide actual panel",lifecycle.IsVisible);

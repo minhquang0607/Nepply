@@ -409,8 +409,10 @@ public partial class MainWindow : Window
         var context = ReadPointerContext();
         if (context is not {} point) { _edgeGate.Disarm(); return; }
         AdjustEdgePolling(point);
+        // Windows also hides the cursor while the user types in another app, so a pinned
+        // panel must not read a hidden cursor as a full-screen app taking over.
         if (_animation.IsVisible && PointerActivationGate.ShouldYield(context, (uint)Environment.ProcessId,
-            _suppress > 0 || _openingSettings || _editingLayout ||
+            _pinned || _suppress > 0 || _openingSettings || _editingLayout ||
             _settingsWindow is { IsVisible: true } || _layoutDecision != null || KeyboardInteractionActive))
         {
             _edgeGate.Disarm();
