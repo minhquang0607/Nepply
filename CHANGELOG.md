@@ -12,6 +12,7 @@ Bản tổng hợp ngày **17/10/2026**, gom các thay đổi trong giai đoạn
 - Tìm kiếm và mở các mục trên Desktop, sử dụng menu chuột phải của Windows.
 - Chỉnh lưới bằng số cột × hàng, với kích thước panel thích ứng theo màn hình.
 - Hạn chế tự mở panel khi trò chơi ẩn con trỏ để điều khiển nhân vật.
+- Panel đã ghim vẫn mở khi bạn gõ phím ở ứng dụng khác (lúc Windows tạm ẩn con trỏ).
 
 ### Giao diện và cá nhân hóa
 

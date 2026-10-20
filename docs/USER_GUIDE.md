@@ -8,12 +8,14 @@ Hướng dẫn cho **Nepply 1.0.0-beta.1**, bản beta công khai đầu tiên (
 
 Đưa chuột tới cạnh màn hình đã chọn để mở panel, hoặc dùng **Ctrl + Space** nếu chưa đổi phím tắt trong Cài đặt.
 
-- Dùng nút ghim để giữ panel mở.
+- Dùng nút ghim để giữ panel mở, kể cả khi bạn chuyển sang gõ phím ở ứng dụng khác.
 - **Ctrl + F** đưa con trỏ vào phần tìm kiếm.
 - **Esc** thoát thao tác hiện tại hoặc xóa/đóng tìm kiếm trước; khi không còn thao tác đó, Esc thu panel.
 - Thu panel không thoát ứng dụng. Để đóng hẳn, chọn **Thoát** từ biểu tượng Nepply trong khay hệ thống; nếu cần, mở vùng biểu tượng ẩn của Windows.
 
 Khi game ẩn chuột để điều khiển nhân vật, Nepply không tự mở từ cạnh. Khi chuột hiện lại, chẳng hạn ở menu game, bạn có thể dùng panel. Hành vi này phụ thuộc cách từng game quản lý con trỏ.
+
+Panel đang mở mà chưa ghim sẽ tự thu khi ứng dụng khác ẩn con trỏ, kể cả khi Windows tạm ẩn con trỏ lúc bạn gõ phím (tùy chọn ẩn con trỏ khi gõ của Windows). Ghim panel nếu muốn giữ nó mở.
 
 ## Mở mục Desktop và chỉnh lưới
 

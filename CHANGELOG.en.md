@@ -12,6 +12,7 @@ Consolidated **17 October 2026**. This is a summary of development changes, not 
 - Search/open Desktop items with the Windows context menu.
 - Choose columns × rows and screen-relative panel dimensions.
 - Avoid automatic edge activation when a game hides the pointer for character control.
+- A pinned panel stays open while you type in another app (when Windows hides the pointer).
 
 ### Appearance & personalization
 

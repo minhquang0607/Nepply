@@ -9,6 +9,10 @@
 3. Kiểm tra cạnh và màn hình đã chọn. Sau khi tháo màn hình ngoài, mở lại Cài đặt để chọn màn hình còn dùng.
 4. Nếu đang điều khiển nhân vật trong game và con trỏ bị ẩn, việc panel không tự mở là chủ đích. Thử lại khi con trỏ hiện trong menu.
 
+## Panel tự thu khi gõ phím ở ứng dụng khác
+
+Windows tạm ẩn con trỏ khi bạn gõ phím. Panel chưa ghim coi đó là ứng dụng khác đang dùng con trỏ nên tự thu. Ghim panel để giữ nó mở. Nếu panel đã ghim mà vẫn thu khi gõ phím, hãy báo lỗi kèm phiên bản Nepply.
+
 ## Không thấy một mục Desktop
 
 Xóa từ khóa tìm kiếm và kiểm tra bộ lọc file ẩn/system icon. Nepply hiển thị các mục trực tiếp trên Desktop, không liệt kê toàn bộ nội dung mọi thư mục con. Nếu vừa thay đổi nhiều file, thử nút làm mới.

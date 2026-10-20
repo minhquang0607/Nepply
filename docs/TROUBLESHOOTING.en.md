@@ -9,6 +9,10 @@
 3. Check the selected edge and display. After disconnecting a monitor, select an available display again.
 4. If a game hides the pointer for character control, preventing edge activation is intentional. Try with the pointer visible in a menu.
 
+## The panel collapses while I type in another app
+
+Windows hides the pointer while you type. An unpinned panel treats that as another app taking the pointer and collapses. Pin the panel to keep it open. If a pinned panel still collapses while you type, report it with your Nepply version.
+
 ## A Desktop item is missing
 
 Clear the search and check hidden-file/system-icon filters. Nepply lists items directly on the Desktop, not all contents of every subfolder. After many file changes, try Refresh.

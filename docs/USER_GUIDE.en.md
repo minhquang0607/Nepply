@@ -8,12 +8,14 @@ For **Nepply 1.0.0-beta.1**, the first public beta (unsigned), currently in prep
 
 Move to your selected screen edge, or press **Ctrl + Space** unless you changed the hotkey.
 
-- Pin the panel to keep it open.
+- Pin the panel to keep it open, including while you type in another app.
 - **Ctrl + F** focuses search.
 - **Esc** leaves the current interaction or clears/closes search first; otherwise it collapses the panel.
 - Collapsing is not quitting. Choose **Exit** from the tray icon to quit completely; check Windows' hidden tray icons if necessary.
 
 While a game hides the pointer for character control, Nepply avoids opening automatically from the edge. When the pointer returns, such as in a game menu, the panel can be used again. Behavior depends on how the game manages its pointer.
+
+An open, unpinned panel collapses when another app hides the pointer, including when Windows hides it while you type (Windows' hide-pointer-while-typing option). Pin the panel to keep it open.
 
 ## 📐 Desktop items and grid
 
