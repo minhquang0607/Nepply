@@ -81,7 +81,7 @@ public sealed class SensorProcessProvider : IHardwareProvider
             using var idle = new CancellationTokenSource(TimeSpan.FromSeconds(90));
             var request=SensorWireProtocol.ReadAsync<Request>(pipe,SensorWireProtocol.RequestLimit,idle.Token).GetAwaiter().GetResult();
             if(request==null) return;
-            if(request.Version!=1 || request.GpuIdentifier==null || request.GpuIdentifier.Length>2048) throw new InvalidDataException("Unsupported sensor request.");
+            if(request.Version!=1 || request.GpuIdentifier==null || request.GpuIdentifier.Length>AppSettings.MaximumIdentifierLength) throw new InvalidDataException("Unsupported sensor request.");
             var settings = new AppSettings { GpuIdentifier=request.GpuIdentifier };
             settings.Validate();
             SensorWireProtocol.WriteAsync(pipe,new Response(1,provider.Read(settings)),SensorWireProtocol.ResponseLimit,idle.Token).GetAwaiter().GetResult();

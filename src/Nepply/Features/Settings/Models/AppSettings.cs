@@ -76,7 +76,8 @@ public sealed class AppSettings
     public string GpuIdentifier { get; set; } = "";
     public int HotkeyModifiers { get; set; } = 2;
     public int HotkeyKey { get; set; } = 32;
-    [JsonIgnore] public int IconSizePx => IconSize switch { IconSizeOption.Small => 28, IconSizeOption.Large => 44, _ => 36 };
+    [JsonIgnore] public int IconSizePx => PixelsFor(IconSize);
+    public static int PixelsFor(IconSizeOption size) => size switch { IconSizeOption.Small => 28, IconSizeOption.Large => 44, _ => 36 };
     [JsonIgnore] public static string SettingsPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Nepply", "settings.json");
 
     public void Validate()
@@ -115,9 +116,15 @@ public sealed class AppSettings
         if (!Services.ThemeService.Palettes.ContainsKey(Accent ?? "")) Accent = "Champagne";
         if (!IsHexColor(CustomAccent)) CustomAccent = "#D9BC8B";
         if (!Enum.IsDefined(GpuDisplay)) GpuDisplay = GpuDisplayMode.All;
-        IntegratedGpuIdentifier ??= "";
-        MonitorDevice ??= ""; NetworkInterfaceId ??= ""; GpuIdentifier ??= "";
-        if (HotkeyModifiers is < 1 or > 7) HotkeyModifiers = 2;
+        // Device identifiers come from Windows/LibreHardwareMonitor and are short. An
+        // oversized value (e.g. a hand-edited file) falls back to automatic selection
+        // instead of being rejected by the sensor helper on every read.
+        IntegratedGpuIdentifier = ValidIdentifier(IntegratedGpuIdentifier);
+        MonitorDevice = ValidIdentifier(MonitorDevice); NetworkInterfaceId = ValidIdentifier(NetworkInterfaceId);
+        GpuIdentifier = ValidIdentifier(GpuIdentifier);
+        // Same rule as the hotkey recorder: Ctrl or Alt is required, so a bare
+        // Shift+key can never be registered globally and swallow normal typing.
+        if (HotkeyModifiers is < 1 or > 7 || (HotkeyModifiers & (ModAlt | ModControl)) == 0) HotkeyModifiers = ModControl;
         if (!Nepply.Helpers.HotkeyGesture.IsSupportedKey(HotkeyKey)) HotkeyKey = 32;
     }
     public static bool IsHexColor(string? color) => color is { Length: 7 } && color[0] == '#' && color.AsSpan(1).ToArray().All(Uri.IsHexDigit);
@@ -128,6 +135,9 @@ public sealed class AppSettings
             property.SetValue(this, property.GetValue(source));
         Validate();
     }
+    internal const int MaximumIdentifierLength = 2048;
+    private const int ModAlt = 1, ModControl = 2;
+    private static string ValidIdentifier(string? value) => value is { Length: <= MaximumIdentifierLength } ? value : "";
     private static double ValidPercent(double value) => double.IsFinite(value) ? Math.Clamp(value, 0, 100) : 0;
     public void ResetToDefaults() => CopyFrom(new AppSettings { HasCompletedOnboarding = HasCompletedOnboarding });
     private static Services.SettingsStore Store = new(SettingsPath,

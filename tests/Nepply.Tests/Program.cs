@@ -202,6 +202,18 @@ internal static class Program
         var settings = new AppSettings { PanelWidth = -5, Theme = (ThemeOption)99, PanelOpacity = double.NaN, MonitorUpdateIntervalMs = 0 };
         settings.Validate();
         Check("Settings bounds and invalid enums", settings.PanelWidth == 320 && settings.Theme == ThemeOption.Dark && settings.PanelOpacity == 0.98 && settings.MonitorUpdateIntervalMs == 1000);
+        var shiftOnly = new AppSettings { HotkeyModifiers = 4, HotkeyKey = 32 }; shiftOnly.Validate();
+        var altShift = new AppSettings { HotkeyModifiers = 5, HotkeyKey = 32 }; altShift.Validate();
+        Check("Saved hotkey without Ctrl or Alt falls back to Ctrl", shiftOnly.HotkeyModifiers == 2 && altShift.HotkeyModifiers == 5);
+        Check("Every allowed hotkey modifier set includes Ctrl or Alt", new[] { 1, 2, 3, 5, 6, 7 }.All(value =>
+            { var s = new AppSettings { HotkeyModifiers = value }; s.Validate(); return s.HotkeyModifiers == value; }));
+        var oversized = new AppSettings { GpuIdentifier = new string('g', 2049), IntegratedGpuIdentifier = new string('i', 4096),
+            MonitorDevice = new string('m', 5000), NetworkInterfaceId = new string('n', 3000) };
+        oversized.Validate();
+        var limitGpu = new string('g', AppSettings.MaximumIdentifierLength);
+        var atLimit = new AppSettings { GpuIdentifier = limitGpu, NetworkInterfaceId = null! }; atLimit.Validate();
+        Check("Oversized device identifiers fall back to automatic selection", oversized.GpuIdentifier == "" && oversized.IntegratedGpuIdentifier == ""
+            && oversized.MonitorDevice == "" && oversized.NetworkInterfaceId == "" && atLimit.GpuIdentifier == limitGpu && atLimit.NetworkInterfaceId == "");
         var copy = settings.Clone(); copy.PanelWidth = 500;
         Check("Settings draft isolated", settings.PanelWidth == 320);
         var legacy = new AppSettings { PanelHeight = 520, GridCellWidth = double.NaN, GridCellHeight = double.PositiveInfinity }; legacy.Validate();
@@ -733,6 +745,15 @@ internal static class Program
         var gridFixture=new IconPanel();
         gridFixture.ConfigureLayout(new AppSettings {GridColumns=6,GridRows=4},true);
         Check("Side grid caps requested columns at five",gridFixture.GridColumns==5 && gridFixture.GridRows==4);
+        Check("Icon panel defaults to medium icons",gridFixture.IconPixels==36);
+        gridFixture.ConfigureLayout(new AppSettings {IconSize=IconSizeOption.Large},false);
+        bool largeIcons=gridFixture.IconPixels==44;
+        gridFixture.ConfigureLayout(new AppSettings {IconSize=IconSizeOption.Small},false);
+        Check("Icon panel follows the configured icon size",largeIcons && gridFixture.IconPixels==28);
+        var sizedWindow=new MainWindow(true);
+        sizedWindow.Settings.IconSize=IconSizeOption.Large; sizedWindow.ApplySettings();
+        Check("Panel settings apply the configured icon size",((IconPanel)sizedWindow.FindName("IconPanelView")).IconPixels==44);
+        sizedWindow.Cleanup(); sizedWindow.Close();
         Check("Grid editor sliders are removed from panel",gridFixture.FindName("GridWidth")==null && gridFixture.FindName("GridHeight")==null);
         Check("Icon context menu supports standard keyboard gestures",
             IconPanel.IsContextMenuKey(System.Windows.Input.Key.Apps,System.Windows.Input.ModifierKeys.None)

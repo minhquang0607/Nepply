@@ -44,7 +44,7 @@ internal static class TelemetrySoak
         using var monitor=new HardwareMonitorService(()=>
         {
             var provider=new SensorProcessProvider(executable);providers.Add(provider);return provider;
-        });
+        },hiddenProviderGraceMs:3000); // Shorter than the first 5-second hidden sample, so quiescence is still measured.
         var settings=new AppSettings {ShowMonitor=true,EcoMode=true,SuspendMonitorWhenHidden=true,HardwareSensorsEnabled=true,MonitorUpdateIntervalMs=1500};
         var samples=new List<object>();
         var observed=new Dictionary<int,Process>();

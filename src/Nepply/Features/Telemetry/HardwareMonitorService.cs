@@ -26,8 +26,16 @@ public sealed class HardwareMonitorService : IHardwareMonitor
     public event Action<HardwareInfoSnapshot>? HardwareUpdated;
     private readonly Func<IHardwareProvider> _providerFactory;
     public HardwareMonitorService(int intervalMs = 1500) : this(() => new LibreHardwareProvider(), intervalMs) { }
-    public HardwareMonitorService(Func<IHardwareProvider> providerFactory, int intervalMs = 1500)
-    { _providerFactory = providerFactory; _settings = new() { MonitorUpdateIntervalMs = intervalMs }; }
+    // Showing the dock again soon after it hides is common. Keep an idle provider (and
+    // the sensor child behind it) briefly instead of restarting it on every reveal.
+    // Must stay below the sensor host's 90-second idle limit.
+    internal const int DefaultHiddenProviderGraceMs = 60000;
+    private readonly int _hiddenProviderGraceMs;
+    public HardwareMonitorService(Func<IHardwareProvider> providerFactory, int intervalMs = 1500, int hiddenProviderGraceMs = DefaultHiddenProviderGraceMs)
+    {
+        _providerFactory = providerFactory; _settings = new() { MonitorUpdateIntervalMs = intervalMs };
+        _hiddenProviderGraceMs = Math.Clamp(hiddenProviderGraceMs, 0, 80000);
+    }
     public void Configure(AppSettings settings, bool visible)
     {
         var configuration = settings.Clone(); configuration.Validate();
@@ -99,6 +107,7 @@ public sealed class HardwareMonitorService : IHardwareMonitor
         IHardwareProvider? provider = null;
         int failures = 0;
         bool policyBlocked = false;
+        long? hiddenSince = null;
         try
         {
             while (!token.IsCancellationRequested)
@@ -106,15 +115,31 @@ public sealed class HardwareMonitorService : IHardwareMonitor
                 _sensorWake.ConsumePending();
                 var settings = Volatile.Read(ref _settings);
                 int delay = Math.Max(1500, Period(settings));
-                if (!settings.ShowMonitor || !settings.HardwareSensorsEnabled || (settings.SuspendMonitorWhenHidden && !_visible))
+                bool disabled = !settings.ShowMonitor || !settings.HardwareSensorsEnabled;
+                if (disabled || (settings.SuspendMonitorWhenHidden && !_visible))
                 {
-                    ReleaseProvider(ref provider);
                     failures = 0;
                     policyBlocked = false;
                     Volatile.Write(ref _hardware, HardwareReading.Empty);
+                    // Hidden only: no reads, but keep a healthy provider for the grace period.
+                    // Disabling sensors or the monitor always releases it immediately.
+                    int remaining = 0;
+                    if (!disabled && provider != null)
+                    {
+                        hiddenSince ??= Environment.TickCount64;
+                        remaining = (int)Math.Max(0, _hiddenProviderGraceMs - (Environment.TickCount64 - hiddenSince.Value));
+                    }
+                    if (remaining > 0)
+                    {
+                        await _sensorWake.WaitAsync(remaining,token).ConfigureAwait(false);
+                        continue;
+                    }
+                    ReleaseProvider(ref provider);
+                    hiddenSince = null;
                     await _sensorWake.WaitAsync(Timeout.Infinite,token).ConfigureAwait(false);
                     continue;
                 }
+                hiddenSince = null;
                 if (policyBlocked)
                 {
                     await _sensorWake.WaitAsync(Timeout.Infinite,token).ConfigureAwait(false);

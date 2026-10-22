@@ -29,7 +29,8 @@ internal static class SamplingLifecycleTests
             check("Shutdown cancels infinite sampling wait",next.IsCanceled);
         }
         var fake=new FakeProvider(); int created=0;
-        using var monitor=new HardwareMonitorService(()=>{Interlocked.Increment(ref created);return fake;},1000);
+        // Short grace: these checks cover release after the hidden grace period expires.
+        using var monitor=new HardwareMonitorService(()=>{Interlocked.Increment(ref created);return fake;},1000,hiddenProviderGraceMs:300);
         var settings=new AppSettings {ShowMonitor=false,HardwareSensorsEnabled=true,EcoMode=false,MonitorUpdateIntervalMs=1000};
         monitor.Configure(settings,false); monitor.Start();
         Thread.Sleep(150);
@@ -54,6 +55,35 @@ internal static class SamplingLifecycleTests
         check("Shutdown completes while both lanes sleep",monitor.Completion.Wait(3000));
         monitor.Configure(settings,false); monitor.Start();
         check("Late configure and start remain harmless after disposal",true);
+        HiddenGrace(check);
+    }
+    private static void HiddenGrace(Action<string,bool> check)
+    {
+        int defaultGrace=HardwareMonitorService.DefaultHiddenProviderGraceMs;
+        check("Hidden grace stays below the sensor host idle limit",defaultGrace>0 && defaultGrace<90000);
+        var fake=new FakeProvider(); int created=0;
+        var monitor=new HardwareMonitorService(()=>{Interlocked.Increment(ref created);return fake;},1000,hiddenProviderGraceMs:60000);
+        var settings=new AppSettings {ShowMonitor=true,HardwareSensorsEnabled=true,EcoMode=false,SuspendMonitorWhenHidden=true,MonitorUpdateIntervalMs=1000};
+        monitor.Configure(settings,true); monitor.Start();
+        bool firstRead=SpinWait.SpinUntil(()=>Volatile.Read(ref fake.Reads)>0,4000);
+        monitor.Configure(settings,false);
+        Thread.Sleep(300);
+        int hiddenReads=Volatile.Read(ref fake.Reads);
+        Thread.Sleep(1200);
+        check("Briefly hidden monitor keeps its provider without reading",firstRead && fake.Disposals==0 && fake.Reads==hiddenReads);
+        monitor.Configure(settings,true);
+        check("Reveal within grace reuses the running provider",SpinWait.SpinUntil(()=>Volatile.Read(ref fake.Reads)>hiddenReads,4000)
+            && Volatile.Read(ref created)==1 && fake.Disposals==0);
+        monitor.Configure(settings,false);
+        Thread.Sleep(200);
+        settings.HardwareSensorsEnabled=false; monitor.Configure(settings,false);
+        check("Disabling sensors during hidden grace releases the provider at once",SpinWait.SpinUntil(()=>Volatile.Read(ref fake.Disposals)==1,3000));
+        settings.HardwareSensorsEnabled=true; monitor.Configure(settings,true);
+        bool reopened=SpinWait.SpinUntil(()=>Volatile.Read(ref created)==2,4000);
+        monitor.Configure(settings,false);
+        Thread.Sleep(200);
+        monitor.Dispose();
+        check("Shutdown during hidden grace releases the provider",reopened && monitor.Completion.Wait(3000) && Volatile.Read(ref fake.Disposals)==2);
     }
     private static void NetworkLifecycle(Action<string,bool> check)
     {

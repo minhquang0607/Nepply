@@ -23,7 +23,7 @@ public partial class IconPanel : UserControl
     private Point _dragPoint;
     private string? _activeDragPath;
     public event EventHandler? LayoutChanged;
-    public void ConfigureLayout(AppSettings settings, bool editing) { _settings = settings; SetEditMode(editing); }
+    public void ConfigureLayout(AppSettings settings, bool editing) { _settings = settings; ApplyIconSize(settings.IconSize); SetEditMode(editing); }
     public void SetEditMode(bool editing) { if (_editing && !editing) LayoutChanged?.Invoke(this,EventArgs.Empty); _editing = editing; if(!editing) StopDragFeedback(); IconList.AllowDrop = editing; IconList.Cursor = editing ? Cursors.SizeAll : Cursors.Arrow; ApplyTileShape(); }
     public static readonly DependencyProperty GridColumnsProperty=DependencyProperty.Register(nameof(GridColumns),typeof(int),typeof(IconPanel),new PropertyMetadata(4));
     public static readonly DependencyProperty GridRowsProperty=DependencyProperty.Register(nameof(GridRows),typeof(int),typeof(IconPanel),new PropertyMetadata(5));
@@ -51,9 +51,9 @@ public partial class IconPanel : UserControl
         ArgumentNullException.ThrowIfNull(actions);
         LocalizationService.Changed-=RefreshActionNotice;
         LocalizationService.Changed+=RefreshActionNotice;
-        _service = actions; _settings = settings; _viewModel.Initialize(catalog, settings); ApplyIconSize(IconSizeOption.Medium); ApplyTileShape();
+        _service = actions; _settings = settings; _viewModel.Initialize(catalog, settings); ApplyIconSize(settings.IconSize); ApplyTileShape();
     }
-    public void ApplyIconSize(IconSizeOption size) => IconPixels = size switch { IconSizeOption.Small => 28, IconSizeOption.Large => 44, _ => 36 };
+    public void ApplyIconSize(IconSizeOption size) => IconPixels = AppSettings.PixelsFor(size);
     public void Cleanup() { LocalizationService.Changed-=RefreshActionNotice; ShowActionFailure(null); StopDragFeedback(); _viewModel.Cleanup(); _service = null; }
     internal Size GridViewport => FindGrid(IconList) is {} grid ? new(grid.ViewportWidth,grid.ViewportHeight) : new();
     internal double GridOffset { get=>FindGrid(IconList)?.VerticalOffset ?? 0; set { FindGrid(IconList)?.SetVerticalOffset(value); } }
