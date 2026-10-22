@@ -271,7 +271,6 @@ public partial class MainWindow : Window
         UpdateActionLabels();
         _animation.RefreshMotionPreference();
         _hideTimer.Interval = TimeSpan.FromMilliseconds(_settings.HideDelayMs);
-        IconPanelView.ApplyIconSize(IconSizeOption.Medium);
         MonitorPanelView.ConfigureLayout(_settings, _editingLayout);
         MonitorPanelView.PreviewConfiguration(_settingsPreview);
         IconPanelView.ConfigureLayout(_settings, _editingLayout);

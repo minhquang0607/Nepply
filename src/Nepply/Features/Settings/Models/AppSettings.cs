@@ -76,7 +76,8 @@ public sealed class AppSettings
     public string GpuIdentifier { get; set; } = "";
     public int HotkeyModifiers { get; set; } = 2;
     public int HotkeyKey { get; set; } = 32;
-    [JsonIgnore] public int IconSizePx => IconSize switch { IconSizeOption.Small => 28, IconSizeOption.Large => 44, _ => 36 };
+    [JsonIgnore] public int IconSizePx => PixelsFor(IconSize);
+    public static int PixelsFor(IconSizeOption size) => size switch { IconSizeOption.Small => 28, IconSizeOption.Large => 44, _ => 36 };
     [JsonIgnore] public static string SettingsPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Nepply", "settings.json");
 
     public void Validate()

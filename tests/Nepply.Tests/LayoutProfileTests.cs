@@ -8,6 +8,10 @@ internal static class LayoutProfileTests
         var source=new AppSettings { EdgePosition=EdgePosition.Top, GridCellWidth=114, GridCellHeight=123, Accent="Custom",CustomAccent="#33CCFF",IconOrder=["C:\\private\\item.lnk"], GpuIdentifier="private-device",AutoStart=true,HideDesktopIcons=true };
         var json=LayoutProfile.Capture(source).ToJson();
         var flat=source.Clone();flat.MetallicEnabled=false;
+        var sized=source.Clone();sized.IconSize=IconSizeOption.Small;
+        check("Layout roundtrip preserves icon size",LayoutProfile.Parse(LayoutProfile.Capture(sized).ToJson()).ApplyTo(source).IconSize==IconSizeOption.Small);
+        check("Icon sizes map to distinct pixel sizes",AppSettings.PixelsFor(IconSizeOption.Small)==28 && AppSettings.PixelsFor(IconSizeOption.Medium)==36
+            && AppSettings.PixelsFor(IconSizeOption.Large)==44 && new AppSettings {IconSize=IconSizeOption.Large}.IconSizePx==44);
         check("Layout roundtrip preserves material disabled",!LayoutProfile.Parse(LayoutProfile.Capture(flat).ToJson()).ApplyTo(source).MetallicEnabled);
         check("Legacy layout defaults material enabled",LayoutProfile.Parse("{\"Version\":1}").ApplyTo(source).MetallicEnabled);
         check("Layout export excludes private paths and device identifiers",!json.Contains("private") && !json.Contains("IconOrder") && !json.Contains("GpuIdentifier"));

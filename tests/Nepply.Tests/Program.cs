@@ -733,6 +733,15 @@ internal static class Program
         var gridFixture=new IconPanel();
         gridFixture.ConfigureLayout(new AppSettings {GridColumns=6,GridRows=4},true);
         Check("Side grid caps requested columns at five",gridFixture.GridColumns==5 && gridFixture.GridRows==4);
+        Check("Icon panel defaults to medium icons",gridFixture.IconPixels==36);
+        gridFixture.ConfigureLayout(new AppSettings {IconSize=IconSizeOption.Large},false);
+        bool largeIcons=gridFixture.IconPixels==44;
+        gridFixture.ConfigureLayout(new AppSettings {IconSize=IconSizeOption.Small},false);
+        Check("Icon panel follows the configured icon size",largeIcons && gridFixture.IconPixels==28);
+        var sizedWindow=new MainWindow(true);
+        sizedWindow.Settings.IconSize=IconSizeOption.Large; sizedWindow.ApplySettings();
+        Check("Panel settings apply the configured icon size",((IconPanel)sizedWindow.FindName("IconPanelView")).IconPixels==44);
+        sizedWindow.Cleanup(); sizedWindow.Close();
         Check("Grid editor sliders are removed from panel",gridFixture.FindName("GridWidth")==null && gridFixture.FindName("GridHeight")==null);
         Check("Icon context menu supports standard keyboard gestures",
             IconPanel.IsContextMenuKey(System.Windows.Input.Key.Apps,System.Windows.Input.ModifierKeys.None)
