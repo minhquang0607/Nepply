@@ -71,11 +71,12 @@ internal static class MonitorMaterialTests
             check("Mouse interaction pauses existing sweep",ReferenceEquals(firstClock,light.Clock) && light.Clock?.IsPaused==true);
             pump(60); // ClockController commands settle on the next WPF timing tick.
             var heldTime=light.Clock?.CurrentTime;pump(350);
-            // DesiredFrameRate quantizes WPF clock timestamps, including paused clocks.
-            // Allow one frame of rounding, not autonomous progress during the 350 ms wait.
-            check($"Sweep stays paused within one timing tick ({heldTime} -> {light.Clock?.CurrentTime})",
+            // DesiredFrameRate quantizes WPF clock timestamps, including paused clocks, and on a
+            // slow runner the pause can land one tick after the sample (CI saw 22.9 ms). Allow two
+            // frames of rounding; a running sweep would advance about 350 ms during the wait.
+            check($"Sweep stays paused within two timing ticks ({heldTime} -> {light.Clock?.CurrentTime})",
                 light.Clock?.IsPaused==true && heldTime is {} held && light.Clock.CurrentTime is {} current
-                && Math.Abs((current-held).TotalMilliseconds)<=1000d/60);
+                && Math.Abs((current-held).TotalMilliseconds)<=2*1000d/60);
             pointer?.MoveTo(null);SettlePointer();
             check("Mouse leave resumes existing sweep",ReferenceEquals(firstClock,light.Clock) && light.Clock?.IsPaused==false);
             check($"Mouse leave preserves light offset ({pointer?.Transform.X:F3}, {pointer?.Transform.Y:F3})",pointer is {} && Math.Abs(pointer.Transform.X+7)<.01 && Math.Abs(pointer.Transform.Y+7)<.01);
