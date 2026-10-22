@@ -13,17 +13,22 @@ Consolidated **17 October 2026**. This is a summary of development changes, not 
 - Choose columns × rows and screen-relative panel dimensions.
 - Avoid automatic edge activation when a game hides the pointer for character control.
 - A pinned panel stays open while you type in another app (when Windows hides the pointer).
+- The Desktop item context menu closes when you click elsewhere, like the tray menu.
+- A hotkey saved in the settings file must include Ctrl or Alt; a Shift-only combination falls back to Ctrl so it cannot block normal typing.
 
 ### Appearance & personalization
 
 - Light, dark and system themes; colors, neon and mouse-interactive metallic effects.
 - Preview before saving: Apply saves, OK saves/closes, Cancel discards unsaved changes.
 - Vietnamese, English, Japanese, German, Simplified Chinese, Russian, French and Thai.
+- The icon size (small, medium, large) stored in settings or an imported layout is now applied; medium remains the default.
 
 ### System monitoring
 
 - Optional CPU, RAM, GPU/iGPU and network cards.
 - GPU/iGPU classification uses system information; unavailable sensors may show no reading.
+- After the panel hides, the sensor helper is kept for 60 seconds (without reading), so reopening shows readings right away instead of restarting it; turning off monitoring or sensors still stops it immediately.
+- An overly long GPU, monitor or network identifier in the settings file falls back to automatic selection instead of leaving sensors stuck reconnecting.
 
 ### Updates & recovery
 
