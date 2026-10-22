@@ -11,10 +11,6 @@ internal static class WindowsPopupMenu
 {
     [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
     private static extern bool AppendMenuW(IntPtr menu, uint flags, UIntPtr id, string? text);
-    [DllImport("user32.dll")]
-    private static extern bool SetForegroundWindow(IntPtr window);
-    [DllImport("user32.dll")]
-    private static extern bool PostMessageW(IntPtr window, uint message, IntPtr wParam, IntPtr lParam);
 
     public static void Show(ContextMenu commands, Window owner, Point? anchor = null)
     {
@@ -37,9 +33,8 @@ internal static class WindowsPopupMenu
             var handle = new WindowInteropHelper(owner).EnsureHandle();
             if (!NativeInterop.GetCursorPos(out var position)) throw new Win32Exception();
             if (anchor is { } point) { position.X = (int)point.X; position.Y = (int)point.Y; }
-            SetForegroundWindow(handle);
-            selected = NativeInterop.TrackPopupMenuEx(menu, 0x100 | 0x2, position.X, position.Y, handle, IntPtr.Zero);
-            PostMessageW(handle, 0, IntPtr.Zero, IntPtr.Zero);
+            selected = PopupMenuTracking.Track(handle,
+                () => NativeInterop.TrackPopupMenuEx(menu, 0x100 | 0x2, position.X, position.Y, handle, IntPtr.Zero));
         }
         finally { NativeInterop.DestroyMenu(menu); }
         if (actions.TryGetValue(selected, out var action) && action.IsEnabled)

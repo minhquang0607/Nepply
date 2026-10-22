@@ -86,5 +86,20 @@ internal static class DesktopScanReplyTests
             && !Nepply.Helpers.ShellMenuSession.IsMenuMessage(0x2B,new IntPtr(3))
             && Nepply.Helpers.ShellMenuSession.IsMenuMessage(0x120,IntPtr.Zero)
             && !Nepply.Helpers.ShellMenuSession.IsMenuMessage(0x200,IntPtr.Zero));
+        PopupTracking(check);
+    }
+    private static void PopupTracking(Action<string,bool> check)
+    {
+        var owner=new IntPtr(0x1234);
+        var calls=new List<string>();
+        int selected=Nepply.Helpers.PopupMenuTracking.Track(owner,()=>{calls.Add("track");return 7;},
+            window=>calls.Add("foreground:"+window),window=>calls.Add("null:"+window));
+        check("Popup owner becomes foreground before tracking and gets WM_NULL after",selected==7
+            && calls.SequenceEqual(["foreground:"+owner,"track","null:"+owner]));
+        calls.Clear();
+        bool threw=false;
+        try { Nepply.Helpers.PopupMenuTracking.Track(owner,()=>throw new InvalidOperationException("fixture"),_=>calls.Add("foreground"),_=>calls.Add("null")); }
+        catch(InvalidOperationException) { threw=true; }
+        check("Popup tracking still posts WM_NULL when tracking fails",threw && calls.SequenceEqual(["foreground","null"]));
     }
 }

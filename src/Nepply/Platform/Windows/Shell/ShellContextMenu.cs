@@ -63,7 +63,8 @@ internal static class ShellContextMenu
                                     else if (!GetCursorPos(out pt)) throw new InvalidOperationException("Windows could not locate the pointer.");
                                     const uint TPM_LEFTALIGN = 0x0000;
                                     const uint TPM_RETURNCMD = 0x0100;
-                                    int cmd = TrackPopupMenuEx(hMenu, TPM_LEFTALIGN | TPM_RETURNCMD, pt.X, pt.Y, hwnd, IntPtr.Zero);
+                                    int cmd = PopupMenuTracking.Track(hwnd,
+                                        () => TrackPopupMenuEx(hMenu, TPM_LEFTALIGN | TPM_RETURNCMD, pt.X, pt.Y, hwnd, IntPtr.Zero));
 
                                     if (cmd > 0)
                                     {
