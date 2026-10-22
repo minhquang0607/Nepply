@@ -202,6 +202,18 @@ internal static class Program
         var settings = new AppSettings { PanelWidth = -5, Theme = (ThemeOption)99, PanelOpacity = double.NaN, MonitorUpdateIntervalMs = 0 };
         settings.Validate();
         Check("Settings bounds and invalid enums", settings.PanelWidth == 320 && settings.Theme == ThemeOption.Dark && settings.PanelOpacity == 0.98 && settings.MonitorUpdateIntervalMs == 1000);
+        var shiftOnly = new AppSettings { HotkeyModifiers = 4, HotkeyKey = 32 }; shiftOnly.Validate();
+        var altShift = new AppSettings { HotkeyModifiers = 5, HotkeyKey = 32 }; altShift.Validate();
+        Check("Saved hotkey without Ctrl or Alt falls back to Ctrl", shiftOnly.HotkeyModifiers == 2 && altShift.HotkeyModifiers == 5);
+        Check("Every allowed hotkey modifier set includes Ctrl or Alt", new[] { 1, 2, 3, 5, 6, 7 }.All(value =>
+            { var s = new AppSettings { HotkeyModifiers = value }; s.Validate(); return s.HotkeyModifiers == value; }));
+        var oversized = new AppSettings { GpuIdentifier = new string('g', 2049), IntegratedGpuIdentifier = new string('i', 4096),
+            MonitorDevice = new string('m', 5000), NetworkInterfaceId = new string('n', 3000) };
+        oversized.Validate();
+        var limitGpu = new string('g', AppSettings.MaximumIdentifierLength);
+        var atLimit = new AppSettings { GpuIdentifier = limitGpu, NetworkInterfaceId = null! }; atLimit.Validate();
+        Check("Oversized device identifiers fall back to automatic selection", oversized.GpuIdentifier == "" && oversized.IntegratedGpuIdentifier == ""
+            && oversized.MonitorDevice == "" && oversized.NetworkInterfaceId == "" && atLimit.GpuIdentifier == limitGpu && atLimit.NetworkInterfaceId == "");
         var copy = settings.Clone(); copy.PanelWidth = 500;
         Check("Settings draft isolated", settings.PanelWidth == 320);
         var legacy = new AppSettings { PanelHeight = 520, GridCellWidth = double.NaN, GridCellHeight = double.PositiveInfinity }; legacy.Validate();
