@@ -132,6 +132,7 @@ public partial class SettingsWindow : Window
         System.Windows.Controls.Grid.SetRowSpan(SearchOverlayLayer,rail ? 2 : 1);
         SearchOverlayLayer.Margin=rail ? new Thickness(0,0,22,0) : new Thickness(16,0,16,0);
         SettingsNavigation.ItemsPanel=(System.Windows.Controls.ItemsPanelTemplate)FindResource(rail ? "SettingsRailPanel" : "SettingsTabsPanel");
+        SettingsNavigation.Tag=rail ? "Rail" : "Tabs"; // Selects the bar or underline indicator.
         SettingsNavigation.Margin=rail ? new Thickness(20,0,8,0) : new Thickness(16,0,16,4);
         SettingsContent.Margin=rail ? new Thickness(0,0,22,0) : new Thickness(16,0,16,0);
     }

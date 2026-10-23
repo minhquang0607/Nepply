@@ -1204,8 +1204,19 @@ internal static class Program
         var navigation=(System.Windows.Controls.ListBox)settingsWindow.FindName("SettingsNavigation");
         Render((FrameworkElement)settingsWindow.Content,820,740,Path.Combine(output,"settings-wide-rail.png"));
         Check("Wide settings use a navigation rail",System.Windows.Controls.Grid.GetColumn(navigation)==0 && System.Windows.Controls.Grid.GetRowSpan(navigation)==2);
+        (FrameworkElement Bar,FrameworkElement Underline) SelectedIndicators()
+        {
+            var item=(System.Windows.Controls.ListBoxItem)navigation.ItemContainerGenerator.ContainerFromItem(navigation.SelectedItem);
+            return ((FrameworkElement)item.Template.FindName("SelectionIndicator",item),(FrameworkElement)item.Template.FindName("SelectionUnderline",item));
+        }
+        var railIndicators=SelectedIndicators();
+        Check("Settings rail marks the selected section with a vertical bar",railIndicators.Bar.Visibility==Visibility.Visible
+            && railIndicators.Underline.Visibility==Visibility.Collapsed && railIndicators.Bar.ActualHeight>railIndicators.Bar.ActualWidth);
         Render((FrameworkElement)settingsWindow.Content,620,700,Path.Combine(output,"settings-adaptive-tabs.png"));
         Check("Narrow settings return to compact tabs",System.Windows.Controls.Grid.GetColumn(navigation)==1 && System.Windows.Controls.Grid.GetRowSpan(navigation)==1);
+        var tabIndicators=SelectedIndicators();
+        Check("Settings tabs mark the selected section with an underline, not a vertical bar",tabIndicators.Bar.Visibility==Visibility.Collapsed
+            && tabIndicators.Underline.Visibility==Visibility.Visible && tabIndicators.Underline.ActualWidth>tabIndicators.Underline.ActualHeight);
         var searchFocusWindow=new SettingsWindow(new AppSettings());
         var focusSearchBox=(System.Windows.Controls.TextBox)searchFocusWindow.FindName("SearchSettings");
         var focusResults=(System.Windows.Controls.ListBox)searchFocusWindow.FindName("SearchResults");
