@@ -31,7 +31,8 @@
    </Grid>
    <Grid x:Name="ContentGrid" Grid.Row="1" SizeChanged="ContentGrid_SizeChanged">
     <ScrollViewer x:Name="MonitorScroller" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled"><views:MonitorPanel x:Name="MonitorPanelView"/></ScrollViewer>
-    <GridSplitter x:Name="ContentSeparator" Background="Transparent" Height="8" Margin="20,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ResizeBehavior="PreviousAndNext" DragCompleted="ResizeLayout_End"><GridSplitter.Template><ControlTemplate TargetType="GridSplitter"><Border Background="Transparent"><Border Background="{DynamicResource AccentBrush}" Height="2" Width="28" CornerRadius="1" Opacity=".4" VerticalAlignment="Center" HorizontalAlignment="Center"/></Border></ControlTemplate></GridSplitter.Template></GridSplitter>
+    <GridSplitter x:Name="ContentSeparator" Background="Transparent" Height="8" Margin="20,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ResizeBehavior="PreviousAndNext" DragCompleted="ResizeLayout_End"><GridSplitter.Template><ControlTemplate TargetType="GridSplitter"><Border Background="Transparent"><Border x:Name="Grip" Background="{DynamicResource AccentBrush}" Height="2" Width="28" CornerRadius="1" Opacity=".4" VerticalAlignment="Center" HorizontalAlignment="Center"/></Border>
+     <ControlTemplate.Triggers><Trigger Property="ResizeDirection" Value="Columns"><Setter TargetName="Grip" Property="Width" Value="2"/><Setter TargetName="Grip" Property="Height" Value="28"/></Trigger></ControlTemplate.Triggers></ControlTemplate></GridSplitter.Template></GridSplitter>
     <views:IconPanel x:Name="IconPanelView"/>
    </Grid>
    <Border x:Name="PanelFooter" Grid.Row="2" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0" Padding="20,11">

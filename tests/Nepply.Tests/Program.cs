@@ -1028,6 +1028,9 @@ internal static class Program
             Check($"{edge}/{headerWidth} blank click restores toolbar and clears query",desktopSearchVm.SearchQuery==""
                 && desktopSearchEditor.Visibility==Visibility.Collapsed && editButton.Visibility==Visibility.Visible);
         }
+        var sideSplitter=(System.Windows.Controls.GridSplitter)preview.FindName("ContentSeparator");
+        var sideGrip=(FrameworkElement)sideSplitter.Template.FindName("Grip",sideSplitter);
+        Check("Side section divider grip stays horizontal",sideGrip.ActualWidth>sideGrip.ActualHeight);
         preview.Settings.EdgePosition = EdgePosition.Top; preview.ApplySettings();
         preview.PositionWindow();
         Check("Top layout is wide and shallow", preview.Width > preview.Height * 2 && preview.Height == 320);
@@ -1047,6 +1050,14 @@ internal static class Program
                 && Math.Abs(icons.ActualWidth-host.ColumnDefinitions[column].ActualWidth)<1 && bounds.Left>=-.5 && bounds.Right<=host.ActualWidth+.5);
             Check($"Top {topWidth}/{topHeight}/{iconsFirst} retains usable icon viewport",gridPanel.ViewportHeight>=80 && gridPanel.ColumnCount>=1
                 && VisualTreeHelper.GetChildrenCount(gridPanel)>0);
+            var topScroller=(System.Windows.Controls.ScrollViewer)preview.FindName("MonitorScroller");
+            // 720 DIP is the narrowest horizontal dock Settings allows (TopPanelWidth clamp);
+            // the 520 stress size keeps one card column and may scroll.
+            if(topHeight==320 && topWidth>=720) Check($"Top {topWidth}/{topHeight}/{iconsFirst} monitor cards fit without scrolling ({topScroller.ExtentHeight:F0}/{topScroller.ViewportHeight:F0})",
+                topScroller.ViewportHeight>0 && topScroller.ExtentHeight<=topScroller.ViewportHeight+.5);
+            var splitter=(System.Windows.Controls.GridSplitter)preview.FindName("ContentSeparator");
+            var grip=(FrameworkElement)splitter.Template.FindName("Grip",splitter);
+            Check($"Top {topWidth}/{topHeight}/{iconsFirst} section divider grip is vertical",grip.ActualHeight>grip.ActualWidth);
         }
         preview.Settings.IconsFirst=false; preview.ApplySettings();
         Render((FrameworkElement)preview.Content,1440,320,Path.Combine(output,"nepply-top-actual-grid.png"));
