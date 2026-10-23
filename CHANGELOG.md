@@ -19,7 +19,7 @@ Bản tổng hợp ngày **17/10/2026**, gom các thay đổi trong giai đoạn
 ### Giao diện và cá nhân hóa
 
 - Giao diện sáng, tối hoặc theo hệ thống; bảng màu, hiệu ứng neon và ánh kim tương tác với chuột.
-- Xem trước trên panel khi chỉnh cài đặt; Apply để lưu, OK để lưu và đóng, Hủy để bỏ thay đổi chưa lưu.
+- Xem trước trên panel khi chỉnh cài đặt; Áp dụng để lưu, OK để lưu và đóng, Hủy để bỏ thay đổi chưa lưu.
 - Hỗ trợ tám ngôn ngữ: Việt, Anh, Nhật, Đức, Trung giản thể, Nga, Pháp và Thái.
 - Cỡ icon (nhỏ, vừa, lớn) lưu trong cài đặt hoặc layout nhập vào giờ được áp dụng; mặc định vẫn là cỡ vừa.
 

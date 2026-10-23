@@ -39,6 +39,14 @@ internal static class LocalizationTests
                 settings.FlushPreview();pump(25);settings.UpdateLayout();
                 check($"Language {language.Id} previews title without saving",((TextBlock)settings.FindName("SettingsTitle")).Text==LocalizationService.Get("Settings") && baseline.Language=="vi");
                 check($"Language {language.Id} exposes localized resource",Application.Current.Resources["Loc.Download"] is string s && !string.IsNullOrEmpty(s));
+                check($"Language {language.Id} localizes the settings Apply and OK buttons",
+                    Equals(((Button)settings.FindName("ApplyButton")).Content,LocalizationService.Get("Apply"))
+                    && Equals(((Button)settings.FindName("OkButton")).Content,LocalizationService.Get("Ok")));
+                if(language.Id=="vi")
+                    check("Vietnamese settings use no English Apply or Monitor labels",LocalizationService.Get("Apply")=="Áp dụng"
+                        && LocalizationService.Get("Monitor")=="Theo dõi" && !LocalizationService.Get("PreviewNotice").Contains("Apply")
+                        && !LocalizationService.Get("DraftReady").Contains("Apply") && !LocalizationService.Get("SettingsExitGuidance").Contains("Apply")
+                        && SettingsSearch.Find("monitor").All(e=>e.Label.StartsWith("Theo dõi")) && SettingsSearch.Find("monitor").Length>0);
                 check($"Language {language.Id} search matches translated label",SettingsSearch.Find(LocalizationService.Get("Language")).Any(e=>e.Control=="LanguageChoice"));
                 render((FrameworkElement)settings.Content,820,740,Path.Combine(output,$"settings-language-{language.Id}.png"));
                 Dialogs(check,pump,output,render,language.Id);

@@ -40,7 +40,7 @@
      <Border x:Name="LayoutActions" Visibility="Collapsed" Background="{DynamicResource AccentWashBrush}" CornerRadius="12" Padding="10" Margin="0,0,0,8">
       <DockPanel LastChildFill="True">
        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal"><Button Content="{DynamicResource Loc.Cancel}" Click="CancelLayout_Click" Padding="10,6" Margin="0,0,6,0"/><Button Content="{DynamicResource Loc.Done}" Click="DoneLayout_Click" Padding="10,6" Style="{StaticResource PrimaryButton}"/></StackPanel>
-       <Button x:Name="SwapSectionsButton" Content="Desktop ↔ Monitor" Click="SwapSections_Click" HorizontalAlignment="Left" Padding="8,6" AutomationProperties.Name="{DynamicResource Loc.SwapSections}"/>
+       <Button x:Name="SwapSectionsButton" Content="{DynamicResource Loc.SwapSectionsShort}" Click="SwapSections_Click" HorizontalAlignment="Left" Padding="8,6" AutomationProperties.Name="{DynamicResource Loc.SwapSections}"/>
       </DockPanel>
      </Border>
     <DockPanel><TextBlock x:Name="FooterState" Visibility="Collapsed" Text="{DynamicResource Loc.Tagline}" Style="{StaticResource Caption}"/>

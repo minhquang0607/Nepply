@@ -114,7 +114,7 @@
   <Border x:Name="ActionArea" Grid.Row="2" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0" Padding="26,16">
    <StackPanel><TextBlock x:Name="ErrorText" Foreground="{DynamicResource ErrorBrush}" TextWrapping="Wrap" AutomationProperties.LiveSetting="Assertive"/><DockPanel>
     <Button Content="{DynamicResource Loc.Defaults}" Click="Reset_Click" DockPanel.Dock="Left"/>
-    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"><Button Content="{DynamicResource Loc.Cancel}" Click="Cancel_Click" Margin="0,0,8,0" IsCancel="True"/><Button x:Name="ApplyButton" Content="Apply" Click="Apply_Click" Margin="0,0,8,0" Padding="14,8"/><Button x:Name="OkButton" Content="OK" Click="Save_Click" Style="{StaticResource PrimaryButton}" FontWeight="SemiBold" Padding="18,8" IsDefault="True"/></StackPanel>
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"><Button Content="{DynamicResource Loc.Cancel}" Click="Cancel_Click" Margin="0,0,8,0" IsCancel="True"/><Button x:Name="ApplyButton" Content="{DynamicResource Loc.Apply}" Click="Apply_Click" Margin="0,0,8,0" Padding="14,8"/><Button x:Name="OkButton" Content="{DynamicResource Loc.Ok}" Click="Save_Click" Style="{StaticResource PrimaryButton}" FontWeight="SemiBold" Padding="18,8" IsDefault="True"/></StackPanel>
    </DockPanel></StackPanel>
   </Border>
  </Grid>

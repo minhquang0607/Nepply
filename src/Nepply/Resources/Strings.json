@@ -30,7 +30,8 @@
   "PrimaryDisplayLabel": ["{0} · Chính","{0} · Primary","{0} · メイン","{0} · Primär","{0} · 主显示器","{0} · основной","{0} · Principal","{0} · หลัก"],
   "GridAccessibleHelp": ["Vùng hiện tại tối đa {0} cột × {1} hàng. Kéo qua các chấm để chọn. Phím trái phải đổi cột, lên xuống đổi hàng. Esc hủy kéo.","This area supports up to {0} columns × {1} rows. Drag over dots to select. Left/right changes columns, up/down changes rows. Esc cancels dragging.","この領域は最大 {0} 列 × {1} 行です。点をドラッグして選択します。左右キーで列、上下キーで行を変更します。Esc でドラッグを取り消します。","Dieser Bereich unterstützt bis zu {0} Spalten × {1} Zeilen. Zur Auswahl über die Punkte ziehen. Links/rechts ändert Spalten, oben/unten Zeilen. Esc bricht das Ziehen ab.","当前区域最多支持 {0} 列 × {1} 行。拖过圆点进行选择。左右键调整列，上下键调整行，Esc 取消拖动。","Область поддерживает до {0} столбцов × {1} строк. Выбирайте перетаскиванием по точкам. Влево/вправо меняет столбцы, вверх/вниз — строки. Esc отменяет перетаскивание.","Cette zone accepte jusqu’à {0} colonnes × {1} lignes. Faites glisser sur les points pour sélectionner. Gauche/droite change les colonnes, haut/bas les lignes. Échap annule le glissement.","พื้นที่นี้รองรับสูงสุด {0} คอลัมน์ × {1} แถว ลากผ่านจุดเพื่อเลือก ปุ่มซ้าย/ขวาปรับคอลัมน์ ขึ้น/ลงปรับแถว Esc ยกเลิกการลาก"],
   "GridCapacityError": ["Vùng hiện tại hỗ trợ tối đa {0}×{1}.","This area supports up to {0}×{1}.","この領域は最大 {0}×{1} に対応します。","Dieser Bereich unterstützt maximal {0}×{1}.","当前区域最多支持 {0}×{1}。","Область поддерживает максимум {0}×{1}.","Cette zone accepte au maximum {0}×{1}.","พื้นที่นี้รองรับสูงสุด {0}×{1}"],
-  "SwapSections": ["Đổi vị trí Desktop và Monitor","Swap Desktop and Monitor","Desktop と Monitor を入れ替える","Desktop und Monitor vertauschen","交换 Desktop 和 Monitor 的位置","Поменять местами Desktop и Monitor","Permuter Desktop et Monitor","สลับตำแหน่ง Desktop และ Monitor"],
+  "SwapSections": ["Đổi vị trí Desktop và Theo dõi","Swap Desktop and Monitor","デスクトップとモニターを入れ替える","Desktop und Überwachung vertauschen","交换桌面和监控的位置","Поменять местами рабочий стол и мониторинг","Permuter Bureau et Surveillance","สลับตำแหน่งเดสก์ท็อปและการตรวจสอบ"],
+  "SwapSectionsShort": ["Desktop ↔ Theo dõi","Desktop ↔ Monitor","デスクトップ ↔ モニター","Desktop ↔ Überwachung","桌面 ↔ 监控","Рабочий стол ↔ Мониторинг","Bureau ↔ Surveillance","เดสก์ท็อป ↔ การตรวจสอบ"],
   "DesktopLoading": ["Đang đọc Desktop…","Reading Desktop…","Desktop を読み込み中…","Desktop wird eingelesen…","正在读取 Desktop…","Чтение Desktop…","Lecture du Desktop…","กำลังอ่าน Desktop…"],
   "DesktopItems": ["Các mục trên Desktop","Desktop items","Desktop の項目","Desktop-Elemente","Desktop 项目","Элементы Desktop","Éléments du Desktop","รายการบน Desktop"],
   "SettingsSections": ["Nhóm cài đặt","Settings sections","設定の分類","Einstellungsbereiche","设置分类","Разделы настроек","Rubriques des paramètres","หมวดการตั้งค่า"],
@@ -726,14 +727,14 @@
     "GPU และ iGPU ต้องเป็นคนละอุปกรณ์"
   ],
   "SettingsExitGuidance": [
-    "Cài đặt đang mở · chọn Apply/OK để lưu hoặc Hủy trước khi thoát Nepply.",
+    "Cài đặt đang mở · chọn Áp dụng/OK để lưu hoặc Hủy trước khi thoát Nepply.",
     "Settings are open · use Apply/OK to save or Cancel before exiting Nepply.",
     "設定を開いています。Nepplyを終了する前に適用/OKで保存するか、キャンセルしてください。",
     "Einstellungen sind geöffnet · vor dem Beenden Übernehmen/OK oder Abbrechen wählen.",
     "设置已打开 · 退出 Nepply 前请选择应用/确定保存或取消。",
     "Настройки открыты · перед выходом выберите Применить/ОК или Отмена.",
     "Paramètres ouverts · choisissez Appliquer/OK ou Annuler avant de quitter Nepply.",
-    "การตั้งค่ายังเปิดอยู่ · เลือกใช้/ตกลงเพื่อบันทึก หรือยกเลิกก่อนออกจาก Nepply"
+    "การตั้งค่ายังเปิดอยู่ · เลือกนำไปใช้/ตกลงเพื่อบันทึก หรือยกเลิกก่อนออกจาก Nepply"
   ],
   "SensorDisabled": [
     "Cảm biến nâng cao đã tắt",
@@ -1106,7 +1107,7 @@
     "เดสก์ท็อป"
   ],
   "Monitor": [
-    "Monitor",
+    "Theo dõi",
     "Monitor",
     "モニター",
     "Überwachung",
@@ -1615,6 +1616,8 @@
     "Annuler",
     "ยกเลิก"
   ],
+  "Apply": ["Áp dụng","Apply","適用","Übernehmen","应用","Применить","Appliquer","นำไปใช้"],
+  "Ok": ["OK","OK","OK","OK","确定","ОК","OK","ตกลง"],
   "Temperature": [
     "Nhiệt độ",
     "Temperature",
@@ -1897,14 +1900,14 @@
     "GPU ไม่พร้อมใช้งาน"
   ],
   "PreviewNotice": [
-    "Xem trước trên panel · Apply lưu và giữ mở; OK lưu và đóng. Hủy bỏ thay đổi kể từ lần lưu gần nhất.",
+    "Xem trước trên panel · Áp dụng lưu và giữ mở; OK lưu và đóng. Hủy bỏ thay đổi kể từ lần lưu gần nhất.",
     "Preview on the panel. Apply saves without closing; OK saves and closes. Cancel discards changes since the last save.",
-    "パネルでプレビュー。Applyで保存、OKで保存して閉じます。キャンセルは最後の保存後の変更を破棄します。",
-    "Vorschau im Panel. Apply speichert, OK speichert und schließt. Abbrechen verwirft Änderungen seit dem letzten Speichern.",
-    "在面板上预览。Apply 保存但不关闭，OK 保存并关闭。取消会放弃上次保存后的更改。",
-    "Предпросмотр на панели. Apply сохраняет, OK сохраняет и закрывает. Отмена откатывает изменения после последнего сохранения.",
-    "Aperçu sur le panneau. Apply enregistre, OK enregistre et ferme. Annuler ignore les modifications depuis le dernier enregistrement.",
-    "ดูตัวอย่างบนแผง Apply บันทึกโดยไม่ปิด OK บันทึกและปิด ยกเลิกจะทิ้งการเปลี่ยนแปลงหลังบันทึกล่าสุด"
+    "パネルでプレビュー。適用で保存、OKで保存して閉じます。キャンセルは最後の保存後の変更を破棄します。",
+    "Vorschau im Panel. Übernehmen speichert, OK speichert und schließt. Abbrechen verwirft Änderungen seit dem letzten Speichern.",
+    "在面板上预览。应用 保存但不关闭，确定 保存并关闭。取消会放弃上次保存后的更改。",
+    "Предпросмотр на панели. «Применить» сохраняет, «ОК» сохраняет и закрывает. Отмена откатывает изменения после последнего сохранения.",
+    "Aperçu sur le panneau. Appliquer enregistre, OK enregistre et ferme. Annuler ignore les modifications depuis le dernier enregistrement.",
+    "ดูตัวอย่างบนแผง นำไปใช้ บันทึกโดยไม่ปิด ตกลง บันทึกและปิด ยกเลิกจะทิ้งการเปลี่ยนแปลงหลังบันทึกล่าสุด"
   ],
   "MotionHint": [
     "Áp dụng cho panel, tìm kiếm, hover, lưới và chỉ số. Luôn tôn trọng tùy chọn giảm chuyển động của Windows.",
@@ -2320,14 +2323,14 @@
     "{0} ผลลัพธ์ · Enter เปิดรายการแรก"
   ],
   "DraftReady": [
-    "Đã nhập vào bản nháp · chọn Apply hoặc OK để lưu.",
+    "Đã nhập vào bản nháp · chọn Áp dụng hoặc OK để lưu.",
     "Loaded into draft · choose Apply or OK to save.",
-    "下書きに読み込み済み。ApplyまたはOKで保存。",
-    "In Entwurf geladen · mit Apply oder OK speichern.",
-    "已载入草稿·选择 Apply 或 OK 保存。",
-    "Загружено в черновик · Apply или OK для сохранения.",
-    "Chargé dans le brouillon · Apply ou OK pour enregistrer.",
-    "โหลดลงฉบับร่างแล้ว · เลือก Apply หรือ OK เพื่อบันทึก"
+    "下書きに読み込み済み。適用またはOKで保存。",
+    "In Entwurf geladen · mit Übernehmen oder OK speichern.",
+    "已载入草稿·选择应用或确定保存。",
+    "Загружено в черновик · «Применить» или «ОК» для сохранения.",
+    "Chargé dans le brouillon · Appliquer ou OK pour enregistrer.",
+    "โหลดลงฉบับร่างแล้ว · เลือกนำไปใช้หรือตกลงเพื่อบันทึก"
   ],
   "NoNetwork": [
     "Chưa có kết nối",

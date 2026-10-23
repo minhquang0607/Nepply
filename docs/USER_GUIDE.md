@@ -35,11 +35,11 @@ Bạn có thể đổi cạnh, kích thước, lưới, màu, chế độ sáng/
 
 | Nút | Tác dụng |
 | --- | --- |
-| Apply | Lưu lựa chọn hiện tại, giữ Cài đặt mở. |
+| Áp dụng | Lưu lựa chọn hiện tại, giữ Cài đặt mở. |
 | OK | Lưu lựa chọn hiện tại rồi đóng Cài đặt. |
 | Hủy hoặc nút đóng | Bỏ thay đổi chưa lưu, trở lại trạng thái đã lưu gần nhất. |
 
-Nếu đã bấm Apply, Hủy sau đó chỉ bỏ những thay đổi mới kể từ lần Apply đó. Các thao tác hệ thống như tự khởi động được áp dụng khi lưu, không phải hiệu ứng xem trước.
+Nếu đã bấm Áp dụng, Hủy sau đó chỉ bỏ những thay đổi mới kể từ lần Áp dụng đó. Các thao tác hệ thống như tự khởi động được áp dụng khi lưu, không phải hiệu ứng xem trước.
 
 Có thể bật/tắt neon và ánh kim. Nếu muốn giao diện tĩnh, giảm hoặc tắt chuyển động trong tùy chọn giao diện. Dùng xuất/nhập bố cục để lưu cách trình bày; file bố cục không phải bản sao lưu toàn bộ cấu hình và Desktop.
 
@@ -53,7 +53,7 @@ Tốc độ tải xuống/tải lên là lưu lượng của adapter, không ph�
 
 ## Khởi động cùng Windows
 
-Bật tùy chọn tự khởi động trong Cài đặt rồi bấm **Apply** hoặc **OK**. Windows có thể quản lý hoặc vô hiệu hóa mục này trong phần ứng dụng khởi động. Với bản portable, giữ nguyên vị trí thư mục ứng dụng; nếu di chuyển, mở lại app ở vị trí mới và lưu lại tùy chọn tự khởi động.
+Bật tùy chọn tự khởi động trong Cài đặt rồi bấm **Áp dụng** hoặc **OK**. Windows có thể quản lý hoặc vô hiệu hóa mục này trong phần ứng dụng khởi động. Với bản portable, giữ nguyên vị trí thư mục ứng dụng; nếu di chuyển, mở lại app ở vị trí mới và lưu lại tùy chọn tự khởi động.
 
 ## Cập nhật
 
