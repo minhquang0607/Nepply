@@ -1081,6 +1081,21 @@ internal static class Program
         var islandSearch=(System.Windows.Controls.Border)preview.FindName("DesktopSearchEditor");
         Check("Island search stays in toolbar row",System.Windows.Controls.Grid.GetRow(islandSearch)==0);
         Check("Island search does not shrink content",Math.Abs(islandContentHeight-islandGrid.ActualHeight)<.5);
+        static int VisibleSearchGlyphs(DependencyObject root)
+        {
+            int count=0;
+            for(int i=0;i<VisualTreeHelper.GetChildrenCount(root);i++)
+            {
+                var child=VisualTreeHelper.GetChild(root,i);
+                if(child is UIElement element && element.Visibility!=Visibility.Visible) continue; // Preview window is not shown.
+                if(child is System.Windows.Controls.TextBlock {Text:""}) count++;
+                count+=VisibleSearchGlyphs(child);
+            }
+            return count;
+        }
+        Check("Open search shows one magnifier: the highlighted header button",
+            VisibleSearchGlyphs((DependencyObject)preview.FindName("PanelHeader"))==1
+            && ((FrameworkElement)preview.FindName("DesktopSearchButton")).Visibility==Visibility.Visible);
         Check("Island search replaces brand without overlapping icon",((System.Windows.Controls.Image)preview.FindName("BrandTitle")).Visibility==Visibility.Hidden);
         Check("Panel brand loads embedded transparent icon",((System.Windows.Controls.Image)preview.FindName("BrandTitle")).Source is BitmapSource {PixelWidth:>0});
         Render((FrameworkElement)preview.Content, 520, 320, Path.Combine(output, "nepply-top-search-narrow.png"));
