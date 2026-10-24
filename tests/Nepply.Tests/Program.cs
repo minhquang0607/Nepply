@@ -671,14 +671,7 @@ internal static class Program
         Check("Error text meets contrast on light and dark surfaces",
             ThemeService.Contrast((Color)ColorConverter.ConvertFromString("#A52F29"),(Color)ColorConverter.ConvertFromString("#F5F3EF"))>=4.5
             && ThemeService.Contrast((Color)ColorConverter.ConvertFromString("#ED8D80"),(Color)ColorConverter.ConvertFromString("#141619"))>=4.5);
-        using(var invalidHotkey=new GlobalHotkeyService(IntPtr.Zero,()=>throw new Exception("Unexpected callback")))
-        {
-            Check("Hotkey without window is rejected without native registration",!invalidHotkey.Register());
-            invalidHotkey.Dispose(); invalidHotkey.Dispose();
-            bool disposedRejected=false;
-            try { invalidHotkey.Register(); } catch(ObjectDisposedException) {disposedRejected=true;}
-            Check("Disposed hotkey cannot register again",disposedRejected);
-        }
+        GlobalShortcutTests.Run(Check,Pump);
         using(var profileStream=new MemoryStream(System.Text.Encoding.UTF8.GetBytes(new LayoutProfile {CellWidth=112}.ToJson())))
         {
             Check("Layout stream parses without closing caller stream",LayoutProfile.Parse(profileStream).CellWidth==112 && profileStream.CanRead);

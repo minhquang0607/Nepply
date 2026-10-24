@@ -151,6 +151,7 @@
     "Impossible d’enregistrer {0}. Ouvrez Nepply depuis la zone de notification ou changez le raccourci dans Paramètres → Panneau.",
     "ลงทะเบียน {0} ไม่ได้ คุณยังเปิด Nepply จากถาดระบบหรือเปลี่ยนปุ่มลัดใน การตั้งค่า → แผง ได้"
   ],
+  "ShortcutUnavailableNotice": ["Chưa đăng ký được phím tắt {0}. Hãy chọn phím khác trong Cài đặt → Phím tắt.","Could not register the shortcut {0}. Choose another key in Settings → Shortcuts.","ショートカット {0} を登録できませんでした。設定 → ショートカットで別のキーを選んでください。","Das Tastenkürzel {0} konnte nicht registriert werden. Wählen Sie unter Einstellungen → Tastenkürzel eine andere Taste.","无法注册快捷键 {0}。请在 设置 → 快捷键 中选择其他按键。","Не удалось зарегистрировать сочетание {0}. Выберите другую клавишу в разделе Настройки → Сочетания клавиш.","Impossible d’enregistrer le raccourci {0}. Choisissez une autre touche dans Paramètres → Raccourcis.","ลงทะเบียนปุ่มลัด {0} ไม่ได้ เลือกปุ่มอื่นใน การตั้งค่า → ปุ่มลัด"],
   "LayoutSaveError": [
     "Không lưu được bố cục. ",
     "Could not save layout. ",

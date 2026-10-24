@@ -222,13 +222,69 @@ public partial class MainWindow : Window
     }
     private void RegisterHotkey()
     {
-        _hotkey ??= new(new WindowInteropHelper(this).Handle, () =>
+        _hotkey ??= new(new WindowInteropHelper(this).Handle, RunGlobalShortcut);
+        var bindings=ShortcutBindings.Global.ToDictionary(action=>action,action=>ShortcutBindings.Get(_settings,action));
+        var failed=_hotkey.Register(bindings);
+        PresentHotkeyStatus(!failed.Contains(ShortcutAction.TogglePanel));
+        PresentShortcutFailures(failed.Where(action=>action!=ShortcutAction.TogglePanel).Select(action=>bindings[action]).ToArray());
+    }
+    private UserMessage? _shortcutFailureNotice;
+    internal void PresentShortcutFailures(IReadOnlyList<ShortcutGesture> failed)
+    {
+        if(_shortcutFailureNotice!=null) { IconPanelView.DismissActionFailure(_shortcutFailureNotice); _shortcutFailureNotice=null; }
+        if(failed.Count==0) return;
+        _shortcutFailureNotice=UserMessage.FromKey("ShortcutUnavailableNotice",string.Join(", ",failed.Select(g=>g.ToString())));
+        IconPanelView.ShowActionFailure(_shortcutFailureNotice);
+    }
+    internal void RunGlobalShortcut(ShortcutAction action)
+    {
+        if(_cleaned) return;
+        if(action==ShortcutAction.TogglePanel)
         {
             if (_openingSettings || _layoutDecision != null) OpenForInteraction();
             else if (_animation.IsVisible) HidePanel();
             else OpenForInteraction();
+            return;
+        }
+        // Leave the hotkey message hook before showing UI; Settings opens a modal loop.
+        Dispatcher.BeginInvoke(()=>
+        {
+            if(_cleaned) return;
+            bool dialogOpen=_openingSettings || _layoutDecision!=null;
+            switch(action)
+            {
+                case ShortcutAction.SearchDesktop:
+                    OpenForInteraction();
+                    if(!dialogOpen) FocusDesktopSearch();
+                    break;
+                case ShortcutAction.TogglePin:
+                    if(dialogOpen) { OpenForInteraction(); break; }
+                    TogglePin();
+                    if(_pinned) OpenForInteraction();
+                    break;
+                case ShortcutAction.ToggleDesktopIcons:
+                    // An open Settings draft owns this option until it is saved or cancelled.
+                    if(dialogOpen) { OpenForInteraction(); break; }
+                    ToggleDesktopIcons();
+                    break;
+                case ShortcutAction.OpenSettings:
+                    OpenSettings();
+                    break;
+            }
         });
-        PresentHotkeyStatus(_hotkey.Register((uint)_settings.HotkeyModifiers, (uint)_settings.HotkeyKey));
+    }
+    private void ToggleDesktopIcons()
+    {
+        _settings.HideDesktopIcons=!_settings.HideDesktopIcons;
+        try { if(!_preview) _settings.Save(); }
+        catch(Exception ex)
+        {
+            _settings.HideDesktopIcons=!_settings.HideDesktopIcons;
+            AppLogger.Error(ex,"Save Desktop icon shortcut");
+            IconPanelView.ShowActionFailure(UserMessage.From(ex));
+            return;
+        }
+        ApplyShellSettings(false,true);
     }
     internal void PresentHotkeyStatus(bool registered)
     {
