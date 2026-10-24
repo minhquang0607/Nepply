@@ -8,6 +8,9 @@
     <SelfContained>true</SelfContained>
     <PublishSingleFile>true</PublishSingleFile>
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <!-- Task Manager shows the file description; name the helper's job, not its assembly. -->
+    <AssemblyTitle>Nepply Desktop icon guardian</AssemblyTitle>
+    <Product>Nepply</Product>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="../Nepply/Features/Desktop/Visibility/DesktopGuardianFence.cs" Link="Shared/DesktopGuardianFence.cs" />
