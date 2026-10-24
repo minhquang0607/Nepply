@@ -36,12 +36,11 @@ internal static class GuidanceTests
 
         var settings = new AppSettings();
         ShortcutBindings.Set(settings, ShortcutAction.RefreshDesktop, new(0, 0x74));
-        ShortcutBindings.Set(settings, ShortcutAction.HidePanel, ShortcutGesture.None);
+        ShortcutBindings.Set(settings, ShortcutAction.FocusSearch, ShortcutGesture.None);
         var lines = WelcomeWindow.ShortcutLines(settings);
         check("Guide lists every assigned shortcut with its current key and skips unassigned ones",
-            lines.Contains(LocalizationService.Get("ShortcutFocusSearch") + " · Ctrl + F")
-            && lines.Contains(LocalizationService.Get("ShortcutRefreshDesktop") + " · F5")
-            && !lines.Any(line => line.StartsWith(LocalizationService.Get("ShortcutHidePanel")))
+            lines.Contains(LocalizationService.Get("ShortcutRefreshDesktop") + " · F5")
+            && !lines.Any(line => line.StartsWith(LocalizationService.Get("ShortcutFocusSearch")))
             && !lines.Any(line => line.StartsWith(LocalizationService.Get("ShortcutTogglePanel"))));
 
         var firstRun = new WelcomeWindow(new AppSettings());

@@ -31,13 +31,12 @@ Every shortcut can be changed in **Settings → Shortcuts**. Click a key box and
 | Pin / unpin panel | Not set | Anywhere |
 | Open settings | Not set | Anywhere |
 | Search desktop | Ctrl + F | While the panel is open |
-| Hide panel | Esc | While the panel is open |
 | Refresh desktop | Not set | While the panel is open |
 
 - Shortcuts that work anywhere need Ctrl or Alt, so they cannot block typing in other apps.
-- Panel shortcuts may be Esc or F1–F12 on their own; letters and digits still need Ctrl or Alt because the panel has a search box.
+- Panel shortcuts may be F1–F12 on their own; letters and digits still need Ctrl or Alt because the panel has a search box.
 - Two actions cannot share a key; Settings tells you which action already uses it.
-- Esc always leaves the current interaction first (layout editing, search), even if you rebind "hide panel".
+- Esc is fixed: it leaves the current interaction (layout editing, search), and pressing it again collapses the panel. To hide the panel with another key, use the show/hide shortcut.
 - If another app already owns a key, Nepply says so on the panel; choose another key in Settings → Shortcuts.
 
 ## 📐 Desktop items and grid

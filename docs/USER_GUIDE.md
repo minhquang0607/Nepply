@@ -31,13 +31,12 @@ Mọi phím tắt đổi được trong **Cài đặt → Phím tắt**. Bấm v
 | Ghim / bỏ ghim panel | Chưa đặt | Ở mọi nơi |
 | Mở Cài đặt | Chưa đặt | Ở mọi nơi |
 | Tìm trên Desktop | Ctrl + F | Khi panel đang mở |
-| Ẩn panel | Esc | Khi panel đang mở |
 | Làm mới Desktop | Chưa đặt | Khi panel đang mở |
 
 - Phím dùng ở mọi nơi cần có Ctrl hoặc Alt, để không chặn việc gõ chữ ở ứng dụng khác.
-- Phím trong panel có thể là Esc hoặc F1–F12 đứng riêng; chữ và số vẫn cần Ctrl hoặc Alt vì panel có ô tìm kiếm.
+- Phím trong panel có thể là F1–F12 đứng riêng; chữ và số vẫn cần Ctrl hoặc Alt vì panel có ô tìm kiếm.
 - Hai chức năng không dùng chung một phím; Cài đặt sẽ báo phím đó đang thuộc chức năng nào.
-- Esc luôn thoát thao tác hiện tại trước (sửa bố cục, ô tìm kiếm), kể cả khi bạn đổi phím ẩn panel.
+- Esc là phím cố định: thoát thao tác đang làm (sửa bố cục, ô tìm kiếm), nhấn tiếp để thu panel. Muốn ẩn panel bằng phím khác, dùng phím Mở / đóng panel.
 - Nếu ứng dụng khác đã chiếm một phím, Nepply báo trên panel; chọn phím khác trong Cài đặt → Phím tắt.
 
 ## Mở mục Desktop và chỉnh lưới

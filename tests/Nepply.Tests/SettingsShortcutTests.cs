@@ -39,12 +39,13 @@ internal static class SettingsShortcutTests
 
             settings.ShowSettingsSection(5); pump(20);
             var section = (FrameworkElement)settings.FindName("ShortcutsSection");
+            check("Show/hide covers hiding, so there is no separate hide panel row", settings.FindName("ShortcutHidePanel") == null);
             check("Settings has a Shortcuts section holding every shortcut, including open/close",
                 section.Visibility == Visibility.Visible && Inside(Row("HotkeyButton"), section)
                 && !Inside(Row("HotkeyButton"), (DependencyObject)settings.FindName("PanelSection")));
             check("Shortcut rows show default keys and unassigned actions",
                 Equals(Row("HotkeyButton").Content, "Ctrl + Space") && Equals(Row("ShortcutFocusSearch").Content, "Ctrl + F")
-                && Equals(Row("ShortcutHidePanel").Content, "Esc") && Equals(Row("ShortcutSearchDesktop").Content, LocalizationService.Get("ShortcutNone")));
+                && Equals(Row("ShortcutSearchDesktop").Content, LocalizationService.Get("ShortcutNone")));
             check("Every shortcut row has an accessible action name",
                 ShortcutBindings.All.Where(a => a != ShortcutAction.TogglePanel)
                     .All(a => System.Windows.Automation.AutomationProperties.GetName(Row("Shortcut" + a)) == LocalizationService.Get("Shortcut" + a)));
@@ -72,13 +73,13 @@ internal static class SettingsShortcutTests
             Press(Key.F5, new(0, F5));
             check("A bare function key works for panel shortcuts", Equals(Row("ShortcutRefreshDesktop").Content, "F5"));
 
-            var hideRow = (Grid)VisualTreeHelper.GetParent(Row("ShortcutHidePanel"));
-            Click("ShortcutClear_Click", Row("ShortcutHidePanel"));
-            check("Clearing a shortcut leaves it unassigned", Equals(Row("ShortcutHidePanel").Content, LocalizationService.Get("ShortcutNone")));
-            Click("ShortcutDefault_Click", Row("ShortcutHidePanel"));
-            check("The default button restores a cleared key", Equals(Row("ShortcutHidePanel").Content, "Esc"));
+            var searchRow = (Grid)VisualTreeHelper.GetParent(Row("ShortcutFocusSearch"));
+            Click("ShortcutClear_Click", Row("ShortcutFocusSearch"));
+            check("Clearing a shortcut leaves it unassigned", Equals(Row("ShortcutFocusSearch").Content, LocalizationService.Get("ShortcutNone")));
+            Click("ShortcutDefault_Click", Row("ShortcutFocusSearch"));
+            check("The default button restores a cleared key", Equals(Row("ShortcutFocusSearch").Content, "Ctrl + F"));
             check("Open/close has no clear button",
-                ((Grid)VisualTreeHelper.GetParent(Row("HotkeyButton"))).Children.OfType<Button>().Count() == 2 && hideRow.Children.OfType<Button>().Count() == 3);
+                ((Grid)VisualTreeHelper.GetParent(Row("HotkeyButton"))).Children.OfType<Button>().Count() == 2 && searchRow.Children.OfType<Button>().Count() == 3);
 
             ((Button)settings.FindName("ApplyButton")).RaiseEvent(new RoutedEventArgs(Button.ClickEvent)); pump(10);
             check("Apply saves the edited shortcuts",

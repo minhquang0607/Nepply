@@ -3,7 +3,7 @@ using Nepply.Helpers;
 namespace Nepply.Models;
 
 /// <summary>Every rebindable action. Global actions work from any app; panel actions only while Nepply has focus.</summary>
-public enum ShortcutAction { TogglePanel, SearchDesktop, ToggleDesktopIcons, TogglePin, OpenSettings, FocusSearch, HidePanel, RefreshDesktop }
+public enum ShortcutAction { TogglePanel, SearchDesktop, ToggleDesktopIcons, TogglePin, OpenSettings, FocusSearch, RefreshDesktop }
 
 /// <summary>Win32 modifier bits (Alt=1, Ctrl=2, Shift=4) plus a virtual key. Key 0 means unassigned.</summary>
 public readonly record struct ShortcutGesture(int Modifiers, int Key)
@@ -25,7 +25,7 @@ public static class ShortcutBindings
     public static readonly ShortcutAction[] Global =
         [ShortcutAction.TogglePanel, ShortcutAction.SearchDesktop, ShortcutAction.ToggleDesktopIcons, ShortcutAction.TogglePin, ShortcutAction.OpenSettings];
     public static readonly ShortcutAction[] Panel =
-        [ShortcutAction.FocusSearch, ShortcutAction.HidePanel, ShortcutAction.RefreshDesktop];
+        [ShortcutAction.FocusSearch, ShortcutAction.RefreshDesktop];
     public static IEnumerable<ShortcutAction> All => Global.Concat(Panel);
 
     private const int Escape = 0x1B, F1 = 0x70, F12 = 0x7B;
@@ -38,7 +38,6 @@ public static class ShortcutBindings
     {
         ShortcutAction.TogglePanel => new(ShortcutGesture.Control, 0x20),
         ShortcutAction.FocusSearch => new(ShortcutGesture.Control, 0x46),
-        ShortcutAction.HidePanel => new(0, Escape),
         _ => ShortcutGesture.None
     };
 
@@ -46,17 +45,18 @@ public static class ShortcutBindings
 
     /// <summary>
     /// Global gestures need Ctrl or Alt so they cannot swallow normal typing in other apps.
-    /// Panel gestures may be a bare Esc or function key; letters, digits and other keys
-    /// still need Ctrl or Alt because the panel has a search box.
+    /// Panel gestures may be a bare function key; letters, digits and other keys still need
+    /// Ctrl or Alt because the panel has a search box. Esc is reserved: it backs out of the
+    /// current interaction and then hides the panel (show/hide already covers hiding).
     /// </summary>
     public static bool IsValid(ShortcutAction action, ShortcutGesture gesture)
     {
         if (gesture.IsEmpty) return CanClear(action) && gesture.Modifiers == 0;
-        if (gesture.Modifiers is < 0 or > 7) return false;
+        if (gesture.Modifiers is < 0 or > 7 || gesture.Key == Escape) return false;
         bool commandModifier = (gesture.Modifiers & (ShortcutGesture.Alt | ShortcutGesture.Control)) != 0;
         bool standardKey = HotkeyGesture.IsSupportedKey(gesture.Key) || IsFunctionKey(gesture.Key);
         if (IsGlobal(action)) return commandModifier && standardKey;
-        if (gesture.Key == Escape || IsFunctionKey(gesture.Key)) return true;
+        if (IsFunctionKey(gesture.Key)) return true;
         return commandModifier && HotkeyGesture.IsSupportedKey(gesture.Key);
     }
 

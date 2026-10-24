@@ -558,20 +558,18 @@ public partial class MainWindow : Window
     internal void HandlePanelKey(KeyEventArgs e,ShortcutGesture pressed)
     {
         bool escape=pressed==new ShortcutGesture(0,KeyInterop.VirtualKeyFromKey(Key.Escape));
-        bool hide=ShortcutInput.Matches(_settings,ShortcutAction.HidePanel,pressed);
-        // One press dismisses one layer; holding the key must not also hide the panel.
-        if(e.IsRepeat && (escape || hide)) { e.Handled=true; return; }
+        // One press dismisses one layer; holding Esc must not also hide the panel.
+        if(e.IsRepeat && escape) { e.Handled=true; return; }
         if(IsActive && IsKeyboardFocusWithin) { _keyboardInteraction=true; _hideTimer.Stop(); }
         if (escape)
         {
-            // Esc always backs out of the current layer first, whatever "hide panel" is bound to.
+            // Esc (fixed, not rebindable) backs out of the current layer, then hides the panel.
             if (_editingLayout) { FinishLayout(false); e.Handled=true; return; }
             if (IconPanelView.ClearFocusedSearch()) { e.Handled=true; return; }
             if (DesktopSearchEditor.Visibility==Visibility.Visible && DesktopSearchBox.Text.Length==0)
             { DesktopSearchButton.Focus(); SetDesktopSearchExpanded(false); e.Handled=true; return; }
         }
-        if (hide) { HidePanel(); e.Handled=true; return; }
-        if (escape) { e.Handled=true; return; }
+        if (escape) { HidePanel(); e.Handled=true; return; }
         if (ShortcutInput.Matches(_settings,ShortcutAction.FocusSearch,pressed)) { IconPanelView.FocusSearch(); e.Handled = true; return; }
         if (ShortcutInput.Matches(_settings,ShortcutAction.RefreshDesktop,pressed)) { RefreshIcons(); e.Handled = true; }
     }

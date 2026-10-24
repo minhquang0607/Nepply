@@ -9,8 +9,7 @@ internal static class ShortcutBindingTests
         var settings = new AppSettings();
         check("Shortcut defaults keep the existing keys",
             ShortcutBindings.Get(settings, ShortcutAction.TogglePanel) == new ShortcutGesture(2, Space)
-            && ShortcutBindings.Get(settings, ShortcutAction.FocusSearch) == new ShortcutGesture(2, F)
-            && ShortcutBindings.Get(settings, ShortcutAction.HidePanel) == new ShortcutGesture(0, Esc));
+            && ShortcutBindings.Get(settings, ShortcutAction.FocusSearch) == new ShortcutGesture(2, F));
         check("New shortcut actions start unassigned",
             new[] { ShortcutAction.SearchDesktop, ShortcutAction.ToggleDesktopIcons, ShortcutAction.TogglePin, ShortcutAction.OpenSettings, ShortcutAction.RefreshDesktop }
                 .All(a => ShortcutBindings.Get(settings, a).IsEmpty));
@@ -22,8 +21,10 @@ internal static class ShortcutBindingTests
         check("Global shortcuts need Ctrl or Alt",
             !ShortcutBindings.IsValid(ShortcutAction.SearchDesktop, new(4, D)) && !ShortcutBindings.IsValid(ShortcutAction.SearchDesktop, new(0, F5))
             && ShortcutBindings.IsValid(ShortcutAction.SearchDesktop, new(3, D)) && ShortcutBindings.IsValid(ShortcutAction.OpenSettings, new(1, F5)));
-        check("Panel shortcuts allow a bare Esc or function key but not a bare letter",
-            ShortcutBindings.IsValid(ShortcutAction.HidePanel, new(0, Esc)) && ShortcutBindings.IsValid(ShortcutAction.RefreshDesktop, new(0, F5))
+        check("Esc is reserved for backing out and hiding, so no action can take it",
+            ShortcutBindings.All.All(a => !ShortcutBindings.IsValid(a, new(0, Esc)) && !ShortcutBindings.IsValid(a, new(2, Esc))));
+        check("Panel shortcuts allow a bare function key but not a bare letter",
+            ShortcutBindings.IsValid(ShortcutAction.RefreshDesktop, new(0, F5))
             && !ShortcutBindings.IsValid(ShortcutAction.FocusSearch, new(0, F)) && !ShortcutBindings.IsValid(ShortcutAction.FocusSearch, new(4, F))
             && ShortcutBindings.IsValid(ShortcutAction.FocusSearch, new(1, F)));
         check("Only the open/close shortcut cannot be cleared",
@@ -32,18 +33,18 @@ internal static class ShortcutBindingTests
 
         var edited = new AppSettings();
         ShortcutBindings.Set(edited, ShortcutAction.SearchDesktop, new(3, D));
-        ShortcutBindings.Set(edited, ShortcutAction.HidePanel, ShortcutGesture.None);
+        ShortcutBindings.Set(edited, ShortcutAction.FocusSearch, ShortcutGesture.None);
         ShortcutBindings.Set(edited, ShortcutAction.RefreshDesktop, new(0, F5));
         ShortcutBindings.Set(edited, ShortcutAction.TogglePanel, new(1, Space));
         var roundTrip = System.Text.Json.JsonSerializer.Deserialize<AppSettings>(System.Text.Json.JsonSerializer.Serialize(edited))!;
         roundTrip.Validate();
         check("Rebound and cleared shortcuts survive a save round trip",
             ShortcutBindings.Get(roundTrip, ShortcutAction.SearchDesktop) == new ShortcutGesture(3, D)
-            && ShortcutBindings.Get(roundTrip, ShortcutAction.HidePanel).IsEmpty
+            && ShortcutBindings.Get(roundTrip, ShortcutAction.FocusSearch).IsEmpty
             && ShortcutBindings.Get(roundTrip, ShortcutAction.RefreshDesktop) == new ShortcutGesture(0, F5)
             && roundTrip.HotkeyModifiers == 1 && roundTrip.HotkeyKey == Space);
-        ShortcutBindings.Set(edited, ShortcutAction.HidePanel, ShortcutBindings.Default(ShortcutAction.HidePanel));
-        check("Restoring a default removes its stored entry", !edited.Shortcuts.Any(e => e.StartsWith("HidePanel:")));
+        ShortcutBindings.Set(edited, ShortcutAction.FocusSearch, ShortcutBindings.Default(ShortcutAction.FocusSearch));
+        check("Restoring a default removes its stored entry", !edited.Shortcuts.Any(e => e.StartsWith("FocusSearch:")));
         bool rejected = false;
         try { ShortcutBindings.Set(edited, ShortcutAction.SearchDesktop, new(0, D)); } catch (ArgumentException) { rejected = true; }
         check("Setting an invalid shortcut is rejected", rejected && ShortcutBindings.Get(edited, ShortcutAction.SearchDesktop) == new ShortcutGesture(3, D));
@@ -63,7 +64,7 @@ internal static class ShortcutBindingTests
             && ShortcutBindings.Get(damaged, ShortcutAction.TogglePin).IsEmpty
             && ShortcutBindings.Get(damaged, ShortcutAction.OpenSettings).IsEmpty
             && ShortcutBindings.Get(damaged, ShortcutAction.FocusSearch).IsEmpty
-            && ShortcutBindings.Get(damaged, ShortcutAction.HidePanel) == new ShortcutGesture(0, Esc)
+            && !damaged.Shortcuts.Any(e => e.StartsWith("HidePanel:"))
             && damaged.HotkeyModifiers == 2 && damaged.HotkeyKey == Space);
         var legacyFunction = new AppSettings { HotkeyModifiers = 2, HotkeyKey = F5 };
         legacyFunction.Validate();

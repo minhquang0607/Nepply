@@ -33,7 +33,6 @@ internal static class SettingsSearch
         new("Phím tắt · Ghim panel",5,"ShortcutTogglePin","hotkey shortcut pin ghim giữ mở"),
         new("Phím tắt · Mở Cài đặt",5,"ShortcutOpenSettings","hotkey shortcut settings cài đặt"),
         new("Phím tắt · Tìm trên Desktop",5,"ShortcutFocusSearch","hotkey shortcut ctrl f tìm kiếm"),
-        new("Phím tắt · Ẩn panel",5,"ShortcutHidePanel","hotkey shortcut esc ẩn đóng"),
         new("Phím tắt · Làm mới Desktop",5,"ShortcutRefreshDesktop","hotkey shortcut refresh f5 làm mới"),
         new("Desktop · Lưới icon",2,"GridPicker","icon grid hàng cột ngang dọc lưới chấm kích thước"),
         new("Desktop · Ẩn icon Windows",2,"HideIcons","desktop biểu tượng windows"),

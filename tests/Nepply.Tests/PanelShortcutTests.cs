@@ -7,7 +7,7 @@ using Nepply.Services;
 
 internal static class PanelShortcutTests
 {
-    private const int F4 = 0x73, F5 = 0x74, S = 0x53, F = 0x46, Esc = 0x1B;
+    private const int F5 = 0x74, S = 0x53, F = 0x46, Esc = 0x1B;
     internal static void Run(Action<string,bool> check, Action<int> pump)
     {
         int scans = 0;
@@ -34,7 +34,6 @@ internal static class PanelShortcutTests
             check("Esc closes the empty search before hiding the panel", editor.Visibility == Visibility.Collapsed);
 
             ShortcutBindings.Set(main.Settings, ShortcutAction.FocusSearch, new(3, S));
-            ShortcutBindings.Set(main.Settings, ShortcutAction.HidePanel, new(0, F4));
             ShortcutBindings.Set(main.Settings, ShortcutAction.RefreshDesktop, new(0, F5));
             main.ApplySettings();
             Press(Key.F, ModifierKeys.Control); pump(30);
@@ -45,9 +44,7 @@ internal static class PanelShortcutTests
 
             main.ShowPanel(); pump(30);
             Press(Key.Escape, ModifierKeys.None); pump(30);
-            check("Esc no longer hides the panel once hide is rebound", main.IsPanelShown);
-            Press(Key.F4, ModifierKeys.None); pump(30);
-            check("The rebound hide key hides the panel", !main.IsPanelShown);
+            check("With nothing to back out of, Esc hides the panel", !main.IsPanelShown);
 
             int before = Volatile.Read(ref scans);
             Press(Key.F5, ModifierKeys.None);
