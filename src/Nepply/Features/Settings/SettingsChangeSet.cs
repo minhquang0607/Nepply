@@ -57,7 +57,7 @@ internal readonly record struct SettingsChangeSet(SettingsChange Changes)
             or nameof(AppSettings.EcoMode) or nameof(AppSettings.SuspendMonitorWhenHidden)
             or nameof(AppSettings.GpuDisplay) or nameof(AppSettings.GpuIdentifier)
             or nameof(AppSettings.IntegratedGpuIdentifier) => SettingsChange.Telemetry,
-        nameof(AppSettings.HotkeyKey) or nameof(AppSettings.HotkeyModifiers) => SettingsChange.Hotkey,
+        nameof(AppSettings.HotkeyKey) or nameof(AppSettings.HotkeyModifiers) or nameof(AppSettings.Shortcuts) => SettingsChange.Hotkey,
         nameof(AppSettings.AutoStart) => SettingsChange.AutoStart,
         nameof(AppSettings.HideDesktopIcons) => SettingsChange.DesktopVisibility,
         _ => SettingsChange.Structure

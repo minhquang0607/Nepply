@@ -13,6 +13,7 @@ internal static class ReleaseHardeningTests
         WindowServicesTests.Run(check);
         SettingsEditSessionTests.Run(check);
         SettingsChangeSetTests.Run(check);
+        ShortcutBindingTests.Run(check);
         DesktopCatalogStoreTests.Run(check);
         DesktopCollectionTests.Run(check);
         DesktopIncrementalTests.Run(check);

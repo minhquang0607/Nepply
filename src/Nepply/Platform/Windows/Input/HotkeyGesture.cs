@@ -10,6 +10,7 @@ internal static class HotkeyGesture
     {
         string key = virtualKey switch
         {
+            0x1B => "Esc",
             33 => "PageUp",
             34 => "PageDown",
             _ => virtualKey is >= 48 and <= 57 or >= 65 and <= 90
