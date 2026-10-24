@@ -31,6 +31,9 @@ Bản tổng hợp ngày **17/10/2026**, gom các thay đổi trong giai đoạn
 - Phân biệt GPU/iGPU theo thông tin hệ thống; cảm biến không hỗ trợ có thể không hiển thị số đo.
 - Khi panel ẩn, tiến trình cảm biến được giữ thêm 60 giây (không đọc số liệu) nên mở lại panel sẽ có số đo ngay, không phải khởi động lại; tắt theo dõi hoặc tắt cảm biến vẫn dừng nó ngay.
 - Mã nhận dạng GPU, màn hình hoặc mạng quá dài trong tệp cài đặt sẽ trở về chế độ tự chọn, thay vì làm cảm biến kẹt ở trạng thái đang kết nối lại.
+- Khi không đọc được nhiệt độ, dấu — hiện màu nhạt và rê chuột sẽ thấy lý do.
+- Nút **Sao chép chẩn đoán** (Cài đặt → Ứng dụng) chép phiên bản, Windows và thông tin cảm biến để dán khi báo lỗi; không chứa đường dẫn hay tên tài khoản.
+- Tiến trình bảo vệ icon Desktop hiện tên rõ ràng trong Task Manager.
 
 ### Cập nhật và khôi phục
 
