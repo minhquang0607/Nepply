@@ -2094,14 +2094,14 @@
     "ค้นหาการตั้งค่า · Ctrl + F"
   ],
   "SearchDesktopTip": [
-    "Tìm Desktop · Ctrl + F",
-    "Search desktop · Ctrl + F",
-    "デスクトップ検索 · Ctrl + F",
-    "Desktop suchen · Ctrl + F",
-    "搜索桌面 · Ctrl + F",
-    "Поиск на рабочем столе · Ctrl + F",
-    "Rechercher sur le bureau · Ctrl + F",
-    "ค้นหาเดสก์ท็อป · Ctrl + F"
+    "Tìm trên Desktop",
+    "Search desktop",
+    "デスクトップ検索",
+    "Desktop suchen",
+    "搜索桌面",
+    "Поиск на рабочем столе",
+    "Rechercher sur le bureau",
+    "ค้นหาเดสก์ท็อป"
   ],
   "EditTip": [
     "Chỉnh bố cục: kéo icon hoặc các khối monitor",

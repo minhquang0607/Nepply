@@ -544,22 +544,26 @@ public partial class MainWindow : Window
         else if(--_displayAttempts>0) _displayTimer.Start();
     }
     private void PreferenceChanged(object sender, Microsoft.Win32.UserPreferenceChangedEventArgs e) => Dispatcher.InvokeAsync(() => { if (!_cleaned) { ThemeService.Apply(_settingsPreview ?? _settings); MainPanel.Opacity=1; _animation.RefreshMotionPreference(); } });
-    private void Window_KeyDown(object sender, KeyEventArgs e)
+    private void Window_KeyDown(object sender, KeyEventArgs e) => HandlePanelKey(e,ShortcutInput.FromEvent(e));
+    internal void HandlePanelKey(KeyEventArgs e,ShortcutGesture pressed)
     {
-        if(e.Key==Key.Escape && e.IsRepeat) { e.Handled=true; return; }
+        bool escape=pressed==new ShortcutGesture(0,KeyInterop.VirtualKeyFromKey(Key.Escape));
+        bool hide=ShortcutInput.Matches(_settings,ShortcutAction.HidePanel,pressed);
+        // One press dismisses one layer; holding the key must not also hide the panel.
+        if(e.IsRepeat && (escape || hide)) { e.Handled=true; return; }
         if(IsActive && IsKeyboardFocusWithin) { _keyboardInteraction=true; _hideTimer.Stop(); }
-        if (e.Key == Key.Escape)
+        if (escape)
         {
-            if (_editingLayout) FinishLayout(false);
-            else if (!IconPanelView.ClearFocusedSearch())
-            {
-                if (DesktopSearchEditor.Visibility==Visibility.Visible && DesktopSearchBox.Text.Length==0)
-                { DesktopSearchButton.Focus(); SetDesktopSearchExpanded(false); }
-                else HidePanel();
-            }
-            e.Handled=true;
+            // Esc always backs out of the current layer first, whatever "hide panel" is bound to.
+            if (_editingLayout) { FinishLayout(false); e.Handled=true; return; }
+            if (IconPanelView.ClearFocusedSearch()) { e.Handled=true; return; }
+            if (DesktopSearchEditor.Visibility==Visibility.Visible && DesktopSearchBox.Text.Length==0)
+            { DesktopSearchButton.Focus(); SetDesktopSearchExpanded(false); e.Handled=true; return; }
         }
-        if (e.Key == Key.F && Keyboard.Modifiers == ModifierKeys.Control) { IconPanelView.FocusSearch(); e.Handled = true; }
+        if (hide) { HidePanel(); e.Handled=true; return; }
+        if (escape) { e.Handled=true; return; }
+        if (ShortcutInput.Matches(_settings,ShortcutAction.FocusSearch,pressed)) { IconPanelView.FocusSearch(); e.Handled = true; return; }
+        if (ShortcutInput.Matches(_settings,ShortcutAction.RefreshDesktop,pressed)) { RefreshIcons(); e.Handled = true; }
     }
     private void SaveLayout()
     {
@@ -608,6 +612,7 @@ public partial class MainWindow : Window
         SaveLayout();
     }
     public bool IsPinned => _pinned;
+    internal bool IsPanelShown => _animation.IsVisible;
     public void TogglePin() { _pinned = !_pinned; UpdateActionLabels(); if (_pinned) _hideTimer.Stop(); else ScheduleHide(); }
     private void Pin_StateChanged(object sender, RoutedEventArgs e)
     {
@@ -619,7 +624,10 @@ public partial class MainWindow : Window
     {
         string pinLabel=LocalizationService.Get(_pinned ? "Unpin" : "PinTip");
         string editLabel=LocalizationService.Get(_editingLayout ? "SaveLayout" : "EditLayout");
-        PinButton.ToolTip=pinLabel;
+        PinButton.ToolTip=ShortcutInput.Label(pinLabel,_settings,ShortcutAction.TogglePin);
+        DesktopSearchButton.ToolTip=ShortcutInput.Label(LocalizationService.Get("SearchDesktopTip"),_settings,ShortcutAction.FocusSearch);
+        RefreshDesktopButton.ToolTip=ShortcutInput.Label(LocalizationService.Get("Refresh"),_settings,ShortcutAction.RefreshDesktop);
+        PanelSettingsButton.ToolTip=ShortcutInput.Label(LocalizationService.Get("Settings"),_settings,ShortcutAction.OpenSettings);
         PinButton.IsChecked=_pinned;
         EditLayoutButton.ToolTip=editLabel;
         System.Windows.Automation.AutomationProperties.SetName(PinButton,pinLabel);

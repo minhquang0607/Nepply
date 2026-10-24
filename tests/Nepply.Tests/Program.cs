@@ -672,6 +672,7 @@ internal static class Program
             ThemeService.Contrast((Color)ColorConverter.ConvertFromString("#A52F29"),(Color)ColorConverter.ConvertFromString("#F5F3EF"))>=4.5
             && ThemeService.Contrast((Color)ColorConverter.ConvertFromString("#ED8D80"),(Color)ColorConverter.ConvertFromString("#141619"))>=4.5);
         GlobalShortcutTests.Run(Check,Pump);
+        PanelShortcutTests.Run(Check,Pump);
         using(var profileStream=new MemoryStream(System.Text.Encoding.UTF8.GetBytes(new LayoutProfile {CellWidth=112}.ToJson())))
         {
             Check("Layout stream parses without closing caller stream",LayoutProfile.Parse(profileStream).CellWidth==112 && profileStream.CanRead);
