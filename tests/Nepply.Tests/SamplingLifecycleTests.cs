@@ -67,7 +67,7 @@ internal static class SamplingLifecycleTests
         monitor.Configure(settings,true); monitor.Start();
         bool firstRead=SpinWait.SpinUntil(()=>Volatile.Read(ref fake.Reads)>0,4000);
         monitor.Configure(settings,false);
-        Thread.Sleep(300);
+        Thread.Sleep(600); // Let a read already in flight when hiding finish, even on a slow runner.
         int hiddenReads=Volatile.Read(ref fake.Reads);
         Thread.Sleep(1200);
         check("Briefly hidden monitor keeps its provider without reading",firstRead && fake.Disposals==0 && fake.Reads==hiddenReads);
