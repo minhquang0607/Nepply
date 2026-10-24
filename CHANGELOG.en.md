@@ -21,6 +21,8 @@ Consolidated **17 October 2026**. This is a summary of development changes, not 
 - Light, dark and system themes; colors, neon and mouse-interactive metallic effects.
 - Preview before saving: Apply saves, OK saves/closes, Cancel discards unsaved changes.
 - Vietnamese, English, Japanese, German, Simplified Chinese, Russian, French and Thai.
+- A **Shortcuts** section in Settings: every key is rebindable (show/hide, search, hide panel…), with new global shortcuts to open the panel and search, hide/show desktop icons, pin the panel and open settings (unset by default).
+- Settings, the tray menu and layout editing show feature names only; usage tips moved to a **Guide** you can reopen from the tray or Settings.
 - The icon size (small, medium, large) stored in settings or an imported layout is now applied; medium remains the default.
 
 ### System monitoring

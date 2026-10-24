@@ -5,7 +5,7 @@
 ## The panel will not open
 
 1. Check the tray, including hidden icons, to confirm Nepply is running.
-2. Try Ctrl + Space unless you changed it. If another app uses that shortcut, choose a different one in Settings.
+2. Try Ctrl + Space unless you changed it. If another app uses that shortcut, choose a different one in **Settings → Shortcuts**.
 3. Check the selected edge and display. After disconnecting a monitor, select an available display again.
 4. If a game hides the pointer for character control, preventing edge activation is intentional. Try with the pointer visible in a menu.
 

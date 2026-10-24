@@ -13,9 +13,32 @@ Hướng dẫn cho **Nepply 1.0.0-beta.1**, bản beta công khai đầu tiên (
 - **Esc** thoát thao tác hiện tại hoặc xóa/đóng tìm kiếm trước; khi không còn thao tác đó, Esc thu panel.
 - Thu panel không thoát ứng dụng. Để đóng hẳn, chọn **Thoát** từ biểu tượng Nepply trong khay hệ thống; nếu cần, mở vùng biểu tượng ẩn của Windows.
 
+Hướng dẫn nhanh trong ứng dụng: chọn **Hướng dẫn** ở biểu tượng khay hệ thống hoặc trong **Cài đặt → Ứng dụng**. Hướng dẫn hiện đúng các phím tắt bạn đang dùng.
+
 Khi game ẩn chuột để điều khiển nhân vật, Nepply không tự mở từ cạnh. Khi chuột hiện lại, chẳng hạn ở menu game, bạn có thể dùng panel. Hành vi này phụ thuộc cách từng game quản lý con trỏ.
 
 Panel đang mở mà chưa ghim sẽ tự thu khi ứng dụng khác ẩn con trỏ, kể cả khi Windows tạm ẩn con trỏ lúc bạn gõ phím (tùy chọn ẩn con trỏ khi gõ của Windows). Ghim panel nếu muốn giữ nó mở.
+
+## Phím tắt
+
+Mọi phím tắt đổi được trong **Cài đặt → Phím tắt**. Bấm vào ô phím rồi nhấn tổ hợp mới; nút ↺ trả về phím mặc định, nút × bỏ phím đó.
+
+| Chức năng | Mặc định | Dùng khi |
+| --- | --- | --- |
+| Mở / đóng panel | Ctrl + Space | Ở mọi nơi |
+| Mở panel và tìm | Chưa đặt | Ở mọi nơi |
+| Ẩn / hiện icon Desktop | Chưa đặt | Ở mọi nơi |
+| Ghim / bỏ ghim panel | Chưa đặt | Ở mọi nơi |
+| Mở Cài đặt | Chưa đặt | Ở mọi nơi |
+| Tìm trên Desktop | Ctrl + F | Khi panel đang mở |
+| Ẩn panel | Esc | Khi panel đang mở |
+| Làm mới Desktop | Chưa đặt | Khi panel đang mở |
+
+- Phím dùng ở mọi nơi cần có Ctrl hoặc Alt, để không chặn việc gõ chữ ở ứng dụng khác.
+- Phím trong panel có thể là Esc hoặc F1–F12 đứng riêng; chữ và số vẫn cần Ctrl hoặc Alt vì panel có ô tìm kiếm.
+- Hai chức năng không dùng chung một phím; Cài đặt sẽ báo phím đó đang thuộc chức năng nào.
+- Esc luôn thoát thao tác hiện tại trước (sửa bố cục, ô tìm kiếm), kể cả khi bạn đổi phím ẩn panel.
+- Nếu ứng dụng khác đã chiếm một phím, Nepply báo trên panel; chọn phím khác trong Cài đặt → Phím tắt.
 
 ## Mở mục Desktop và chỉnh lưới
 
