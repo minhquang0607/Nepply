@@ -674,6 +674,7 @@ internal static class Program
         GlobalShortcutTests.Run(Check,Pump);
         PanelShortcutTests.Run(Check,Pump);
         SettingsShortcutTests.Run(Check,Pump);
+        GuidanceTests.Run(Check,Pump,output,Render);
         using(var profileStream=new MemoryStream(System.Text.Encoding.UTF8.GetBytes(new LayoutProfile {CellWidth=112}.ToJson())))
         {
             Check("Layout stream parses without closing caller stream",LayoutProfile.Parse(profileStream).CellWidth==112 && profileStream.CanRead);

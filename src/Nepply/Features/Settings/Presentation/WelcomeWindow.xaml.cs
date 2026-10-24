@@ -8,10 +8,18 @@ namespace Nepply.Views;
 public partial class WelcomeWindow : Window
 {
     private readonly AppSettings _settings;
-    public WelcomeWindow(AppSettings settings)
+    internal bool IsGuide { get; }
+    /// <param name="guideOnly">Reopened from Settings or the tray: show the guide without first-run choices.</param>
+    public WelcomeWindow(AppSettings settings, bool guideOnly = false)
     {
         _settings = settings;
+        IsGuide = guideOnly;
         InitializeComponent();
+        if (guideOnly)
+        {
+            SetupArea.Visibility = Visibility.Collapsed;
+            StartButton.SetResourceReference(ContentProperty, "Loc.Close");
+        }
         Loaded+=(_,_)=>Helpers.DialogPlacement.FitInitial(this);
         EdgeChoice.SelectedIndex = (int)settings.EdgePosition;
         HideIcons.IsChecked = false;
@@ -25,9 +33,18 @@ public partial class WelcomeWindow : Window
         EdgeChoice.ItemsSource=Enum.GetNames<EdgePosition>().Select(LocalizationService.Get).ToArray();
         EdgeChoice.SelectedIndex=selected;
         HotkeyHint.Text=string.Format(LocalizationService.Get("WelcomeHotkey"),MainWindow.HotkeyLabel(_settings));
+        ShortcutList.ItemsSource=ShortcutLines(_settings);
     }
+    /// <summary>"Action · Key" for every assigned shortcut except show/hide, which has its own line.</summary>
+    internal static string[] ShortcutLines(AppSettings settings) => ShortcutBindings.All
+        .Where(action=>action!=ShortcutAction.TogglePanel)
+        .Select(action=>(Action:action,Gesture:ShortcutBindings.Get(settings,action)))
+        .Where(item=>!item.Gesture.IsEmpty)
+        .Select(item=>LocalizationService.Get(SettingsWindow.ShortcutLabelKey(item.Action))+" · "+item.Gesture)
+        .ToArray();
     private void Start_Click(object sender, RoutedEventArgs e)
     {
+        if (IsGuide) { Close(); return; }
         try
         {
             OnboardingService.Complete(_settings, (EdgePosition)EdgeChoice.SelectedIndex,

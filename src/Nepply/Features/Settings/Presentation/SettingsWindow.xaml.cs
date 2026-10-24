@@ -108,8 +108,6 @@ public partial class SettingsWindow : Window
     internal void ApplyCompactLayout(double height)
     {
         bool compact=height<480;
-        PreviewNotice.Visibility=compact ? Visibility.Collapsed : Visibility.Visible;
-        SettingsTitle.ToolTip=PreviewNotice.Text;
         TitleArea.Margin=compact ? new Thickness(16,6,16,4) : new Thickness(26,20,18,18);
         SettingsTitle.FontSize=compact ? 18 : 25;
         SearchArea.Margin=compact ? new Thickness(16,0,16,4) : new Thickness(26,0,26,12);
@@ -648,6 +646,12 @@ public partial class SettingsWindow : Window
         var action=ShortcutFor(sender);
         StopRecording();
         if(ShortcutBindings.CanClear(action)) TryAssignShortcut(action,ShortcutGesture.None);
+    }
+    private void Guide_Click(object sender, RoutedEventArgs e)
+    {
+        StopRecording();
+        // Shows the draft's shortcuts, so keys edited here appear before they are saved.
+        new WelcomeWindow(_draft, guideOnly: true) { Owner = this }.ShowDialog();
     }
     private void ResetShortcuts_Click(object sender, RoutedEventArgs e)
     {

@@ -49,6 +49,7 @@ public partial class TrayMenu : ContextMenu
     private void Pin_Click(object sender,RoutedEventArgs e) => Run(()=> { _window.TogglePin(); if(_window.IsPinned) _window.OpenForInteraction(); });
     private void Refresh_Click(object sender,RoutedEventArgs e) => Run(_window.RefreshIcons);
     private void Settings_Click(object sender,RoutedEventArgs e) => Run(_window.OpenSettings);
+    private void Guide_Click(object sender,RoutedEventArgs e) => Run(_window.ShowGuide);
     private void Logs_Click(object sender,RoutedEventArgs e) => Run(_openLogs);
     private void Exit_Click(object sender,RoutedEventArgs e) => Run(_exit);
 }

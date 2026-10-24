@@ -204,6 +204,16 @@ public partial class MainWindow : Window
         if (!_settings.HasCompletedOnboarding && AppSettings.RecoveryNotice == null)
             Dispatcher.BeginInvoke(ShowWelcome);
     }
+    /// <summary>Reopens the welcome window as the usage guide (tray "Guide").</summary>
+    public void ShowGuide()
+    {
+        if (_cleaned) return;
+        if (_settingsWindow is { IsVisible: true }) { FocusDialog(_settingsWindow); return; }
+        if (_layoutDecision is { IsVisible: true }) { FocusDialog(_layoutDecision); return; }
+        SuppressHide();
+        try { new WelcomeWindow(_settings, guideOnly: true).ShowDialog(); }
+        finally { ResumeHide(); }
+    }
     private void ShowWelcome()
     {
         if (_cleaned) return;
@@ -578,8 +588,7 @@ public partial class MainWindow : Window
         SuppressHide();
         LayoutActions.Visibility = Visibility.Visible;
         EditLayoutButton.SetResourceReference(Control.ForegroundProperty,_editingLayout ? "AccentBrush" : "MutedBrush");
-        FooterState.Visibility = _editingLayout ? Visibility.Visible : Visibility.Collapsed;
-        FooterState.SetResourceReference(TextBlock.TextProperty,"Loc.LayoutEditingHint");
+        FooterState.Visibility = Visibility.Collapsed; // Editing instructions live in the guide.
         ApplySettings(); PositionWindow();
     }
     private void DoneLayout_Click(object sender,RoutedEventArgs e) => FinishLayout(true);
@@ -597,7 +606,7 @@ public partial class MainWindow : Window
         try
         {
             try { _layoutEdit.Complete(commit, settings => { if (!_preview) settings.Save(); }); }
-            catch(Exception ex) { AppLogger.Error(ex,"Commit layout"); FooterState.SetResourceReference(TextBlock.TextProperty,"Loc.LayoutCommitError"); return; }
+            catch(Exception ex) { AppLogger.Error(ex,"Commit layout"); FooterState.SetResourceReference(TextBlock.TextProperty,"Loc.LayoutCommitError"); FooterState.Visibility=Visibility.Visible; return; }
             LayoutActions.Visibility=Visibility.Collapsed;
             FooterState.Visibility=Visibility.Collapsed;
             EditLayoutButton.SetResourceReference(Control.ForegroundProperty,"MutedBrush");
