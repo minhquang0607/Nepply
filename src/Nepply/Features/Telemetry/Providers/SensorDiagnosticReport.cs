@@ -16,6 +16,7 @@ internal static class SensorDiagnosticReport
         var report=new StringBuilder();
         report.AppendLine(LocalizationService.Get("ReportTitle"));
         report.AppendLine(Format("ReportVersion",typeof(SensorDiagnosticReport).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion));
+        report.AppendLine("Windows: " + Environment.OSVersion.Version + (Environment.Is64BitOperatingSystem ? " x64" : ""));
         report.AppendLine(Format("ReportPrivilege",LocalizationService.Get(privilegeKey)));
         report.AppendLine("PawnIO: " + LocalizationService.Get(driverKey));
         report.AppendLine(LocalizationService.Get("ReportCapture"));

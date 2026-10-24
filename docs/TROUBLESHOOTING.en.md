@@ -67,7 +67,7 @@ Logs are in `%LOCALAPPDATA%\Nepply\Logs`; deleting them is not necessary for a v
 
 [Open an issue](https://github.com/minhquang0607/Nepply/issues) with:
 
-- Nepply/Windows version and Setup or portable.
+- Nepply/Windows version and Setup or portable. **Settings → Application → Copy diagnostics** copies the version, Windows and sensor details to paste into the issue (no paths or account names).
 - Reproduction steps, expected and actual behavior, and frequency.
 - Screenshots/video if useful; resolution/scaling for display issues and hardware models for monitoring issues.
 
