@@ -27,7 +27,14 @@ internal static class SettingsSearch
         new("Panel · Độ rộng vùng chạm mép",1,"ZoneSlider","vùng kích hoạt trigger chuột mép rộng"),
         new("Panel · Tự ẩn",1,"DelaySlider","thời gian chờ tự ẩn"),
         new("Panel · Chạm mép",1,"DwellSlider","thời gian mở chuột mép"),
-        new("Panel · Phím tắt",1,"HotkeyButton","hotkey bàn phím mở đóng"),
+        new("Phím tắt · Mở / đóng panel",5,"HotkeyButton","hotkey bàn phím mở đóng shortcut"),
+        new("Phím tắt · Mở panel và tìm",5,"ShortcutSearchDesktop","hotkey shortcut tìm kiếm search"),
+        new("Phím tắt · Ẩn / hiện icon Desktop",5,"ShortcutToggleDesktopIcons","hotkey shortcut icon desktop biểu tượng"),
+        new("Phím tắt · Ghim panel",5,"ShortcutTogglePin","hotkey shortcut pin ghim giữ mở"),
+        new("Phím tắt · Mở Cài đặt",5,"ShortcutOpenSettings","hotkey shortcut settings cài đặt"),
+        new("Phím tắt · Tìm trên Desktop",5,"ShortcutFocusSearch","hotkey shortcut ctrl f tìm kiếm"),
+        new("Phím tắt · Ẩn panel",5,"ShortcutHidePanel","hotkey shortcut esc ẩn đóng"),
+        new("Phím tắt · Làm mới Desktop",5,"ShortcutRefreshDesktop","hotkey shortcut refresh f5 làm mới"),
         new("Desktop · Lưới icon",2,"GridPicker","icon grid hàng cột ngang dọc lưới chấm kích thước"),
         new("Desktop · Ẩn icon Windows",2,"HideIcons","desktop biểu tượng windows"),
         new("Desktop · Gộp lối tắt",2,"MergeShortcuts","trùng duplicate shortcut đường dẫn gộp"),
@@ -65,7 +72,8 @@ internal static class SettingsSearch
             "GridPicker"=>"IconGrid","HideIcons"=>"HideDesktop","MergeShortcuts"=>"MergeShortcuts","SingleClick"=>"SingleClick",
             "HiddenFiles"=>"HiddenFiles","SystemIcons"=>"SystemIcons","GpuModeChoice"=>"Device","Sensors"=>"Sensors",
             "IntervalSlider"=>"Interval","EcoMode"=>"Eco","NetworkChoice"=>"NetworkAdapter","AutoStart"=>"Startup",
-            "PresetCards" or "ProfileStatus"=>"Layouts","AboutVersion"=>"About",_=>entry.Label
+            "PresetCards" or "ProfileStatus"=>"Layouts","AboutVersion"=>"About",
+            {} control when control.StartsWith("Shortcut",StringComparison.Ordinal)=>control,_=>entry.Label
         };
         return entry with {Label=LocalizationService.Get(key)};
     }

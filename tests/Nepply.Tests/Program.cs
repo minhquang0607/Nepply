@@ -673,6 +673,7 @@ internal static class Program
             && ThemeService.Contrast((Color)ColorConverter.ConvertFromString("#ED8D80"),(Color)ColorConverter.ConvertFromString("#141619"))>=4.5);
         GlobalShortcutTests.Run(Check,Pump);
         PanelShortcutTests.Run(Check,Pump);
+        SettingsShortcutTests.Run(Check,Pump);
         using(var profileStream=new MemoryStream(System.Text.Encoding.UTF8.GetBytes(new LayoutProfile {CellWidth=112}.ToJson())))
         {
             Check("Layout stream parses without closing caller stream",LayoutProfile.Parse(profileStream).CellWidth==112 && profileStream.CanRead);
@@ -1207,6 +1208,10 @@ internal static class Program
         Check("Settings rail marks the selected section with a vertical bar",railIndicators.Bar.Visibility==Visibility.Visible
             && railIndicators.Underline.Visibility==Visibility.Collapsed && railIndicators.Bar.ActualHeight>railIndicators.Bar.ActualWidth);
         Render((FrameworkElement)settingsWindow.Content,620,700,Path.Combine(output,"settings-adaptive-tabs.png"));
+        settingsWindow.ShowSettingsSection(5);
+        Render((FrameworkElement)settingsWindow.Content,620,700,Path.Combine(output,"settings-shortcuts.png"));
+        Check("Shortcuts tab joins the compact tab row",navigation.Items.Count==6);
+        settingsWindow.ShowSettingsSection(0);
         Check("Narrow settings return to compact tabs",System.Windows.Controls.Grid.GetColumn(navigation)==1 && System.Windows.Controls.Grid.GetRowSpan(navigation)==1);
         var tabIndicators=SelectedIndicators();
         Check("Settings tabs mark the selected section with an underline, not a vertical bar",tabIndicators.Bar.Visibility==Visibility.Collapsed

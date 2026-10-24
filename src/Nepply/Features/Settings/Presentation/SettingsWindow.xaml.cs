@@ -262,7 +262,7 @@ public partial class SettingsWindow : Window
     public void ShowSettingsSection(int index)
     {
         CancelSearchFocus();
-        FrameworkElement[] sections = [AppearanceSection,PanelSection,DesktopSection,MonitorSection,ApplicationSection];
+        FrameworkElement[] sections = [AppearanceSection,PanelSection,DesktopSection,MonitorSection,ApplicationSection,ShortcutsSection];
         index = Math.Clamp(index,0,sections.Length-1);
         if (SettingsNavigation.SelectedIndex != index)
         {
@@ -288,7 +288,7 @@ public partial class SettingsWindow : Window
     private void ClearSectionAnimations()
     {
         unchecked { _sectionAnimationGeneration++; }
-        foreach(var section in new FrameworkElement[] {AppearanceSection,PanelSection,DesktopSection,MonitorSection,ApplicationSection})
+        foreach(var section in new FrameworkElement[] {AppearanceSection,PanelSection,DesktopSection,MonitorSection,ApplicationSection,ShortcutsSection})
             section.BeginAnimation(OpacityProperty,null);
     }
     private void LoadDraft()
@@ -318,7 +318,7 @@ public partial class SettingsWindow : Window
         LanguageChoice.SelectedValue = _draft.Language;
         ShowNetwork.IsChecked = _draft.ShowNetwork;
         _recording=false;
-        HotkeyButton.Content = MainWindow.HotkeyLabel(_draft);
+        RefreshShortcutButtons();
         _loadingDraft=false;
         QueuePreview();
     }
@@ -588,7 +588,75 @@ public partial class SettingsWindow : Window
     }
     private void Reset_Click(object sender, RoutedEventArgs e) { _draft.ResetToDefaults(); LoadDraft(); SetError(null); ProfileStatus.Text=""; }
     private void DragTitle(object sender, MouseButtonEventArgs e) { if (e.ChangedButton == MouseButton.Left) DragMove(); }
-    private void Hotkey_Click(object sender, RoutedEventArgs e) { _recording = true; HotkeyButton.SetResourceReference(ContentControl.ContentProperty,"Loc.RecordHotkeyPrompt"); HotkeyButton.Focus(); }
+    private ShortcutAction _recordingAction;
+    private static ShortcutAction ShortcutFor(object sender) =>
+        sender is FrameworkElement {Tag:string tag} && Enum.TryParse<ShortcutAction>(tag,out var action) ? action : ShortcutAction.TogglePanel;
+    private Button ShortcutButton(ShortcutAction action) =>
+        action==ShortcutAction.TogglePanel ? HotkeyButton : (Button)FindName("Shortcut"+action);
+    private void RefreshShortcutButtons()
+    {
+        foreach(var action in ShortcutBindings.All)
+        {
+            var button=ShortcutButton(action);
+            if(_recording && action==_recordingAction) continue;
+            var gesture=ShortcutBindings.Get(_draft,action);
+            if(gesture.IsEmpty) button.SetResourceReference(ContentControl.ContentProperty,"Loc.ShortcutNone");
+            else button.Content=gesture.ToString();
+            if(action!=ShortcutAction.TogglePanel)
+                button.SetResourceReference(System.Windows.Automation.AutomationProperties.NameProperty,"Loc."+ShortcutLabelKey(action));
+        }
+    }
+    // Each action's label is the resource "Shortcut<Action>" (e.g. ShortcutTogglePin).
+    internal static string ShortcutLabelKey(ShortcutAction action) => "Shortcut" + action;
+    private void StopRecording()
+    {
+        if(!_recording) return;
+        _recording=false;
+        RefreshShortcutButtons();
+    }
+    private void Hotkey_Click(object sender, RoutedEventArgs e)
+    {
+        var action=ShortcutFor(sender);
+        StopRecording();
+        SetError(null);
+        _recording=true; _recordingAction=action;
+        var button=ShortcutButton(action);
+        button.SetResourceReference(ContentControl.ContentProperty,ShortcutBindings.IsGlobal(action) ? "Loc.RecordHotkeyPrompt" : "Loc.RecordShortcutPrompt");
+        button.Focus();
+    }
+    // Assigns only when no other action uses the gesture; the error names the owner instead.
+    private bool TryAssignShortcut(ShortcutAction action,ShortcutGesture gesture)
+    {
+        if(ShortcutBindings.ConflictFor(_draft,action,gesture) is {} owner)
+        {
+            SetError(UserMessage.FromKey("ShortcutConflict",gesture.ToString(),UserMessage.FromKey(ShortcutLabelKey(owner))));
+            return false;
+        }
+        ShortcutBindings.Set(_draft,action,gesture);
+        SetError(null);
+        RefreshShortcutButtons();
+        return true;
+    }
+    private void ShortcutDefault_Click(object sender, RoutedEventArgs e)
+    {
+        var action=ShortcutFor(sender);
+        StopRecording();
+        TryAssignShortcut(action,ShortcutBindings.Default(action));
+    }
+    private void ShortcutClear_Click(object sender, RoutedEventArgs e)
+    {
+        var action=ShortcutFor(sender);
+        StopRecording();
+        if(ShortcutBindings.CanClear(action)) TryAssignShortcut(action,ShortcutGesture.None);
+    }
+    private void ResetShortcuts_Click(object sender, RoutedEventArgs e)
+    {
+        StopRecording();
+        var toggle=ShortcutBindings.Default(ShortcutAction.TogglePanel);
+        _draft.HotkeyModifiers=toggle.Modifiers; _draft.HotkeyKey=toggle.Key; _draft.Shortcuts=[];
+        SetError(null);
+        RefreshShortcutButtons();
+    }
     private void RecordKey(object sender, KeyEventArgs e)
     {
         // One Escape press dismisses one layer only (picker, search, recording,
@@ -600,12 +668,23 @@ public partial class SettingsWindow : Window
         if(!_recording && e.Key==Key.Escape && _searchExpanded)
         { SettingsSearchTrigger.Focus(); ExpandSettingsSearch(false); e.Handled=true; return; }
         if (!_recording) return;
-        if (e.Key == Key.Escape) { _recording = false; HotkeyButton.Content = MainWindow.HotkeyLabel(_draft); e.Handled = true; return; }
-        var key = e.Key == Key.System ? e.SystemKey : e.Key;
-        int virtualKey = KeyInterop.VirtualKeyFromKey(key);
-        var modifiers = Keyboard.Modifiers;
-        if ((modifiers & (ModifierKeys.Control | ModifierKeys.Alt)) == 0 || (modifiers & ModifierKeys.Windows) != 0 || !HotkeyGesture.IsSupportedKey(virtualKey)) return;
-        _draft.HotkeyModifiers = ((modifiers & ModifierKeys.Control) != 0 ? 2 : 0) | ((modifiers & ModifierKeys.Alt) != 0 ? 1 : 0) | ((modifiers & ModifierKeys.Shift) != 0 ? 4 : 0);
-        _draft.HotkeyKey = virtualKey; _recording = false; HotkeyButton.Content = MainWindow.HotkeyLabel(_draft); e.Handled = true;
+        RecordShortcut(e,ShortcutInput.FromEvent(e));
+    }
+    internal void RecordShortcut(KeyEventArgs e,ShortcutGesture gesture)
+    {
+        if (!_recording) return;
+        // Esc cancels recording (its default use is restored with the reset button); Tab keeps moving focus.
+        if (e.Key == Key.Escape && Keyboard.Modifiers==ModifierKeys.None) { StopRecording(); e.Handled = true; return; }
+        if (e.Key == Key.Tab) { StopRecording(); return; }
+        e.Handled = true;
+        if (gesture.IsEmpty) return; // A modifier on its own: keep waiting for the key.
+        if (!ShortcutBindings.IsValid(_recordingAction,gesture))
+        {
+            SetError(UserMessage.FromKey(ShortcutBindings.IsGlobal(_recordingAction) ? "ShortcutInvalidGlobal" : "ShortcutInvalidPanel"));
+            return;
+        }
+        var action=_recordingAction;
+        _recording=false;
+        if(!TryAssignShortcut(action,gesture)) { _recording=true; return; }
     }
 }
