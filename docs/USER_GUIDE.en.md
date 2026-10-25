@@ -13,9 +13,31 @@ Move to your selected screen edge, or press **Ctrl + Space** unless you changed 
 - **Esc** leaves the current interaction or clears/closes search first; otherwise it collapses the panel.
 - Collapsing is not quitting. Choose **Exit** from the tray icon to quit completely; check Windows' hidden tray icons if necessary.
 
+For an in-app guide, choose **Guide** from the tray icon or in **Settings → Application**. It shows the shortcuts you currently use.
+
 While a game hides the pointer for character control, Nepply avoids opening automatically from the edge. When the pointer returns, such as in a game menu, the panel can be used again. Behavior depends on how the game manages its pointer.
 
 An open, unpinned panel collapses when another app hides the pointer, including when Windows hides it while you type (Windows' hide-pointer-while-typing option). Pin the panel to keep it open.
+
+## ⌨️ Shortcuts
+
+Every shortcut can be changed in **Settings → Shortcuts**. Click a key box and press the new combination; ↺ restores the default and × removes the shortcut.
+
+| Action | Default | Works |
+| --- | --- | --- |
+| Show / hide panel | Ctrl + Space | Anywhere |
+| Open panel and search | Not set | Anywhere |
+| Hide / show desktop icons | Not set | Anywhere |
+| Pin / unpin panel | Not set | Anywhere |
+| Open settings | Not set | Anywhere |
+| Search desktop | Ctrl + F | While the panel is open |
+| Refresh desktop | Not set | While the panel is open |
+
+- Shortcuts that work anywhere need Ctrl or Alt, so they cannot block typing in other apps.
+- Panel shortcuts may be F1–F12 on their own; letters and digits still need Ctrl or Alt because the panel has a search box.
+- Two actions cannot share a key; Settings tells you which action already uses it.
+- Esc is fixed: it leaves the current interaction (layout editing, search), and pressing it again collapses the panel. To hide the panel with another key, use the show/hide shortcut.
+- If another app already owns a key, Nepply says so on the panel; choose another key in Settings → Shortcuts.
 
 ## 📐 Desktop items and grid
 

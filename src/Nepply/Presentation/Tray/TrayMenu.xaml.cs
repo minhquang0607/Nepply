@@ -30,6 +30,8 @@ public partial class TrayMenu : ContextMenu
         StatusLabel.Text=$"{edge} · {Services.LocalizationService.Get(_window.IsPinned ? "Pinned" : "AutoHide")}";
         PinItem.IsChecked=_window.IsPinned;
         OpenItem.InputGestureText=MainWindow.HotkeyLabel(_window.Settings);
+        PinItem.InputGestureText=ShortcutBindings.Get(_window.Settings,ShortcutAction.TogglePin).ToString();
+        SettingsItem.InputGestureText=ShortcutBindings.Get(_window.Settings,ShortcutAction.OpenSettings).ToString();
     }
     private void Menu_Opened(object sender,RoutedEventArgs e)
     {
@@ -47,6 +49,7 @@ public partial class TrayMenu : ContextMenu
     private void Pin_Click(object sender,RoutedEventArgs e) => Run(()=> { _window.TogglePin(); if(_window.IsPinned) _window.OpenForInteraction(); });
     private void Refresh_Click(object sender,RoutedEventArgs e) => Run(_window.RefreshIcons);
     private void Settings_Click(object sender,RoutedEventArgs e) => Run(_window.OpenSettings);
+    private void Guide_Click(object sender,RoutedEventArgs e) => Run(_window.ShowGuide);
     private void Logs_Click(object sender,RoutedEventArgs e) => Run(_openLogs);
     private void Exit_Click(object sender,RoutedEventArgs e) => Run(_exit);
 }

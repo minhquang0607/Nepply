@@ -204,6 +204,16 @@ public partial class MainWindow : Window
         if (!_settings.HasCompletedOnboarding && AppSettings.RecoveryNotice == null)
             Dispatcher.BeginInvoke(ShowWelcome);
     }
+    /// <summary>Reopens the welcome window as the usage guide (tray "Guide").</summary>
+    public void ShowGuide()
+    {
+        if (_cleaned) return;
+        if (_settingsWindow is { IsVisible: true }) { FocusDialog(_settingsWindow); return; }
+        if (_layoutDecision is { IsVisible: true }) { FocusDialog(_layoutDecision); return; }
+        SuppressHide();
+        try { new WelcomeWindow(_settings, guideOnly: true).ShowDialog(); }
+        finally { ResumeHide(); }
+    }
     private void ShowWelcome()
     {
         if (_cleaned) return;
@@ -222,13 +232,69 @@ public partial class MainWindow : Window
     }
     private void RegisterHotkey()
     {
-        _hotkey ??= new(new WindowInteropHelper(this).Handle, () =>
+        _hotkey ??= new(new WindowInteropHelper(this).Handle, RunGlobalShortcut);
+        var bindings=ShortcutBindings.Global.ToDictionary(action=>action,action=>ShortcutBindings.Get(_settings,action));
+        var failed=_hotkey.Register(bindings);
+        PresentHotkeyStatus(!failed.Contains(ShortcutAction.TogglePanel));
+        PresentShortcutFailures(failed.Where(action=>action!=ShortcutAction.TogglePanel).Select(action=>bindings[action]).ToArray());
+    }
+    private UserMessage? _shortcutFailureNotice;
+    internal void PresentShortcutFailures(IReadOnlyList<ShortcutGesture> failed)
+    {
+        if(_shortcutFailureNotice!=null) { IconPanelView.DismissActionFailure(_shortcutFailureNotice); _shortcutFailureNotice=null; }
+        if(failed.Count==0) return;
+        _shortcutFailureNotice=UserMessage.FromKey("ShortcutUnavailableNotice",string.Join(", ",failed.Select(g=>g.ToString())));
+        IconPanelView.ShowActionFailure(_shortcutFailureNotice);
+    }
+    internal void RunGlobalShortcut(ShortcutAction action)
+    {
+        if(_cleaned) return;
+        if(action==ShortcutAction.TogglePanel)
         {
             if (_openingSettings || _layoutDecision != null) OpenForInteraction();
             else if (_animation.IsVisible) HidePanel();
             else OpenForInteraction();
+            return;
+        }
+        // Leave the hotkey message hook before showing UI; Settings opens a modal loop.
+        Dispatcher.BeginInvoke(()=>
+        {
+            if(_cleaned) return;
+            bool dialogOpen=_openingSettings || _layoutDecision!=null;
+            switch(action)
+            {
+                case ShortcutAction.SearchDesktop:
+                    OpenForInteraction();
+                    if(!dialogOpen) FocusDesktopSearch();
+                    break;
+                case ShortcutAction.TogglePin:
+                    if(dialogOpen) { OpenForInteraction(); break; }
+                    TogglePin();
+                    if(_pinned) OpenForInteraction();
+                    break;
+                case ShortcutAction.ToggleDesktopIcons:
+                    // An open Settings draft owns this option until it is saved or cancelled.
+                    if(dialogOpen) { OpenForInteraction(); break; }
+                    ToggleDesktopIcons();
+                    break;
+                case ShortcutAction.OpenSettings:
+                    OpenSettings();
+                    break;
+            }
         });
-        PresentHotkeyStatus(_hotkey.Register((uint)_settings.HotkeyModifiers, (uint)_settings.HotkeyKey));
+    }
+    private void ToggleDesktopIcons()
+    {
+        _settings.HideDesktopIcons=!_settings.HideDesktopIcons;
+        try { if(!_preview) _settings.Save(); }
+        catch(Exception ex)
+        {
+            _settings.HideDesktopIcons=!_settings.HideDesktopIcons;
+            AppLogger.Error(ex,"Save Desktop icon shortcut");
+            IconPanelView.ShowActionFailure(UserMessage.From(ex));
+            return;
+        }
+        ApplyShellSettings(false,true);
     }
     internal void PresentHotkeyStatus(bool registered)
     {
@@ -377,10 +443,11 @@ public partial class MainWindow : Window
     }
     public void HidePanel() { if (_suppress == 0) { _keyboardInteraction=false; _edgeGate.Disarm(); _pinned = false; UpdateActionLabels(); _animation.Hide(); } }
     public void HidePanelInstantly() => _animation.HideInstantly();
-    private void ScheduleHide() { if (_animation.IsVisible && !_pinned && _suppress == 0 && !KeyboardInteractionActive) { _hideTimer.Stop(); _hideTimer.Start(); } }
+    // Closing the window raises Deactivated after Cleanup; never restart the timer then.
+    private void ScheduleHide() { if (!_cleaned && _animation.IsVisible && !_pinned && _suppress == 0 && !KeyboardInteractionActive) { _hideTimer.Stop(); _hideTimer.Start(); } }
     private void HideTick(object? sender, EventArgs e)
     {
-        if (!_animation.IsVisible) { _hideTimer.Stop(); return; }
+        if (_cleaned || !_animation.IsVisible || PresentationSource.FromVisual(this) == null) { _hideTimer.Stop(); return; }
         // A failed cursor read is not evidence that the user left the panel.
         if (!GetCursorPos(out var point)) { _hideTimer.Stop(); return; }
         // Transparent/rounded edges and moving visuals can report MouseLeave while
@@ -454,7 +521,8 @@ public partial class MainWindow : Window
     }
     private bool PointerInsidePanel(int screenX,int screenY)
     {
-        if (!_animation.IsVisible) return false;
+        // A closed or not-yet-shown window has no screen mapping.
+        if (!_animation.IsVisible || PresentationSource.FromVisual(this) == null) return false;
         var local = PointFromScreen(new Point(screenX, screenY));
         // The 12-DIP floating gap is a transit corridor, not a mouse leave.
         double left=_settings.EdgePosition==EdgePosition.Left ? -16 : -4;
@@ -488,22 +556,24 @@ public partial class MainWindow : Window
         else if(--_displayAttempts>0) _displayTimer.Start();
     }
     private void PreferenceChanged(object sender, Microsoft.Win32.UserPreferenceChangedEventArgs e) => Dispatcher.InvokeAsync(() => { if (!_cleaned) { ThemeService.Apply(_settingsPreview ?? _settings); MainPanel.Opacity=1; _animation.RefreshMotionPreference(); } });
-    private void Window_KeyDown(object sender, KeyEventArgs e)
+    private void Window_KeyDown(object sender, KeyEventArgs e) => HandlePanelKey(e,ShortcutInput.FromEvent(e));
+    internal void HandlePanelKey(KeyEventArgs e,ShortcutGesture pressed)
     {
-        if(e.Key==Key.Escape && e.IsRepeat) { e.Handled=true; return; }
+        bool escape=pressed==new ShortcutGesture(0,KeyInterop.VirtualKeyFromKey(Key.Escape));
+        // One press dismisses one layer; holding Esc must not also hide the panel.
+        if(e.IsRepeat && escape) { e.Handled=true; return; }
         if(IsActive && IsKeyboardFocusWithin) { _keyboardInteraction=true; _hideTimer.Stop(); }
-        if (e.Key == Key.Escape)
+        if (escape)
         {
-            if (_editingLayout) FinishLayout(false);
-            else if (!IconPanelView.ClearFocusedSearch())
-            {
-                if (DesktopSearchEditor.Visibility==Visibility.Visible && DesktopSearchBox.Text.Length==0)
-                { DesktopSearchButton.Focus(); SetDesktopSearchExpanded(false); }
-                else HidePanel();
-            }
-            e.Handled=true;
+            // Esc (fixed, not rebindable) backs out of the current layer, then hides the panel.
+            if (_editingLayout) { FinishLayout(false); e.Handled=true; return; }
+            if (IconPanelView.ClearFocusedSearch()) { e.Handled=true; return; }
+            if (DesktopSearchEditor.Visibility==Visibility.Visible && DesktopSearchBox.Text.Length==0)
+            { DesktopSearchButton.Focus(); SetDesktopSearchExpanded(false); e.Handled=true; return; }
         }
-        if (e.Key == Key.F && Keyboard.Modifiers == ModifierKeys.Control) { IconPanelView.FocusSearch(); e.Handled = true; }
+        if (escape) { HidePanel(); e.Handled=true; return; }
+        if (ShortcutInput.Matches(_settings,ShortcutAction.FocusSearch,pressed)) { IconPanelView.FocusSearch(); e.Handled = true; return; }
+        if (ShortcutInput.Matches(_settings,ShortcutAction.RefreshDesktop,pressed)) { RefreshIcons(); e.Handled = true; }
     }
     private void SaveLayout()
     {
@@ -518,8 +588,7 @@ public partial class MainWindow : Window
         SuppressHide();
         LayoutActions.Visibility = Visibility.Visible;
         EditLayoutButton.SetResourceReference(Control.ForegroundProperty,_editingLayout ? "AccentBrush" : "MutedBrush");
-        FooterState.Visibility = _editingLayout ? Visibility.Visible : Visibility.Collapsed;
-        FooterState.SetResourceReference(TextBlock.TextProperty,"Loc.LayoutEditingHint");
+        FooterState.Visibility = Visibility.Collapsed; // Editing instructions live in the guide.
         ApplySettings(); PositionWindow();
     }
     private void DoneLayout_Click(object sender,RoutedEventArgs e) => FinishLayout(true);
@@ -537,7 +606,7 @@ public partial class MainWindow : Window
         try
         {
             try { _layoutEdit.Complete(commit, settings => { if (!_preview) settings.Save(); }); }
-            catch(Exception ex) { AppLogger.Error(ex,"Commit layout"); FooterState.SetResourceReference(TextBlock.TextProperty,"Loc.LayoutCommitError"); return; }
+            catch(Exception ex) { AppLogger.Error(ex,"Commit layout"); FooterState.SetResourceReference(TextBlock.TextProperty,"Loc.LayoutCommitError"); FooterState.Visibility=Visibility.Visible; return; }
             LayoutActions.Visibility=Visibility.Collapsed;
             FooterState.Visibility=Visibility.Collapsed;
             EditLayoutButton.SetResourceReference(Control.ForegroundProperty,"MutedBrush");
@@ -552,6 +621,7 @@ public partial class MainWindow : Window
         SaveLayout();
     }
     public bool IsPinned => _pinned;
+    internal bool IsPanelShown => _animation.IsVisible;
     public void TogglePin() { _pinned = !_pinned; UpdateActionLabels(); if (_pinned) _hideTimer.Stop(); else ScheduleHide(); }
     private void Pin_StateChanged(object sender, RoutedEventArgs e)
     {
@@ -563,7 +633,10 @@ public partial class MainWindow : Window
     {
         string pinLabel=LocalizationService.Get(_pinned ? "Unpin" : "PinTip");
         string editLabel=LocalizationService.Get(_editingLayout ? "SaveLayout" : "EditLayout");
-        PinButton.ToolTip=pinLabel;
+        PinButton.ToolTip=ShortcutInput.Label(pinLabel,_settings,ShortcutAction.TogglePin);
+        DesktopSearchButton.ToolTip=ShortcutInput.Label(LocalizationService.Get("SearchDesktopTip"),_settings,ShortcutAction.FocusSearch);
+        RefreshDesktopButton.ToolTip=ShortcutInput.Label(LocalizationService.Get("Refresh"),_settings,ShortcutAction.RefreshDesktop);
+        PanelSettingsButton.ToolTip=ShortcutInput.Label(LocalizationService.Get("Settings"),_settings,ShortcutAction.OpenSettings);
         PinButton.IsChecked=_pinned;
         EditLayoutButton.ToolTip=editLabel;
         System.Windows.Automation.AutomationProperties.SetName(PinButton,pinLabel);

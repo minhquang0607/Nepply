@@ -671,14 +671,10 @@ internal static class Program
         Check("Error text meets contrast on light and dark surfaces",
             ThemeService.Contrast((Color)ColorConverter.ConvertFromString("#A52F29"),(Color)ColorConverter.ConvertFromString("#F5F3EF"))>=4.5
             && ThemeService.Contrast((Color)ColorConverter.ConvertFromString("#ED8D80"),(Color)ColorConverter.ConvertFromString("#141619"))>=4.5);
-        using(var invalidHotkey=new GlobalHotkeyService(IntPtr.Zero,()=>throw new Exception("Unexpected callback")))
-        {
-            Check("Hotkey without window is rejected without native registration",!invalidHotkey.Register());
-            invalidHotkey.Dispose(); invalidHotkey.Dispose();
-            bool disposedRejected=false;
-            try { invalidHotkey.Register(); } catch(ObjectDisposedException) {disposedRejected=true;}
-            Check("Disposed hotkey cannot register again",disposedRejected);
-        }
+        GlobalShortcutTests.Run(Check,Pump);
+        PanelShortcutTests.Run(Check,Pump);
+        SettingsShortcutTests.Run(Check,Pump);
+        GuidanceTests.Run(Check,Pump,output,Render);
         using(var profileStream=new MemoryStream(System.Text.Encoding.UTF8.GetBytes(new LayoutProfile {CellWidth=112}.ToJson())))
         {
             Check("Layout stream parses without closing caller stream",LayoutProfile.Parse(profileStream).CellWidth==112 && profileStream.CanRead);
@@ -1213,6 +1209,10 @@ internal static class Program
         Check("Settings rail marks the selected section with a vertical bar",railIndicators.Bar.Visibility==Visibility.Visible
             && railIndicators.Underline.Visibility==Visibility.Collapsed && railIndicators.Bar.ActualHeight>railIndicators.Bar.ActualWidth);
         Render((FrameworkElement)settingsWindow.Content,620,700,Path.Combine(output,"settings-adaptive-tabs.png"));
+        settingsWindow.ShowSettingsSection(5);
+        Render((FrameworkElement)settingsWindow.Content,620,700,Path.Combine(output,"settings-shortcuts.png"));
+        Check("Shortcuts tab joins the compact tab row",navigation.Items.Count==6);
+        settingsWindow.ShowSettingsSection(0);
         Check("Narrow settings return to compact tabs",System.Windows.Controls.Grid.GetColumn(navigation)==1 && System.Windows.Controls.Grid.GetRowSpan(navigation)==1);
         var tabIndicators=SelectedIndicators();
         Check("Settings tabs mark the selected section with an underline, not a vertical bar",tabIndicators.Bar.Visibility==Visibility.Collapsed

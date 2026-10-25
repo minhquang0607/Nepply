@@ -44,7 +44,7 @@ internal static class LocalizationTests
                     && Equals(((Button)settings.FindName("OkButton")).Content,LocalizationService.Get("Ok")));
                 if(language.Id=="vi")
                     check("Vietnamese settings use no English Apply or Monitor labels",LocalizationService.Get("Apply")=="Áp dụng"
-                        && LocalizationService.Get("Monitor")=="Theo dõi" && !LocalizationService.Get("PreviewNotice").Contains("Apply")
+                        && LocalizationService.Get("Monitor")=="Theo dõi"
                         && !LocalizationService.Get("DraftReady").Contains("Apply") && !LocalizationService.Get("SettingsExitGuidance").Contains("Apply")
                         && SettingsSearch.Find("monitor").All(e=>e.Label.StartsWith("Theo dõi")) && SettingsSearch.Find("monitor").Length>0);
                 check($"Language {language.Id} search matches translated label",SettingsSearch.Find(LocalizationService.Get("Language")).Any(e=>e.Control=="LanguageChoice"));

@@ -53,7 +53,7 @@ internal static class ErrorLocalizationTests
             check($"Language {language} preset tooltip descriptions are translated",
                 ((ItemsControl)settings.FindName("PresetCards")).Items.Cast<LayoutPreset>().All(p=>p.Description==LocalizationService.Get(
                     p.Id switch {"compact"=>"CompactPresetDescription","spacious"=>"SpaciousPresetDescription",_=>"RibbonPresetDescription"})));
-            check($"Language {language} shortcut guidance has no XML character reference",!LocalizationService.Get("ShortcutsHint").Contains("&#10;"));
+            check($"Language {language} guide tips have no XML character reference",!LocalizationService.Get("WelcomeTips").Contains("&#10;"));
             Exception Thrown(Action action) { try { action(); } catch(Exception ex) { return ex; } throw new InvalidOperationException("Fixture did not throw."); }
             foreach(var (key,thrown) in new (string,Exception)[]{
                 ("LayoutVersionError",Thrown(()=>(LayoutProfile.Capture(new AppSettings()) with {Version=2}).ApplyTo(new AppSettings()))),

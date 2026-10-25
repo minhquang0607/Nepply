@@ -20,15 +20,23 @@
       <TextBlock Text="{DynamicResource Loc.WelcomeReveal}" TextWrapping="Wrap" Margin="0,12,0,0"/>
      </StackPanel>
     </Border>
-    <TextBlock Text="{DynamicResource Loc.WelcomePosition}" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,10"/>
-    <ComboBox x:Name="EdgeChoice" AutomationProperties.Name="{DynamicResource Loc.WelcomePosition}"/>
-    <CheckBox x:Name="HideIcons" Margin="0,18,0,6"><TextBlock Text="{DynamicResource Loc.WelcomeHideIcons}" TextWrapping="Wrap"/></CheckBox>
-    <TextBlock Text="{DynamicResource Loc.WelcomeRecovery}" Style="{StaticResource Caption}" TextWrapping="Wrap"/>
-    <Border Background="{DynamicResource HoverBrush}" CornerRadius="14" Padding="16" Margin="0,20,0,12">
+    <!-- First-run choices; hidden when the window is reopened as the guide. -->
+    <StackPanel x:Name="SetupArea" Margin="0,0,0,20">
+     <TextBlock Text="{DynamicResource Loc.WelcomePosition}" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,10"/>
+     <ComboBox x:Name="EdgeChoice" AutomationProperties.Name="{DynamicResource Loc.WelcomePosition}"/>
+     <CheckBox x:Name="HideIcons" Margin="0,18,0,6"><TextBlock Text="{DynamicResource Loc.WelcomeHideIcons}" TextWrapping="Wrap"/></CheckBox>
+     <TextBlock Text="{DynamicResource Loc.WelcomeRecovery}" Style="{StaticResource Caption}" TextWrapping="Wrap"/>
+    </StackPanel>
+    <!-- All usage guidance lives here: settings and panel show only feature names. -->
+    <Border Background="{DynamicResource HoverBrush}" CornerRadius="14" Padding="16" Margin="0,0,0,12">
      <StackPanel>
-      <TextBlock x:Name="HotkeyHint" FontWeight="SemiBold" TextWrapping="Wrap"/>
-      <TextBlock Text="{DynamicResource Loc.WelcomeTips}" TextWrapping="Wrap" Margin="0,8,0,0"/>
+      <TextBlock Text="{DynamicResource Loc.Shortcuts}" FontWeight="SemiBold" Margin="0,0,0,8"/>
+      <TextBlock x:Name="HotkeyHint" TextWrapping="Wrap"/>
+      <ItemsControl x:Name="ShortcutList"><ItemsControl.ItemTemplate><DataTemplate><TextBlock Text="{Binding}" TextWrapping="Wrap" Margin="0,4,0,0"/></DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
      </StackPanel>
+    </Border>
+    <Border Background="{DynamicResource HoverBrush}" CornerRadius="14" Padding="16" Margin="0,0,0,12">
+     <TextBlock Text="{DynamicResource Loc.WelcomeTips}" TextWrapping="Wrap" LineHeight="22"/>
     </Border>
    </StackPanel>
   </ScrollViewer>

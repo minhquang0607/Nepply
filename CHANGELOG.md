@@ -21,6 +21,8 @@ Bản tổng hợp ngày **17/10/2026**, gom các thay đổi trong giai đoạn
 - Giao diện sáng, tối hoặc theo hệ thống; bảng màu, hiệu ứng neon và ánh kim tương tác với chuột.
 - Xem trước trên panel khi chỉnh cài đặt; Áp dụng để lưu, OK để lưu và đóng, Hủy để bỏ thay đổi chưa lưu.
 - Hỗ trợ tám ngôn ngữ: Việt, Anh, Nhật, Đức, Trung giản thể, Nga, Pháp và Thái.
+- Mục **Phím tắt** trong Cài đặt: đổi được mọi phím (mở/đóng, tìm, làm mới…) và thêm phím toàn cục mới để mở panel kèm tìm, ẩn/hiện icon Desktop, ghim panel và mở Cài đặt (mặc định chưa đặt).
+- Cài đặt, menu khay và chế độ sửa bố cục chỉ còn tên chức năng; hướng dẫn sử dụng gom vào màn **Hướng dẫn**, mở lại được từ khay hoặc Cài đặt.
 - Cỡ icon (nhỏ, vừa, lớn) lưu trong cài đặt hoặc layout nhập vào giờ được áp dụng; mặc định vẫn là cỡ vừa.
 
 ### Theo dõi hệ thống

@@ -5,7 +5,7 @@
 ## Không mở được panel
 
 1. Kiểm tra Nepply có đang chạy trong khay hệ thống không, kể cả vùng biểu tượng ẩn.
-2. Thử **Ctrl + Space** nếu chưa đổi phím tắt; nếu ứng dụng khác dùng phím này, chọn tổ hợp khác trong Cài đặt.
+2. Thử **Ctrl + Space** nếu chưa đổi phím tắt; nếu ứng dụng khác dùng phím này, chọn tổ hợp khác trong **Cài đặt → Phím tắt**.
 3. Kiểm tra cạnh và màn hình đã chọn. Sau khi tháo màn hình ngoài, mở lại Cài đặt để chọn màn hình còn dùng.
 4. Nếu đang điều khiển nhân vật trong game và con trỏ bị ẩn, việc panel không tự mở là chủ đích. Thử lại khi con trỏ hiện trong menu.
 

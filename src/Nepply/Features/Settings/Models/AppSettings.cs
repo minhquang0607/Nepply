@@ -76,6 +76,8 @@ public sealed class AppSettings
     public string GpuIdentifier { get; set; } = "";
     public int HotkeyModifiers { get; set; } = 2;
     public int HotkeyKey { get; set; } = 32;
+    // Rebound shortcuts other than TogglePanel; see ShortcutBindings for the format.
+    public string[] Shortcuts { get; set; } = [];
     [JsonIgnore] public int IconSizePx => PixelsFor(IconSize);
     public static int PixelsFor(IconSizeOption size) => size switch { IconSizeOption.Small => 28, IconSizeOption.Large => 44, _ => 36 };
     [JsonIgnore] public static string SettingsPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Nepply", "settings.json");
@@ -124,11 +126,12 @@ public sealed class AppSettings
         GpuIdentifier = ValidIdentifier(GpuIdentifier);
         // Same rule as the hotkey recorder: Ctrl or Alt is required, so a bare
         // Shift+key can never be registered globally and swallow normal typing.
-        if (HotkeyModifiers is < 1 or > 7 || (HotkeyModifiers & (ModAlt | ModControl)) == 0) HotkeyModifiers = ModControl;
-        if (!Nepply.Helpers.HotkeyGesture.IsSupportedKey(HotkeyKey)) HotkeyKey = 32;
+        if (!ShortcutBindings.IsValid(ShortcutAction.TogglePanel, new(HotkeyModifiers, HotkeyKey)))
+        { HotkeyModifiers = ModControl; HotkeyKey = 32; }
+        Shortcuts = ShortcutBindings.Normalize(this);
     }
     public static bool IsHexColor(string? color) => color is { Length: 7 } && color[0] == '#' && color.AsSpan(1).ToArray().All(Uri.IsHexDigit);
-    public AppSettings Clone() { var copy = (AppSettings)MemberwiseClone(); copy.WidgetOrder = (string[])WidgetOrder.Clone(); copy.IconOrder = (string[])IconOrder.Clone(); return copy; }
+    public AppSettings Clone() { var copy = (AppSettings)MemberwiseClone(); copy.WidgetOrder = (string[])WidgetOrder.Clone(); copy.IconOrder = (string[])IconOrder.Clone(); copy.Shortcuts = (string[])Shortcuts.Clone(); return copy; }
     public void CopyFrom(AppSettings source)
     {
         foreach (var property in typeof(AppSettings).GetProperties().Where(p => p.CanWrite))
@@ -136,7 +139,7 @@ public sealed class AppSettings
         Validate();
     }
     internal const int MaximumIdentifierLength = 2048;
-    private const int ModAlt = 1, ModControl = 2;
+    private const int ModControl = 2;
     private static string ValidIdentifier(string? value) => value is { Length: <= MaximumIdentifierLength } ? value : "";
     private static double ValidPercent(double value) => double.IsFinite(value) ? Math.Clamp(value, 0, 100) : 0;
     public void ResetToDefaults() => CopyFrom(new AppSettings { HasCompletedOnboarding = HasCompletedOnboarding });

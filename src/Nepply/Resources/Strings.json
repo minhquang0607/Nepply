@@ -132,25 +132,26 @@
     "แสดงหรือซ่อน Nepply"
   ],
   "HotkeyChangeHint": [
-    "Chọn phím khác trong Cài đặt → Panel",
-    "Choose another shortcut in Settings → Panel",
-    "設定 → パネルで別のショートカットを選択",
-    "Andere Tastenkombination unter Einstellungen → Panel wählen",
-    "在设置 → 面板中选择其他快捷键",
-    "Выберите другое сочетание в Настройки → Панель",
-    "Choisissez un autre raccourci dans Paramètres → Panneau",
-    "เลือกปุ่มลัดอื่นใน การตั้งค่า → แผง"
+    "Chọn phím khác trong Cài đặt → Phím tắt",
+    "Choose another shortcut in Settings → Shortcuts",
+    "設定 → ショートカットで別のキーを選択",
+    "Andere Taste unter Einstellungen → Tastenkürzel wählen",
+    "在设置 → 快捷键中选择其他按键",
+    "Выберите другое сочетание в Настройки → Сочетания клавиш",
+    "Choisissez un autre raccourci dans Paramètres → Raccourcis",
+    "เลือกปุ่มลัดอื่นใน การตั้งค่า → ปุ่มลัด"
   ],
   "HotkeyUnavailableNotice": [
-    "Chưa đăng ký được {0}. Bạn vẫn có thể mở Nepply từ khay hệ thống hoặc đổi phím trong Cài đặt → Panel.",
-    "Could not register {0}. You can still open Nepply from the system tray or change the shortcut in Settings → Panel.",
-    "{0} を登録できません。システムトレイからNepplyを開くか、設定 → パネルでショートカットを変更してください。",
-    "{0} konnte nicht registriert werden. Nepply lässt sich weiterhin über den Infobereich öffnen. Die Tastenkombination kann unter Einstellungen → Panel geändert werden.",
-    "无法注册 {0}。仍可从系统托盘打开 Nepply，或在设置 → 面板中更改快捷键。",
-    "Не удалось зарегистрировать {0}. Откройте Nepply из системного трея или измените сочетание в Настройки → Панель.",
-    "Impossible d’enregistrer {0}. Ouvrez Nepply depuis la zone de notification ou changez le raccourci dans Paramètres → Panneau.",
-    "ลงทะเบียน {0} ไม่ได้ คุณยังเปิด Nepply จากถาดระบบหรือเปลี่ยนปุ่มลัดใน การตั้งค่า → แผง ได้"
+    "Chưa đăng ký được {0}. Bạn vẫn có thể mở Nepply từ khay hệ thống hoặc đổi phím trong Cài đặt → Phím tắt.",
+    "Could not register {0}. You can still open Nepply from the system tray or change the shortcut in Settings → Shortcuts.",
+    "{0} を登録できません。システムトレイからNepplyを開くか、設定 → ショートカットでキーを変更してください。",
+    "{0} konnte nicht registriert werden. Nepply lässt sich weiterhin über den Infobereich öffnen. Die Taste kann unter Einstellungen → Tastenkürzel geändert werden.",
+    "无法注册 {0}。仍可从系统托盘打开 Nepply，或在设置 → 快捷键中更改按键。",
+    "Не удалось зарегистрировать {0}. Откройте Nepply из системного трея или измените сочетание в Настройки → Сочетания клавиш.",
+    "Impossible d’enregistrer {0}. Ouvrez Nepply depuis la zone de notification ou changez le raccourci dans Paramètres → Raccourcis.",
+    "ลงทะเบียน {0} ไม่ได้ คุณยังเปิด Nepply จากถาดระบบหรือเปลี่ยนปุ่มลัดใน การตั้งค่า → ปุ่มลัด ได้"
   ],
+  "ShortcutUnavailableNotice": ["Chưa đăng ký được phím tắt {0}. Hãy chọn phím khác trong Cài đặt → Phím tắt.","Could not register the shortcut {0}. Choose another key in Settings → Shortcuts.","ショートカット {0} を登録できませんでした。設定 → ショートカットで別のキーを選んでください。","Das Tastenkürzel {0} konnte nicht registriert werden. Wählen Sie unter Einstellungen → Tastenkürzel eine andere Taste.","无法注册快捷键 {0}。请在 设置 → 快捷键 中选择其他按键。","Не удалось зарегистрировать сочетание {0}. Выберите другую клавишу в разделе Настройки → Сочетания клавиш.","Impossible d’enregistrer le raccourci {0}. Choisissez une autre touche dans Paramètres → Raccourcis.","ลงทะเบียนปุ่มลัด {0} ไม่ได้ เลือกปุ่มอื่นใน การตั้งค่า → ปุ่มลัด"],
   "LayoutSaveError": [
     "Không lưu được bố cục. ",
     "Could not save layout. ",
@@ -161,16 +162,7 @@
     "Impossible d’enregistrer la disposition. ",
     "บันทึกเค้าโครงไม่ได้ "
   ],
-  "LayoutEditingHint": [
-    "Kéo hoặc Ctrl + ↑↓ để sắp xếp · Esc hủy",
-    "Drag or Ctrl + ↑↓ to reorder · Esc to cancel",
-    "ドラッグまたは Ctrl + ↑↓ で並べ替え · Esc でキャンセル",
-    "Ziehen oder Ctrl + ↑↓ zum Sortieren · Esc zum Abbrechen",
-    "拖动或 Ctrl + ↑↓ 排序 · Esc 取消",
-    "Перетаскивайте или Ctrl + ↑↓ для сортировки · Esc для отмены",
-    "Glisser ou Ctrl + ↑↓ pour réordonner · Esc pour annuler",
-    "ลากหรือ Ctrl + ↑↓ เพื่อจัดลำดับ · Esc เพื่อยกเลิก"
-  ],
+
   "LayoutCommitError": [
     "Chưa lưu được · thử lại hoặc Hủy",
     "Could not save · retry or Cancel",
@@ -827,25 +819,26 @@
     "ซ่อนเฉพาะไอคอน ไม่ย้ายหรือลบไฟล์ ไอคอนจะกลับมาเมื่อออกตามปกติ หลังแอปขัดข้อง Nepply จะพยายามกู้คืนเมื่อเปิดครั้งถัดไป"
   ],
   "WelcomeHotkey": [
-    "{0} · mở / đóng dock",
-    "{0} · open / close dock",
-    "{0} · ドックを開く / 閉じる",
-    "{0} · Dock öffnen / schließen",
-    "{0} · 展开 / 收起停靠栏",
-    "{0} · открыть / закрыть панель",
-    "{0} · ouvrir / fermer le panneau",
-    "{0} · เปิด / ปิดแผง"
+    "Mở / đóng panel · {0}",
+    "Show / hide panel · {0}",
+    "パネルの表示・非表示 · {0}",
+    "Panel ein-/ausblenden · {0}",
+    "显示/隐藏面板 · {0}",
+    "Показать/скрыть панель · {0}",
+    "Afficher/masquer le panneau · {0}",
+    "แสดง/ซ่อนแผง · {0}"
   ],
   "WelcomeTips": [
-    "Cài đặt: chọn số cột và hàng của lưới.\nBút chì: kéo thả bố cục.\nBiểu tượng khay hệ thống: cài đặt hoặc thoát.",
-    "Settings: choose grid columns and rows.\nPencil: drag to arrange the layout.\nTray icon: open settings or exit.",
-    "設定: グリッドの列数と行数を選択。\n鉛筆: ドラッグしてレイアウトを編集。\nトレイアイコン: 設定を開く、または終了。",
-    "Einstellungen: Spalten und Zeilen wählen.\nStift: Layout per Ziehen anordnen.\nInfobereichsymbol: Einstellungen öffnen oder beenden.",
-    "设置：选择网格列数和行数。\n铅笔：拖动调整布局。\n托盘图标：打开设置或退出。",
-    "Настройки: число столбцов и строк.\nКарандаш: расположение перетаскиванием.\nЗначок в трее: настройки или выход.",
-    "Paramètres : choisir les colonnes et lignes.\nCrayon : réorganiser par glisser-déposer.\nIcône de notification : paramètres ou quitter.",
-    "การตั้งค่า: เลือกจำนวนคอลัมน์และแถว\nดินสอ: ลากเพื่อจัดเค้าโครง\nไอคอนถาดระบบ: เปิดการตั้งค่าหรือออก"
+    "• Esc thoát thao tác đang làm; nhấn tiếp để thu panel.\n• Bấm ghim để giữ panel luôn mở.\n• Bút chì: kéo icon hoặc khối theo dõi để sắp xếp; Ctrl + ↑↓ để di chuyển, Esc để hủy.\n• Chuột phải một icon để mở menu của Windows.\n• Cài đặt xem trước ngay trên panel: Áp dụng lưu và giữ mở, OK lưu và đóng, Hủy bỏ thay đổi chưa lưu.\n• Xuất bố cục ra file để dùng lại; file không chứa đường dẫn icon hay thông tin thiết bị.\n• Thoát hẳn từ biểu tượng khay hệ thống; icon Desktop đã ẩn sẽ hiện lại.",
+    "• Esc leaves what you are doing; press it again to collapse the panel.\n• Pin the panel to keep it open.\n• Pencil: drag icons or monitor blocks to arrange them; Ctrl + ↑↓ moves, Esc cancels.\n• Right-click an icon for its Windows menu.\n• Settings preview on the panel: Apply saves and stays open, OK saves and closes, Cancel discards unsaved changes.\n• Export a layout to reuse it; the file holds no icon paths or device details.\n• Exit from the tray icon; Desktop icons Nepply hid come back.",
+    "• Esc で操作を抜け、もう一度押すとパネルを閉じます。\n• ピン留めするとパネルが開いたままになります。\n• 鉛筆: アイコンやモニターのブロックをドラッグして並べ替え。Ctrl + ↑↓ で移動、Esc で取り消し。\n• アイコンを右クリックすると Windows のメニューが開きます。\n• 設定はパネル上でプレビュー: 適用は保存して開いたまま、OK は保存して閉じる、キャンセルは未保存の変更を破棄。\n• レイアウトをファイルに書き出して再利用できます。アイコンのパスやデバイス情報は含まれません。\n• 終了はトレイアイコンから。Nepply が隠したデスクトップアイコンは元に戻ります。",
+    "• Esc verlässt die aktuelle Aktion; erneut drücken klappt das Panel ein.\n• Anheften hält das Panel geöffnet.\n• Stift: Symbole oder Überwachungsblöcke per Ziehen anordnen; Strg + ↑↓ verschiebt, Esc bricht ab.\n• Rechtsklick auf ein Symbol öffnet das Windows-Menü.\n• Einstellungen zeigen eine Vorschau im Panel: Übernehmen speichert und bleibt offen, OK speichert und schließt, Abbrechen verwirft ungespeicherte Änderungen.\n• Layout als Datei exportieren und wiederverwenden; sie enthält keine Symbolpfade oder Gerätedaten.\n• Beenden über das Infobereichsymbol; von Nepply ausgeblendete Desktopsymbole erscheinen wieder.",
+    "• Esc 退出当前操作；再按一次收起面板。\n• 固定后面板会保持打开。\n• 铅笔：拖动图标或监控块来排列；Ctrl + ↑↓ 移动，Esc 取消。\n• 右键单击图标可打开 Windows 菜单。\n• 设置会在面板上预览：应用 保存并保持打开，确定 保存并关闭，取消 放弃未保存的更改。\n• 可将布局导出为文件以便复用；文件不含图标路径或设备信息。\n• 从托盘图标退出；Nepply 隐藏的桌面图标会恢复显示。",
+    "• Esc выходит из текущего действия; повторное нажатие сворачивает панель.\n• Закрепите панель, чтобы она не скрывалась.\n• Карандаш: перетаскивайте значки или блоки мониторинга; Ctrl + ↑↓ перемещает, Esc отменяет.\n• Правый щелчок по значку открывает меню Windows.\n• Настройки сразу видны на панели: «Применить» сохраняет и оставляет окно, «ОК» сохраняет и закрывает, «Отмена» отбрасывает несохранённое.\n• Макет можно экспортировать в файл; в нём нет путей к значкам и данных об устройствах.\n• Выход — через значок в трее; скрытые Nepply значки рабочего стола вернутся.",
+    "• Échap quitte l’action en cours ; appuyez encore pour replier le panneau.\n• Épinglez le panneau pour le garder ouvert.\n• Crayon : faites glisser icônes ou blocs de surveillance pour les organiser ; Ctrl + ↑↓ déplace, Échap annule.\n• Clic droit sur une icône pour son menu Windows.\n• Les paramètres s’affichent en aperçu sur le panneau : Appliquer enregistre sans fermer, OK enregistre et ferme, Annuler ignore les modifications non enregistrées.\n• Exportez une disposition pour la réutiliser ; le fichier ne contient ni chemins d’icônes ni infos d’appareils.\n• Quittez depuis l’icône de notification ; les icônes du bureau masquées par Nepply réapparaissent.",
+    "• Esc ออกจากสิ่งที่ทำอยู่ กดอีกครั้งเพื่อพับแผง\n• ปักหมุดเพื่อให้แผงเปิดค้างไว้\n• ดินสอ: ลากไอคอนหรือบล็อกการตรวจสอบเพื่อจัดเรียง Ctrl + ↑↓ เพื่อย้าย Esc เพื่อยกเลิก\n• คลิกขวาที่ไอคอนเพื่อเปิดเมนูของ Windows\n• การตั้งค่าจะแสดงตัวอย่างบนแผง: นำไปใช้ บันทึกและเปิดค้างไว้ ตกลง บันทึกและปิด ยกเลิก ทิ้งการเปลี่ยนแปลงที่ยังไม่บันทึก\n• ส่งออกเค้าโครงเป็นไฟล์เพื่อใช้ซ้ำ ไฟล์ไม่มีพาธไอคอนหรือข้อมูลอุปกรณ์\n• ออกจากโปรแกรมผ่านไอคอนถาดระบบ ไอคอนเดสก์ท็อปที่ Nepply ซ่อนไว้จะกลับมา"
   ],
+  "GuideOpen": ["Hướng dẫn","Guide","ガイド","Anleitung","使用指南","Справка","Guide","คู่มือ"],
   "WelcomeStart": [
     "Bắt đầu",
     "Get started",
@@ -886,16 +879,7 @@
     "Conserver les modifications ?",
     "เก็บการเปลี่ยนแปลงเค้าโครงไหม?"
   ],
-  "LayoutDecisionHint": [
-    "Lưu trước khi rời chế độ chỉnh, hoặc quay về bố cục trước đó.",
-    "Save before leaving edit mode, or restore the previous layout.",
-    "編集を終了する前に保存するか、以前のレイアウトに戻します。",
-    "Vor dem Verlassen speichern oder das vorherige Layout wiederherstellen.",
-    "退出编辑前保存，或恢复之前的布局。",
-    "Сохраните изменения перед выходом или верните прежний макет.",
-    "Enregistrez avant de quitter ou restaurez la disposition précédente.",
-    "บันทึกก่อนออกจากโหมดแก้ไข หรือคืนค่าเค้าโครงเดิม"
-  ],
+
   "LayoutContinue": [
     "Tiếp tục chỉnh",
     "Continue editing",
@@ -1336,6 +1320,24 @@
     "Raccourci afficher/masquer",
     "ปุ่มลัดแสดง/ซ่อน"
   ],
+  "Shortcuts": ["Phím tắt","Shortcuts","ショートカット","Tastenkürzel","快捷键","Сочетания клавиш","Raccourcis","ปุ่มลัด"],
+  "ShortcutsGlobal": ["Dùng ở mọi nơi","Anywhere","どこでも","Überall","全局","В любом приложении","Partout","ใช้ได้ทุกที่"],
+  "ShortcutsPanel": ["Khi panel đang mở","While the panel is open","パネル表示中","Bei geöffnetem Panel","面板打开时","Когда панель открыта","Quand le panneau est ouvert","ขณะแผงเปิดอยู่"],
+  "ShortcutTogglePanel": ["Mở / đóng panel","Show / hide panel","パネルの表示・非表示","Panel ein-/ausblenden","显示/隐藏面板","Показать/скрыть панель","Afficher/masquer le panneau","แสดง/ซ่อนแผง"],
+  "ShortcutSearchDesktop": ["Mở panel và tìm","Open panel and search","パネルを開いて検索","Panel öffnen und suchen","打开面板并搜索","Открыть панель и искать","Ouvrir le panneau et rechercher","เปิดแผงและค้นหา"],
+  "ShortcutToggleDesktopIcons": ["Ẩn / hiện icon Desktop","Hide / show desktop icons","デスクトップアイコンの表示・非表示","Desktopsymbole aus-/einblenden","隐藏/显示桌面图标","Скрыть/показать значки рабочего стола","Masquer/afficher les icônes du bureau","ซ่อน/แสดงไอคอนเดสก์ท็อป"],
+  "ShortcutTogglePin": ["Ghim / bỏ ghim panel","Pin / unpin panel","パネルの固定・解除","Panel anheften/lösen","固定/取消固定面板","Закрепить/открепить панель","Épingler/désépingler le panneau","ปักหมุด/เลิกปักหมุดแผง"],
+  "ShortcutOpenSettings": ["Mở Cài đặt","Open settings","設定を開く","Einstellungen öffnen","打开设置","Открыть настройки","Ouvrir les paramètres","เปิดการตั้งค่า"],
+  "ShortcutFocusSearch": ["Tìm trên Desktop","Search desktop","デスクトップ検索","Desktop suchen","搜索桌面","Поиск на рабочем столе","Rechercher sur le bureau","ค้นหาเดสก์ท็อป"],
+  "ShortcutRefreshDesktop": ["Làm mới Desktop","Refresh desktop","デスクトップを更新","Desktop aktualisieren","刷新桌面","Обновить рабочий стол","Actualiser le bureau","รีเฟรชเดสก์ท็อป"],
+  "ShortcutNone": ["Chưa đặt","Not set","未設定","Nicht festgelegt","未设置","Не задано","Non défini","ยังไม่ได้ตั้ง"],
+  "ShortcutClear": ["Xóa phím","Remove shortcut","ショートカットを削除","Tastenkürzel entfernen","移除快捷键","Удалить сочетание","Supprimer le raccourci","ลบปุ่มลัด"],
+  "ShortcutDefault": ["Dùng phím mặc định","Use default key","既定のキーに戻す","Standardtaste verwenden","使用默认按键","Вернуть клавишу по умолчанию","Utiliser la touche par défaut","ใช้ปุ่มเริ่มต้น"],
+  "ShortcutsReset": ["Khôi phục tất cả phím mặc định","Restore all default keys","すべて既定のキーに戻す","Alle Standardtasten wiederherstellen","恢复所有默认按键","Вернуть все клавиши по умолчанию","Rétablir toutes les touches par défaut","คืนค่าปุ่มเริ่มต้นทั้งหมด"],
+  "RecordShortcutPrompt": ["Nhấn phím…","Press a key…","キーを押してください…","Taste drücken…","请按键…","Нажмите клавишу…","Appuyez sur une touche…","กดปุ่ม…"],
+  "ShortcutConflict": ["{0} đang dùng cho “{1}”.","{0} is already used for “{1}”.","{0} は「{1}」で使用中です。","{0} wird bereits für „{1}“ verwendet.","{0} 已用于“{1}”。","{0} уже используется для «{1}».","{0} est déjà utilisé pour « {1} ».","{0} ใช้กับ “{1}” อยู่แล้ว"],
+  "ShortcutInvalidGlobal": ["Phím dùng ở mọi nơi cần có Ctrl hoặc Alt.","Shortcuts that work anywhere need Ctrl or Alt.","どこでも使えるショートカットには Ctrl か Alt が必要です。","Überall gültige Tastenkürzel brauchen Strg oder Alt.","全局快捷键需要包含 Ctrl 或 Alt。","Глобальным сочетаниям нужен Ctrl или Alt.","Les raccourcis globaux doivent inclure Ctrl ou Alt.","ปุ่มลัดที่ใช้ได้ทุกที่ต้องมี Ctrl หรือ Alt"],
+  "ShortcutInvalidPanel": ["Chữ và số cần kèm Ctrl hoặc Alt; F1–F12 dùng riêng được. Esc luôn dùng để thoát và thu panel.","Letters and digits need Ctrl or Alt; F1–F12 work alone. Esc is reserved for leaving and collapsing the panel.","文字と数字には Ctrl か Alt が必要です。F1–F12 は単独で使えます。Esc は操作の終了とパネルを閉じる用です。","Buchstaben und Ziffern brauchen Strg oder Alt; F1–F12 gehen allein. Esc ist zum Verlassen und Einklappen reserviert.","字母和数字需要 Ctrl 或 Alt；F1–F12 可单独使用。Esc 固定用于退出和收起面板。","Буквам и цифрам нужен Ctrl или Alt; F1–F12 можно без них. Esc зарезервирован для выхода и сворачивания панели.","Les lettres et chiffres doivent inclure Ctrl ou Alt ; F1–F12 fonctionnent seuls. Échap sert à quitter et replier le panneau.","ตัวอักษรและตัวเลขต้องมี Ctrl หรือ Alt ส่วน F1–F12 ใช้เดี่ยวได้ Esc สงวนไว้สำหรับออกและพับแผง"],
   "HideDesktop": [
     "Ẩn biểu tượng trên Desktop Windows",
     "Hide Windows desktop icons",
@@ -1899,36 +1901,9 @@
     "GPU indisponible",
     "GPU ไม่พร้อมใช้งาน"
   ],
-  "PreviewNotice": [
-    "Xem trước trên panel · Áp dụng lưu và giữ mở; OK lưu và đóng. Hủy bỏ thay đổi kể từ lần lưu gần nhất.",
-    "Preview on the panel. Apply saves without closing; OK saves and closes. Cancel discards changes since the last save.",
-    "パネルでプレビュー。適用で保存、OKで保存して閉じます。キャンセルは最後の保存後の変更を破棄します。",
-    "Vorschau im Panel. Übernehmen speichert, OK speichert und schließt. Abbrechen verwirft Änderungen seit dem letzten Speichern.",
-    "在面板上预览。应用 保存但不关闭，确定 保存并关闭。取消会放弃上次保存后的更改。",
-    "Предпросмотр на панели. «Применить» сохраняет, «ОК» сохраняет и закрывает. Отмена откатывает изменения после последнего сохранения.",
-    "Aperçu sur le panneau. Appliquer enregistre, OK enregistre et ferme. Annuler ignore les modifications depuis le dernier enregistrement.",
-    "ดูตัวอย่างบนแผง นำไปใช้ บันทึกโดยไม่ปิด ตกลง บันทึกและปิด ยกเลิกจะทิ้งการเปลี่ยนแปลงหลังบันทึกล่าสุด"
-  ],
-  "MotionHint": [
-    "Áp dụng cho panel, tìm kiếm, hover, lưới và chỉ số. Luôn tôn trọng tùy chọn giảm chuyển động của Windows.",
-    "Applies to panels, search, hover, grids and meters. Respects Windows reduced motion.",
-    "パネル、検索、ホバー、グリッド、メーターに適用。Windowsのアニメーション設定を尊重します。",
-    "Gilt für Panel, Suche, Hover, Raster und Anzeigen. Beachtet reduzierte Bewegung in Windows.",
-    "用于面板、搜索、悬停、网格和仪表。遵循 Windows 减少动态效果设置。",
-    "Для панели, поиска, наведения, сетки и показателей. Учитывает настройки анимации Windows.",
-    "Pour le panneau, la recherche, le survol, les grilles et les jauges. Respecte les réglages d’animation Windows.",
-    "ใช้กับแผง การค้นหา การชี้เมาส์ ตาราง และมาตรวัด ตามการตั้งค่าลดการเคลื่อนไหวของ Windows"
-  ],
-  "MetalHint": [
-    "Dải phản sáng chéo kết hợp được với mọi màu, kể cả neon. Tắt chỉ bỏ ánh kim, vẫn giữ màu và quầng sáng.",
-    "Diagonal reflections work with every color. Metallic and neon effects can be switched independently.",
-    "斜めの反射はすべての色に対応。メタリックとネオンは個別に切り替えられます。",
-    "Diagonale Reflexe für alle Farben. Metall- und Neoneffekte sind getrennt schaltbar.",
-    "斜向光泽适用于所有颜色。金属与霓虹效果可独立开关。",
-    "Диагональные блики для всех цветов. Металл и неон включаются отдельно.",
-    "Les reflets diagonaux fonctionnent avec toutes les couleurs. Métal et néon sont indépendants.",
-    "ประกายทแยงใช้ได้กับทุกสี เปิดปิดโลหะและนีออนได้แยกกัน"
-  ],
+
+
+
   "DesktopRestore": [
     "Biểu tượng được khôi phục khi thoát Nepply bình thường.",
     "Icons are restored when Nepply exits normally.",
@@ -1939,39 +1914,12 @@
     "Les icônes sont restaurées à la fermeture normale de Nepply.",
     "ไอคอนจะคืนค่าเมื่อออกจาก Nepply ตามปกติ"
   ],
-  "MergeHint": [
-    "Tắt để xem từng lối tắt. Rê chuột lên icon để xem các đường dẫn đã gộp; không xóa hay di chuyển file.",
-    "Disable to show each shortcut. Hover to see merged paths; no files are deleted or moved.",
-    "オフで各ショートカットを表示。ホバーでまとめたパスを確認。ファイルの削除や移動はしません。",
-    "Deaktivieren, um alle Verknüpfungen einzeln zu sehen. Pfade per Hover anzeigen; Dateien bleiben unverändert.",
-    "关闭后显示每个快捷方式。悬停查看合并路径；不会删除或移动文件。",
-    "Выключите для показа всех ярлыков. Наведите для просмотра путей; файлы не удаляются и не перемещаются.",
-    "Désactivez pour voir chaque raccourci. Survolez pour les chemins regroupés ; aucun fichier supprimé ou déplacé.",
-    "ปิดเพื่อแสดงทุกทางลัด ชี้เมาส์เพื่อดูเส้นทางที่รวมไว้ ไม่มีการลบหรือย้ายไฟล์"
-  ],
-  "GridHint": [
-    "Kéo qua các chấm để chọn. Ô tự khớp vùng icon; các mục còn lại cuộn xuống.",
-    "Drag across dots to choose rows and columns. Extra items remain scrollable.",
-    "点をドラッグして行と列を選択。残りの項目はスクロールで表示します。",
-    "Punkte ziehen, um Zeilen und Spalten zu wählen. Weitere Elemente bleiben scrollbar.",
-    "拖过圆点选择行列。其余项目可滚动查看。",
-    "Проведите по точкам для выбора строк и столбцов. Остальные элементы доступны прокруткой.",
-    "Faites glisser sur les points pour choisir lignes et colonnes. Le reste reste accessible par défilement.",
-    "ลากผ่านจุดเพื่อเลือกแถวและคอลัมน์ รายการที่เหลือเลื่อนดูได้"
-  ],
+
+
   "Advanced": [
     "Nâng cao", "Advanced", "詳細設定", "Erweitert", "高级", "Дополнительно", "Avancé", "ขั้นสูง"
   ],
-  "GpuHint": [
-    "Gán theo tên thiết bị; không suy đoán card rời/tích hợp từ hãng.",
-    "Choose by device name; the vendor does not identify integrated or dedicated GPUs.",
-    "デバイス名で選択。メーカー名だけでは内蔵 GPU とディスクリート GPU を判別しません。",
-    "Nach Gerätename wählen; der Hersteller bestimmt nicht, ob die GPU integriert oder dediziert ist.",
-    "按设备名称选择；不根据厂商推断独显或核显。",
-    "Выбирайте по имени устройства, а не по производителю GPU.",
-    "Choisissez par nom d’appareil, pas selon le fabricant du GPU.",
-    "เลือกตามชื่ออุปกรณ์ ไม่ใช้ยี่ห้อคาดเดาว่าเป็นการ์ดแยกหรือในตัว"
-  ],
+
   "SensorHint": [
     "Tùy phần cứng và driver, một số cảm biến cần quyền quản trị hoặc có thể không khả dụng. Dấu — nghĩa là không có số đo.",
     "Some sensors require administrator privileges or may be unavailable. — means no reading.",
@@ -1982,96 +1930,15 @@
     "Certains capteurs nécessitent des droits administrateur ou sont indisponibles. — indique aucune mesure.",
     "บางเซ็นเซอร์ต้องใช้สิทธิ์ผู้ดูแลหรืออาจไม่พร้อมใช้งาน — หมายถึงไม่มีค่า"
   ],
-  "SuspendHint": [
-    "Dừng lấy mẫu CPU/RAM/mạng và đóng nguồn cảm biến. Khi mở lại, nhiệt độ có thể cần một lúc để kết nối.",
-    "Stops CPU/RAM/network sampling and closes sensors. Temperature may take a moment to return.",
-    "CPU/RAM/ネットワーク測定とセンサーを停止。温度の再表示に時間がかかる場合があります。",
-    "Stoppt CPU-/RAM-/Netzwerkmessung und schließt Sensoren. Temperaturwerte können verzögert zurückkehren.",
-    "停止 CPU/RAM/网络采样并关闭传感器。恢复温度读数可能需要片刻。",
-    "Останавливает опрос CPU/RAM/сети и датчиков. Температура может появиться с задержкой.",
-    "Arrête les mesures CPU/RAM/réseau et ferme les capteurs. La température peut revenir après un délai.",
-    "หยุดอ่าน CPU/RAM/เครือข่ายและปิดเซ็นเซอร์ อุณหภูมิอาจใช้เวลาสักครู่จึงกลับมา"
-  ],
-  "EcoHint": [
-    "Chỉ áp dụng khi không chọn ngủ hoàn toàn: tối thiểu 5 giây / lượt; không vẽ lại giao diện.",
-    "Only when full suspension is off: at least 5 seconds per sample, without UI redraws.",
-    "完全停止がオフの場合のみ、最低5秒間隔で測定。画面の再描画なし。",
-    "Nur ohne vollständige Pause: mindestens 5 Sekunden pro Messung, ohne Neuzeichnen.",
-    "仅在未完全暂停时生效：采样间隔至少 5 秒，不重绘界面。",
-    "Только без полной паузы: не чаще раза в 5 секунд, без перерисовки.",
-    "Sans suspension complète : au moins 5 secondes entre mesures, sans redessiner l’interface.",
-    "ใช้เมื่อไม่ได้พักทั้งหมด อ่านห่างอย่างน้อย 5 วินาทีโดยไม่วาดหน้าจอใหม่"
-  ],
-  "ShortcutsHint": [
-    "Ctrl + F để tìm nhanh · Esc để ẩn panel.\nThoát hoàn toàn bằng menu biểu tượng khay hệ thống.",
-    "Ctrl + F to search · Esc to hide. Exit completely from the tray menu.",
-    "Ctrl + Fで検索、Escで非表示。完全終了はトレイメニューから。",
-    "Ctrl + F zum Suchen · Esc zum Ausblenden. Vollständig über das Traymenü beenden.",
-    "Ctrl + F 搜索，Esc 隐藏。通过托盘菜单完全退出。",
-    "Ctrl + F — поиск, Esc — скрыть. Полный выход через меню в трее.",
-    "Ctrl + F pour rechercher, Esc pour masquer. Quittez via le menu de notification.",
-    "Ctrl + F ค้นหา · Esc ซ่อน ออกจากโปรแกรมผ่านเมนูถาดระบบ"
-  ],
-  "PresetHint": [
-    "Chọn mẫu, rồi chỉnh tiếp. Giữ nguyên màu và thiết bị của bạn.",
-    "Choose a preset, then customize. Your colors and devices are kept.",
-    "プリセットを選んで調整。色とデバイス設定は保持します。",
-    "Vorlage wählen und anpassen. Farben und Geräte bleiben erhalten.",
-    "选择预设后继续调整。保留颜色和设备设置。",
-    "Выберите шаблон и настройте. Цвета и устройства сохраняются.",
-    "Choisissez un modèle puis personnalisez. Vos couleurs et appareils sont conservés.",
-    "เลือกแบบแล้วปรับต่อ สีและอุปกรณ์ของคุณจะคงอยู่"
-  ],
-  "ExportHint": [
-    "Lưu màu sắc, kích thước và vị trí các vùng thành file để dùng lại. Không xuất đường dẫn icon hay thông tin thiết bị.",
-    "Export colors, dimensions and layout for reuse, without icon paths or device information.",
-    "色、サイズ、配置を保存。アイコンのパスやデバイス情報は含みません。",
-    "Farben, Maße und Layout exportieren, ohne Symbolpfade oder Geräteinformationen.",
-    "导出颜色、尺寸和布局，不包含图标路径或设备信息。",
-    "Экспорт цветов, размеров и макета без путей значков и данных устройств.",
-    "Exportez couleurs, dimensions et disposition sans chemins d’icônes ni données d’appareils.",
-    "ส่งออกสี ขนาด และเค้าโครงโดยไม่รวมเส้นทางไอคอนหรือข้อมูลอุปกรณ์"
-  ],
-  "PrivacyHint": [
-    "Không analytics · không tự gửi danh sách Desktop hoặc số đo phần cứng.",
-    "No analytics. No automatic upload of desktop lists or hardware readings.",
-    "分析収集なし。デスクトップ一覧や測定値の自動送信なし。",
-    "Keine Analyse. Kein automatisches Hochladen von Desktoplisten oder Messwerten.",
-    "无分析追踪，不自动上传桌面列表或硬件读数。",
-    "Без аналитики и автоматической отправки списка рабочего стола или показаний.",
-    "Sans analyse ni envoi automatique des listes du bureau ou des mesures.",
-    "ไม่มีการวิเคราะห์ติดตาม ไม่ส่งรายการเดสก์ท็อปหรือค่าฮาร์ดแวร์อัตโนมัติ"
-  ],
-  "TraySettingsHint": [
-    "Giao diện, cạnh neo và phần cứng",
-    "Appearance, docking and hardware",
-    "外観、配置、ハードウェア",
-    "Darstellung, Position und Hardware",
-    "外观、停靠与硬件",
-    "Оформление, положение и оборудование",
-    "Apparence, ancrage et matériel",
-    "รูปลักษณ์ ตำแหน่ง และฮาร์ดแวร์"
-  ],
-  "TrayLogsHint": [
-    "Xem thông tin khi gặp sự cố",
-    "View information when troubleshooting",
-    "問題の診断情報を表示",
-    "Informationen zur Fehlerbehebung",
-    "查看故障排查信息",
-    "Информация для устранения проблем",
-    "Consulter les informations de dépannage",
-    "ดูข้อมูลเมื่อแก้ปัญหา"
-  ],
-  "TrayExitHint": [
-    "Khôi phục icon đã ẩn bởi Nepply",
-    "Restore icons hidden by Nepply",
-    "Nepplyで隠したアイコンを復元",
-    "Von Nepply verborgene Symbole wiederherstellen",
-    "恢复 Nepply 隐藏的图标",
-    "Восстановить значки, скрытые Nepply",
-    "Restaurer les icônes masquées par Nepply",
-    "คืนค่าไอคอนที่ Nepply ซ่อนไว้"
-  ],
+
+
+
+
+
+
+
+
+
   "Tagline": [
     "Desktop, gọn trong tầm tay.",
     "Your desktop, within reach.",
@@ -2093,25 +1960,16 @@
     "ค้นหาการตั้งค่า · Ctrl + F"
   ],
   "SearchDesktopTip": [
-    "Tìm Desktop · Ctrl + F",
-    "Search desktop · Ctrl + F",
-    "デスクトップ検索 · Ctrl + F",
-    "Desktop suchen · Ctrl + F",
-    "搜索桌面 · Ctrl + F",
-    "Поиск на рабочем столе · Ctrl + F",
-    "Rechercher sur le bureau · Ctrl + F",
-    "ค้นหาเดสก์ท็อป · Ctrl + F"
+    "Tìm trên Desktop",
+    "Search desktop",
+    "デスクトップ検索",
+    "Desktop suchen",
+    "搜索桌面",
+    "Поиск на рабочем столе",
+    "Rechercher sur le bureau",
+    "ค้นหาเดสก์ท็อป"
   ],
-  "EditTip": [
-    "Chỉnh bố cục: kéo icon hoặc các khối monitor",
-    "Edit layout: drag icons or monitor cards",
-    "レイアウト編集：アイコンやカードをドラッグ",
-    "Layout bearbeiten: Symbole oder Karten ziehen",
-    "编辑布局：拖动图标或监控卡片",
-    "Изменить макет: перетащите значки или блоки",
-    "Modifier la disposition : glissez les icônes ou cartes",
-    "แก้ไขเค้าโครง: ลากไอคอนหรือการ์ด"
-  ],
+
   "Stale": [
     "Số đo cũ · đang chờ cập nhật",
     "Old readings · waiting for update",
