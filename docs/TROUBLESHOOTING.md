@@ -57,7 +57,7 @@ Nếu kiểm tra cập nhật báo lỗi, kiểm tra kết nối Internet rồi 
 
 ## Đặt lại cấu hình
 
-Trong Cài đặt, chọn **Mặc định**, kiểm tra các tùy chọn rồi bấm **Apply** hoặc **OK** để lưu. Nếu chưa muốn lưu, chọn **Hủy**.
+Trong Cài đặt, chọn **Mặc định**, kiểm tra các tùy chọn rồi bấm **Áp dụng** hoặc **OK** để lưu. Nếu chưa muốn lưu, chọn **Hủy**.
 
 Nếu cần sao lưu trước, thoát app rồi sao chép `%APPDATA%\Nepply\settings.json` sang nơi riêng. Không chỉ xóa file này để đặt lại: app có thể phục hồi từ bản `.bak` hoặc nhập cấu hình HoverBox cũ. Nếu Cài đặt không mở được, hãy báo lỗi trước khi tự xóa các file khôi phục.
 

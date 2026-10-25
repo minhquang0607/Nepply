@@ -17,13 +17,13 @@
     </StackPanel>
     <Border x:Name="DesktopSearchEditor" Visibility="Collapsed" MaxWidth="480" HorizontalAlignment="Stretch" Margin="0,0,12,0" Height="40" CornerRadius="20" Background="{DynamicResource CardBrush}" MouseEnter="DesktopSearch_Enter" MouseLeave="DesktopSearch_Leave">
      <Border.Style><Style TargetType="Border"><Setter Property="BorderThickness" Value="0.6"/><Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/><Style.Triggers><Trigger Property="IsKeyboardFocusWithin" Value="True"><Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}"/></Trigger></Style.Triggers></Style></Border.Style>
-     <Grid Margin="12,0,7,0"><Grid.ColumnDefinitions><ColumnDefinition Width="25"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
-      <TextBlock Text="&#xE721;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="14" Foreground="{DynamicResource AccentBrush}" VerticalAlignment="Center"/>
-      <Grid Grid.Column="1">
+     <!-- The header search button stays beside the editor (highlighted while open), so the editor carries no second magnifier. -->
+     <Grid Margin="16,0,7,0"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+      <Grid>
        <TextBox x:Name="DesktopSearchBox" Background="Transparent" BorderThickness="0" Padding="0" VerticalAlignment="Center" VerticalContentAlignment="Center" MinHeight="24" Text="{Binding DataContext.SearchQuery, ElementName=IconPanelView, UpdateSourceTrigger=PropertyChanged}" TextChanged="DesktopSearch_Changed" PreviewKeyDown="DesktopSearch_KeyDown" GotKeyboardFocus="DesktopSearch_Focused" LostKeyboardFocus="DesktopSearch_Unfocused" AutomationProperties.Name="{DynamicResource Loc.SearchDesktopTip}"/>
        <TextBlock Text="{DynamicResource Loc.SearchDesktop}" Foreground="{DynamicResource MutedBrush}" VerticalAlignment="Center" IsHitTestVisible="False"><TextBlock.Style><Style TargetType="TextBlock"><Setter Property="Visibility" Value="Collapsed"/><Style.Triggers><DataTrigger Binding="{Binding Text, ElementName=DesktopSearchBox}" Value=""><Setter Property="Visibility" Value="Visible"/></DataTrigger></Style.Triggers></Style></TextBlock.Style></TextBlock>
       </Grid>
-      <Button Grid.Column="2" Content="&#xE894;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Padding="7" Margin="3,0,0,0" Background="Transparent" BorderThickness="0" Click="DesktopSearch_Clear" ToolTip="{DynamicResource Loc.ClearSearch}" AutomationProperties.Name="{DynamicResource Loc.ClearSearch}">
+      <Button Grid.Column="1" Content="&#xE894;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Padding="7" Margin="3,0,0,0" Background="Transparent" BorderThickness="0" Click="DesktopSearch_Clear" ToolTip="{DynamicResource Loc.ClearSearch}" AutomationProperties.Name="{DynamicResource Loc.ClearSearch}">
        <Button.Style><Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}"><Setter Property="Visibility" Value="Visible"/><Style.Triggers><DataTrigger Binding="{Binding Text, ElementName=DesktopSearchBox}" Value=""><Setter Property="Visibility" Value="Collapsed"/></DataTrigger></Style.Triggers></Style></Button.Style>
       </Button>
      </Grid>
@@ -31,7 +31,8 @@
    </Grid>
    <Grid x:Name="ContentGrid" Grid.Row="1" SizeChanged="ContentGrid_SizeChanged">
     <ScrollViewer x:Name="MonitorScroller" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled"><views:MonitorPanel x:Name="MonitorPanelView"/></ScrollViewer>
-    <GridSplitter x:Name="ContentSeparator" Background="Transparent" Height="8" Margin="20,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ResizeBehavior="PreviousAndNext" DragCompleted="ResizeLayout_End"><GridSplitter.Template><ControlTemplate TargetType="GridSplitter"><Border Background="Transparent"><Border Background="{DynamicResource AccentBrush}" Height="2" Width="28" CornerRadius="1" Opacity=".4" VerticalAlignment="Center" HorizontalAlignment="Center"/></Border></ControlTemplate></GridSplitter.Template></GridSplitter>
+    <GridSplitter x:Name="ContentSeparator" Background="Transparent" Height="8" Margin="20,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ResizeBehavior="PreviousAndNext" DragCompleted="ResizeLayout_End"><GridSplitter.Template><ControlTemplate TargetType="GridSplitter"><Border Background="Transparent"><Border x:Name="Grip" Background="{DynamicResource AccentBrush}" Height="2" Width="28" CornerRadius="1" Opacity=".4" VerticalAlignment="Center" HorizontalAlignment="Center"/></Border>
+     <ControlTemplate.Triggers><Trigger Property="ResizeDirection" Value="Columns"><Setter TargetName="Grip" Property="Width" Value="2"/><Setter TargetName="Grip" Property="Height" Value="28"/></Trigger></ControlTemplate.Triggers></ControlTemplate></GridSplitter.Template></GridSplitter>
     <views:IconPanel x:Name="IconPanelView"/>
    </Grid>
    <Border x:Name="PanelFooter" Grid.Row="2" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0" Padding="20,11">
@@ -39,7 +40,7 @@
      <Border x:Name="LayoutActions" Visibility="Collapsed" Background="{DynamicResource AccentWashBrush}" CornerRadius="12" Padding="10" Margin="0,0,0,8">
       <DockPanel LastChildFill="True">
        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal"><Button Content="{DynamicResource Loc.Cancel}" Click="CancelLayout_Click" Padding="10,6" Margin="0,0,6,0"/><Button Content="{DynamicResource Loc.Done}" Click="DoneLayout_Click" Padding="10,6" Style="{StaticResource PrimaryButton}"/></StackPanel>
-       <Button x:Name="SwapSectionsButton" Content="Desktop ↔ Monitor" Click="SwapSections_Click" HorizontalAlignment="Left" Padding="8,6" AutomationProperties.Name="{DynamicResource Loc.SwapSections}"/>
+       <Button x:Name="SwapSectionsButton" Content="{DynamicResource Loc.SwapSectionsShort}" Click="SwapSections_Click" HorizontalAlignment="Left" Padding="8,6" AutomationProperties.Name="{DynamicResource Loc.SwapSections}"/>
       </DockPanel>
      </Border>
     <DockPanel><TextBlock x:Name="FooterState" Visibility="Collapsed" Text="{DynamicResource Loc.Tagline}" Style="{StaticResource Caption}"/>

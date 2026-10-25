@@ -1,8 +1,9 @@
-<UserControl x:Class="Nepply.Views.MonitorPanel" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:Nepply.Views">
+<UserControl x:Class="Nepply.Views.MonitorPanel" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:Nepply.Views" xmlns:appearance="clr-namespace:Nepply.Modules.Appearance">
  <UserControl.Resources>
   <Style x:Key="MonitorMetricCard" TargetType="Border" BasedOn="{StaticResource MetricCard}">
    <Setter Property="Height" Value="{Binding CardHeight, RelativeSource={RelativeSource AncestorType=local:MonitorPanel}}"/>
    <Setter Property="Margin" Value="6,0,6,14"/><Setter Property="Padding" Value="11,9"/><Setter Property="CornerRadius" Value="17"/>
+   <Style.Triggers><Trigger Property="appearance:PresentationDensity.Compact" Value="True"><Setter Property="Margin" Value="6,0,6,8"/></Trigger></Style.Triggers>
   </Style>
  </UserControl.Resources>
  <StackPanel>

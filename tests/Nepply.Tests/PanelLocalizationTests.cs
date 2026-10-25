@@ -36,6 +36,8 @@ internal static class PanelLocalizationTests
                     && Equals(hotkey.ToolTip,LocalizationService.Get("HotkeyChangeHint")));
                 check($"Language {language.Id} refreshes existing hotkey warning",notice.Visibility==Visibility.Visible
                     && noticeText.Text==string.Format(LocalizationService.Get("HotkeyUnavailableNotice"),MainWindow.HotkeyLabel(main.Settings)));
+                check($"Language {language.Id} localizes the layout section swap button",
+                    Equals(((Button)main.FindName("SwapSectionsButton")).Content,LocalizationService.Get("SwapSectionsShort")));
                 check($"Language {language.Id} refreshes layout footer",((TextBlock)main.FindName("FooterState")).Text==LocalizationService.Get("LayoutEditingHint"));
                 check($"Language {language.Id} refreshes panel accessibility states",
                     AutomationProperties.GetItemStatus((DependencyObject)main.FindName("PinButton"))==LocalizationService.Get("Pinned")

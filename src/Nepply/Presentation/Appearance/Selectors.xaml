@@ -8,13 +8,22 @@
   <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="ListBoxItem">
    <Border x:Name="TabChrome" Background="Transparent" CornerRadius="{DynamicResource RadiusTile}" Padding="{TemplateBinding Padding}" BorderThickness="1" BorderBrush="Transparent">
     <Grid>
+     <!-- Rail (vertical list): bar at the leading edge. Tabs (horizontal row): underline. -->
      <Border x:Name="SelectionIndicator" Width="3" Height="14" CornerRadius="1.5" Background="{TemplateBinding Foreground}" HorizontalAlignment="Left" Margin="-7,0,0,0" Visibility="Collapsed" IsHitTestVisible="False"/>
+     <Border x:Name="SelectionUnderline" Width="18" Height="2" CornerRadius="1" Background="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,-6" Visibility="Collapsed" IsHitTestVisible="False"/>
      <ContentPresenter><ContentPresenter.Resources><Style TargetType="TextBlock"><Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"/></Style></ContentPresenter.Resources></ContentPresenter>
     </Grid>
    </Border>
    <ControlTemplate.Triggers>
     <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="TabChrome" Property="Background" Value="{DynamicResource HoverBrush}"/></Trigger>
     <Trigger Property="IsSelected" Value="True"><Setter TargetName="TabChrome" Property="Background" Value="{DynamicResource SelectionBrush}"/><Setter Property="Foreground" Value="{DynamicResource SelectionTextBrush}"/><Setter TargetName="SelectionIndicator" Property="Visibility" Value="Visible"/></Trigger>
+    <MultiDataTrigger>
+     <MultiDataTrigger.Conditions>
+      <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="True"/>
+      <Condition Binding="{Binding Tag, RelativeSource={RelativeSource AncestorType=ListBox}}" Value="Tabs"/>
+     </MultiDataTrigger.Conditions>
+     <Setter TargetName="SelectionIndicator" Property="Visibility" Value="Collapsed"/><Setter TargetName="SelectionUnderline" Property="Visibility" Value="Visible"/>
+    </MultiDataTrigger>
     <Trigger Property="IsKeyboardFocusWithin" Value="True"><Setter TargetName="TabChrome" Property="BorderBrush" Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}}"/></Trigger>
    </ControlTemplate.Triggers>
   </ControlTemplate></Setter.Value></Setter>

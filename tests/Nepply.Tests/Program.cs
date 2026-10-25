@@ -1028,6 +1028,9 @@ internal static class Program
             Check($"{edge}/{headerWidth} blank click restores toolbar and clears query",desktopSearchVm.SearchQuery==""
                 && desktopSearchEditor.Visibility==Visibility.Collapsed && editButton.Visibility==Visibility.Visible);
         }
+        var sideSplitter=(System.Windows.Controls.GridSplitter)preview.FindName("ContentSeparator");
+        var sideGrip=(FrameworkElement)sideSplitter.Template.FindName("Grip",sideSplitter);
+        Check("Side section divider grip stays horizontal",sideGrip.ActualWidth>sideGrip.ActualHeight);
         preview.Settings.EdgePosition = EdgePosition.Top; preview.ApplySettings();
         preview.PositionWindow();
         Check("Top layout is wide and shallow", preview.Width > preview.Height * 2 && preview.Height == 320);
@@ -1047,6 +1050,14 @@ internal static class Program
                 && Math.Abs(icons.ActualWidth-host.ColumnDefinitions[column].ActualWidth)<1 && bounds.Left>=-.5 && bounds.Right<=host.ActualWidth+.5);
             Check($"Top {topWidth}/{topHeight}/{iconsFirst} retains usable icon viewport",gridPanel.ViewportHeight>=80 && gridPanel.ColumnCount>=1
                 && VisualTreeHelper.GetChildrenCount(gridPanel)>0);
+            var topScroller=(System.Windows.Controls.ScrollViewer)preview.FindName("MonitorScroller");
+            // 720 DIP is the narrowest horizontal dock Settings allows (TopPanelWidth clamp);
+            // the 520 stress size keeps one card column and may scroll.
+            if(topHeight==320 && topWidth>=720) Check($"Top {topWidth}/{topHeight}/{iconsFirst} monitor cards fit without scrolling ({topScroller.ExtentHeight:F0}/{topScroller.ViewportHeight:F0})",
+                topScroller.ViewportHeight>0 && topScroller.ExtentHeight<=topScroller.ViewportHeight+.5);
+            var splitter=(System.Windows.Controls.GridSplitter)preview.FindName("ContentSeparator");
+            var grip=(FrameworkElement)splitter.Template.FindName("Grip",splitter);
+            Check($"Top {topWidth}/{topHeight}/{iconsFirst} section divider grip is vertical",grip.ActualHeight>grip.ActualWidth);
         }
         preview.Settings.IconsFirst=false; preview.ApplySettings();
         Render((FrameworkElement)preview.Content,1440,320,Path.Combine(output,"nepply-top-actual-grid.png"));
@@ -1070,6 +1081,21 @@ internal static class Program
         var islandSearch=(System.Windows.Controls.Border)preview.FindName("DesktopSearchEditor");
         Check("Island search stays in toolbar row",System.Windows.Controls.Grid.GetRow(islandSearch)==0);
         Check("Island search does not shrink content",Math.Abs(islandContentHeight-islandGrid.ActualHeight)<.5);
+        static int VisibleSearchGlyphs(DependencyObject root)
+        {
+            int count=0;
+            for(int i=0;i<VisualTreeHelper.GetChildrenCount(root);i++)
+            {
+                var child=VisualTreeHelper.GetChild(root,i);
+                if(child is UIElement element && element.Visibility!=Visibility.Visible) continue; // Preview window is not shown.
+                if(child is System.Windows.Controls.TextBlock {Text:""}) count++;
+                count+=VisibleSearchGlyphs(child);
+            }
+            return count;
+        }
+        Check("Open search shows one magnifier: the highlighted header button",
+            VisibleSearchGlyphs((DependencyObject)preview.FindName("PanelHeader"))==1
+            && ((FrameworkElement)preview.FindName("DesktopSearchButton")).Visibility==Visibility.Visible);
         Check("Island search replaces brand without overlapping icon",((System.Windows.Controls.Image)preview.FindName("BrandTitle")).Visibility==Visibility.Hidden);
         Check("Panel brand loads embedded transparent icon",((System.Windows.Controls.Image)preview.FindName("BrandTitle")).Source is BitmapSource {PixelWidth:>0});
         Render((FrameworkElement)preview.Content, 520, 320, Path.Combine(output, "nepply-top-search-narrow.png"));
@@ -1178,8 +1204,19 @@ internal static class Program
         var navigation=(System.Windows.Controls.ListBox)settingsWindow.FindName("SettingsNavigation");
         Render((FrameworkElement)settingsWindow.Content,820,740,Path.Combine(output,"settings-wide-rail.png"));
         Check("Wide settings use a navigation rail",System.Windows.Controls.Grid.GetColumn(navigation)==0 && System.Windows.Controls.Grid.GetRowSpan(navigation)==2);
+        (FrameworkElement Bar,FrameworkElement Underline) SelectedIndicators()
+        {
+            var item=(System.Windows.Controls.ListBoxItem)navigation.ItemContainerGenerator.ContainerFromItem(navigation.SelectedItem);
+            return ((FrameworkElement)item.Template.FindName("SelectionIndicator",item),(FrameworkElement)item.Template.FindName("SelectionUnderline",item));
+        }
+        var railIndicators=SelectedIndicators();
+        Check("Settings rail marks the selected section with a vertical bar",railIndicators.Bar.Visibility==Visibility.Visible
+            && railIndicators.Underline.Visibility==Visibility.Collapsed && railIndicators.Bar.ActualHeight>railIndicators.Bar.ActualWidth);
         Render((FrameworkElement)settingsWindow.Content,620,700,Path.Combine(output,"settings-adaptive-tabs.png"));
         Check("Narrow settings return to compact tabs",System.Windows.Controls.Grid.GetColumn(navigation)==1 && System.Windows.Controls.Grid.GetRowSpan(navigation)==1);
+        var tabIndicators=SelectedIndicators();
+        Check("Settings tabs mark the selected section with an underline, not a vertical bar",tabIndicators.Bar.Visibility==Visibility.Collapsed
+            && tabIndicators.Underline.Visibility==Visibility.Visible && tabIndicators.Underline.ActualWidth>tabIndicators.Underline.ActualHeight);
         var searchFocusWindow=new SettingsWindow(new AppSettings());
         var focusSearchBox=(System.Windows.Controls.TextBox)searchFocusWindow.FindName("SearchSettings");
         var focusResults=(System.Windows.Controls.ListBox)searchFocusWindow.FindName("SearchResults");

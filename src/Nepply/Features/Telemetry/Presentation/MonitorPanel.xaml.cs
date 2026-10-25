@@ -13,6 +13,7 @@ public partial class MonitorPanel : UserControl
     public static readonly DependencyProperty CardHeightProperty = DependencyProperty.Register(nameof(CardHeight), typeof(double), typeof(MonitorPanel), new PropertyMetadata(118d));
     public double CardHeight { get => (double)GetValue(CardHeightProperty); private set => SetValue(CardHeightProperty, value); }
     public static readonly DependencyProperty GpuColumnsProperty = DependencyProperty.Register(nameof(GpuColumns), typeof(int), typeof(MonitorPanel), new PropertyMetadata(1));
+    internal const double CompactCardHeight = 72;
     public int GpuColumns { get => (int)GetValue(GpuColumnsProperty); private set => SetValue(GpuColumnsProperty, value); }
     public MonitorPanel() { InitializeComponent(); _light = new(Widgets); Widgets.SetValue(MetallicSurface.LightScopeProperty, _light); DataContext = _viewModel; SizeChanged += (_, _) => FitCards(); _viewModel.Gpus.CollectionChanged += (_, _) => FitCards(); }
     public void Initialize(Services.Telemetry.IHardwareMonitor service) => _viewModel.Initialize(service);
@@ -50,7 +51,11 @@ public partial class MonitorPanel : UserControl
         SummaryGrid.Columns = _settings.SummaryColumns == 0 ? (ActualWidth >= (compact ? 220 : 300) ? 2 : 1) : _settings.SummaryColumns;
         // Reserve the next GPU cell even when only one device is present.
         GpuColumns = SummaryGrid.Columns;
-        CardHeight = compact ? 110 : 118;
+        // The horizontal dock is about 240 DIP tall: compact cards drop their footnote
+        // (still in the tooltip) and tighten spacing so both rows fit without scrolling.
+        CardHeight = compact ? CompactCardHeight : 118;
+        Widgets.Margin = compact ? new Thickness(12,8,12,6) : new Thickness(18,14,18,14);
+        NetworkCard.Padding = compact ? new Thickness(12,6,12,6) : new Thickness(12,8,12,8);
     }
     private void OpenNativeMenu(object sender, ContextMenuEventArgs e)
     {
