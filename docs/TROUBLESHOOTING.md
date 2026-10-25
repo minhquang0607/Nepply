@@ -67,7 +67,7 @@ Nhật ký ở `%LOCALAPPDATA%\Nepply\Logs`. Không cần xóa log để đặt 
 
 [Tạo issue](https://github.com/minhquang0607/Nepply/issues) với:
 
-- Phiên bản Nepply và Windows; dùng Setup hay portable.
+- Phiên bản Nepply và Windows; dùng Setup hay portable. Nút **Cài đặt → Ứng dụng → Sao chép chẩn đoán** chép sẵn phiên bản, Windows và thông tin cảm biến để dán vào issue (không chứa đường dẫn hay tên tài khoản).
 - Các bước tái hiện, điều bạn mong đợi và kết quả thực tế.
 - Mức độ lặp lại; ảnh/video nếu giúp mô tả lỗi.
 - Độ phân giải/scaling cho lỗi hiển thị, mẫu phần cứng cho lỗi monitor.

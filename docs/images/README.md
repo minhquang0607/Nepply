@@ -1,30 +1,30 @@
 # 🖼️ Image provenance · Nguồn ảnh
 
-Both images were generated together on **17 October 2026** from a fresh Release rebuild. No user screenshot or prior QA image was used.
+Both images were generated together on **24 October 2026** from a fresh Release rebuild. No user screenshot or prior QA image was used.
 
-Hai ảnh được tạo cùng lượt ngày **17/10/2026** từ Release rebuild mới; không dùng ảnh người dùng hoặc kết quả QA cũ.
+Hai ảnh được tạo cùng lượt ngày **24/10/2026** từ Release rebuild mới; không dùng ảnh người dùng hoặc kết quả QA cũ.
 
 ## Source · Nguồn
 
 | Field / Trường | Value / Giá trị |
 | --- | --- |
-| Commit | `15cdbb22f2533762ddccfb0b8cdb1fd7cbf2dd7e` — matched origin/main before build / khớp origin/main trước build |
-| src Git tree | `bdf88f4567228b981dbc3a1cb6fa2ba6b683786c` |
-| ProductVersion | `1.0.0+15cdbb22f2533762ddccfb0b8cdb1fd7cbf2dd7e` |
+| Commit | `ff63ba91eb9a421153933326734f6b4585779757` — branch `chore/release-prep`, clean tree before build / nhánh `chore/release-prep`, cây sạch trước build |
+| src Git tree | `2f7dd41022a8150a2f558c9afe2e977e419b0b7c` |
+| ProductVersion | `1.0.0-beta.1+ff63ba91eb9a421153933326734f6b4585779757` |
 | Build | Release · Windows x64 |
-| Nepply.dll SHA-256 | `6A62E7FADD6045976793D2F8FB94E30F441683DEDC2F6FD861894FE9C69552E0` |
-| UI verification / Kiểm thử | 1789 passed / đạt · 0 failed / lỗi; native collector disabled / tắt collector thật |
+| Nepply.dll SHA-256 | `BEA8B425FB8CB71A51CF5901F6E759A5DB798B7D7D03A5B8ECEFE057BB4F6FCC` |
+| UI verification / Kiểm thử | 1970 passed / đạt · 0 failed / lỗi; native collector disabled / tắt collector thật |
 
 ## Images · Ảnh
 
 | Image | Render | SHA-256 |
 | --- | --- | --- |
-| `panel-1.0.0.png` | MainWindow.Content · 380 × 880 DIP · 96 DPI | `CB08B033D0CFB0ACAC5D633BBA64A99413EBC590742E05339E51AB2DB644E663` |
-| `settings-1.0.0-wide.png` | SettingsWindow.Content · 820 × 740 DIP · 96 DPI | `9FCEB4FC22B96F002BE1D5A2D52E2124AC358E39495EDA80CBBBE41973A3F60C` |
+| `panel-1.0.0.png` | MainWindow.Content · 380 × 880 DIP · 96 DPI | `7F612A9D956760D0A8EA4AACBF72D2A4A0C5061CF107A5E567FB6896F55E30BD` |
+| `settings-1.0.0-wide.png` | SettingsWindow.Content · 820 × 740 DIP · 96 DPI | `6C9C99F0702DFA222E00EEE2E7EA19D2ABA19078C403AC1CA8A0C8A6B867CEDC` |
 
-Dark/Champagne, Vietnamese UI. Real WPF views rendered in an isolated fixture; not screenshots of the user's running desktop. Panel names, icons and telemetry are illustrative. Settings uses vertical navigation at this width. Its PNG matches the previous render byte-for-byte because this view has not changed; it was still regenerated in this run.
+Dark/Champagne, Vietnamese UI. Real WPF views rendered in an isolated fixture; not screenshots of the user's running desktop. Panel names, icons and telemetry are illustrative. Settings uses vertical navigation at this width and shows the Shortcuts section, translated buttons and no explanatory captions.
 
-Giao diện tối/Champagne, tiếng Việt. View WPF thật được render trong fixture cô lập, không phải screenshot Desktop người dùng. Tên mục, icon và số đo panel là minh họa. Settings dùng menu dọc ở kích thước này. PNG Settings giống từng byte với lượt trước vì view chưa thay đổi; ảnh vẫn được tạo lại trong lượt này.
+Giao diện tối/Champagne, tiếng Việt. View WPF thật được render trong fixture cô lập, không phải screenshot Desktop người dùng. Tên mục, icon và số đo panel là minh họa. Settings dùng menu dọc ở kích thước này, có mục Phím tắt, nút đã Việt hóa và không còn dòng giải thích.
 
 ## Reproduce · Tái tạo
 

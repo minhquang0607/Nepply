@@ -548,9 +548,9 @@ public partial class SettingsWindow : Window
     }
     private void Cancel_Click(object sender, RoutedEventArgs e) => DialogResult = false;
     internal void ShowExitGuidance() => SetError(UserMessage.FromKey("SettingsExitGuidance"));
-    private void Diagnostics_Click(object sender, RoutedEventArgs e)
+    /// <summary>The shareable sensor report (no paths, account names or raw logs) for the snapshot taken when Settings opened.</summary>
+    internal string BuildDiagnosticReport()
     {
-#if DEBUG
         string privilege="PrivilegeUnknown", driver="DriverUnknown";
         try
         {
@@ -560,8 +560,27 @@ public partial class SettingsWindow : Window
             driver=driverKey==null ? "DriverAbsent" : "DriverRegistered";
         }
         catch(Exception ex) when(ex is System.Security.SecurityException or UnauthorizedAccessException) { }
-        long capturedAt=System.Diagnostics.Stopwatch.GetTimestamp();
-        new SensorDiagnosticsWindow(()=>Services.Telemetry.SensorDiagnosticReport.Build(_diagnosticSnapshot,privilege,driver,capturedAt)) {Owner=this}.ShowDialog();
+        return Services.Telemetry.SensorDiagnosticReport.Build(_diagnosticSnapshot,privilege,driver,System.Diagnostics.Stopwatch.GetTimestamp());
+    }
+    // Replaceable so tests never touch the shared system clipboard.
+    internal Action<string> CopyText { get; set; } = Clipboard.SetText;
+    private void CopyDiagnostics_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            CopyText(BuildDiagnosticReport());
+            InfoStatus.SetResourceReference(TextBlock.TextProperty,"Loc.DiagnosticsCopied");
+        }
+        catch(Exception ex) when(ex is System.Runtime.InteropServices.COMException or System.Runtime.InteropServices.ExternalException)
+        {
+            Services.AppLogger.Error(ex,"Copy diagnostics");
+            InfoStatus.SetResourceReference(TextBlock.TextProperty,"Loc.DiagnosticsClipboardBusy");
+        }
+    }
+    private void Diagnostics_Click(object sender, RoutedEventArgs e)
+    {
+#if DEBUG
+        new SensorDiagnosticsWindow(BuildDiagnosticReport) {Owner=this}.ShowDialog();
 #endif
     }
     internal static string? FindLocalDocument(string fileName, string? baseDirectory = null)

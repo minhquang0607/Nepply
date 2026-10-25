@@ -26,6 +26,8 @@ Extract the complete portable archive and run `Nepply.exe`; keep `guardian` and 
 - Desktop search, launch and Windows context menus.
 - Columns × rows grid and screen-relative panel dimensions.
 - Light/dark themes, neon/metallic effects and Settings preview; Apply or OK to save.
+- Rebindable shortcuts in Settings → Shortcuts, including optional global keys to open search, hide/show desktop icons, pin the panel and open settings.
+- An in-app Guide (tray or Settings) with your current shortcuts and usage tips; Settings itself shows feature names only.
 - CPU, RAM, GPU/iGPU and upload/download monitoring.
 - Suppressed automatic edge activation when games hide the pointer for character control.
 - Eight interface languages and an update window with release notes.
@@ -40,7 +42,7 @@ Extract the complete portable archive and run `Nepply.exe`; keep `guardian` and 
 
 [User guide](https://github.com/minhquang0607/Nepply/blob/main/docs/USER_GUIDE.en.md) · [Troubleshooting](https://github.com/minhquang0607/Nepply/blob/main/docs/TROUBLESHOOTING.en.md) · [Report an issue](https://github.com/minhquang0607/Nepply/issues)
 
-Include Windows/Nepply versions and reproduction steps. Redact paths, account names and personal data in screenshots or logs.
+Include Windows/Nepply versions and reproduction steps; **Settings → Application → Copy diagnostics** copies the version, Windows and sensor details for you. Redact paths, account names and personal data in screenshots or logs.
 
 ## Tiếng Việt
 
@@ -67,7 +69,9 @@ Với portable, giải nén **toàn bộ** và chạy `Nepply.exe`; không tách
 - Mở panel từ cạnh màn hình hoặc Ctrl + Space; ghim khi cần.
 - Tìm và mở mục Desktop, dùng menu chuột phải của Windows.
 - Chỉnh lưới cột × hàng, bố cục và kích thước theo màn hình.
-- Giao diện sáng/tối, neon và ánh kim; xem trước cài đặt, Apply hoặc OK để lưu.
+- Giao diện sáng/tối, neon và ánh kim; xem trước cài đặt, Áp dụng hoặc OK để lưu.
+- Đổi được mọi phím tắt trong Cài đặt → Phím tắt, kèm phím toàn cục tùy chọn để mở tìm kiếm, ẩn/hiện icon Desktop, ghim panel và mở Cài đặt.
+- Màn **Hướng dẫn** trong app (từ khay hoặc Cài đặt) liệt kê phím tắt bạn đang dùng và mẹo sử dụng; Cài đặt chỉ hiện tên chức năng.
 - Theo dõi CPU, RAM, GPU/iGPU và tốc độ tải xuống/tải lên.
 - Hạn chế tự mở panel khi game ẩn con trỏ để điều khiển nhân vật.
 - Tám ngôn ngữ và cửa sổ kiểm tra cập nhật có ghi chú phiên bản.
@@ -82,4 +86,4 @@ Với portable, giải nén **toàn bộ** và chạy `Nepply.exe`; không tách
 
 [Hướng dẫn sử dụng](https://github.com/minhquang0607/Nepply/blob/main/docs/USER_GUIDE.md) · [Xử lý sự cố](https://github.com/minhquang0607/Nepply/blob/main/docs/TROUBLESHOOTING.md) · [Báo lỗi](https://github.com/minhquang0607/Nepply/issues)
 
-Khi báo lỗi, gửi phiên bản Windows/Nepply và các bước tái hiện; che đường dẫn, tên tài khoản và dữ liệu cá nhân trong ảnh hoặc log.
+Khi báo lỗi, gửi phiên bản Windows/Nepply và các bước tái hiện; nút **Cài đặt → Ứng dụng → Sao chép chẩn đoán** chép sẵn phiên bản, Windows và thông tin cảm biến. Che đường dẫn, tên tài khoản và dữ liệu cá nhân trong ảnh hoặc log.

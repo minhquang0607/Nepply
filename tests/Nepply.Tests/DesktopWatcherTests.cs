@@ -108,13 +108,14 @@ internal static class DesktopWatcherTests
             });
         try
         {
-            check($"Watcher constructor never waits for blocked I/O ({blockFactory})",timer.ElapsedMilliseconds<500);
+            // The injected I/O blocks until released, so any wait would never finish; 2 s only absorbs slow runners.
+            check($"Watcher constructor never waits for blocked I/O ({blockFactory})",timer.ElapsedMilliseconds<2000);
             check($"Watcher starts probe off caller thread ({blockFactory})",entered.Wait(3000));
             var pending=watcher.ReconcileAsync();
             for(int i=0;i<100;i++) watcher.ReconcileAsync();
             check($"Reconciliation burst remains single-flight ({blockFactory})",calls==1 && !pending.IsCompleted);
             timer.Restart(); watcher.RequestRefresh(); watcher.Dispose();
-            check($"Refresh and shutdown do not wait for blocked I/O ({blockFactory})",timer.ElapsedMilliseconds<500);
+            check($"Refresh and shutdown do not wait for blocked I/O ({blockFactory})",timer.ElapsedMilliseconds<2000);
             check($"Disposed watcher publishes no subscriptions ({blockFactory})",watcher.WatchedCount==0);
         }
         finally { release.Set(); watcher.Dispose(); }

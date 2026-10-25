@@ -31,6 +31,9 @@ Consolidated **17 October 2026**. This is a summary of development changes, not 
 - GPU/iGPU classification uses system information; unavailable sensors may show no reading.
 - After the panel hides, the sensor helper is kept for 60 seconds (without reading), so reopening shows readings right away instead of restarting it; turning off monitoring or sensors still stops it immediately.
 - An overly long GPU, monitor or network identifier in the settings file falls back to automatic selection instead of leaving sensors stuck reconnecting.
+- A missing temperature shows a muted dash that explains why on hover.
+- **Copy diagnostics** (Settings → Application) copies the version, Windows and sensor details for bug reports, without paths or account names.
+- The Desktop icon guardian process has a clear name in Task Manager.
 
 ### Updates & recovery
 

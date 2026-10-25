@@ -4,6 +4,8 @@ internal static class DesktopGuardianConnectionTests
 {
     internal static async Task Run(string executable,Action<string,bool> check)
     {
+        var info=System.Diagnostics.FileVersionInfo.GetVersionInfo(executable);
+        check("Guardian names its job in Task Manager",info.FileDescription=="Nepply Desktop icon guardian" && info.ProductName=="Nepply");
         var connection=await DesktopGuardianConnection.StartAsync(executable);
         try
         {

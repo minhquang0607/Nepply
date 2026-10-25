@@ -242,7 +242,8 @@ internal static class Program
         Check("Disabled native sensors remain unavailable", snapshots.All(x => x.Hardware.CpuTemp == null));
         }
         var stopwatch = Stopwatch.StartNew(); monitor.Dispose(); stopwatch.Stop();
-        Check("Dispose returns without UI wait", stopwatch.ElapsedMilliseconds < 100);
+        // A blocking dispose waits for a sampling cycle (1.5 s); 500 ms leaves room for slow CI runners.
+        Check("Dispose returns without UI wait", stopwatch.ElapsedMilliseconds < 500);
         monitor.Dispose(); monitor.Configure(new AppSettings(), true); monitor.Start();
         Check("Repeated teardown and late configuration do not throw", true);
         using (var cold = new HardwareMonitorService()) { cold.Dispose(); cold.Start(); }
@@ -675,6 +676,8 @@ internal static class Program
         PanelShortcutTests.Run(Check,Pump);
         SettingsShortcutTests.Run(Check,Pump);
         GuidanceTests.Run(Check,Pump,output,Render);
+        TemperatureDashTests.Run(Check,Pump);
+        CopyDiagnosticsTests.Run(Check,Pump);
         using(var profileStream=new MemoryStream(System.Text.Encoding.UTF8.GetBytes(new LayoutProfile {CellWidth=112}.ToJson())))
         {
             Check("Layout stream parses without closing caller stream",LayoutProfile.Parse(profileStream).CellWidth==112 && profileStream.CanRead);

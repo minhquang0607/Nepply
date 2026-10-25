@@ -8,10 +8,17 @@
   <Viewbox Grid.Row="1" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" VerticalAlignment="Center" MaxHeight="38">
    <StackPanel Orientation="Horizontal">
     <TextBlock Text="{Binding ValueText, ElementName=Root}" Style="{StaticResource MetricValue}" FontSize="34"/>
-    <TextBlock Text="{Binding SecondaryText, ElementName=Root}" FontSize="17" FontWeight="SemiBold" Foreground="{DynamicResource AccentBrush}" VerticalAlignment="Bottom" ToolTip="{DynamicResource Loc.Temperature}">
+    <TextBlock x:Name="SecondaryValue" Text="{Binding SecondaryText, ElementName=Root}" FontSize="17" FontWeight="SemiBold" VerticalAlignment="Bottom">
      <TextBlock.Style><Style TargetType="TextBlock" BasedOn="{StaticResource NumericText}">
       <Setter Property="Margin" Value="10,0,0,3"/>
-      <Style.Triggers><DataTrigger Binding="{Binding SecondaryText, ElementName=Root}" Value=""><Setter Property="Visibility" Value="Collapsed"/></DataTrigger></Style.Triggers>
+      <Setter Property="Foreground" Value="{DynamicResource AccentBrush}"/><Setter Property="ToolTip" Value="{DynamicResource Loc.Temperature}"/>
+      <Style.Triggers>
+       <DataTrigger Binding="{Binding SecondaryText, ElementName=Root}" Value=""><Setter Property="Visibility" Value="Collapsed"/></DataTrigger>
+       <!-- No reading: a muted dash that says why on hover, so it never reads as a value. -->
+       <DataTrigger Binding="{Binding SecondaryText, ElementName=Root}" Value="—">
+        <Setter Property="Foreground" Value="{DynamicResource MutedBrush}"/><Setter Property="ToolTip" Value="{DynamicResource Loc.TemperatureUnavailable}"/>
+       </DataTrigger>
+      </Style.Triggers>
      </Style></TextBlock.Style>
     </TextBlock>
    </StackPanel>

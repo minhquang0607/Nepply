@@ -14,7 +14,7 @@ Nepply sits at the edge of your Windows screen. Open Desktop items, search by na
 
 | | What you can do |
 | --- | --- |
-| 🖱️ Quick access | Open from your chosen screen edge or a hotkey; pin the panel when needed. |
+| 🖱️ Quick access | Open from your chosen screen edge or a hotkey; pin the panel when needed. Every shortcut can be changed. |
 | 🔎 Desktop search | Find and launch items, with the Windows context menu. Your files stay where they are. |
 | 🎨 Make it yours | Light/dark/system theme, colors, neon and metallic effects, with live preview before saving. |
 | 📐 Flexible layout | Choose columns × rows with the dot grid; scroll through additional items. |
@@ -53,7 +53,7 @@ Only use the official release channel. If Windows blocks a file, check its sourc
 ## 🚀 Get started
 
 1. Open Nepply and choose a screen edge.
-2. Move to that edge, or press **Ctrl + Space** unless you changed the hotkey.
+2. Move to that edge, or press **Ctrl + Space** unless you changed it in Settings → Shortcuts.
 3. Open a Desktop item or search by name.
 4. Try changes in Settings: **Apply** saves and stays open; **OK** saves and closes; **Cancel** discards changes since the last save.
 5. To quit completely, choose **Exit** from the tray icon.

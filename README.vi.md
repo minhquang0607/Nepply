@@ -14,7 +14,7 @@ Nepply nằm ở cạnh màn hình Windows. Mở mục Desktop, tìm theo tên v
 
 | | Bạn có thể làm gì? |
 | --- | --- |
-| 🖱️ Mở nhanh | Mở từ cạnh màn hình hoặc phím tắt; ghim panel khi cần giữ mở. |
+| 🖱️ Mở nhanh | Mở từ cạnh màn hình hoặc phím tắt; ghim panel khi cần giữ mở. Đổi được mọi phím tắt. |
 | 🔎 Tìm trên Desktop | Tìm và mở mục, dùng menu chuột phải Windows. File vẫn ở vị trí cũ. |
 | 🎨 Cá nhân hóa | Sáng/tối/theo hệ thống, bảng màu, neon và ánh kim; xem trước trước khi lưu. |
 | 📐 Bố cục linh hoạt | Chọn cột × hàng bằng lưới chấm tròn; cuộn để xem các mục còn lại. |
@@ -53,7 +53,7 @@ Chỉ tải từ kênh phát hành chính thức. Nếu Windows chặn file, ki�
 ## 🚀 Bắt đầu
 
 1. Mở Nepply và chọn cạnh màn hình.
-2. Đưa chuột tới cạnh đó hoặc nhấn **Ctrl + Space** nếu chưa đổi phím tắt.
+2. Đưa chuột tới cạnh đó hoặc nhấn **Ctrl + Space** nếu chưa đổi trong Cài đặt → Phím tắt.
 3. Mở một mục Desktop hoặc tìm theo tên.
 4. Thử thay đổi trong Cài đặt: **Áp dụng** lưu và giữ mở; **OK** lưu rồi đóng; **Hủy** bỏ phần thay đổi kể từ lần lưu gần nhất.
 5. Muốn thoát hẳn, chọn **Thoát** ở biểu tượng khay hệ thống.
