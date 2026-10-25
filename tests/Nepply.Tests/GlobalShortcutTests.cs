@@ -75,5 +75,24 @@ internal static class GlobalShortcutTests
                 ((FrameworkElement)icons2.FindName("LaunchNotice")).Visibility == Visibility.Collapsed);
         }
         finally { main.Cleanup(); main.Close(); }
+        ClosedPanelTimers(check, pump);
+    }
+
+    // CI regression: closing a shown panel raised Deactivated after Cleanup, which restarted the
+    // auto-hide timer; its tick then mapped screen points on a closed window and crashed.
+    private static void ClosedPanelTimers(Action<string,bool> check, Action<int> pump)
+    {
+        var icons = new DesktopIconService(_ => Task.FromResult(new List<DesktopIcon>()));
+        var main = new MainWindow(preview: true, icons: icons) { ShowInTaskbar = false, Left = -10000, Top = -10000 };
+        main.Show(); main.ShowPanel(); pump(20);
+        main.Cleanup(); main.Close(); pump(20);
+        var flags = System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic;
+        typeof(MainWindow).GetMethod("ScheduleHide", flags)!.Invoke(main, null);
+        var timer = (System.Windows.Threading.DispatcherTimer)typeof(MainWindow).GetField("_hideTimer", flags)!.GetValue(main)!;
+        check("A closed panel never restarts its auto-hide timer", !timer.IsEnabled);
+        bool threw = false;
+        try { typeof(MainWindow).GetMethod("HideTick", flags)!.Invoke(main, [timer, EventArgs.Empty]); }
+        catch (System.Reflection.TargetInvocationException) { threw = true; }
+        check("An auto-hide tick after closing is ignored instead of crashing", !threw && !timer.IsEnabled);
     }
 }
