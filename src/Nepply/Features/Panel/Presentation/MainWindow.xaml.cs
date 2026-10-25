@@ -443,10 +443,11 @@ public partial class MainWindow : Window
     }
     public void HidePanel() { if (_suppress == 0) { _keyboardInteraction=false; _edgeGate.Disarm(); _pinned = false; UpdateActionLabels(); _animation.Hide(); } }
     public void HidePanelInstantly() => _animation.HideInstantly();
-    private void ScheduleHide() { if (_animation.IsVisible && !_pinned && _suppress == 0 && !KeyboardInteractionActive) { _hideTimer.Stop(); _hideTimer.Start(); } }
+    // Closing the window raises Deactivated after Cleanup; never restart the timer then.
+    private void ScheduleHide() { if (!_cleaned && _animation.IsVisible && !_pinned && _suppress == 0 && !KeyboardInteractionActive) { _hideTimer.Stop(); _hideTimer.Start(); } }
     private void HideTick(object? sender, EventArgs e)
     {
-        if (!_animation.IsVisible) { _hideTimer.Stop(); return; }
+        if (_cleaned || !_animation.IsVisible || PresentationSource.FromVisual(this) == null) { _hideTimer.Stop(); return; }
         // A failed cursor read is not evidence that the user left the panel.
         if (!GetCursorPos(out var point)) { _hideTimer.Stop(); return; }
         // Transparent/rounded edges and moving visuals can report MouseLeave while
@@ -520,7 +521,8 @@ public partial class MainWindow : Window
     }
     private bool PointerInsidePanel(int screenX,int screenY)
     {
-        if (!_animation.IsVisible) return false;
+        // A closed or not-yet-shown window has no screen mapping.
+        if (!_animation.IsVisible || PresentationSource.FromVisual(this) == null) return false;
         var local = PointFromScreen(new Point(screenX, screenY));
         // The 12-DIP floating gap is a transit corridor, not a mouse leave.
         double left=_settings.EdgePosition==EdgePosition.Left ? -16 : -4;
