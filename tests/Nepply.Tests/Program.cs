@@ -29,6 +29,9 @@ internal static class Program
     [STAThread]
     public static int Main(string[] args)
     {
+        // New settings follow the Windows display language. Fixtures were authored against
+        // the Vietnamese UI, so pin it: CI hosts and contributors' machines must agree.
+        System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = System.Globalization.CultureInfo.CurrentUICulture = new("vi-VN");
         string output = Path.GetFullPath(args.FirstOrDefault() ?? "artifacts/qa");
         Directory.CreateDirectory(output);
         if (args.Contains("--update-ui-only"))

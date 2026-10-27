@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.Json;
 using System.Windows;
 
@@ -15,6 +16,16 @@ public static class LocalizationService
     public static string CurrentLanguage => Languages[_index].Id;
     internal static event Action? Changed;
     public static bool IsSupported(string? language)=>Languages.Any(l=>l.Id==language);
+    /// <summary>First-run language: the Windows display language when Nepply has it, otherwise English.</summary>
+    public static string SystemDefault => DefaultFor(CultureInfo.CurrentUICulture);
+    internal static string DefaultFor(CultureInfo culture)
+    {
+        // Only Simplified Chinese is translated; Traditional Chinese readers get English.
+        for(var current=culture;!string.IsNullOrEmpty(current.Name);current=current.Parent)
+            if(current.Name is "zh-Hant" or "zh-TW" or "zh-HK" or "zh-MO") return "en";
+        string language=culture.TwoLetterISOLanguageName;
+        return IsSupported(language) ? language : "en";
+    }
     private static Dictionary<string,string[]> Load()
     {
         using var stream=typeof(LocalizationService).Assembly.GetManifestResourceStream("Nepply.Resources.Strings.json")

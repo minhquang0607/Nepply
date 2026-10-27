@@ -22,6 +22,8 @@
     </Border>
     <!-- First-run choices; hidden when the window is reopened as the guide. -->
     <StackPanel x:Name="SetupArea" Margin="0,0,0,20">
+     <TextBlock Text="{DynamicResource Loc.Language}" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,10"/>
+     <ComboBox x:Name="LanguageChoice" DisplayMemberPath="Name" SelectedValuePath="Id" Margin="0,0,0,18" AutomationProperties.Name="{DynamicResource Loc.Language}" SelectionChanged="LanguageChoice_SelectionChanged"/>
      <TextBlock Text="{DynamicResource Loc.WelcomePosition}" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,10"/>
      <ComboBox x:Name="EdgeChoice" AutomationProperties.Name="{DynamicResource Loc.WelcomePosition}"/>
      <CheckBox x:Name="HideIcons" Margin="0,18,0,6"><TextBlock Text="{DynamicResource Loc.WelcomeHideIcons}" TextWrapping="Wrap"/></CheckBox>

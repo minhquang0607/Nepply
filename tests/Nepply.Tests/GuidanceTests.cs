@@ -47,7 +47,18 @@ internal static class GuidanceTests
         check("First-run welcome still asks for dock side and Desktop icons",
             ((FrameworkElement)firstRun.FindName("SetupArea")).Visibility == Visibility.Visible
             && Equals(((Button)firstRun.FindName("StartButton")).Content, LocalizationService.Get("WelcomeStart")));
+        var languageChoice = (ComboBox)firstRun.FindName("LanguageChoice");
+        string before = LocalizationService.CurrentLanguage;
+        check("First-run welcome offers every language with the current one selected",
+            languageChoice.Items.Count == LocalizationService.Languages.Count && (string)languageChoice.SelectedValue == firstRun.SelectedLanguage);
+        string other = before == "en" ? "ja" : "en";
+        languageChoice.SelectedValue = other; pump(20);
+        check("Welcome language choice previews immediately",
+            LocalizationService.CurrentLanguage == other && firstRun.SelectedLanguage == other
+            && Equals(((Button)firstRun.FindName("StartButton")).Content, LocalizationService.Get("WelcomeStart")));
         firstRun.Close();
+        check("Closing the welcome without starting restores the saved language", LocalizationService.CurrentLanguage == new AppSettings().Language);
+        LocalizationService.Apply(before);
         var guide = new WelcomeWindow(settings, guideOnly: true);
         check("Reopened guide hides first-run choices and closes instead of starting",
             guide.IsGuide && ((FrameworkElement)guide.FindName("SetupArea")).Visibility == Visibility.Collapsed
