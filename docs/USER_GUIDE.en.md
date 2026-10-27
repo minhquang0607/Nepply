@@ -6,6 +6,8 @@ For **Nepply 1.0.0-beta.1**, the first public beta (unsigned), currently in prep
 
 ## 🖱️ Open and close the panel
 
+On first run the welcome screen uses your Windows language; pick another there or later in **Settings → Appearance**.
+
 Move to your selected screen edge, or press **Ctrl + Space** unless you changed the hotkey.
 
 - Pin the panel to keep it open, including while you type in another app.
@@ -81,7 +83,7 @@ Enable startup in Settings and choose Apply or OK. Windows may manage or disable
 
 Open **Settings → Application → Check for updates**. A suitable release shows its version and notes so you can update or defer. There is no scheduled background update check.
 
-**Current limit:** automatic EXE installation is not enabled for public release until signing configuration and acceptance testing are complete. Portable cannot replace its own files. Internal builds are not an official update channel; check [Releases](https://github.com/minhquang0607/Nepply/releases) when downloads are published.
+**Current limit:** automatic EXE installation is not enabled for public release until signing configuration and acceptance testing are complete. Portable cannot replace its own files. In those cases the update window offers **Open download page**, linking to the official release so you can download the new installer yourself. Internal builds are not an official update channel; check [Releases](https://github.com/minhquang0607/Nepply/releases) when downloads are published.
 
 ## 🗑️ Uninstall and data
 

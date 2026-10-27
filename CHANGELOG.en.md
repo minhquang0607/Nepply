@@ -21,6 +21,7 @@ Consolidated **17 October 2026**. This is a summary of development changes, not 
 - Light, dark and system themes; colors, neon and mouse-interactive metallic effects.
 - Preview before saving: Apply saves, OK saves/closes, Cancel discards unsaved changes.
 - Vietnamese, English, Japanese, German, Simplified Chinese, Russian, French and Thai.
+- The first run uses your Windows display language (English when Nepply lacks it), and the welcome screen lets you pick another. Existing settings keep their language; Reset does not change it.
 - A **Shortcuts** section in Settings: every key is rebindable (show/hide, search, refresh…), with new global shortcuts to open the panel and search, hide/show desktop icons, pin the panel and open settings (unset by default).
 - Settings, the tray menu and layout editing show feature names only; usage tips moved to a **Guide** you can reopen from the tray or Settings.
 - The icon size (small, medium, large) stored in settings or an imported layout is now applied; medium remains the default.
@@ -38,6 +39,7 @@ Consolidated **17 October 2026**. This is a summary of development changes, not 
 ### Updates & recovery
 
 - Update window with version, notes, progress and retry states.
+- When this build cannot install an update itself (portable or not yet signed), the update window offers **Open download page**, linking to the official GitHub release.
 - Desktop icon recovery after abnormal termination, subject to helper/Explorer availability.
 
 ### Current limits
