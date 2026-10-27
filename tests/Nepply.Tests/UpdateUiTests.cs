@@ -26,12 +26,14 @@ internal static class UpdateUiTests
             check("Updater UI displays release version", window.StatusText.Contains("v99.0.0"));
             check("Updater UI renders notes literally", window.ReleaseNotes.Contains("<script>"));
             check("Updater UI does not enable unconfigured installation", !window.CanInstall);
+            check("Updater without self-install offers the release page instead of a dead button",
+                window.CanOpenRelease && ((Button)window.FindName("_install")).Visibility == Visibility.Collapsed);
             check("Updater has branded window icon", window.Icon != null);
             Capture(window, output, "update-preview.png");
             window.Width = 440; window.Height = 420; pump(100);
-            var install = (Button)window.FindName("_install");
-            var position = install.TransformToAncestor(window).Transform(new Point(0, 0));
-            check("Updater actions stay inside compact window", position.Y >= 0 && position.Y + install.ActualHeight <= window.ActualHeight && position.X + install.ActualWidth <= window.ActualWidth);
+            var action = (Button)window.FindName("OpenReleaseButton");
+            var position = action.TransformToAncestor(window).Transform(new Point(0, 0));
+            check("Updater actions stay inside compact window", action.ActualWidth > 0 && position.Y >= 0 && position.Y + action.ActualHeight <= window.ActualHeight && position.X + action.ActualWidth <= window.ActualWidth);
             Capture(window, output, "update-compact.png");
             ((FrameworkElement)window.FindName("ProgressSection")).Visibility = Visibility.Visible;
             window.PresentDownloadProgress(43); pump(50);
@@ -53,7 +55,7 @@ internal static class UpdateUiTests
         finished.Show(); pump(100); finished.Close();
         check("Updater UI releases an idle service on close", idle.Disposed);
         var error = new UpdateWindow(new UpdateService(new Handler([], status: HttpStatusCode.ServiceUnavailable)));
-        try { error.Show(); pump(100); check("Updater error offers retry without install", error.CanRetry && !error.CanInstall); Capture(error, output, "update-error.png"); }
+        try { error.Show(); pump(100); check("Updater error offers retry without install", error.CanRetry && !error.CanInstall && !error.CanOpenRelease); Capture(error, output, "update-error.png"); }
         finally { error.Close(); }
         var empty = new UpdateWindow(new UpdateService(new Handler("[]"u8.ToArray())));
         try { empty.Show(); pump(100); check("Updater no-release state hides update action", ((Button)empty.FindName("_install")).Visibility == Visibility.Collapsed); Capture(empty, output, "update-empty.png"); }
