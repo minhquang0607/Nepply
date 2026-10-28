@@ -14,6 +14,8 @@ jobs:
         with:
           global-json-file: global.json
       - run: dotnet restore Nepply.slnx --locked-mode
+      - name: Code layout matches .editorconfig
+        run: dotnet format whitespace Nepply.slnx --verify-no-changes
       - run: ./scripts/Test-BuildBoundary.ps1
       - run: ./scripts/Test-PublicSource.ps1
       - run: ./scripts/Test-LanguageResources.ps1
