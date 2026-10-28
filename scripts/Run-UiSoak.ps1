@@ -17,9 +17,9 @@ New-Item -ItemType Directory -Path $runRoot -ErrorAction Stop | Out-Null
 $start=[DateTimeOffset]::Now
 $metadata=[ordered]@{Started=$start.ToString('o');RequestedMinutes=$Minutes;Profile='normal';RunnerPid=$PID;Binaries=$hashes;Output=$runRoot}
 $metadata | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath (Join-Path $runRoot 'run-start.json') -Encoding utf8
-Write-Host "Kết quả: $runRoot"
-Write-Host 'Giữ terminal và máy hoạt động đến khi xong. Không build đè binary đang đo. Không cần giữ cuộc hội thoại chạy.'
-Write-Host 'Bài này dùng 500 mục giả và Windows metrics, luân phiên hiện/ẩn ngoài màn hình; không nghiệm thu native sensor hoặc Shell.'
+Write-Host "Results: $runRoot"
+Write-Host 'Keep the terminal and machine running until it finishes. Do not rebuild the binary under test.'
+Write-Host 'Uses 500 fixture items and Windows metrics, alternating show/hide off screen; does not accept native sensors or Shell.'
 $exitCode=$null
 $failure=$null
 $accepted=$false
@@ -30,7 +30,7 @@ try {
         Tee-Object -FilePath (Join-Path $runRoot 'console.log')
     $exitCode=$LASTEXITCODE
     $summaryPath=Join-Path $runRoot 'ui-soak-summary.json'
-    if(!(Test-Path -LiteralPath $summaryPath)) {throw 'Không có summary; lượt đo chưa hoàn tất.'}
+    if(!(Test-Path -LiteralPath $summaryPath)) {throw 'No summary; the run did not complete.'}
     $summary=Get-Content -LiteralPath $summaryPath -Raw | ConvertFrom-Json
     $unchanged=$true
     foreach($binary in $hashes) {
@@ -38,14 +38,14 @@ try {
     }
     $accepted=$exitCode -eq 0 -and $summary.Completed -eq $true -and $summary.LoopsStopped -eq $true -and
         $summary.RequestedMinutes -eq $Minutes -and $summary.Seconds -ge 60*$Minutes -and $unchanged
-    if(!$accepted) {throw 'Lượt đo không đạt điều kiện hoàn tất hoặc binary đã đổi; xem summary.'}
+    if(!$accepted) {throw 'The run did not meet completion conditions or the binary changed; see the summary.'}
 }
 catch {$failure=$_.Exception.ToString();Write-Warning $failure}
 finally {
     [ordered]@{Started=$start.ToString('o');Ended=[DateTimeOffset]::Now.ToString('o');ExitCode=$exitCode;
-        RunCompleted=$accepted;Error=$failure;Note='RunCompleted chỉ xác nhận thời lượng và teardown, không tự kết luận không leak.'} |
+        RunCompleted=$accepted;Error=$failure;Note='RunCompleted confirms duration and teardown only; it does not prove the absence of leaks.'} |
         ConvertTo-Json -Depth 5 | Set-Content -LiteralPath (Join-Path $runRoot 'run-result.json') -Encoding utf8
 }
 if(!$accepted) {exit 1}
-Write-Host 'Đã chạy đủ thời lượng. Tiếp tục phân tích JSONL về CPU/RAM/handle; chưa tự kết luận nghiệm thu toàn app.'
+Write-Host 'Ran for the full duration. Analyze the JSONL for CPU/RAM/handles next; this is not whole-app acceptance.'
 exit 0

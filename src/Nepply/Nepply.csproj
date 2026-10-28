@@ -21,7 +21,7 @@
     <InformationalVersion>1.0.0-beta.1</InformationalVersion>
     <Product>Nepply</Product>
     <Title>Nepply</Title>
-    <Description>Panel nổi cho Desktop Windows · Minh Quang</Description>
+    <Description>Screen-edge panel for Windows Desktop items and system stats</Description>
     <Authors>Minh Quang</Authors>
     <Company>Minh Quang</Company>
     <DefaultItemExcludes>$(DefaultItemExcludes);SensorDumper\**;Tests\**;Research\**;thư viện cho AETHER\**;artifacts\**;publish\**</DefaultItemExcludes>
