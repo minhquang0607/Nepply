@@ -4,6 +4,16 @@
 
 For building and contributing. To use the app, start with the [user guide](docs/USER_GUIDE.en.md). Nepply-owned code uses [MIT](LICENSE); dependencies retain their own licenses.
 
+## Quick start
+
+```powershell
+dotnet restore Nepply.slnx --locked-mode
+dotnet build Nepply.slnx -c Release --no-restore
+dotnet run --project tests/Nepply.Tests/Nepply.Tests.csproj -c Release --no-build -- artifacts/current/core --core-only
+```
+
+Before committing C# changes, run `dotnet format whitespace Nepply.slnx`; CI rejects code that does not match `.editorconfig`. To keep `git blame` useful, run `git config blame.ignoreRevsFile .git-blame-ignore-revs` once.
+
 ## Start here
 
 Use Windows x64 and the .NET SDK pinned in `global.json`. Open `Nepply.slnx`. Consult the [source structure](docs/architecture/STRUCTURE.md) and [module boundaries](docs/architecture/MODULES.md); these detailed architecture references are currently in Vietnamese.

@@ -65,7 +65,9 @@ Nhật ký ở `%LOCALAPPDATA%\Nepply\Logs`. Không cần xóa log để đặt 
 
 ## Báo lỗi hữu ích và an toàn
 
-[Tạo issue](https://github.com/minhquang0607/Nepply/issues) với:
+Cách nhanh nhất: **Cài đặt → Ứng dụng → Báo lỗi**. Nepply chép chẩn đoán vào clipboard và mở form báo lỗi đã điền sẵn phiên bản Nepply và Windows; dán chẩn đoán vào mục **Chẩn đoán** sau khi xem lại.
+
+Hoặc [tạo issue](https://github.com/minhquang0607/Nepply/issues) với:
 
 - Phiên bản Nepply và Windows; dùng Setup hay portable. Nút **Cài đặt → Ứng dụng → Sao chép chẩn đoán** chép sẵn phiên bản, Windows và thông tin cảm biến để dán vào issue (không chứa đường dẫn hay tên tài khoản).
 - Các bước tái hiện, điều bạn mong đợi và kết quả thực tế.

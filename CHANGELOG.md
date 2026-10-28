@@ -40,6 +40,9 @@ Bản tổng hợp ngày **17/10/2026**, gom các thay đổi trong giai đoạn
 
 - Cửa sổ kiểm tra cập nhật hiển thị phiên bản, nội dung mới, tiến độ và lựa chọn thử lại khi gặp lỗi.
 - Khi bản đang dùng chưa tự cài được cập nhật (portable hoặc chưa ký số), cửa sổ cập nhật có nút **Mở trang tải** tới trang phát hành chính thức trên GitHub.
+- Ghi chú phát hành trong cửa sổ cập nhật hiển thị dạng văn bản gọn thay vì ký hiệu Markdown thô.
+- Bộ cài theo ngôn ngữ của Windows: Anh, Nhật, Đức, Trung giản thể, Nga, Pháp và Thái (Inno Setup chưa có bản tiếng Việt).
+- Nút **Báo lỗi** (Cài đặt → Ứng dụng) chép chẩn đoán vào clipboard và mở form báo lỗi GitHub đã điền sẵn phiên bản Nepply và Windows.
 - Hỗ trợ khôi phục icon Desktop khi ứng dụng kết thúc bất thường; vẫn có giới hạn nếu tiến trình hỗ trợ cũng bị dừng hoặc Explorer không hoạt động.
 
 ### Giới hạn hiện tại

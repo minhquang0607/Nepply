@@ -4,6 +4,16 @@
 
 Tài liệu này dành cho người muốn tự build hoặc đóng góp mã nguồn. Nếu bạn chỉ muốn sử dụng ứng dụng, xem [hướng dẫn người dùng](docs/USER_GUIDE.md). Mã do Nepply sở hữu dùng [MIT License](LICENSE); dependency giữ giấy phép riêng.
 
+## Bắt đầu nhanh
+
+```powershell
+dotnet restore Nepply.slnx --locked-mode
+dotnet build Nepply.slnx -c Release --no-restore
+dotnet run --project tests/Nepply.Tests/Nepply.Tests.csproj -c Release --no-build -- artifacts/current/core --core-only
+```
+
+Trước khi commit thay đổi C#, chạy `dotnet format whitespace Nepply.slnx`; CI từ chối code không khớp `.editorconfig`. Để `git blame` bỏ qua commit format hàng loạt, chạy một lần `git config blame.ignoreRevsFile .git-blame-ignore-revs`.
+
 ## Bắt đầu
 
 1. Dùng Windows x64 và .NET SDK theo `global.json`.

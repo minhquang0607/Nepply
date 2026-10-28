@@ -65,7 +65,9 @@ Logs are in `%LOCALAPPDATA%\Nepply\Logs`; deleting them is not necessary for a v
 
 ## Report an issue safely
 
-[Open an issue](https://github.com/minhquang0607/Nepply/issues) with:
+Quickest: **Settings → Application → Report a problem**. Nepply copies diagnostics to the clipboard and opens the bug form with the Nepply and Windows versions filled in; review the diagnostics, then paste them into the **Diagnostics** field.
+
+Or [open an issue](https://github.com/minhquang0607/Nepply/issues) with:
 
 - Nepply/Windows version and Setup or portable. **Settings → Application → Copy diagnostics** copies the version, Windows and sensor details to paste into the issue (no paths or account names).
 - Reproduction steps, expected and actual behavior, and frequency.
