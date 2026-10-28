@@ -13,7 +13,7 @@ internal static class SearchSessionTests
         reveal.Set(editor, anchor, true);
         check("Search reveal can reopen after lifecycle reset", editor.Visibility == System.Windows.Visibility.Visible);
         reveal.Settle(editor, false);
-        check("Search lifecycle reset releases presentation", editor.Visibility == System.Windows.Visibility.Collapsed && editor.Clip == null && ReferenceEquals(editor.RenderTransform,System.Windows.Media.Transform.Identity));
+        check("Search lifecycle reset releases presentation", editor.Visibility == System.Windows.Visibility.Collapsed && editor.Clip == null && ReferenceEquals(editor.RenderTransform, System.Windows.Media.Transform.Identity));
         bool keepOpen = false;
         var changes = new List<bool>();
         using var session = new SearchSession(() => keepOpen, changes.Add);

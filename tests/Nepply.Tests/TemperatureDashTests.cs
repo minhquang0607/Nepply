@@ -6,7 +6,7 @@ using Nepply.Views;
 /// <summary>A missing temperature is shown as a muted dash that explains itself on hover.</summary>
 internal static class TemperatureDashTests
 {
-    internal static void Run(Action<string,bool> check, Action<int> pump)
+    internal static void Run(Action<string, bool> check, Action<int> pump)
     {
         LocalizationService.Apply("vi");
         var reading = new MetricReadingView { Label = "CPU", ValueText = "24%", SecondaryText = "48°C" };

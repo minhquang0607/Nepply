@@ -70,9 +70,16 @@ internal static class DesktopCrashRuntimeTests
         bool passed = ready && terminated && afterCrash == false && restored && final == initial && !lease.OwnsChange && error == null;
         File.WriteAllText(Path.Combine(output, "desktop-crash-result.json"), JsonSerializer.Serialize(new
         {
-            Passed = passed, Initial = initial, Ready = ready, ChildTerminated = terminated,
-            AfterCrash = afterCrash, Restored = restored, Final = final, JournalRemains = lease.OwnsChange,
-            Journal = Path.Combine(root, "lease"), Error = error,
+            Passed = passed,
+            Initial = initial,
+            Ready = ready,
+            ChildTerminated = terminated,
+            AfterCrash = afterCrash,
+            Restored = restored,
+            Final = final,
+            JournalRemains = lease.OwnsChange,
+            Journal = Path.Combine(root, "lease"),
+            Error = error,
             Scope = "Real Explorer hide and abrupt owned-child termination; production lease restores via QA parent. NOT automatic production/MSIX uninstall recovery."
         }, new JsonSerializerOptions { WriteIndented = true }));
         return passed ? 0 : 1;

@@ -11,7 +11,7 @@ internal static class GlobalShortcutTests
     private static extern IntPtr SendMessage(IntPtr hwnd, int message, IntPtr wParam, IntPtr lParam);
     private const int WM_HOTKEY = 0x0312, BaseId = 0x4862;
 
-    internal static void Run(Action<string,bool> check, Action<int> pump)
+    internal static void Run(Action<string, bool> check, Action<int> pump)
     {
         using (var invalid = new GlobalHotkeyService(IntPtr.Zero, _ => throw new Exception("Unexpected callback")))
         {
@@ -32,7 +32,7 @@ internal static class GlobalShortcutTests
         using (var rival = new GlobalHotkeyService(second.Handle, _ => { }))
         {
             var failed = service.Register(new Dictionary<ShortcutAction, ShortcutGesture>
-                { [ShortcutAction.TogglePin] = pin, [ShortcutAction.OpenSettings] = settings, [ShortcutAction.SearchDesktop] = ShortcutGesture.None });
+            { [ShortcutAction.TogglePin] = pin, [ShortcutAction.OpenSettings] = settings, [ShortcutAction.SearchDesktop] = ShortcutGesture.None });
             check("Several global shortcuts register on one window", failed.Count == 0);
             SendMessage(first.Handle, WM_HOTKEY, (IntPtr)(BaseId + (int)ShortcutAction.TogglePin), IntPtr.Zero);
             SendMessage(first.Handle, WM_HOTKEY, (IntPtr)(BaseId + (int)ShortcutAction.OpenSettings), IntPtr.Zero);
@@ -80,7 +80,7 @@ internal static class GlobalShortcutTests
 
     // CI regression: closing a shown panel raised Deactivated after Cleanup, which restarted the
     // auto-hide timer; its tick then mapped screen points on a closed window and crashed.
-    private static void ClosedPanelTimers(Action<string,bool> check, Action<int> pump)
+    private static void ClosedPanelTimers(Action<string, bool> check, Action<int> pump)
     {
         var icons = new DesktopIconService(_ => Task.FromResult(new List<DesktopIcon>()));
         var main = new MainWindow(preview: true, icons: icons) { ShowInTaskbar = false, Left = -10000, Top = -10000 };

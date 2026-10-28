@@ -47,14 +47,14 @@ internal static class ShellContextMenu
                             try
                             {
                                 IntPtr hMenu = CreatePopupMenu();
-                                if(hMenu==IntPtr.Zero) throw new InvalidOperationException("Windows could not create a popup menu.");
+                                if (hMenu == IntPtr.Zero) throw new InvalidOperationException("Windows could not create a popup menu.");
 
                                 try
                                 {
                                     using var menuSession = new ShellMenuSession(hwnd, contextMenu);
                                     // Populate the menu
-                                    int menuResult=contextMenu.QueryContextMenu(hMenu, 0, 1, 0x7FFF, 0); // CMF_NORMAL
-                                    if(menuResult<0) Marshal.ThrowExceptionForHR(menuResult);
+                                    int menuResult = contextMenu.QueryContextMenu(hMenu, 0, 1, 0x7FFF, 0); // CMF_NORMAL
+                                    if (menuResult < 0) Marshal.ThrowExceptionForHR(menuResult);
 
                                     // Show the menu
                                     POINT pt;
@@ -113,8 +113,8 @@ internal static class ShellContextMenu
         }
         catch (Exception ex)
         {
-            AppLogger.Error(ex,"Show Shell context menu");
-            return UserMessage.FromKey("DesktopMenuError",icon.Name);
+            AppLogger.Error(ex, "Show Shell context menu");
+            return UserMessage.FromKey("DesktopMenuError", icon.Name);
         }
         return null;
     }

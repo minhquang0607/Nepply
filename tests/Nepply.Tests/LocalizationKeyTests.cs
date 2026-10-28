@@ -7,7 +7,7 @@ using Nepply.Services.Telemetry;
 // key gate: every key a producer can emit must resolve to a translated resource.
 internal static class LocalizationKeyTests
 {
-    internal static void Run(Action<string,bool> check)
+    internal static void Run(Action<string, bool> check)
     {
         string[] produced = [
             "SensorDisabled","SensorReconnecting","SensorExpired",HelperFailure.PolicyMessageKey,

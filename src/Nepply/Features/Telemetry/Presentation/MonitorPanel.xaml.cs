@@ -5,6 +5,7 @@ using Nepply.Services;
 using Nepply.ViewModels;
 using Nepply.Modules.Appearance;
 namespace Nepply.Views;
+
 public partial class MonitorPanel : UserControl
 {
     private readonly HardwareMonitorViewModel _viewModel = new();
@@ -25,19 +26,19 @@ public partial class MonitorPanel : UserControl
         _settings = settings;
         PresentationDensity.SetCompact(this, settings.EdgePosition.IsHorizontal() && !editing);
         var items = Widgets.Children.OfType<System.Windows.FrameworkElement>().ToArray();
-        var order = items.Where(e=>e.Tag is string).Select(e=>(string)e.Tag).ToArray();
-        bool reorder=!order.SequenceEqual(settings.WidgetOrder);
-        if(reorder) foreach (var element in items) if (element.Tag is string) Widgets.Children.Remove(element);
+        var order = items.Where(e => e.Tag is string).Select(e => (string)e.Tag).ToArray();
+        bool reorder = !order.SequenceEqual(settings.WidgetOrder);
+        if (reorder) foreach (var element in items) if (element.Tag is string) Widgets.Children.Remove(element);
         foreach (string id in settings.WidgetOrder)
         {
-            var element = items.FirstOrDefault(e => Equals(e.Tag,id)); if (element == null) continue;
+            var element = items.FirstOrDefault(e => Equals(e.Tag, id)); if (element == null) continue;
             element.Visibility = (id == "network" && !settings.ShowNetwork) ? System.Windows.Visibility.Collapsed : System.Windows.Visibility.Visible;
-            WidgetDrag.SetEnabled(element, editing); if(reorder) Widgets.Children.Add(element);
-            if(id is "summary" or "network") element.SetResourceReference(System.Windows.Automation.AutomationProperties.NameProperty,id=="summary" ? "Loc.WidgetSummary" : "Loc.WidgetNetwork");
-            else System.Windows.Automation.AutomationProperties.SetName(element,id=="gpus" ? "GPU" : id);
-            if(editing) element.SetResourceReference(System.Windows.Automation.AutomationProperties.HelpTextProperty,"Loc.WidgetMoveHint");
+            WidgetDrag.SetEnabled(element, editing); if (reorder) Widgets.Children.Add(element);
+            if (id is "summary" or "network") element.SetResourceReference(System.Windows.Automation.AutomationProperties.NameProperty, id == "summary" ? "Loc.WidgetSummary" : "Loc.WidgetNetwork");
+            else System.Windows.Automation.AutomationProperties.SetName(element, id == "gpus" ? "GPU" : id);
+            if (editing) element.SetResourceReference(System.Windows.Automation.AutomationProperties.HelpTextProperty, "Loc.WidgetMoveHint");
             else element.ClearValue(System.Windows.Automation.AutomationProperties.HelpTextProperty);
-            element.SetResourceReference(FrameworkElement.FocusVisualStyleProperty,"WidgetFocusVisual");
+            element.SetResourceReference(FrameworkElement.FocusVisualStyleProperty, "WidgetFocusVisual");
             element.ContextMenu = editing && id is "summary" or "gpus" ? ShapeMenu(id) : null;
             element.ContextMenuOpening -= OpenNativeMenu;
             if (element.ContextMenu != null) element.ContextMenuOpening += OpenNativeMenu;
@@ -54,16 +55,16 @@ public partial class MonitorPanel : UserControl
         // The horizontal dock is about 240 DIP tall: compact cards drop their footnote
         // (still in the tooltip) and tighten spacing so both rows fit without scrolling.
         CardHeight = compact ? CompactCardHeight : 118;
-        Widgets.Margin = compact ? new Thickness(12,8,12,6) : new Thickness(18,14,18,14);
-        NetworkCard.Padding = compact ? new Thickness(12,6,12,6) : new Thickness(12,8,12,8);
+        Widgets.Margin = compact ? new Thickness(12, 8, 12, 6) : new Thickness(18, 14, 18, 14);
+        NetworkCard.Padding = compact ? new Thickness(12, 6, 12, 6) : new Thickness(12, 8, 12, 8);
     }
     private void OpenNativeMenu(object sender, ContextMenuEventArgs e)
     {
         e.Handled = true;
         if (sender is not FrameworkElement element || element.ContextMenu is not { } commands || Window.GetWindow(this) is not MainWindow main) return;
         main.SuppressHide();
-        try { Helpers.WindowsPopupMenu.Show(commands, main, e.CursorLeft < 0 ? element.PointToScreen(new Point(12,12)) : null); }
-        catch(Exception ex) { AppLogger.Error(ex,"Widget native menu"); }
+        try { Helpers.WindowsPopupMenu.Show(commands, main, e.CursorLeft < 0 ? element.PointToScreen(new Point(12, 12)) : null); }
+        catch (Exception ex) { AppLogger.Error(ex, "Widget native menu"); }
         finally { main.ResumeHide(); }
     }
     private ContextMenu ShapeMenu(string id)
@@ -71,11 +72,14 @@ public partial class MonitorPanel : UserControl
         var menu = new ContextMenu();
         foreach (var (key, columns) in new[] { ("WidgetAutoWidth", 0), ("WidgetOneColumn", 1), ("WidgetTwoColumns", 2) })
         {
-            var item = new MenuItem { IsCheckable = true, IsChecked = _settings!.SummaryColumns == columns, Tag=key, Header=LocalizationService.Get(key) };
+            var item = new MenuItem { IsCheckable = true, IsChecked = _settings!.SummaryColumns == columns, Tag = key, Header = LocalizationService.Get(key) };
             item.Icon = item.IsChecked ? "✓" : null;
-            item.Click += (_, _) => { _settings!.SummaryColumns = columns; _settings.GpuColumns = columns; FitCards();
+            item.Click += (_, _) =>
+            {
+                _settings!.SummaryColumns = columns; _settings.GpuColumns = columns; FitCards();
                 foreach (MenuItem sibling in menu.Items) { sibling.IsChecked = sibling == item; sibling.Icon = sibling.IsChecked ? "✓" : null; }
-                RaiseEvent(new RoutedEventArgs(WidgetDrag.ReorderedEvent, this)); };
+                RaiseEvent(new RoutedEventArgs(WidgetDrag.ReorderedEvent, this));
+            };
             menu.Items.Add(item);
         }
         return menu;
@@ -83,10 +87,10 @@ public partial class MonitorPanel : UserControl
     internal void RefreshLanguage()
     {
         // These command menus feed a native popup and are never attached to a WPF tree.
-        foreach(var widget in Widgets.Children.OfType<FrameworkElement>())
-            if(widget.ContextMenu is {} menu)
-                foreach(var item in menu.Items.OfType<MenuItem>())
-                    if(item.Tag is string key) item.Header=LocalizationService.Get(key);
+        foreach (var widget in Widgets.Children.OfType<FrameworkElement>())
+            if (widget.ContextMenu is { } menu)
+                foreach (var item in menu.Items.OfType<MenuItem>())
+                    if (item.Tag is string key) item.Header = LocalizationService.Get(key);
     }
     public string[] GetWidgetOrder() => Widgets.Children.OfType<System.Windows.FrameworkElement>().Select(e => e.Tag).OfType<string>().ToArray();
 }

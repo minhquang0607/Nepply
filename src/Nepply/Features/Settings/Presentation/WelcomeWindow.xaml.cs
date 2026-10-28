@@ -20,17 +20,17 @@ public partial class WelcomeWindow : Window
             SetupArea.Visibility = Visibility.Collapsed;
             StartButton.SetResourceReference(ContentProperty, "Loc.Close");
         }
-        Loaded+=(_,_)=>Helpers.DialogPlacement.FitInitial(this);
+        Loaded += (_, _) => Helpers.DialogPlacement.FitInitial(this);
         EdgeChoice.SelectedIndex = (int)settings.EdgePosition;
         HideIcons.IsChecked = false;
         LanguageChoice.ItemsSource = LocalizationService.Languages;
         LanguageChoice.SelectedValue = settings.Language;
         _languageReady = true;
         RefreshLanguage((int)settings.EdgePosition);
-        LocalizationService.Changed+=LanguageChanged;
-        Closed+=(_,_)=>
+        LocalizationService.Changed += LanguageChanged;
+        Closed += (_, _) =>
         {
-            LocalizationService.Changed-=LanguageChanged;
+            LocalizationService.Changed -= LanguageChanged;
             // Only a preview from this window needs undoing; a completed start already saved it.
             if (_previewedLanguage) LocalizationService.Apply(_settings.Language);
         };
@@ -44,20 +44,20 @@ public partial class WelcomeWindow : Window
         _previewedLanguage = true;
         LocalizationService.Apply(language);
     }
-    private void LanguageChanged()=>RefreshLanguage(EdgeChoice.SelectedIndex);
+    private void LanguageChanged() => RefreshLanguage(EdgeChoice.SelectedIndex);
     private void RefreshLanguage(int selected)
     {
-        EdgeChoice.ItemsSource=Enum.GetNames<EdgePosition>().Select(LocalizationService.Get).ToArray();
-        EdgeChoice.SelectedIndex=selected;
-        HotkeyHint.Text=string.Format(LocalizationService.Get("WelcomeHotkey"),MainWindow.HotkeyLabel(_settings));
-        ShortcutList.ItemsSource=ShortcutLines(_settings);
+        EdgeChoice.ItemsSource = Enum.GetNames<EdgePosition>().Select(LocalizationService.Get).ToArray();
+        EdgeChoice.SelectedIndex = selected;
+        HotkeyHint.Text = string.Format(LocalizationService.Get("WelcomeHotkey"), MainWindow.HotkeyLabel(_settings));
+        ShortcutList.ItemsSource = ShortcutLines(_settings);
     }
     /// <summary>"Action · Key" for every assigned shortcut except show/hide, which has its own line.</summary>
     internal static string[] ShortcutLines(AppSettings settings) => ShortcutBindings.All
-        .Where(action=>action!=ShortcutAction.TogglePanel)
-        .Select(action=>(Action:action,Gesture:ShortcutBindings.Get(settings,action)))
-        .Where(item=>!item.Gesture.IsEmpty)
-        .Select(item=>LocalizationService.Get(SettingsWindow.ShortcutLabelKey(item.Action))+" · "+item.Gesture)
+        .Where(action => action != ShortcutAction.TogglePanel)
+        .Select(action => (Action: action, Gesture: ShortcutBindings.Get(settings, action)))
+        .Where(item => !item.Gesture.IsEmpty)
+        .Select(item => LocalizationService.Get(SettingsWindow.ShortcutLabelKey(item.Action)) + " · " + item.Gesture)
         .ToArray();
     private void Start_Click(object sender, RoutedEventArgs e)
     {
@@ -70,8 +70,8 @@ public partial class WelcomeWindow : Window
         }
         catch (Exception ex)
         {
-            AppLogger.Error(ex,"Complete onboarding");
-            ErrorText.SetResourceReference(System.Windows.Controls.TextBlock.TextProperty,"Loc.WelcomeSaveError");
+            AppLogger.Error(ex, "Complete onboarding");
+            ErrorText.SetResourceReference(System.Windows.Controls.TextBlock.TextProperty, "Loc.WelcomeSaveError");
         }
     }
     private void Close_Click(object sender, RoutedEventArgs e) => Close();

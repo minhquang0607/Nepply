@@ -9,7 +9,7 @@ internal enum AutoHideAction
 
 internal static class AutoHidePolicy
 {
-    internal static AutoHideAction Decide(bool pinned, bool suppressed, bool animating, bool pointerInside, bool keyboardInteraction=false)
+    internal static AutoHideAction Decide(bool pinned, bool suppressed, bool animating, bool pointerInside, bool keyboardInteraction = false)
     {
         if (pinned || suppressed || pointerInside || keyboardInteraction) return AutoHideAction.Cancel;
         if (animating) return AutoHideAction.RestartCountdown;

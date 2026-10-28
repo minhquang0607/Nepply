@@ -6,16 +6,16 @@ namespace Nepply.Services;
 public sealed class DesktopVisibilityLease(IDesktopVisibility desktop, string journal)
 {
     // Share the recovery journal with pre-rename builds; never duplicate an ownership lease.
-    private static string LegacyJournalPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),ProductIdentity.LegacyName,"desktop-visibility.lease");
+    private static string LegacyJournalPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), ProductIdentity.LegacyName, "desktop-visibility.lease");
     public static string JournalPath => ProcessPackageIdentity.IsPackaged
-        ? Path.Combine(Windows.Storage.ApplicationData.Current.LocalCacheFolder.Path,ProductIdentity.LegacyName,"desktop-visibility.lease")
+        ? Path.Combine(Windows.Storage.ApplicationData.Current.LocalCacheFolder.Path, ProductIdentity.LegacyName, "desktop-visibility.lease")
         : LegacyJournalPath;
-    public static DesktopVisibilityLease Create() => new(new ExplorerDesktopVisibility(),JournalPath);
+    public static DesktopVisibilityLease Create() => new(new ExplorerDesktopVisibility(), JournalPath);
     internal static bool RestorePreviousSession()
     {
-        using var fence=DesktopGuardianFence.Acquire(TimeSpan.FromSeconds(15));
-        if(!string.Equals(LegacyJournalPath,JournalPath,StringComparison.OrdinalIgnoreCase)
-            && !new DesktopVisibilityLease(new ExplorerDesktopVisibility(),LegacyJournalPath).Restore()) return false;
+        using var fence = DesktopGuardianFence.Acquire(TimeSpan.FromSeconds(15));
+        if (!string.Equals(LegacyJournalPath, JournalPath, StringComparison.OrdinalIgnoreCase)
+            && !new DesktopVisibilityLease(new ExplorerDesktopVisibility(), LegacyJournalPath).Restore()) return false;
         return Create().Restore();
     }
     public bool OwnsChange => File.Exists(journal);
@@ -25,7 +25,7 @@ public sealed class DesktopVisibilityLease(IDesktopVisibility desktop, string jo
         if (desktop.IsVisible() is not true) return false;
         Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(journal))!);
         // Durable intent is written BEFORE touching Explorer, including the crash-between-steps case.
-        using (var file = new FileStream(journal,FileMode.Create,FileAccess.Write,FileShare.Read))
+        using (var file = new FileStream(journal, FileMode.Create, FileAccess.Write, FileShare.Read))
         { file.Write("restore-visible-v1"u8); file.Flush(true); }
         return desktop.SetVisible(false);
     }
@@ -36,12 +36,12 @@ public sealed class DesktopVisibilityLease(IDesktopVisibility desktop, string jo
         // The authenticated guardian can finish recovery and remove the marker
         // between OwnsChange and opening it. Still verify visibility; absence
         // alone must not turn an incomplete restoration into success.
-        catch(FileNotFoundException) { return desktop.IsVisible()==true; }
-        catch(DirectoryNotFoundException) { return desktop.IsVisible()==true; }
+        catch (FileNotFoundException) { return desktop.IsVisible() == true; }
+        catch (DirectoryNotFoundException) { return desktop.IsVisible() == true; }
         if (desktop.IsVisible() is not { } visible) return false;
         if (!visible && !desktop.SetVisible(true)) return false;
         File.Delete(journal);
         return true;
     }
-    internal static bool HasRestoreMarker(string path)=>DesktopRecoveryJournal.HasRestoreMarker(path);
+    internal static bool HasRestoreMarker(string path) => DesktopRecoveryJournal.HasRestoreMarker(path);
 }

@@ -5,28 +5,28 @@ namespace Nepply.Modules.Panel;
 /// <summary>Physical work-area coordinates; never captures taskbar clicks.</summary>
 internal static class EdgeHitTest
 {
-    internal static bool Contains(EdgePosition edge,int x,int y,int left,int top,int right,int bottom,int size)
+    internal static bool Contains(EdgePosition edge, int x, int y, int left, int top, int right, int bottom, int size)
     {
-        if(size<=0 || x<left || x>=right || y<top || y>=bottom) return false;
+        if (size <= 0 || x < left || x >= right || y < top || y >= bottom) return false;
         return edge switch
         {
-            EdgePosition.Left => x-left<size,
-            EdgePosition.Right => right-x<=size,
-            EdgePosition.Top => y-top<size,
-            EdgePosition.Bottom => bottom-y<=size,
+            EdgePosition.Left => x - left < size,
+            EdgePosition.Right => right - x <= size,
+            EdgePosition.Top => y - top < size,
+            EdgePosition.Bottom => bottom - y <= size,
             _ => false
         };
     }
     // Pixels from the pointer to the trigger edge; null outside the monitor.
-    internal static int? DistanceToEdge(EdgePosition edge,int x,int y,int left,int top,int right,int bottom)
+    internal static int? DistanceToEdge(EdgePosition edge, int x, int y, int left, int top, int right, int bottom)
     {
-        if(x<left || x>=right || y<top || y>=bottom) return null;
+        if (x < left || x >= right || y < top || y >= bottom) return null;
         return edge switch
         {
-            EdgePosition.Left => x-left,
-            EdgePosition.Right => right-1-x,
-            EdgePosition.Top => y-top,
-            EdgePosition.Bottom => bottom-1-y,
+            EdgePosition.Left => x - left,
+            EdgePosition.Right => right - 1 - x,
+            EdgePosition.Top => y - top,
+            EdgePosition.Bottom => bottom - 1 - y,
             _ => null
         };
     }
@@ -40,6 +40,6 @@ internal static class EdgePolling
     // Wide enough that even a fast approach is sampled several times before the zone.
     internal const double NearBandDip = 160;
 
-    internal static TimeSpan Interval(bool panelActive,int? distanceToEdge,int nearBand)
+    internal static TimeSpan Interval(bool panelActive, int? distanceToEdge, int nearBand)
         => panelActive || distanceToEdge is { } distance && distance <= nearBand ? Responsive : Idle;
 }

@@ -5,7 +5,7 @@ namespace Nepply.Services;
 
 internal static class SettingsSearch
 {
-    internal sealed record Entry(string Label,int Section,string Control,string Keywords);
+    internal sealed record Entry(string Label, int Section, string Control, string Keywords);
     private static readonly Entry[] Entries =
     [
         new("Giao diện · Ngôn ngữ",0,"LanguageChoice","language tiếng việt english japanese german chinese russian french thai"),
@@ -52,28 +52,54 @@ internal static class SettingsSearch
     ];
     internal static Entry[] Find(string query)
     {
-        var words=SearchText.Words(query);
-        if(words.Length==0) return [];
-        return Entries.Select(e=>(Original:e,Local:Localized(e)))
-            .Where(e=>SearchText.Matches(e.Original.Label+" "+e.Original.Keywords+" "+e.Local.Label,words))
-            .Select(e=>e.Local).ToArray();
+        var words = SearchText.Words(query);
+        if (words.Length == 0) return [];
+        return Entries.Select(e => (Original: e, Local: Localized(e)))
+            .Where(e => SearchText.Matches(e.Original.Label + " " + e.Original.Keywords + " " + e.Local.Label, words))
+            .Select(e => e.Local).ToArray();
     }
     private static Entry Localized(Entry entry)
     {
-        if(LocalizationService.CurrentLanguage=="vi") return entry;
-        string key=entry.Control switch
+        if (LocalizationService.CurrentLanguage == "vi") return entry;
+        string key = entry.Control switch
         {
-            "LanguageChoice"=>"Language","NeonEnabled"=>"Neon","ThemeChoice"=>"Theme","AccentChoice"=>"Materials",
-            "ColorButton"=>"CustomColor","MetallicEnabled"=>"Metallic","MotionChoice"=>"Motion","SuspendMonitor"=>"Suspend",
-            "DynamicMaterial"=>"Sheen","GlowSlider"=>"Glow","OpacitySlider"=>"Opacity","EdgeChoice"=>"Edge",
-            "ScreenChoice"=>"Screen","WidthSlider"=>"Width","TopWidthSlider"=>"TopWidth","HeightSlider"=>"TopHeight",
-            "ZoneSlider"=>"TriggerZone","DelaySlider"=>"HideDelay","DwellSlider"=>"TriggerDelay","HotkeyButton"=>"Hotkey",
-            "GridPicker"=>"IconGrid","HideIcons"=>"HideDesktop","MergeShortcuts"=>"MergeShortcuts","SingleClick"=>"SingleClick",
-            "HiddenFiles"=>"HiddenFiles","SystemIcons"=>"SystemIcons","GpuModeChoice"=>"Device","Sensors"=>"Sensors",
-            "IntervalSlider"=>"Interval","EcoMode"=>"Eco","NetworkChoice"=>"NetworkAdapter","AutoStart"=>"Startup",
-            "PresetCards" or "ProfileStatus"=>"Layouts","AboutVersion"=>"About",
-            {} control when control.StartsWith("Shortcut",StringComparison.Ordinal)=>control,_=>entry.Label
+            "LanguageChoice" => "Language",
+            "NeonEnabled" => "Neon",
+            "ThemeChoice" => "Theme",
+            "AccentChoice" => "Materials",
+            "ColorButton" => "CustomColor",
+            "MetallicEnabled" => "Metallic",
+            "MotionChoice" => "Motion",
+            "SuspendMonitor" => "Suspend",
+            "DynamicMaterial" => "Sheen",
+            "GlowSlider" => "Glow",
+            "OpacitySlider" => "Opacity",
+            "EdgeChoice" => "Edge",
+            "ScreenChoice" => "Screen",
+            "WidthSlider" => "Width",
+            "TopWidthSlider" => "TopWidth",
+            "HeightSlider" => "TopHeight",
+            "ZoneSlider" => "TriggerZone",
+            "DelaySlider" => "HideDelay",
+            "DwellSlider" => "TriggerDelay",
+            "HotkeyButton" => "Hotkey",
+            "GridPicker" => "IconGrid",
+            "HideIcons" => "HideDesktop",
+            "MergeShortcuts" => "MergeShortcuts",
+            "SingleClick" => "SingleClick",
+            "HiddenFiles" => "HiddenFiles",
+            "SystemIcons" => "SystemIcons",
+            "GpuModeChoice" => "Device",
+            "Sensors" => "Sensors",
+            "IntervalSlider" => "Interval",
+            "EcoMode" => "Eco",
+            "NetworkChoice" => "NetworkAdapter",
+            "AutoStart" => "Startup",
+            "PresetCards" or "ProfileStatus" => "Layouts",
+            "AboutVersion" => "About",
+            { } control when control.StartsWith("Shortcut", StringComparison.Ordinal) => control,
+            _ => entry.Label
         };
-        return entry with {Label=LocalizationService.Get(key)};
+        return entry with { Label = LocalizationService.Get(key) };
     }
 }

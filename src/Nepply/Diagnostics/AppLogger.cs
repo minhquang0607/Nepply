@@ -15,7 +15,7 @@ public static class AppLogger
     private static long _droppedEntries;
     internal static long DroppedEntries => Interlocked.Read(ref _droppedEntries);
     internal static string LimitText(string value) => value.Length <= MaximumEntryCharacters
-        ? value : value[..(MaximumEntryCharacters-24)] + "\n[diagnostic truncated]";
+        ? value : value[..(MaximumEntryCharacters - 24)] + "\n[diagnostic truncated]";
 
     public static string LogDirectory { get; } = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
@@ -68,7 +68,7 @@ public static class AppLogger
     {
         try
         {
-            if (!_channel.Writer.TryWrite(new(DateTimeOffset.Now,level,LimitText(message),exception)))
+            if (!_channel.Writer.TryWrite(new(DateTimeOffset.Now, level, LimitText(message), exception)))
                 Interlocked.Increment(ref _droppedEntries);
         }
         catch (Exception ex)
@@ -156,7 +156,7 @@ public static class AppLogger
         {
             // Signal that no more items will be added
             _channel.Writer.TryComplete();
-            
+
             // Wait for the background task to finish writing the queue
             if (!_processTask.IsCompleted)
             {

@@ -15,62 +15,63 @@ public sealed class LibreHardwareProvider : IHardwareProvider
     public string Name => "LibreHardwareMonitor + AMD ADL";
     public HardwareReading Read(AppSettings settings)
     {
-    if (_computer == null)
-    {
-        _computer = new Computer { IsCpuEnabled = true, IsGpuEnabled = true, IsMotherboardEnabled = false, IsMemoryEnabled = true };
-        _computer.Open();
-    }
-    var available = new List<IHardware>();
-    foreach (var hardware in _computer.Hardware)
-        UpdateTree(hardware, available);
-    var cpu = available.FirstOrDefault(h => h.HardwareType == HardwareType.Cpu);
-    var amdSamples = available.Where(h => h.HardwareType == HardwareType.GpuAmd).ToDictionary(h => h.Identifier.ToString(), h => _amd.Read(h.Identifier.ToString()));
-    var cpuCandidates = amdSamples.Values.Where(s => s?.CpuTemperature != null).ToArray();
-    var cpuFallback = available.Count(h => h.HardwareType == HardwareType.Cpu) == 1 && cpu?.Name.Contains("AMD", StringComparison.OrdinalIgnoreCase) == true && cpuCandidates.Length == 1 ? cpuCandidates[0] : null;
-    var cpuTemperatureSensor = SelectSensor(cpu, SensorType.Temperature, 1, 130, SensorSelection.CpuTemperatureNames);
-    var cpuTemperature = cpuTemperatureSensor?.Value;
-    var cpuClock = CpuClock(cpu);
-    var gpuHardware = available.Where(IsGpu).ToArray();
-    if (!_gpuInventory.SequenceEqual(gpuHardware.Select(h => (h.Identifier.ToString(), h.Name))))
-    {
-        _gpuInventory = gpuHardware.Select(h => (h.Identifier.ToString(), h.Name)).ToArray();
-        var adapters = GpuAdapterCatalog.Read();
-        _gpuKinds = _gpuInventory.ToDictionary(g => g.Id, g => GpuAdapterCatalog.Classify(g.Name, adapters));
-    }
-    var gpus = gpuHardware.Select(h => new GpuReading(h.Identifier.ToString(), h.Name,
-        GpuLoad(h), Sensor(h, SensorType.Temperature, 1, 130, SensorSelection.GpuCoreNames),
-        Sensor(h, SensorType.Clock, 1, 15000, "GPU Core", "Core"), "LibreHardwareMonitor · " + h.HardwareType + " · " + (HasGpuEngines(h) ? "load: busiest D3D engine" : "load: GPU Core"))
-        { Kind = _gpuKinds.GetValueOrDefault(h.Identifier.ToString()), SourceInfo = new(h.HardwareType.ToString(),HasGpuEngines(h),false) })
-        .Select(g => g.Temperature == null && amdSamples.GetValueOrDefault(g.Id)?.GpuTemperature is { } temperature ? g with { Temperature = temperature, Source = g.Source + " · temperature: AMD ADL PMLog EDGE", SourceInfo = g.SourceInfo! with {AdlTemperature=true} } : g)
-        .DistinctBy(g => g.Id).ToImmutableArray();
-    var gpu = available.FirstOrDefault(h => h.Identifier.ToString() == settings.GpuIdentifier && IsGpu(h))
-        ?? available.FirstOrDefault(IsGpu);
-    var memoryClock = available.Where(h => h.HardwareType == HardwareType.Memory).SelectMany(h => h.Sensors)
-        .FirstOrDefault(s => s.SensorType == SensorType.Clock);
-    var reading = new HardwareReading(DateTimeOffset.UtcNow, cpu?.Name ?? "CPU", gpu?.Name ?? "GPU",
-        cpuTemperature ?? cpuFallback?.CpuTemperature,
-        cpuClock ?? cpuFallback?.CpuClockMHz,
-        gpu == null ? null : GpuLoad(gpu),
-        gpus.FirstOrDefault(g => g.Id == gpu?.Identifier.ToString())?.Temperature,
-        Sensor(gpu, SensorType.Clock, 1, 15000, "GPU Core", "Core"),
-        Valid(memoryClock?.Value, 1, 15000), null)
-    {
-        Gpus = gpus, MonotonicTimestamp = Stopwatch.GetTimestamp(),
-        CpuSourceInfo = new(
-            cpuTemperatureSensor != null ? "LibreHardwareMonitor · " + cpuTemperatureSensor.Name
-                : cpuFallback?.CpuTemperature != null ? "AMD ADL PMLog · CPU temperature" : null,
-            cpuClock != null ? "LibreHardwareMonitor · reported clock"
-                : cpuFallback?.CpuClockMHz != null ? "AMD ADL PMLog · reported clock" : null,
-            cpuTemperatureSensor == null && cpuFallback?.CpuTemperature != null,
-            cpuClock == null && cpuFallback?.CpuClockMHz != null),
-        CpuTemperatureSourceId = cpuTemperatureSensor != null ? "lhm:" + cpuTemperatureSensor.Id
-            : cpuFallback?.CpuTemperature != null ? "adl:cpu:" + cpu?.Identifier : "",
-        CpuTelemetrySource = "Temperature: " + (cpuTemperatureSensor != null
-            ? "LibreHardwareMonitor · " + cpuTemperatureSensor.Name
-            : cpuFallback?.CpuTemperature != null ? "AMD ADL PMLog · CPU temperature (fallback)" : "unavailable")
-            + " · Clock: " + (cpuClock != null ? "LibreHardwareMonitor · reported clock"
-                : cpuFallback?.CpuClockMHz != null ? "AMD ADL PMLog · reported clock (fallback)" : "unavailable")
-    };
+        if (_computer == null)
+        {
+            _computer = new Computer { IsCpuEnabled = true, IsGpuEnabled = true, IsMotherboardEnabled = false, IsMemoryEnabled = true };
+            _computer.Open();
+        }
+        var available = new List<IHardware>();
+        foreach (var hardware in _computer.Hardware)
+            UpdateTree(hardware, available);
+        var cpu = available.FirstOrDefault(h => h.HardwareType == HardwareType.Cpu);
+        var amdSamples = available.Where(h => h.HardwareType == HardwareType.GpuAmd).ToDictionary(h => h.Identifier.ToString(), h => _amd.Read(h.Identifier.ToString()));
+        var cpuCandidates = amdSamples.Values.Where(s => s?.CpuTemperature != null).ToArray();
+        var cpuFallback = available.Count(h => h.HardwareType == HardwareType.Cpu) == 1 && cpu?.Name.Contains("AMD", StringComparison.OrdinalIgnoreCase) == true && cpuCandidates.Length == 1 ? cpuCandidates[0] : null;
+        var cpuTemperatureSensor = SelectSensor(cpu, SensorType.Temperature, 1, 130, SensorSelection.CpuTemperatureNames);
+        var cpuTemperature = cpuTemperatureSensor?.Value;
+        var cpuClock = CpuClock(cpu);
+        var gpuHardware = available.Where(IsGpu).ToArray();
+        if (!_gpuInventory.SequenceEqual(gpuHardware.Select(h => (h.Identifier.ToString(), h.Name))))
+        {
+            _gpuInventory = gpuHardware.Select(h => (h.Identifier.ToString(), h.Name)).ToArray();
+            var adapters = GpuAdapterCatalog.Read();
+            _gpuKinds = _gpuInventory.ToDictionary(g => g.Id, g => GpuAdapterCatalog.Classify(g.Name, adapters));
+        }
+        var gpus = gpuHardware.Select(h => new GpuReading(h.Identifier.ToString(), h.Name,
+            GpuLoad(h), Sensor(h, SensorType.Temperature, 1, 130, SensorSelection.GpuCoreNames),
+            Sensor(h, SensorType.Clock, 1, 15000, "GPU Core", "Core"), "LibreHardwareMonitor · " + h.HardwareType + " · " + (HasGpuEngines(h) ? "load: busiest D3D engine" : "load: GPU Core"))
+        { Kind = _gpuKinds.GetValueOrDefault(h.Identifier.ToString()), SourceInfo = new(h.HardwareType.ToString(), HasGpuEngines(h), false) })
+            .Select(g => g.Temperature == null && amdSamples.GetValueOrDefault(g.Id)?.GpuTemperature is { } temperature ? g with { Temperature = temperature, Source = g.Source + " · temperature: AMD ADL PMLog EDGE", SourceInfo = g.SourceInfo! with { AdlTemperature = true } } : g)
+            .DistinctBy(g => g.Id).ToImmutableArray();
+        var gpu = available.FirstOrDefault(h => h.Identifier.ToString() == settings.GpuIdentifier && IsGpu(h))
+            ?? available.FirstOrDefault(IsGpu);
+        var memoryClock = available.Where(h => h.HardwareType == HardwareType.Memory).SelectMany(h => h.Sensors)
+            .FirstOrDefault(s => s.SensorType == SensorType.Clock);
+        var reading = new HardwareReading(DateTimeOffset.UtcNow, cpu?.Name ?? "CPU", gpu?.Name ?? "GPU",
+            cpuTemperature ?? cpuFallback?.CpuTemperature,
+            cpuClock ?? cpuFallback?.CpuClockMHz,
+            gpu == null ? null : GpuLoad(gpu),
+            gpus.FirstOrDefault(g => g.Id == gpu?.Identifier.ToString())?.Temperature,
+            Sensor(gpu, SensorType.Clock, 1, 15000, "GPU Core", "Core"),
+            Valid(memoryClock?.Value, 1, 15000), null)
+        {
+            Gpus = gpus,
+            MonotonicTimestamp = Stopwatch.GetTimestamp(),
+            CpuSourceInfo = new(
+                cpuTemperatureSensor != null ? "LibreHardwareMonitor · " + cpuTemperatureSensor.Name
+                    : cpuFallback?.CpuTemperature != null ? "AMD ADL PMLog · CPU temperature" : null,
+                cpuClock != null ? "LibreHardwareMonitor · reported clock"
+                    : cpuFallback?.CpuClockMHz != null ? "AMD ADL PMLog · reported clock" : null,
+                cpuTemperatureSensor == null && cpuFallback?.CpuTemperature != null,
+                cpuClock == null && cpuFallback?.CpuClockMHz != null),
+            CpuTemperatureSourceId = cpuTemperatureSensor != null ? "lhm:" + cpuTemperatureSensor.Id
+                : cpuFallback?.CpuTemperature != null ? "adl:cpu:" + cpu?.Identifier : "",
+            CpuTelemetrySource = "Temperature: " + (cpuTemperatureSensor != null
+                ? "LibreHardwareMonitor · " + cpuTemperatureSensor.Name
+                : cpuFallback?.CpuTemperature != null ? "AMD ADL PMLog · CPU temperature (fallback)" : "unavailable")
+                + " · Clock: " + (cpuClock != null ? "LibreHardwareMonitor · reported clock"
+                    : cpuFallback?.CpuClockMHz != null ? "AMD ADL PMLog · reported clock (fallback)" : "unavailable")
+        };
 
         return reading;
     }

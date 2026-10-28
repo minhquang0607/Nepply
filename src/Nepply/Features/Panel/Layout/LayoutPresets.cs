@@ -20,16 +20,35 @@ internal static class LayoutPresets
     internal static AppSettings Apply(string id, AppSettings source)
     {
         // A geometry preset must preserve the user's palette, effects and private settings.
-        var profile = LayoutProfile.Capture(source) with { WidthPercent=0, TopWidthPercent=0, TopHeightPercent=0 };
+        var profile = LayoutProfile.Capture(source) with { WidthPercent = 0, TopWidthPercent = 0, TopHeightPercent = 0 };
         var side = source.EdgePosition == EdgePosition.Right ? EdgePosition.Right : EdgePosition.Left;
         profile = id switch
         {
-            "compact" => profile with { Edge=side, Width=340,
-                MonitorHeight=340, SummaryColumns=2, GpuColumns=1 },
-            "spacious" => profile with { Edge=side, Width=460,
-                MonitorHeight=400, SummaryColumns=2, GpuColumns=2 },
-            "ribbon" => profile with { Edge=source.EdgePosition.IsHorizontal() ? source.EdgePosition : EdgePosition.Top, TopWidth=1520, TopHeight=280,
-                MonitorWidth=420, SummaryColumns=2, GpuColumns=2 },
+            "compact" => profile with
+            {
+                Edge = side,
+                Width = 340,
+                MonitorHeight = 340,
+                SummaryColumns = 2,
+                GpuColumns = 1
+            },
+            "spacious" => profile with
+            {
+                Edge = side,
+                Width = 460,
+                MonitorHeight = 400,
+                SummaryColumns = 2,
+                GpuColumns = 2
+            },
+            "ribbon" => profile with
+            {
+                Edge = source.EdgePosition.IsHorizontal() ? source.EdgePosition : EdgePosition.Top,
+                TopWidth = 1520,
+                TopHeight = 280,
+                MonitorWidth = 420,
+                SummaryColumns = 2,
+                GpuColumns = 2
+            },
             _ => throw new ArgumentOutOfRangeException(nameof(id), "Unknown layout preset.")
         };
         return profile.ApplyTo(source);

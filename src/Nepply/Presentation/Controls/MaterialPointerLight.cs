@@ -28,7 +28,7 @@ internal sealed class MaterialPointerLight : IDisposable
     {
         _owner = owner;
         _period = period;
-        owner.AddHandler(Mouse.PreviewMouseMoveEvent,new MouseEventHandler(MouseMoved),handledEventsToo:true);
+        owner.AddHandler(Mouse.PreviewMouseMoveEvent, new MouseEventHandler(MouseMoved), handledEventsToo: true);
         owner.MouseEnter += MouseEntered;
         owner.MouseLeave += MouseLeft;
     }
@@ -79,7 +79,7 @@ internal sealed class MaterialPointerLight : IDisposable
         if (_disposed) return;
         _disposed = true;
         _sweep = null;
-        _owner.RemoveHandler(Mouse.PreviewMouseMoveEvent,new MouseEventHandler(MouseMoved));
+        _owner.RemoveHandler(Mouse.PreviewMouseMoveEvent, new MouseEventHandler(MouseMoved));
         _owner.MouseEnter -= MouseEntered;
         _owner.MouseLeave -= MouseLeft;
         _previous = null;

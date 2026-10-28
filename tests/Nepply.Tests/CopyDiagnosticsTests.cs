@@ -6,7 +6,7 @@ using Nepply.Views;
 
 internal static class CopyDiagnosticsTests
 {
-    internal static void Run(Action<string,bool> check, Action<int> pump)
+    internal static void Run(Action<string, bool> check, Action<int> pump)
     {
         LocalizationService.Apply("vi");
         var snapshot = HardwareInfoSnapshot.Empty with

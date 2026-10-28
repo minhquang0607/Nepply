@@ -49,8 +49,8 @@ internal sealed class MaterialLightScope(FrameworkElement owner) : IDisposable
         if (!_cards.Remove(card, out var entry)) return;
         if (!_cards.Values.Any(c => c.Moving))
         {
-            _sharedShift.BeginAnimation(TranslateTransform.XProperty,null);
-            _sharedShift.BeginAnimation(TranslateTransform.YProperty,null);
+            _sharedShift.BeginAnimation(TranslateTransform.XProperty, null);
+            _sharedShift.BeginAnimation(TranslateTransform.YProperty, null);
             Clock?.Controller?.Remove(); Clock = null;
             Pointer?.Dispose(); Pointer = null; _movingField = null;
         }

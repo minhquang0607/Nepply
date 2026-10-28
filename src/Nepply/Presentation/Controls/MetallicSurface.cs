@@ -12,12 +12,12 @@ public static class MetallicSurface
     public static bool HighContrast { get; internal set; }
     public static bool NeonPalette { get; internal set; }
     public static bool NeonEnabled { get; internal set; } = true;
-    public static readonly DependencyProperty AnimateProperty = DependencyProperty.RegisterAttached("Animate",typeof(bool),typeof(MetallicSurface),new PropertyMetadata(true,Changed));
-    public static bool GetAnimate(DependencyObject element)=>(bool)element.GetValue(AnimateProperty);
-    public static void SetAnimate(DependencyObject element,bool value)=>element.SetValue(AnimateProperty,value);
-    public static readonly DependencyProperty FrameProperty = DependencyProperty.RegisterAttached("Frame",typeof(bool),typeof(MetallicSurface),new PropertyMetadata(true,Changed));
-    public static bool GetFrame(DependencyObject element)=>(bool)element.GetValue(FrameProperty);
-    public static void SetFrame(DependencyObject element,bool value)=>element.SetValue(FrameProperty,value);
+    public static readonly DependencyProperty AnimateProperty = DependencyProperty.RegisterAttached("Animate", typeof(bool), typeof(MetallicSurface), new PropertyMetadata(true, Changed));
+    public static bool GetAnimate(DependencyObject element) => (bool)element.GetValue(AnimateProperty);
+    public static void SetAnimate(DependencyObject element, bool value) => element.SetValue(AnimateProperty, value);
+    public static readonly DependencyProperty FrameProperty = DependencyProperty.RegisterAttached("Frame", typeof(bool), typeof(MetallicSurface), new PropertyMetadata(true, Changed));
+    public static bool GetFrame(DependencyObject element) => (bool)element.GetValue(FrameProperty);
+    public static void SetFrame(DependencyObject element, bool value) => element.SetValue(FrameProperty, value);
     public static double GlowStrength { get; set; } = .22;
     public static readonly DependencyProperty AccentProperty = DependencyProperty.RegisterAttached("Accent", typeof(Brush), typeof(MetallicSurface), new PropertyMetadata(null, Changed));
     public static Brush? GetAccent(DependencyObject element) => (Brush?)element.GetValue(AccentProperty);
@@ -69,10 +69,10 @@ public static class MetallicSurface
         }
         if (GetAccent(border) is not SolidColorBrush accent) return;
         var color = accent.Color;
-        var baseColor = (Application.Current.Resources["CardBrush"] as SolidColorBrush)?.Color ?? Color.FromRgb(29,32,36);
-        double glow = NeonEnabled ? (double.IsFinite(GlowStrength) ? Math.Clamp(GlowStrength,0,.5) : .22) : 0;
-        if(!GetFrame(border)) glow=0;
-        if(!GetAnimate(border)) glow*=.65;
+        var baseColor = (Application.Current.Resources["CardBrush"] as SolidColorBrush)?.Color ?? Color.FromRgb(29, 32, 36);
+        double glow = NeonEnabled ? (double.IsFinite(GlowStrength) ? Math.Clamp(GlowStrength, 0, .5) : .22) : 0;
+        if (!GetFrame(border)) glow = 0;
+        if (!GetAnimate(border)) glow *= .65;
         bool animate = GetAnimate(border) && MotionEnabled && MaterialEnabled && border.IsVisible && border.IsLoaded;
         var lightScope = border.GetValue(LightScopeProperty) as MaterialLightScope;
         var state = new SurfaceState(color, baseColor, MaterialEnabled, NeonPalette, animate, glow, lightScope, border.IsLoaded && border.IsVisible, GetFrame(border));
@@ -80,28 +80,28 @@ public static class MetallicSurface
         if (Equals(border.GetValue(StateProperty), state)) return;
         Halt(border);
         border.SetValue(StateProperty, state);
-        Color Blend(double amount) => Color.FromRgb((byte)(baseColor.R*(1-amount)+color.R*amount), (byte)(baseColor.G*(1-amount)+color.G*amount), (byte)(baseColor.B*(1-amount)+color.B*amount));
+        Color Blend(double amount) => Color.FromRgb((byte)(baseColor.R * (1 - amount) + color.R * amount), (byte)(baseColor.G * (1 - amount) + color.G * amount), (byte)(baseColor.B * (1 - amount) + color.B * amount));
         // Repeating diagonal bands have matching endpoints: each cycle advances one full period.
-        var material = new LinearGradientBrush { StartPoint = new(0,0), EndPoint = new(1,1), SpreadMethod=GradientSpreadMethod.Repeat };
-        double peak=NeonPalette ? .18 : .24;
-        if(!GetAnimate(border)) peak*=.65;
+        var material = new LinearGradientBrush { StartPoint = new(0, 0), EndPoint = new(1, 1), SpreadMethod = GradientSpreadMethod.Repeat };
+        double peak = NeonPalette ? .18 : .24;
+        if (!GetAnimate(border)) peak *= .65;
         material.GradientStops = !MaterialEnabled && NeonPalette
-            ? new GradientStopCollection { new(Blend(.16),0), new(Blend(.04),.5), new(Blend(.16),1) }
-            : new GradientStopCollection(Enumerable.Range(0,17).Select(i =>
+            ? new GradientStopCollection { new(Blend(.16), 0), new(Blend(.04), .5), new(Blend(.16), 1) }
+            : new GradientStopCollection(Enumerable.Range(0, 17).Select(i =>
             {
-                double position=i/16d;
+                double position = i / 16d;
                 // A smooth periodic lobe: equal endpoints and a flat slope at the seam.
-                double light=Math.Pow((1-Math.Cos(Math.Min(position,1-position)*2*Math.PI))/2,3);
-                return new GradientStop(Blend(.035+(peak-.035)*light),position);
+                double light = Math.Pow((1 - Math.Cos(Math.Min(position, 1 - position) * 2 * Math.PI)) / 2, 3);
+                return new GradientStop(Blend(.035 + (peak - .035) * light), position);
             }));
         if (!MaterialEnabled && !NeonPalette)
-            material.GradientStops = new GradientStopCollection { new(baseColor,0),new(baseColor,1) };
+            material.GradientStops = new GradientStopCollection { new(baseColor, 0), new(baseColor, 1) };
         var shift = new TranslateTransform(); material.RelativeTransform = shift;
         border.Background = material;
-        if(GetFrame(border))
+        if (GetFrame(border))
         {
             border.BorderThickness = new(NeonPalette ? 1 : .7);
-            border.BorderBrush = new SolidColorBrush(Color.FromArgb(NeonPalette ? (byte)170 : (byte)70,color.R,color.G,color.B));
+            border.BorderBrush = new SolidColorBrush(Color.FromArgb(NeonPalette ? (byte)170 : (byte)70, color.R, color.G, color.B));
         }
         else
         {
@@ -109,7 +109,7 @@ public static class MetallicSurface
             border.ClearValue(Border.BorderThicknessProperty);
             border.ClearValue(Border.BorderBrushProperty);
         }
-        border.Effect = glow<=0 ? null : new DropShadowEffect { Color = color, ShadowDepth = 0, BlurRadius = NeonPalette ? 18 : 10, Opacity = glow*(NeonPalette ? 1.6 : .35), RenderingBias = RenderingBias.Performance };
+        border.Effect = glow <= 0 ? null : new DropShadowEffect { Color = color, ShadowDepth = 0, BlurRadius = NeonPalette ? 18 : 10, Opacity = glow * (NeonPalette ? 1.6 : .35), RenderingBias = RenderingBias.Performance };
         if (lightScope != null && border.IsLoaded && border.IsVisible)
         {
             border.SetValue(ActiveScopeProperty, lightScope);
@@ -122,7 +122,7 @@ public static class MetallicSurface
             material.Transform = pointer.Transform;
             // A (1,1) translation follows the gradient vector by exactly one period,
             // including wide GPU cards. X-only translation was seamless only on squares.
-            var animation = new DoubleAnimation(0,1,SweepDuration) { RepeatBehavior=RepeatBehavior.Forever };
+            var animation = new DoubleAnimation(0, 1, SweepDuration) { RepeatBehavior = RepeatBehavior.Forever };
             Timeline.SetDesiredFrameRate(animation, 60);
             var clock = (AnimationClock)animation.CreateClock(true);
             shift.ApplyAnimationClock(TranslateTransform.XProperty, clock);

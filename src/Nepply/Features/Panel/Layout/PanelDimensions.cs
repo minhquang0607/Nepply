@@ -23,6 +23,6 @@ internal static class PanelDimensions
     }
 
     internal static bool OnlyDimensionsChanged(AppSettings a, AppSettings b) =>
-        Settings.SettingsChangeSet.Between(a,b).OnlyDimensions;
+        Settings.SettingsChangeSet.Between(a, b).OnlyDimensions;
 
 }

@@ -21,7 +21,7 @@ internal static class GuidanceTests
             foreach (var node in Tree(child)) yield return node;
     }
 
-    internal static void Run(Action<string,bool> check, Action<int> pump, string output, Action<FrameworkElement,int,int,string> render)
+    internal static void Run(Action<string, bool> check, Action<int> pump, string output, Action<FrameworkElement, int, int, string> render)
     {
         LocalizationService.Apply("vi");
         check("Explanatory hint texts are gone from the language resources", RemovedHints.All(key => !LocalizationService.TryGet(key, out _)));

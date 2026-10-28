@@ -5,7 +5,7 @@ public interface IHardwareProvider : IDisposable
 {
     string Name { get; }
     HardwareReading Read(AppSettings settings);
-    HardwareReading Read(AppSettings settings,CancellationToken cancellation)
+    HardwareReading Read(AppSettings settings, CancellationToken cancellation)
     {
         cancellation.ThrowIfCancellationRequested();
         return Read(settings);

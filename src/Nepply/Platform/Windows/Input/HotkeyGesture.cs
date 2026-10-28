@@ -6,7 +6,7 @@ internal static class HotkeyGesture
 {
     // Keep the persisted VK contract; virtual-key numbers are not character codes.
     internal static bool IsSupportedKey(int key) => key is >= 32 and <= 90;
-    internal static string Format(int modifiers,int virtualKey)
+    internal static string Format(int modifiers, int virtualKey)
     {
         string key = virtualKey switch
         {
@@ -15,11 +15,11 @@ internal static class HotkeyGesture
             34 => "PageDown",
             _ => virtualKey is >= 48 and <= 57 or >= 65 and <= 90
             ? ((char)virtualKey).ToString()
-            : KeyInterop.KeyFromVirtualKey(virtualKey) is { } mapped && mapped!=Key.None
+            : KeyInterop.KeyFromVirtualKey(virtualKey) is { } mapped && mapped != Key.None
                 ? mapped.ToString() : $"0x{virtualKey:X}"
         };
-        return ((modifiers & 2)!=0 ? "Ctrl + " : "")
-            + ((modifiers & 1)!=0 ? "Alt + " : "")
-            + ((modifiers & 4)!=0 ? "Shift + " : "") + key;
+        return ((modifiers & 2) != 0 ? "Ctrl + " : "")
+            + ((modifiers & 1) != 0 ? "Alt + " : "")
+            + ((modifiers & 4) != 0 ? "Shift + " : "") + key;
     }
 }

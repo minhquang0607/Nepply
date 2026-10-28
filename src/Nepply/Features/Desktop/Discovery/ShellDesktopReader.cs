@@ -32,10 +32,10 @@ public static class ShellDesktopReader
                     if (Path.GetFileName(path).Equals("desktop.ini", StringComparison.OrdinalIgnoreCase)) continue;
                     result.Add(new() { Name = name, Path = path, IsSystemIcon = !desktopFile });
                 }
-                catch (Exception ex) { throw new IOException("Shell Desktop item could not be read completely.",ex); }
+                catch (Exception ex) { throw new IOException("Shell Desktop item could not be read completely.", ex); }
             }
         }
-        catch (Exception ex) { throw new IOException("Shell Desktop namespace is unavailable or incomplete.",ex); }
+        catch (Exception ex) { throw new IOException("Shell Desktop namespace is unavailable or incomplete.", ex); }
         return result;
     }
     public static string ShortcutIdentity(string name, string target, string arguments, string directory) =>
@@ -82,15 +82,15 @@ public static class ShellDesktopReader
                 // Unresolved/MSI/UWP links retain their original identity; never merge by display name alone.
                 if (target.Length > 0)
                 {
-                    var iconPath=new StringBuilder(32768);
-                    link.GetIconLocation(iconPath,iconPath.Capacity,out var iconIndex);
+                    var iconPath = new StringBuilder(32768);
+                    link.GetIconLocation(iconPath, iconPath.Capacity, out var iconIndex);
                     link.GetShowCmd(out var show); link.GetHotkey(out var hotkey);
-                    using var file=File.OpenRead(item.Path);
-                    Span<byte> header=stackalloc byte[24]; file.ReadExactly(header);
-                    uint flags=System.Buffers.Binary.BinaryPrimitives.ReadUInt32LittleEndian(header[20..]);
+                    using var file = File.OpenRead(item.Path);
+                    Span<byte> header = stackalloc byte[24]; file.ReadExactly(header);
+                    uint flags = System.Buffers.Binary.BinaryPrimitives.ReadUInt32LittleEndian(header[20..]);
                     // Run-as-admin, window mode, hotkey and custom icon change behavior.
                     // Keep those shortcuts separate even when target/arguments match.
-                    return ShortcutIdentity(item.Name,target.ToString(),args.ToString(),dir.ToString())
+                    return ShortcutIdentity(item.Name, target.ToString(), args.ToString(), dir.ToString())
                         + $"\0{flags & 0x2000}\0{show}\0{hotkey}\0{iconPath.ToString().ToUpperInvariant()}\0{iconIndex}";
                 }
             }

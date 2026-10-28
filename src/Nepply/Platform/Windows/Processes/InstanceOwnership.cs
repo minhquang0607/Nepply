@@ -8,7 +8,7 @@ internal static class InstanceOwnership
     internal static bool TryAcquire(Mutex mutex)
     {
         try { return mutex.WaitOne(0); }
-        catch(AbandonedMutexException)
+        catch (AbandonedMutexException)
         {
             // WaitOne grants ownership before reporting abandonment. Startup
             // recovery must still restore the previous Desktop visibility lease.

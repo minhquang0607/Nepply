@@ -8,7 +8,7 @@ using Nepply.Services;
 internal static class PanelShortcutTests
 {
     private const int F5 = 0x74, S = 0x53, F = 0x46, Esc = 0x1B;
-    internal static void Run(Action<string,bool> check, Action<int> pump)
+    internal static void Run(Action<string, bool> check, Action<int> pump)
     {
         int scans = 0;
         var icons = new DesktopIconService(_ => { Interlocked.Increment(ref scans); return Task.FromResult(new List<DesktopIcon>()); });

@@ -45,7 +45,7 @@ public sealed class AnimationService(TranslateTransform transform, Window window
         IsVisible = visible; IsAnimating = true;
         int generation = ++_generation;
         if (visible) window.Show();
-        if(generation!=_generation) return;
+        if (generation != _generation) return;
         VisibilityChanged?.Invoke(visible);
         if (!AnimationsEnabled()) { Settle(visible); return; }
         var property = settings.EdgePosition.IsHorizontal() ? TranslateTransform.YProperty : TranslateTransform.XProperty;
@@ -65,7 +65,7 @@ public sealed class AnimationService(TranslateTransform transform, Window window
     }
     private void ClearMorph()
     {
-        if(surface?.Clip is RectangleGeometry geometry) geometry.BeginAnimation(RectangleGeometry.RectProperty,null);
-        if(surface!=null) surface.Clip=null;
+        if (surface?.Clip is RectangleGeometry geometry) geometry.BeginAnimation(RectangleGeometry.RectProperty, null);
+        if (surface != null) surface.Clip = null;
     }
 }

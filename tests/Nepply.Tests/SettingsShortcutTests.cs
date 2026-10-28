@@ -11,7 +11,7 @@ using Nepply.Views;
 internal static class SettingsShortcutTests
 {
     private const int Space = 0x20, D = 0x44, F5 = 0x74;
-    internal static void Run(Action<string,bool> check, Action<int> pump)
+    internal static void Run(Action<string, bool> check, Action<int> pump)
     {
         foreach (var language in LocalizationService.Languages)
         {

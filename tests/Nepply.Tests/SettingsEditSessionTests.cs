@@ -3,7 +3,7 @@ using Nepply.Modules.Settings;
 
 internal static class SettingsEditSessionTests
 {
-    internal static void Run(Action<string,bool> check)
+    internal static void Run(Action<string, bool> check)
     {
         var target = new AppSettings { IconOrder = ["a", "b"] };
         var original = target.Clone();

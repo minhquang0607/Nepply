@@ -14,12 +14,12 @@ public sealed class SettingsStore(string path, string? legacyPath = null)
     public UserMessage? RecoveryNotice { get; private set; }
     private static AppSettings Read(string file)
     {
-        using var stream = new FileStream(file,FileMode.Open,FileAccess.Read,FileShare.Read);
+        using var stream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read);
         if (stream.Length > MaximumBytes) throw new InvalidDataException("Settings file exceeds size limit.");
         using var document = JsonDocument.Parse(stream);
         if (document.RootElement.ValueKind != JsonValueKind.Object) throw new JsonException("Settings must be an object.");
         // Inspect the envelope before decoding fields whose types may change in future versions.
-        if (document.RootElement.TryGetProperty(nameof(AppSettings.SchemaVersion),out var schema))
+        if (document.RootElement.TryGetProperty(nameof(AppSettings.SchemaVersion), out var schema))
         {
             if (schema.ValueKind != JsonValueKind.Number || !schema.TryGetInt64(out var version) || version < 0)
                 throw new JsonException("Invalid settings schema.");
@@ -56,7 +56,7 @@ public sealed class SettingsStore(string path, string? legacyPath = null)
                 AppLogger.Error(ex, "Read settings");
                 RecoveryNotice = UserMessage.FromKey("RecoveryDamaged");
                 try { File.Move(path, path + ".broken-" + DateTime.UtcNow.ToString("yyyyMMddHHmmss") + "-" + Guid.NewGuid().ToString("N")); }
-                catch (Exception move) when (move is IOException or UnauthorizedAccessException) { _readOnly = true; AppLogger.Error(move,"Preserve damaged settings"); }
+                catch (Exception move) when (move is IOException or UnauthorizedAccessException) { _readOnly = true; AppLogger.Error(move, "Preserve damaged settings"); }
             }
             try
             {
@@ -74,7 +74,7 @@ public sealed class SettingsStore(string path, string? legacyPath = null)
                 return new();
             }
             catch (Exception ex) when (ex is IOException or InvalidDataException or UnauthorizedAccessException or JsonException or ArgumentException)
-            { AppLogger.Error(ex,"Read backup settings"); RecoveryNotice = UserMessage.FromKey("RecoveryUnreadable"); }
+            { AppLogger.Error(ex, "Read backup settings"); RecoveryNotice = UserMessage.FromKey("RecoveryUnreadable"); }
             if (mayImport && !_readOnly && legacyPath != null)
                 return ImportLegacy(legacyPath);
             return new();
@@ -128,8 +128,8 @@ public sealed class SettingsStore(string path, string? legacyPath = null)
                 if (bytes.Length > MaximumBytes) throw new InvalidDataException("Settings exceed the 2 MiB limit.").WithUserMessage("SettingsTooLargeError");
                 using (var stream = new FileStream(temporary, FileMode.CreateNew, FileAccess.Write, FileShare.None))
                 { stream.Write(bytes); stream.Flush(true); }
-                if (File.Exists(path)) File.Replace(temporary,path,path + ".bak");
-                else File.Move(temporary,path);
+                if (File.Exists(path)) File.Replace(temporary, path, path + ".bak");
+                else File.Move(temporary, path);
             }
             finally { if (File.Exists(temporary)) File.Delete(temporary); }
         }
