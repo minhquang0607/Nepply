@@ -54,6 +54,12 @@ body:
     validations:
       required: true
   - type: textarea
+    id: diagnostics
+    attributes:
+      label: Diagnostics (optional) · Chẩn đoán (tùy chọn)
+      description: "Settings → App → Report a problem copies this; review it before posting. · Cài đặt → Ứng dụng → Báo lỗi tự chép phần này; hãy xem lại trước khi đăng."
+      render: text
+  - type: textarea
     id: logs
     attributes:
       label: Logs (optional, redacted) · Log (tùy chọn, đã che)

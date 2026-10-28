@@ -598,6 +598,38 @@ public partial class SettingsWindow : Window
         try { System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(path) { UseShellExecute = true }); InfoStatus.Text = ""; }
         catch (Exception ex) { Services.AppLogger.Error(ex, "Open local documentation"); InfoStatus.SetResourceReference(TextBlock.TextProperty, "Loc.LocalDocumentError"); }
     }
+    // Replaceable so tests never start a browser.
+    internal Action<Uri> OpenLink { get; set; } = uri =>
+    {
+        using var _ = System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(uri.AbsoluteUri) { UseShellExecute = true });
+    };
+    /// <summary>
+    /// Bug form prefilled with the Nepply and Windows versions only. Hardware names and
+    /// other diagnostics go through the clipboard so nothing personal lands in a URL.
+    /// </summary>
+    internal static Uri BugReportUri(string version, Version windows)
+    {
+        string os = (windows.Major == 10 && windows.Build >= 22000 ? "Windows 11" : windows.Major == 10 ? "Windows 10" : "Windows " + windows.Major)
+            + " (build " + windows.Build.ToString(System.Globalization.CultureInfo.InvariantCulture) + ")";
+        return new($"https://github.com/{Modules.Updates.UpdatePolicy.Repository}/issues/new?template=bug_report.yml"
+            + "&version=" + Uri.EscapeDataString(version) + "&windows=" + Uri.EscapeDataString(os));
+    }
+    private void ReportProblem_Click(object sender, RoutedEventArgs e)
+    {
+        bool copied = true;
+        try { CopyText(BuildDiagnosticReport()); }
+        catch (Exception ex) when (ex is System.Runtime.InteropServices.COMException or System.Runtime.InteropServices.ExternalException)
+        {
+            Services.AppLogger.Error(ex, "Copy diagnostics for bug report");
+            copied = false;
+        }
+        try
+        {
+            OpenLink(BugReportUri(Modules.Updates.UpdateService.CurrentVersion.Split('+')[0], Environment.OSVersion.Version));
+            InfoStatus.SetResourceReference(TextBlock.TextProperty, copied ? "Loc.ReportProblemOpened" : "Loc.DiagnosticsClipboardBusy");
+        }
+        catch (Exception ex) { Services.AppLogger.Error(ex, "Open bug report"); InfoStatus.SetResourceReference(TextBlock.TextProperty, "Loc.OpenBrowserError"); }
+    }
     private void OpenSupport_Click(object sender, RoutedEventArgs e)
     {
         try { System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("https://github.com/minhquang0607/Nepply/issues") { UseShellExecute = true }); InfoStatus.Text = ""; }
