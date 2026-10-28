@@ -1,26 +1,40 @@
-Nepply - BẢN THỬ NỘI BỘ / LOCAL TEST BUILD
+﻿Nepply beta - please read before installing
 
-Publisher: Minh Quang
-Support: https://github.com/minhquang0607/Nepply/issues
+This is a public beta. Nepply is not code-signed yet, so Windows SmartScreen
+may warn you. Continue only if you downloaded this file from the official
+release page: https://github.com/minhquang0607/Nepply/releases
+Never turn off Windows security features to install or run Nepply.
 
-Bản này chưa có chữ ký phát hành. Nhãn kiểm thử mô tả mức nghiệm thu,
-không hạn chế các quyền được giấy phép MIT cấp.
-Xem LICENSE và THIRD_PARTY_NOTICES.md cùng thư mục để biết điều khoản.
-Kết quả nghiệm thu chỉ áp dụng cho đúng hash artifact trong biên bản tương ứng.
+- Desktop icons: Nepply hides your Desktop icons only if you turn that option
+  on. Files are never moved or deleted, and icons come back when Nepply exits.
+  If they stay hidden, right-click the Desktop and choose
+  View > Show desktop icons.
+- System monitor: available readings depend on your hardware, drivers and
+  permissions. CPU temperature is unavailable on many PCs. This installer does
+  not install any driver.
+- Privacy: no ads, analytics or automatic crash uploads.
 
-Hardware sensor availability depends on your hardware, driver and permissions.
-CPU temperature is unavailable on many Intel/AMD PCs; motherboard temperature
-and fan speed are not supported. This installer does not install PawnIO or any
-other hardware monitoring driver. Do not disable Windows security protections
-to obtain sensor readings.
+Report a problem: https://github.com/minhquang0607/Nepply/issues
+License: MIT (see LICENSE). Third-party components keep their own licenses
+(THIRD_PARTY_NOTICES.md).
 
-Desktop icons: Nepply can hide the Windows Desktop icons only if you turn that
-option on (first-run screen or Settings > Desktop). Files are never moved or
-deleted; icons are restored when Nepply exits. If they stay hidden, right-click
-the Desktop and choose View > Show desktop icons.
-Biểu tượng Desktop: Nepply chỉ ẩn icon Desktop khi bạn bật tùy chọn này; file
-không bị di chuyển hay xóa và icon được khôi phục khi thoát Nepply. Nếu icon
-vẫn ẩn: chuột phải Desktop > Xem > Hiển thị biểu tượng màn hình nền.
+------------------------------------------------------------------------------
 
-Mã Nepply: MIT License, Copyright (c) 2026 Minh Quang.
-Thư viện bên thứ ba giữ giấy phép riêng. Thông báo này không thay thế LICENSE.
+Nepply bản beta - vui lòng đọc trước khi cài
+
+Đây là bản beta công khai. Nepply chưa được ký số nên Windows SmartScreen có
+thể cảnh báo. Chỉ tiếp tục nếu bạn tải file này từ trang phát hành chính thức:
+https://github.com/minhquang0607/Nepply/releases
+Không tắt các tính năng bảo mật của Windows để cài hoặc chạy Nepply.
+
+- Biểu tượng Desktop: Nepply chỉ ẩn biểu tượng Desktop khi bạn bật tùy chọn
+  này. File không bao giờ bị di chuyển hay xóa, và biểu tượng trở lại khi
+  thoát Nepply. Nếu vẫn bị ẩn, nhấp chuột phải vào Desktop và chọn
+  Xem > Hiển thị biểu tượng màn hình nền.
+- Theo dõi hệ thống: số đo hiển thị được tùy phần cứng, driver và quyền truy
+  cập. Nhiều máy không đọc được nhiệt độ CPU. Bộ cài này không cài driver nào.
+- Quyền riêng tư: không quảng cáo, không analytics, không tự gửi báo cáo lỗi.
+
+Báo lỗi: https://github.com/minhquang0607/Nepply/issues
+Giấy phép: MIT (xem LICENSE). Thành phần bên thứ ba giữ giấy phép riêng
+(THIRD_PARTY_NOTICES.md).

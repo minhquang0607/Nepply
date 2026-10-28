@@ -46,6 +46,8 @@ UninstallDisplayIcon={app}\Nepply.exe
 Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
+; Follow the Windows display language; ask only when it is not one of [Languages].
+ShowLanguageDialog=auto
 ; Let the user finish editing and restore Desktop through a normal app exit.
 ; Stable across rename: also block installation while a legacy build owns Desktop.
 AppMutex=Local\HoverBox-SetupGuard
@@ -53,7 +55,14 @@ CloseApplications=no
 RestartApplications=no
 
 [Languages]
-Name: "english"; MessagesFile: "compiler:Default.isl"
+; Inno Setup ships these translations; Messages\Nepply.*.isl adds Nepply's own text.
+Name: "english"; MessagesFile: "compiler:Default.isl,Messages\Nepply.en.isl"
+Name: "japanese"; MessagesFile: "compiler:Languages\Japanese.isl,Messages\Nepply.ja.isl"
+Name: "german"; MessagesFile: "compiler:Languages\German.isl,Messages\Nepply.de.isl"
+Name: "chinesesimplified"; MessagesFile: "compiler:Languages\ChineseSimplified.isl,Messages\Nepply.zh.isl"
+Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl,Messages\Nepply.ru.isl"
+Name: "french"; MessagesFile: "compiler:Languages\French.isl,Messages\Nepply.fr.isl"
+Name: "thai"; MessagesFile: "compiler:Languages\Thai.isl,Messages\Nepply.th.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
@@ -123,7 +132,7 @@ begin
   end;
   Result := not CheckForMutexes('Local\HoverBox-SetupGuard');
   if not Result then
-    MsgBox('Nepply has not exited safely. No update was installed. Close Nepply and retry.', mbError, MB_OK);
+    MsgBox(CustomMessage('UpdateNotExited'), mbError, MB_OK);
 end;
 
 function LocateDesktopView(var View, List: HWND): Boolean;
@@ -237,14 +246,14 @@ begin
   if RunAppRecovery(RecoveryExitCode) then Exit;
   if RecoveryExitCode = RecoveryAppRunning then
   begin
-    Result := 'Nepply is still running and owns your Desktop icons. Close Nepply and retry. No update was installed.';
+    Result := CustomMessage('UpgradeAppRunning');
     Exit;
   end;
   if RecoverDesktopWithoutApp() then Exit;
   { Never strand the user on a blocked old build: the new Nepply restores the
     retained lease at its next start (App.OnStartup). }
   ClearPersistedHiddenDesktop();
-  SuppressibleMsgBox('Setup could not restore your Desktop icons right now. The update will continue and Nepply restores them when it next starts. If they stay hidden, right-click the Desktop and choose View > Show desktop icons.', mbInformation, MB_OK, IDOK);
+  SuppressibleMsgBox(CustomMessage('UpgradeRecoveryDeferred'), mbInformation, MB_OK, IDOK);
 end;
 
 procedure RetireLegacyShortcut(const ShortcutPath: String);
@@ -301,14 +310,14 @@ begin
   if RunAppRecovery(RecoveryExitCode) then Exit;
   if RecoveryExitCode = RecoveryAppRunning then
   begin
-    MsgBox('Nepply is still running and owns your Desktop icons. Close Nepply and try again. No application files have been removed.', mbError, MB_OK);
+    MsgBox(CustomMessage('UninstallAppRunning'), mbError, MB_OK);
     Result := False;
     Exit;
   end;
   if RecoverDesktopWithoutApp() then Exit;
   { A blocked or broken Nepply.exe must never make uninstall impossible. }
   ClearPersistedHiddenDesktop();
-  Result := SuppressibleMsgBox('Nepply could not restore your Desktop icons automatically. Windows may have blocked Nepply.exe; do not disable protection. You can still uninstall: afterwards, right-click the Desktop and choose View > Show desktop icons (icons also return after you sign out and back in).' + #13#10#13#10 + 'Continue uninstalling?', mbConfirmation, MB_YESNO, IDYES) = IDYES;
+  Result := SuppressibleMsgBox(CustomMessage('UninstallRecoveryFailed'), mbConfirmation, MB_YESNO, IDYES) = IDYES;
 end;
 
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
