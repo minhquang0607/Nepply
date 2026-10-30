@@ -44,7 +44,16 @@ public partial class WelcomeWindow : Window
         _previewedLanguage = true;
         LocalizationService.Apply(language);
     }
-    private void LanguageChanged() => RefreshLanguage(EdgeChoice.SelectedIndex);
+    private void LanguageChanged()
+    {
+        // A Windows preference change re-applies the saved language; keep the one being previewed.
+        if (_previewedLanguage && LocalizationService.CurrentLanguage != SelectedLanguage)
+        {
+            LocalizationService.Apply(SelectedLanguage);
+            return;
+        }
+        RefreshLanguage(EdgeChoice.SelectedIndex);
+    }
     private void RefreshLanguage(int selected)
     {
         EdgeChoice.ItemsSource = Enum.GetNames<EdgePosition>().Select(LocalizationService.Get).ToArray();

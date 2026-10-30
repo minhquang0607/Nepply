@@ -56,6 +56,8 @@ internal static class GuidanceTests
         check("Welcome language choice previews immediately",
             LocalizationService.CurrentLanguage == other && firstRun.SelectedLanguage == other
             && Equals(((Button)firstRun.FindName("StartButton")).Content, LocalizationService.Get("WelcomeStart")));
+        LocalizationService.Apply(before); // What a Windows preference change does through ThemeService.
+        check("Welcome language preview survives a Windows preference change", LocalizationService.CurrentLanguage == other && firstRun.SelectedLanguage == other);
         firstRun.Close();
         check("Closing the welcome without starting restores the saved language", LocalizationService.CurrentLanguage == new AppSettings().Language);
         LocalizationService.Apply(before);
