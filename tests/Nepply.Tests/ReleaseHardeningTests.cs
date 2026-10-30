@@ -139,7 +139,8 @@ internal static class ReleaseHardeningTests
         catch (InvalidDataException) { hugeSaveRejected = true; }
         check("Oversized save preserves readable last configuration", hugeSaveRejected && File.ReadAllText(boundedPath) == originalSettings && boundedStore.Load().PanelWidth == 432 && Directory.GetFiles(root, "bounded-save.json.tmp-*").Length == 0);
         var oversizedPath = Path.Combine(root, "oversized.json");
-        File.WriteAllText(oversizedPath, new string(' ', 2 * 1024 * 1024 + 1));
+        // Valid JSON, so only the size limit can reject it.
+        File.WriteAllText(oversizedPath, "{\"PanelWidth\":432,\"IconOrder\":[\"" + new string('x', SettingsStore.MaximumBytes) + "\"]}");
         var oversized = new SettingsStore(oversizedPath);
         oversized.Load();
         check("Oversized settings recover without crashing", oversized.RecoveryNotice?.Key == "RecoveryDamaged" && !File.Exists(oversizedPath) && Directory.GetFiles(root, "oversized.json.broken-*").Length == 1);
