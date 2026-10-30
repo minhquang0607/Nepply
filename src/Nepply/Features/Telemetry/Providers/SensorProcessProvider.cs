@@ -13,13 +13,13 @@ public sealed class SensorProcessProvider : IHardwareProvider
     private Process? _child;
     internal Process? DiagnosticProcess => _child;
     private NamedPipeServerStream? _pipe;
-    internal sealed record Request(int Version,string GpuIdentifier);
-    internal sealed record Response(int Version,HardwareReading Reading);
+    internal sealed record Request(int Version, string GpuIdentifier);
+    internal sealed record Response(int Version, HardwareReading Reading);
     public string Name => "Isolated native sensors";
     public SensorProcessProvider(string? executable = null) => _executable = executable ?? Environment.ProcessPath!;
 
-    public HardwareReading Read(AppSettings settings) => Read(settings,CancellationToken.None);
-    public HardwareReading Read(AppSettings settings,CancellationToken cancellation)
+    public HardwareReading Read(AppSettings settings) => Read(settings, CancellationToken.None);
+    public HardwareReading Read(AppSettings settings, CancellationToken cancellation)
     {
         // Includes process startup and first driver enumeration; a stuck driver cannot block indefinitely.
         using var deadline = CancellationTokenSource.CreateLinkedTokenSource(cancellation);
@@ -40,13 +40,13 @@ public sealed class SensorProcessProvider : IHardwareProvider
             start.ArgumentList.Add(Environment.ProcessId.ToString(System.Globalization.CultureInfo.InvariantCulture));
             _child = Process.Start(start) ?? throw new IOException("Sensor process did not start.");
             await _pipe.WaitForConnectionAsync(token).ConfigureAwait(false);
-            Helpers.HelperPipeIdentity.RequireClient(_pipe,_child.Id);
+            Helpers.HelperPipeIdentity.RequireClient(_pipe, _child.Id);
         }
-        await SensorWireProtocol.WriteAsync(_pipe,new Request(1,settings.GpuIdentifier),SensorWireProtocol.RequestLimit,token).ConfigureAwait(false);
-        var response=await SensorWireProtocol.ReadAsync<Response>(_pipe,SensorWireProtocol.ResponseLimit,token).ConfigureAwait(false)
+        await SensorWireProtocol.WriteAsync(_pipe, new Request(1, settings.GpuIdentifier), SensorWireProtocol.RequestLimit, token).ConfigureAwait(false);
+        var response = await SensorWireProtocol.ReadAsync<Response>(_pipe, SensorWireProtocol.ResponseLimit, token).ConfigureAwait(false)
             ?? throw new IOException("Sensor process disconnected.");
-        if(response.Version!=1 || response.Reading==null) throw new InvalidDataException("Unsupported sensor response.");
-        var reading=response.Reading;
+        if (response.Version != 1 || response.Reading == null) throw new InvalidDataException("Unsupported sensor response.");
+        var reading = response.Reading;
         // Freshness is measured by the receiving process, not by a remote timestamp.
         return reading with { MonotonicTimestamp = Stopwatch.GetTimestamp() };
     }
@@ -59,7 +59,8 @@ public sealed class SensorProcessProvider : IHardwareProvider
             // EOF lets the normal path close driver handles cleanly. Only a stuck child is killed.
             _pipe?.Dispose();
             if (_child is { HasExited: false } && !_child.WaitForExit(300)) _child.Kill();
-        } catch (InvalidOperationException) { }
+        }
+        catch (InvalidOperationException) { }
         finally
         {
             _pipe?.Dispose(); _pipe = null;
@@ -74,17 +75,17 @@ public sealed class SensorProcessProvider : IHardwareProvider
         using var watchdog = new ParentExitSubscription(parent, () => Environment.Exit(0));
         using var pipe = new NamedPipeClientStream(".", pipeName, PipeDirection.InOut, PipeOptions.Asynchronous | PipeOptions.CurrentUserOnly);
         pipe.Connect(10000);
-        Helpers.HelperPipeIdentity.RequireServer(pipe,parent);
+        Helpers.HelperPipeIdentity.RequireServer(pipe, parent);
         using IHardwareProvider provider = new LibreHardwareProvider();
         while (true)
         {
             using var idle = new CancellationTokenSource(TimeSpan.FromSeconds(90));
-            var request=SensorWireProtocol.ReadAsync<Request>(pipe,SensorWireProtocol.RequestLimit,idle.Token).GetAwaiter().GetResult();
-            if(request==null) return;
-            if(request.Version!=1 || request.GpuIdentifier==null || request.GpuIdentifier.Length>AppSettings.MaximumIdentifierLength) throw new InvalidDataException("Unsupported sensor request.");
-            var settings = new AppSettings { GpuIdentifier=request.GpuIdentifier };
+            var request = SensorWireProtocol.ReadAsync<Request>(pipe, SensorWireProtocol.RequestLimit, idle.Token).GetAwaiter().GetResult();
+            if (request == null) return;
+            if (request.Version != 1 || request.GpuIdentifier == null || request.GpuIdentifier.Length > AppSettings.MaximumIdentifierLength) throw new InvalidDataException("Unsupported sensor request.");
+            var settings = new AppSettings { GpuIdentifier = request.GpuIdentifier };
             settings.Validate();
-            SensorWireProtocol.WriteAsync(pipe,new Response(1,provider.Read(settings)),SensorWireProtocol.ResponseLimit,idle.Token).GetAwaiter().GetResult();
+            SensorWireProtocol.WriteAsync(pipe, new Response(1, provider.Read(settings)), SensorWireProtocol.ResponseLimit, idle.Token).GetAwaiter().GetResult();
         }
     }
 }

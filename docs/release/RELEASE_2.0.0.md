@@ -1,4 +1,4 @@
-# Nepply 1.0.0
+# Nepply 2.0.0
 
 [English](#english) · [Tiếng Việt](#tiếng-việt)
 
@@ -14,8 +14,8 @@ A tidier desktop. Your apps and system stats, within reach. Nepply is a Windows 
 
 | Choose | Planned asset |
 | --- | --- |
-| Standard installation — recommended | `Nepply-1.0.0-Setup.exe` |
-| Extract and run, no installer | `Nepply-1.0.0-win-x64-portable.zip` |
+| Standard installation — recommended | `Nepply-2.0.0-Setup.exe` |
+| Extract and run, no installer | `Nepply-2.0.0-win-x64-portable.zip` |
 | Compare download SHA-256 hashes | `SHA256.json` |
 
 Extract the complete portable archive and run `Nepply.exe`; keep `guardian` and all companion files. Settings still live in your Windows user profile. GitHub's Source code archives are not ready-to-run apps. The distributions bundle .NET runtime.
@@ -36,7 +36,7 @@ Extract the complete portable archive and run `Nepply.exe`; keep `guardian` and 
 
 - Sensor readings depend on hardware; motherboard temperature/RPM are not supported. Do not disable antivirus or anti-cheat to obtain data.
 - Automatic EXE installation is not enabled for release; portable does not replace its own files. Check Releases and the next version's instructions.
-- Internal `2.5.0-*` builds do not see `1.0.0` as an upgrade. Exit the old build, back up settings and switch manually.
+- Internal `2.5.0-*` builds do not see `2.0.0` as an upgrade. Exit the old build, back up settings and switch manually.
 - Nepply restores Desktop icons it hid when exiting. If abnormal termination leaves icons hidden, follow troubleshooting instructions.
 - A valid signature does not guarantee acceptance by every Windows or enterprise policy. Do not disable Windows protection to bypass warnings.
 
@@ -58,13 +58,13 @@ Yêu cầu: **Windows 10 phiên bản 2004 trở lên hoặc Windows 11, x64**.
 
 | Bạn muốn | Tệp trong Assets |
 | --- | --- |
-| Cài như ứng dụng thông thường — khuyên dùng | `Nepply-1.0.0-Setup.exe` |
-| Giải nén rồi chạy, không dùng bộ cài | `Nepply-1.0.0-win-x64-portable.zip` |
+| Cài như ứng dụng thông thường — khuyên dùng | `Nepply-2.0.0-Setup.exe` |
+| Giải nén rồi chạy, không dùng bộ cài | `Nepply-2.0.0-win-x64-portable.zip` |
 | Đối chiếu SHA-256 của tệp tải | `SHA256.json` |
 
 Với portable, giải nén **toàn bộ** và chạy `Nepply.exe`; không tách EXE khỏi thư mục `guardian` hoặc các file đi kèm. Cấu hình vẫn lưu trong tài khoản Windows. Không chọn `Source code` nếu bạn chỉ muốn dùng app. Bản đóng gói có sẵn .NET runtime.
 
-### ✨ Có gì trong 1.0.0?
+### ✨ Có gì trong 2.0.0?
 
 - Mở panel từ cạnh màn hình hoặc Ctrl + Space; ghim khi cần.
 - Tìm và mở mục Desktop, dùng menu chuột phải của Windows.
@@ -80,7 +80,7 @@ Với portable, giải nén **toàn bộ** và chạy `Nepply.exe`; không tách
 
 - Số đo cảm biến phụ thuộc phần cứng; không có nhiệt độ bo mạch chủ/RPM. Không tắt antivirus hay anti-cheat để lấy thêm số đo.
 - Tự cài cập nhật EXE chưa được mở cho phát hành; portable chưa tự thay file. Hãy kiểm tra trang Releases và đọc hướng dẫn của bản mới.
-- Nếu đang dùng bản thử `2.5.0-*`, updater không coi `1.0.0` là bản nâng cấp. Thoát bản cũ và chuyển thủ công; sao lưu cấu hình trước khi chuyển.
+- Nếu đang dùng bản thử `2.5.0-*`, updater không coi `2.0.0` là bản nâng cấp. Thoát bản cũ và chuyển thủ công; sao lưu cấu hình trước khi chuyển.
 - Khi thoát, Nepply khôi phục icon Desktop do app đã ẩn. Nếu app đóng bất thường và icon chưa trở lại, xem hướng dẫn xử lý sự cố.
 - Chữ ký hợp lệ không bảo đảm mọi chính sách Windows hoặc doanh nghiệp đều cho chạy. Không tắt bảo vệ Windows để vượt cảnh báo.
 

@@ -9,7 +9,7 @@ public sealed class GpuCardViewModel(GpuReading reading) : INotifyPropertyChange
     public string Name => _reading.Name;
     public string Label => _reading.Label;
     public string Details => TelemetrySourceText.GpuDetails(_reading);
-    internal void RefreshLanguage()=>PropertyChanged?.Invoke(this,new(nameof(Details)));
+    internal void RefreshLanguage() => PropertyChanged?.Invoke(this, new(nameof(Details)));
     public double LoadValue => _reading.LoadValue;
     public string LoadText => _reading.LoadText;
     public string TemperatureText => string.IsNullOrWhiteSpace(_reading.TemperatureText) ? "—" : _reading.TemperatureText;

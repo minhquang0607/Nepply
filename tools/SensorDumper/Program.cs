@@ -49,7 +49,7 @@ class Program
     {
         string indent = new string(' ', indentLevel * 4);
         Console.WriteLine($"{indent}- Hardware: {hardware.Name} (Type: {hardware.HardwareType})");
-        
+
         foreach (var sensor in hardware.Sensors)
         {
             Console.WriteLine($"{indent}    Sensor: {sensor.Name} (Type: {sensor.SensorType}) = {sensor.Value}");

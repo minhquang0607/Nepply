@@ -11,13 +11,19 @@ internal static class BrandMigrationTests
         Directory.CreateDirectory(root);
         string old = Path.Combine(root, "HoverBox", "settings.json");
         string current = Path.Combine(root, "Nepply", "settings.json");
-        var original = new AppSettings { PanelWidth = 456, Accent = "Neon Cyan", HasCompletedOnboarding = true,
-            IconOrder = [@"C:\Desktop\example.lnk"], AutoStart = true };
+        var original = new AppSettings
+        {
+            PanelWidth = 456,
+            Accent = "Neon Cyan",
+            HasCompletedOnboarding = true,
+            IconOrder = [@"C:\Desktop\example.lnk"],
+            AutoStart = true
+        };
         new SettingsStore(old).Save(original);
         byte[] before = File.ReadAllBytes(old);
         var migrationStore = new SettingsStore(current, old);
         var migrated = migrationStore.Load();
-        check("Successful rebrand exposes an import notice",migrationStore.RecoveryNotice?.Key == "RecoveryLegacyImported");
+        check("Successful rebrand exposes an import notice", migrationStore.RecoveryNotice?.Key == "RecoveryLegacyImported");
         check("Rebrand keeps layout, icon order and onboarding", migrated.PanelWidth == 456 && migrated.HasCompletedOnboarding
             && migrated.IconOrder.SequenceEqual(original.IconOrder) && migrated.AutoStart);
         check("Rebrand persists new settings and leaves original byte-identical", File.Exists(current) && before.SequenceEqual(File.ReadAllBytes(old)));
@@ -37,7 +43,7 @@ internal static class BrandMigrationTests
         string futurePath = Path.Combine(root, "future.json");
         var future = new SettingsStore(futurePath, old);
         future.Load();
-        check("Future legacy schema exposes its own recovery reason",future.RecoveryNotice?.Key == "RecoveryLegacyNewer");
+        check("Future legacy schema exposes its own recovery reason", future.RecoveryNotice?.Key == "RecoveryLegacyNewer");
         bool rejected = false;
         try { future.Save(new()); } catch (IOException) { rejected = true; }
         check("Future legacy schema is neither downgraded nor overwritten", rejected && !File.Exists(futurePath)

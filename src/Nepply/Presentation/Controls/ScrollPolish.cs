@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
 namespace Nepply.Views;
+
 public static class ScrollPolish
 {
     public static readonly DependencyProperty SuppressMenuProperty = DependencyProperty.RegisterAttached("SuppressMenu", typeof(bool), typeof(ScrollPolish), new PropertyMetadata(false, Changed));

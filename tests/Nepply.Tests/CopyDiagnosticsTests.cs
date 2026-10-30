@@ -6,7 +6,7 @@ using Nepply.Views;
 
 internal static class CopyDiagnosticsTests
 {
-    internal static void Run(Action<string,bool> check, Action<int> pump)
+    internal static void Run(Action<string, bool> check, Action<int> pump)
     {
         LocalizationService.Apply("vi");
         var snapshot = HardwareInfoSnapshot.Empty with
@@ -32,6 +32,26 @@ internal static class CopyDiagnosticsTests
             settings.CopyText = _ => throw new System.Runtime.InteropServices.COMException("Clipboard busy");
             button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
             check("A busy clipboard reports a retryable error instead of crashing", info.Text == LocalizationService.Get("DiagnosticsClipboardBusy"));
+
+            Uri? opened = null;
+            copied = null;
+            settings.CopyText = text => copied = text;
+            settings.OpenLink = uri => opened = uri;
+            ((Button)settings.FindName("ReportProblemButton")).RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+            check("Report a problem copies diagnostics and opens the prefilled bug form",
+                copied != null && copied.Contains("Fixture CPU") && opened != null
+                && opened.AbsoluteUri.StartsWith("https://github.com/minhquang0607/Nepply/issues/new?template=bug_report.yml&version=", StringComparison.Ordinal)
+                && info.Text == LocalizationService.Get("ReportProblemOpened"));
+            check("The bug form URL carries versions only, never diagnostics or account data",
+                !opened!.AbsoluteUri.Contains("Fixture", StringComparison.OrdinalIgnoreCase)
+                && !opened.AbsoluteUri.Contains(Uri.EscapeDataString(Environment.UserName), StringComparison.OrdinalIgnoreCase));
+            check("Bug form names Windows 11 by build and keeps the exact build number",
+                Uri.UnescapeDataString(SettingsWindow.BugReportUri("1.0.0-beta.1", new Version(10, 0, 26100)).Query)
+                    == "?template=bug_report.yml&version=1.0.0-beta.1&windows=Windows 11 (build 26100)"
+                && Uri.UnescapeDataString(SettingsWindow.BugReportUri("1.0.0", new Version(10, 0, 19045)).Query).EndsWith("windows=Windows 10 (build 19045)", StringComparison.Ordinal));
+            settings.OpenLink = _ => throw new System.ComponentModel.Win32Exception(1155);
+            ((Button)settings.FindName("ReportProblemButton")).RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+            check("Report a problem explains a missing browser instead of crashing", info.Text == LocalizationService.Get("OpenBrowserError"));
         }
         finally { settings.Close(); }
     }

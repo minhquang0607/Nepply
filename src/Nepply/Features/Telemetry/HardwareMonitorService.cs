@@ -22,7 +22,7 @@ public sealed class HardwareMonitorService : IHardwareMonitor
     private long _networkSamples;
     internal long WindowsSampleCount => Interlocked.Read(ref _windowsSamples);
     internal long NetworkSampleCount => Interlocked.Read(ref _networkSamples);
-    internal Task Completion { get { lock (_lifecycle) return Task.WhenAll(_fastTask ?? Task.CompletedTask,_sensorTask ?? Task.CompletedTask); } }
+    internal Task Completion { get { lock (_lifecycle) return Task.WhenAll(_fastTask ?? Task.CompletedTask, _sensorTask ?? Task.CompletedTask); } }
     public event Action<HardwareInfoSnapshot>? HardwareUpdated;
     private readonly Func<IHardwareProvider> _providerFactory;
     public HardwareMonitorService(int intervalMs = 1500) : this(() => new LibreHardwareProvider(), intervalMs) { }
@@ -71,7 +71,7 @@ public sealed class HardwareMonitorService : IHardwareMonitor
                 if (!settings.ShowMonitor || (settings.SuspendMonitorWhenHidden && !_visible))
                 {
                     system = null; // Reset delta baselines when collection resumes.
-                    await _fastWake.WaitAsync(Timeout.Infinite,token).ConfigureAwait(false);
+                    await _fastWake.WaitAsync(Timeout.Infinite, token).ConfigureAwait(false);
                     continue;
                 }
                 try
@@ -81,14 +81,15 @@ public sealed class HardwareMonitorService : IHardwareMonitor
                     float? cpu = system.ReadCpu();
                     var ram = SystemMetrics.ReadMemory();
                     long networkBefore = system.NetworkSampleCount;
-                    var net = system.ReadNetwork(settings.NetworkInterfaceId,settings.ShowNetwork);
-                    Interlocked.Add(ref _networkSamples,system.NetworkSampleCount-networkBefore);
+                    var net = system.ReadNetwork(settings.NetworkInterfaceId, settings.ShowNetwork);
+                    Interlocked.Add(ref _networkSamples, system.NetworkSampleCount - networkBefore);
                     var native = Volatile.Read(ref _hardware);
                     if (!settings.HardwareSensorsEnabled) native = HardwareReading.Empty with { Error = "SensorDisabled" };
-                    else native = TelemetryFreshness.ExpireIfNeeded(native,Period(settings));
+                    else native = TelemetryFreshness.ExpireIfNeeded(native, Period(settings));
                     var snapshot = new HardwareInfoSnapshot(Interlocked.Increment(ref _sequence), DateTimeOffset.UtcNow,
                         cpu, ram.Used, ram.Total, ram.Load, net.Upload, net.Download, net.Name,
-                        native with { VisibleGpus = SelectGpus(native.Gpus, settings) }, []) { RamInstalledGB = installedMemory, NetworkStatus = net.Status };
+                        native with { VisibleGpus = SelectGpus(native.Gpus, settings) }, [])
+                    { RamInstalledGB = installedMemory, NetworkStatus = net.Status };
                     Volatile.Write(ref _snapshot, snapshot);
                     if (!token.IsCancellationRequested && Volatile.Read(ref _settings).ShowMonitor)
                     {
@@ -97,7 +98,7 @@ public sealed class HardwareMonitorService : IHardwareMonitor
                     }
                 }
                 catch (Exception ex) { AppLogger.Error(ex, "Windows metrics"); }
-                await _fastWake.WaitAsync(Period(settings),token).ConfigureAwait(false);
+                await _fastWake.WaitAsync(Period(settings), token).ConfigureAwait(false);
             }
         }
         catch (OperationCanceledException) { }
@@ -131,24 +132,24 @@ public sealed class HardwareMonitorService : IHardwareMonitor
                     }
                     if (remaining > 0)
                     {
-                        await _sensorWake.WaitAsync(remaining,token).ConfigureAwait(false);
+                        await _sensorWake.WaitAsync(remaining, token).ConfigureAwait(false);
                         continue;
                     }
                     ReleaseProvider(ref provider);
                     hiddenSince = null;
-                    await _sensorWake.WaitAsync(Timeout.Infinite,token).ConfigureAwait(false);
+                    await _sensorWake.WaitAsync(Timeout.Infinite, token).ConfigureAwait(false);
                     continue;
                 }
                 hiddenSince = null;
                 if (policyBlocked)
                 {
-                    await _sensorWake.WaitAsync(Timeout.Infinite,token).ConfigureAwait(false);
+                    await _sensorWake.WaitAsync(Timeout.Infinite, token).ConfigureAwait(false);
                     continue;
                 }
                 try
                 {
                     provider ??= _providerFactory();
-                    var reading = provider.Read(settings,token);
+                    var reading = provider.Read(settings, token);
                     var current = Volatile.Read(ref _settings);
                     if (current.ShowMonitor && current.HardwareSensorsEnabled && !token.IsCancellationRequested)
                         Volatile.Write(ref _hardware, reading);
@@ -158,13 +159,13 @@ public sealed class HardwareMonitorService : IHardwareMonitor
                 catch (Exception ex)
                 {
                     policyBlocked = HelperFailure.IsPolicyBlocked(ex);
-                    var unavailable = TelemetryFreshness.Unavailable(Volatile.Read(ref _hardware),policyBlocked ? HelperFailure.PolicyMessageKey : "SensorReconnecting");
-                    Volatile.Write(ref _hardware,policyBlocked ? unavailable with { MonotonicTimestamp=0 } : unavailable);
+                    var unavailable = TelemetryFreshness.Unavailable(Volatile.Read(ref _hardware), policyBlocked ? HelperFailure.PolicyMessageKey : "SensorReconnecting");
+                    Volatile.Write(ref _hardware, policyBlocked ? unavailable with { MonotonicTimestamp = 0 } : unavailable);
                     AppLogger.Error(ex, "Telemetry provider");
                     ReleaseProvider(ref provider);
-                    delay = (int)(1000 * Math.Min(60, 5 * Math.Pow(2, Math.Min(++failures,4))));
+                    delay = (int)(1000 * Math.Min(60, 5 * Math.Pow(2, Math.Min(++failures, 4))));
                 }
-                await _sensorWake.WaitAsync(delay,token).ConfigureAwait(false);
+                await _sensorWake.WaitAsync(delay, token).ConfigureAwait(false);
             }
         }
         catch (OperationCanceledException) { }

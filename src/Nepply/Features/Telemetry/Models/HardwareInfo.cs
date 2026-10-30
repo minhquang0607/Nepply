@@ -3,8 +3,8 @@ namespace Nepply.Models;
 
 public enum GpuKind { Unknown, Integrated, Discrete }
 
-public sealed record CpuSourceInfo(string? Temperature,string? Clock,bool TemperatureFallback,bool ClockFallback);
-public sealed record GpuSourceInfo(string HardwareType,bool D3dEngines,bool AdlTemperature);
+public sealed record CpuSourceInfo(string? Temperature, string? Clock, bool TemperatureFallback, bool ClockFallback);
+public sealed record GpuSourceInfo(string HardwareType, bool D3dEngines, bool AdlTemperature);
 
 public sealed record GpuReading(string Id, string Name, float? Load, float? Temperature, float? ClockMHz, string Source)
 {
@@ -47,5 +47,5 @@ public sealed record HardwareInfoSnapshot(
     /// <summary>Resource key shown instead of NetworkName when no adapter is being read.</summary>
     public string? NetworkStatus { get; init; }
     public long MonotonicTimestamp { get; init; } = System.Diagnostics.Stopwatch.GetTimestamp();
-    public static HardwareInfoSnapshot Empty { get; } = new(0, default, null, null, null, null, null, null, "", HardwareReading.Empty, []) { MonotonicTimestamp=0, NetworkStatus="NoNetwork" };
+    public static HardwareInfoSnapshot Empty { get; } = new(0, default, null, null, null, null, null, null, "", HardwareReading.Empty, []) { MonotonicTimestamp = 0, NetworkStatus = "NoNetwork" };
 }

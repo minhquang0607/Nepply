@@ -8,24 +8,24 @@ internal sealed class ParentExitSubscription : IDisposable
     private readonly Process _parent;
     private readonly Action _exited;
     private int _completed;
-    internal ParentExitSubscription(Process parent,Action exited)
+    internal ParentExitSubscription(Process parent, Action exited)
     {
-        _parent=parent; _exited=exited;
-        parent.Exited+=OnExit;
+        _parent = parent; _exited = exited;
+        parent.Exited += OnExit;
         try
         {
-            parent.EnableRaisingEvents=true;
-            if(parent.HasExited) OnExit(parent,EventArgs.Empty);
+            parent.EnableRaisingEvents = true;
+            if (parent.HasExited) OnExit(parent, EventArgs.Empty);
         }
-        catch { parent.Exited-=OnExit; throw; }
+        catch { parent.Exited -= OnExit; throw; }
     }
-    private void OnExit(object? sender,EventArgs args)
+    private void OnExit(object? sender, EventArgs args)
     {
-        if(Interlocked.Exchange(ref _completed,1)==0) _exited();
+        if (Interlocked.Exchange(ref _completed, 1) == 0) _exited();
     }
     public void Dispose()
     {
-        Interlocked.Exchange(ref _completed,1);
-        _parent.Exited-=OnExit;
+        Interlocked.Exchange(ref _completed, 1);
+        _parent.Exited -= OnExit;
     }
 }

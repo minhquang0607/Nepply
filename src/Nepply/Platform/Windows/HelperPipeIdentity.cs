@@ -12,8 +12,8 @@ internal static class HelperPipeIdentity
         // Cache a real process handle before querying the PID; it pins that process identity.
         _ = parent.SafeHandle;
         if (parent.HasExited) throw new UnauthorizedAccessException("Helper parent has exited.");
-        if (!GetNamedPipeServerProcessId(pipe.SafePipeHandle,out uint actualProcessId))
-            throw new Win32Exception(Marshal.GetLastWin32Error(),"Cannot verify helper pipe server.");
+        if (!GetNamedPipeServerProcessId(pipe.SafePipeHandle, out uint actualProcessId))
+            throw new Win32Exception(Marshal.GetLastWin32Error(), "Cannot verify helper pipe server.");
         if (actualProcessId != (uint)parent.Id || parent.HasExited)
             throw new UnauthorizedAccessException("Unexpected helper pipe server.");
     }

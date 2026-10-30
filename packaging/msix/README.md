@@ -12,7 +12,7 @@ Script publish self-contained x64 dạng nhiều file (MSIX đã nén), tạo lo
 
 `msix-build.json` ghi `Signed`, `Installed`, `StoreReady` là false khi script chỉ đóng gói; không dùng các cờ đó để suy ra lịch sử QA của package khác. Windows SDK mặc định là 10.0.26100.0; có thể truyền `-MakeAppx` tới SDK chính thức đã cài. Không tải tool tùy ý để chạy.
 
-Nhánh Store đang tạm hoãn. Phiên bản nguồn là `1.0.0`; identity QA trong `identity.internal.json` giữ `0.0.3.0`, không đổi thành chuỗi có hậu tố ngày. Version/identity phát hành Store phải chốt riêng khi tiếp tục Partner Center.
+Nhánh Store đang tạm hoãn. Phiên bản nguồn là `2.0.0-rc.1`; identity QA trong `identity.internal.json` giữ `0.0.3.0`, không đổi thành chuỗi có hậu tố ngày. Version/identity phát hành Store phải chốt riêng khi tiếp tục Partner Center.
 
 ## Những việc phải hoàn tất
 

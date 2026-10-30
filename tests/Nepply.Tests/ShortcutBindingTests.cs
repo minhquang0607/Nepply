@@ -4,7 +4,7 @@ using Nepply.Modules.Settings;
 internal static class ShortcutBindingTests
 {
     private const int Esc = 0x1B, F5 = 0x74, Space = 0x20, F = 0x46, D = 0x44, R = 0x52;
-    internal static void Run(Action<string,bool> check)
+    internal static void Run(Action<string, bool> check)
     {
         var settings = new AppSettings();
         check("Shortcut defaults keep the existing keys",
@@ -55,8 +55,11 @@ internal static class ShortcutBindingTests
             && ShortcutBindings.ConflictFor(edited, ShortcutAction.TogglePin, new(1, Space)) == ShortcutAction.TogglePanel
             && ShortcutBindings.ConflictFor(edited, ShortcutAction.TogglePin, ShortcutGesture.None) == null);
 
-        var damaged = new AppSettings { Shortcuts = ["Unknown:2:68", "SearchDesktop:x:1", "3:2:68", "TogglePanel:1:65", "OpenSettings:4:68",
-            "TogglePin:2:32", "SearchDesktop:2:82", "RefreshDesktop:2:82", null!, "FocusSearch:0:0", "HidePanel:9:27"] };
+        var damaged = new AppSettings
+        {
+            Shortcuts = ["Unknown:2:68", "SearchDesktop:x:1", "3:2:68", "TogglePanel:1:65", "OpenSettings:4:68",
+            "TogglePin:2:32", "SearchDesktop:2:82", "RefreshDesktop:2:82", null!, "FocusSearch:0:0", "HidePanel:9:27"]
+        };
         damaged.Validate();
         check("Validation drops malformed, unknown, invalid and duplicate shortcuts",
             ShortcutBindings.Get(damaged, ShortcutAction.SearchDesktop) == new ShortcutGesture(2, R)

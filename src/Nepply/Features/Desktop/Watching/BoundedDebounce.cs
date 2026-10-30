@@ -8,10 +8,10 @@ internal sealed class BoundedDebounce(int quietMs = 350, int maximumMs = 2000)
     public int Signal(long now)
     {
         _first ??= now;
-        int delay=(int)Math.Clamp(maximumMs - Math.Max(0, now - _first.Value), 0, quietMs);
-        _due=now+delay;
+        int delay = (int)Math.Clamp(maximumMs - Math.Max(0, now - _first.Value), 0, quietMs);
+        _due = now + delay;
         return delay;
     }
-    public int? Remaining(long now) => _due is {} due ? (int)Math.Clamp(due-now,0,int.MaxValue) : null;
-    public void Reset() { _first=null; _due=null; }
+    public int? Remaining(long now) => _due is { } due ? (int)Math.Clamp(due - now, 0, int.MaxValue) : null;
+    public void Reset() { _first = null; _due = null; }
 }

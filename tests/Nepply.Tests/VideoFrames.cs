@@ -25,10 +25,10 @@ internal static class VideoFrames
             player.Position = TimeSpan.FromSeconds(second); Pump(150);
             int width = Math.Min(1280, player.NaturalVideoWidth);
             int height = (int)Math.Round(width * (double)player.NaturalVideoHeight / player.NaturalVideoWidth);
-            var visual = new DrawingVisual(); using (var drawing = visual.RenderOpen()) drawing.DrawVideo(player, new Rect(0,0,width,height));
-            var bitmap = new RenderTargetBitmap(width,height,96,96,PixelFormats.Pbgra32); bitmap.Render(visual);
+            var visual = new DrawingVisual(); using (var drawing = visual.RenderOpen()) drawing.DrawVideo(player, new Rect(0, 0, width, height));
+            var bitmap = new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Pbgra32); bitmap.Render(visual);
             var encoder = new PngBitmapEncoder(); encoder.Frames.Add(BitmapFrame.Create(bitmap));
-            using var stream = File.Create(Path.Combine(destination,$"frame-{i:00}-{second:F2}s.png")); encoder.Save(stream);
+            using var stream = File.Create(Path.Combine(destination, $"frame-{i:00}-{second:F2}s.png")); encoder.Save(stream);
         }
         player.Close();
     }

@@ -1601,6 +1601,8 @@
     "Assistance",
     "การช่วยเหลือ"
   ],
+  "ReportProblem": ["Báo lỗi","Report a problem","問題を報告","Problem melden","报告问题","Сообщить о проблеме","Signaler un problème","รายงานปัญหา"],
+  "ReportProblemOpened": ["Đã chép chẩn đoán · dán vào mục Chẩn đoán trên trang báo lỗi nếu bạn muốn chia sẻ","Diagnostics copied · paste them into the Diagnostics field if you choose to share","診断情報をコピーしました · 共有する場合は「診断情報」欄に貼り付けてください","Diagnose kopiert · bei Bedarf in das Feld „Diagnose“ einfügen","已复制诊断信息 · 如愿意分享，请粘贴到“诊断信息”栏","Диагностика скопирована · при желании вставьте её в поле «Диагностика»","Diagnostic copié · collez-le dans le champ Diagnostic si vous souhaitez le partager","คัดลอกข้อมูลวินิจฉัยแล้ว · วางในช่อง Diagnostics หากต้องการแชร์"],
   "Defaults": [
     "Mặc định",
     "Defaults",

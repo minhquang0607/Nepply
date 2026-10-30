@@ -17,19 +17,19 @@ internal readonly record struct IconGridGeometry(int Columns, double TileWidth, 
         return new(columns, width, tileHeight, gap, origin);
     }
 
-    internal static IconGridGeometry Fixed(double width,double height,int columns,int rows)
+    internal static IconGridGeometry Fixed(double width, double height, int columns, int rows)
     {
-        if(!double.IsFinite(width) || !double.IsFinite(height) || width<0 || height<0) throw new ArgumentOutOfRangeException(nameof(width));
-        columns=Math.Clamp(columns,1,GridCapacity.MaximumColumns); rows=Math.Clamp(rows,1,GridCapacity.MaximumRows);
-        return new(columns,Math.Max(.01,width/columns),Math.Max(.01,height/rows),0,0);
+        if (!double.IsFinite(width) || !double.IsFinite(height) || width < 0 || height < 0) throw new ArgumentOutOfRangeException(nameof(width));
+        columns = Math.Clamp(columns, 1, GridCapacity.MaximumColumns); rows = Math.Clamp(rows, 1, GridCapacity.MaximumRows);
+        return new(columns, Math.Max(.01, width / columns), Math.Max(.01, height / rows), 0, 0);
     }
 
-    internal static IconGridGeometry Fit(double width,double height,int columns,int rows)
+    internal static IconGridGeometry Fit(double width, double height, int columns, int rows)
     {
-        var capacity=GridCapacity.For(width,height);
-        var fitted=Fixed(width,height,Math.Min(columns,capacity.Columns),Math.Min(rows,capacity.Rows));
+        var capacity = GridCapacity.For(width, height);
+        var fitted = Fixed(width, height, Math.Min(columns, capacity.Columns), Math.Min(rows, capacity.Rows));
         // A short viewport scrolls over a full-height row instead of crushing its contents.
-        return fitted with {TileHeight=Math.Max(GridCapacity.MinimumHeight,fitted.TileHeight)};
+        return fitted with { TileHeight = Math.Max(GridCapacity.MinimumHeight, fitted.TileHeight) };
     }
 
     internal (double X, double Y) Position(int index, double verticalOffset)

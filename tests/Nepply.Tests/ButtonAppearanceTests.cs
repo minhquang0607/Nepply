@@ -10,35 +10,35 @@ internal static class ButtonAppearanceTests
     {
         var style = (Style)Application.Current.FindResource("PrimaryButton");
         foreach (var theme in new[] { ThemeOption.Dark, ThemeOption.Light })
-        foreach (var color in new[] { "#000000", "#FFFFFF", "#D9BC8B" })
-        {
-            ThemeService.ApplyAccessibility(new AppSettings { Theme = theme, Accent = "Custom", CustomAccent = color }, false, true);
-            var button = new Button { Style = style, Content = "Lưu thay đổi" };
-            button.ApplyTemplate();
-            button.Measure(new Size(300, 100));
-            button.Arrange(new Rect(button.DesiredSize));
-            pump(10); // Resolve the generated text's ancestor binding after template construction.
-            var chrome = (Border)button.Template.FindName("Chrome", button);
-            check($"Primary button {theme}/{color} renders readable colors",
-                chrome.Background is SolidColorBrush background && button.Foreground is SolidColorBrush foreground
-                && ThemeService.Contrast(background.Color, foreground.Color) >= 4.5);
-            var text = FindText(button);
-            check($"Primary button {theme}/{color} actual glyph uses on-accent color",
-                text != null && Equals(text.Foreground, button.Foreground));
-            check($"Primary button {theme}/{color} reserves stable focus geometry",
-                chrome.BorderThickness == new Thickness(1) && button.FocusVisualStyle != null
-                && button.Template.FindName("FocusRing", button) == null);
-            var focusVisual = new Control { Style = button.FocusVisualStyle };
-            focusVisual.ApplyTemplate();
-            var outline = (Border)focusVisual.Template.FindName("KeyboardOutline", focusVisual);
-            check($"Primary button {theme}/{color} keyboard outline stays outside the fill",
-                outline.Margin == new Thickness(-3) && outline.CornerRadius == new CornerRadius(18)
-                && outline.Background == Brushes.Transparent && !outline.IsHitTestVisible);
-            button.IsEnabled = false;
-            check($"Primary button {theme}/{color} uses disabled surface",
-                ReferenceEquals(chrome.Background, Application.Current.FindResource("CardBrush"))
-                && ReferenceEquals(button.Foreground, Application.Current.FindResource("MutedBrush")));
-        }
+            foreach (var color in new[] { "#000000", "#FFFFFF", "#D9BC8B" })
+            {
+                ThemeService.ApplyAccessibility(new AppSettings { Theme = theme, Accent = "Custom", CustomAccent = color }, false, true);
+                var button = new Button { Style = style, Content = "Lưu thay đổi" };
+                button.ApplyTemplate();
+                button.Measure(new Size(300, 100));
+                button.Arrange(new Rect(button.DesiredSize));
+                pump(10); // Resolve the generated text's ancestor binding after template construction.
+                var chrome = (Border)button.Template.FindName("Chrome", button);
+                check($"Primary button {theme}/{color} renders readable colors",
+                    chrome.Background is SolidColorBrush background && button.Foreground is SolidColorBrush foreground
+                    && ThemeService.Contrast(background.Color, foreground.Color) >= 4.5);
+                var text = FindText(button);
+                check($"Primary button {theme}/{color} actual glyph uses on-accent color",
+                    text != null && Equals(text.Foreground, button.Foreground));
+                check($"Primary button {theme}/{color} reserves stable focus geometry",
+                    chrome.BorderThickness == new Thickness(1) && button.FocusVisualStyle != null
+                    && button.Template.FindName("FocusRing", button) == null);
+                var focusVisual = new Control { Style = button.FocusVisualStyle };
+                focusVisual.ApplyTemplate();
+                var outline = (Border)focusVisual.Template.FindName("KeyboardOutline", focusVisual);
+                check($"Primary button {theme}/{color} keyboard outline stays outside the fill",
+                    outline.Margin == new Thickness(-3) && outline.CornerRadius == new CornerRadius(18)
+                    && outline.Background == Brushes.Transparent && !outline.IsHitTestVisible);
+                button.IsEnabled = false;
+                check($"Primary button {theme}/{color} uses disabled surface",
+                    ReferenceEquals(chrome.Background, Application.Current.FindResource("CardBrush"))
+                    && ReferenceEquals(button.Foreground, Application.Current.FindResource("MutedBrush")));
+            }
         // Structural checks complement rendering; they do not simulate real mouse/focus input.
         var sample = new Button { Style = style }; sample.ApplyTemplate();
         var active = sample.Template.Triggers.OfType<Trigger>()

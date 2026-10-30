@@ -80,7 +80,8 @@ internal sealed partial class UpdateWindow : Window
             ReleaseVersionLabel.Text = release.Tag; VersionBadge.Visibility = Visibility.Visible;
             DownloadSizeLabel.Text = release.Bytes < 1024 * 1024
                 ? $"{release.Bytes / 1024d:0.#} KiB" : $"{release.Bytes / (1024d * 1024):0.#} MiB";
-            _notes.Text = string.IsNullOrWhiteSpace(release.Notes) ? LocalizationService.Get("UpdateNoNotes") : release.Notes;
+            string notes = ReleaseNotesText.ToPlain(release.Notes);
+            _notes.Text = notes.Length == 0 ? LocalizationService.Get("UpdateNoNotes") : notes;
             NotesSection.Visibility = Visibility.Visible;
             _install.IsEnabled = false;
             if (UpdatePolicy.InstalledDirectory() == null) ManualOnly("UpdatePortable");

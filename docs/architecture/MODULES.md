@@ -1,6 +1,6 @@
 # Ranh giới module Nepply
 
-Kiến trúc hiện hành của **1.0.0**, rà soát 17/10/2026. Xem [cây thư mục](STRUCTURE.md). Đây là bản đồ trách nhiệm và giới hạn, không phải nhật ký refactor hay chứng nhận runtime.
+Kiến trúc hiện hành của **2.0.0**, rà soát 17/10/2026. Xem [cây thư mục](STRUCTURE.md). Đây là bản đồ trách nhiệm và giới hạn, không phải nhật ký refactor hay chứng nhận runtime.
 
 ## Nguyên tắc
 

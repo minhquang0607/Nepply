@@ -11,6 +11,9 @@
     <!-- Task Manager shows the file description; name the helper's job, not its assembly. -->
     <AssemblyTitle>Nepply Desktop icon guardian</AssemblyTitle>
     <Product>Nepply</Product>
+    <!-- The app refuses a guardian whose file version differs. Keep equal to Nepply.csproj (Test-ReleaseLayout checks). -->
+    <Version>2.0.0-rc.1</Version>
+    <FileVersion>2.0.0.1</FileVersion>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="../Nepply/Features/Desktop/Visibility/DesktopGuardianFence.cs" Link="Shared/DesktopGuardianFence.cs" />

@@ -4,9 +4,9 @@
 <p align="center"><strong>English</strong> · <a href="README.vi.md">Tiếng Việt</a></p>
 <p align="center"><a href="#-download">Download</a> · <a href="docs/USER_GUIDE.en.md">User guide</a> · <a href="CHANGELOG.en.md">What's new</a> · <a href="docs/README.md">Documentation</a></p>
 
-> **1.0.0-beta.1 · First public beta (unsigned) in preparation**
+> **2.0.0-rc.1 · Release candidate (unsigned) in preparation**
 >
-> Signed downloads are not available yet. The GitHub release is a draft; internal builds are not public release binaries.
+> Signed downloads are not available yet; 2.0.0 will be the first signed release. Internal builds are not public release binaries.
 
 ## ✨ A small panel, close at hand
 
@@ -33,7 +33,7 @@ The app supports Vietnamese, English, Japanese, German, Simplified Chinese, Russ
 </tr>
 </table>
 
-Fresh renders from a clean **1.0.0-beta.1 Release build**, source `ff63ba9`. These are real WPF views rendered in an isolated UI fixture, not personal desktop screenshots. Panel items, icons and metrics are illustrative; the screenshots show the Vietnamese UI. Settings switches to horizontal tabs in narrow windows. [Image provenance →](docs/images/README.md)
+Fresh renders from a clean **Release build**, source `ff63ba9`. These are real WPF views rendered in an isolated UI fixture, not personal desktop screenshots. Panel items, icons and metrics are illustrative; the screenshots show the Vietnamese UI. Settings switches to horizontal tabs in narrow windows. [Image provenance →](docs/images/README.md)
 
 ## 📦 Download
 
@@ -41,8 +41,8 @@ Fresh renders from a clean **1.0.0-beta.1 Release build**, source `ff63ba9`. The
 
 | Choose | Planned file | How to use |
 | --- | --- | --- |
-| **Setup — recommended** | `Nepply-1.0.0-beta.1-Setup.exe` | Run the installer. Uninstall through Windows Installed apps. |
-| **Portable** | `Nepply-1.0.0-beta.1-win-x64-portable.zip` | Extract everything, then run `Nepply.exe`. Keep `guardian` and all companion files. |
+| **Setup — recommended** | `Nepply-2.0.0-rc.1-Setup.exe` | Run the installer. Uninstall through Windows Installed apps. |
+| **Portable** | `Nepply-2.0.0-rc.1-win-x64-portable.zip` | Extract everything, then run `Nepply.exe`. Keep `guardian` and all companion files. |
 
 [Open GitHub Releases →](https://github.com/minhquang0607/Nepply/releases)
 

@@ -12,7 +12,7 @@ body:
     attributes:
       label: Nepply version · Phiên bản Nepply
       description: Settings → App → About. · Cài đặt → Ứng dụng → Giới thiệu.
-      placeholder: "1.0.0-beta.1"
+      placeholder: "2.0.0-rc.1"
     validations:
       required: true
   - type: dropdown
@@ -53,6 +53,12 @@ body:
       label: Expected and actual result · Kết quả mong đợi và thực tế
     validations:
       required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Diagnostics (optional) · Chẩn đoán (tùy chọn)
+      description: "Settings → App → Report a problem copies this; review it before posting. · Cài đặt → Ứng dụng → Báo lỗi tự chép phần này; hãy xem lại trước khi đăng."
+      render: text
   - type: textarea
     id: logs
     attributes:

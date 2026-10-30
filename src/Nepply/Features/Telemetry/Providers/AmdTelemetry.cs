@@ -11,7 +11,8 @@ public sealed class AmdTelemetry : IDisposable
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)] private delegate IntPtr Allocate(int size);
     private readonly Allocate _allocate = Marshal.AllocHGlobal;
     [StructLayout(LayoutKind.Sequential)] private struct Sensor { public int Supported; public int Value; }
-    [StructLayout(LayoutKind.Sequential)] private struct LogData
+    [StructLayout(LayoutKind.Sequential)]
+    private struct LogData
     {
         public int Size;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)] public Sensor[] Sensors;
@@ -31,16 +32,16 @@ public sealed class AmdTelemetry : IDisposable
         if (_unavailable || !hardwareId.StartsWith("/gpu-amd/", StringComparison.Ordinal) || !int.TryParse(hardwareId[9..], out int adapter) || adapter < 0) return null;
         try
         {
-            if (_context == IntPtr.Zero && ADL2_Main_Control_Create(_allocate,1,ref _context) != 0) { Dispose(); _unavailable = true; return null; }
+            if (_context == IntPtr.Zero && ADL2_Main_Control_Create(_allocate, 1, ref _context) != 0) { Dispose(); _unavailable = true; return null; }
             if (_context == IntPtr.Zero) return null;
             var data = new LogData { Size = Marshal.SizeOf<LogData>(), Sensors = new Sensor[256] };
-            if (ADL2_New_QueryPMLogData_Get(_context,adapter,ref data) != 0) return null;
-            float? ReadSensor(int index, int min, int max) => ValidateMetric(data.Sensors[index].Supported, data.Sensors[index].Value,min,max);
+            if (ADL2_New_QueryPMLogData_Get(_context, adapter, ref data) != 0) return null;
+            float? ReadSensor(int index, int min, int max) => ValidateMetric(data.Sensors[index].Supported, data.Sensors[index].Value, min, max);
             // ADL_PMLOG_TEMPERATURE_EDGE=8, TEMPERATURE_CPU=32, CLK_CPUCLK=34.
-            return new(ReadSensor(8,1,130), ReadSensor(32,1,130), ReadSensor(34,1,15000));
+            return new(ReadSensor(8, 1, 130), ReadSensor(32, 1, 130), ReadSensor(34, 1, 15000));
         }
         catch (Exception ex) when (ex is DllNotFoundException or EntryPointNotFoundException or BadImageFormatException)
-        { _unavailable = true; AppLogger.Error(ex,"AMD PMLog unavailable"); return null; }
+        { _unavailable = true; AppLogger.Error(ex, "AMD PMLog unavailable"); return null; }
     }
     public void Dispose()
     {

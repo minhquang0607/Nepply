@@ -7,7 +7,7 @@ luồng tải/xác minh/bàn giao Setup; portable chỉ xem thông tin, chưa th
 MSIX dùng Store và không gọi feed EXE.
 
 Feed cố định: `https://api.github.com/repos/minhquang0607/Nepply/releases?per_page=30`.
-Chỉ chọn bản mới hơn; stable không nhận prerelease, beta nhận cả hai. Chọn
+Chỉ chọn bản mới hơn; stable không nhận prerelease, prerelease nhận cả hai. Chọn
 phiên bản lớn nhất trong 30 release mới nhất, không dựa thứ tự đăng. Draft bị bỏ.
 Ghi chú hiển thị dạng text, không thực thi HTML hoặc tải ảnh nhúng.
 
@@ -75,15 +75,15 @@ cấu hình ký hoặc nghiệm thu cập nhật có chữ ký trên máy thật
 
 ## Phiên bản hiện hành
 
-Phiên bản hiện tại là `1.0.0-beta.1` (chốt 20/10/2026), metadata Windows
-`1.0.0.0`: bản beta công khai **chưa ký**, đáp ứng điều kiện "đã phát hành"
-của SignPath. Tag `v1.0.0-beta.1`, asset `Nepply-1.0.0-beta.1-Setup.exe`,
-đánh dấu prerelease trên GitHub. Bản ký đầu tiên dự kiến là `1.0.0`, cao hơn
-`1.0.0-beta.1` theo SemVer nên updater nhận đúng thứ tự. Nhãn cũ
-`1.0.0-17.10.26` chưa từng phát hành. Chỉ bật `-RequireStable` khi mọi điều
-kiện ký và nghiệm thu đều đạt.
+Phiên bản hiện tại là `2.0.0-rc.1` (chốt 30/10/2026), metadata Windows
+`2.0.0.1`: bản phát hành thử công khai **chưa ký**, đáp ứng điều kiện "đã phát
+hành" của SignPath. Tag `v2.0.0-rc.1`, asset `Nepply-2.0.0-rc.1-Setup.exe`, đánh
+dấu prerelease trên GitHub. Bản ký đầu tiên là `2.0.0` (metadata `2.0.0.100`),
+cao hơn `2.0.0-rc.1` theo SemVer nên updater nhận đúng thứ tự. Nhãn cũ
+`1.0.0-beta.1` và `1.0.0-17.10.26` chưa từng phát hành. Chỉ bật `-RequireStable`
+khi mọi điều kiện ký và nghiệm thu đều đạt.
 
 Đây là lần đặt lại mốc trước phát hành, thấp hơn các bản thử `2.5.0-*` cũ.
 Updater giữ nguyên nguyên tắc không downgrade: bản thử cũ cần chuyển thủ công,
 không nhận mốc này như bản mới hơn. Các bản sau phải tăng phiên bản SemVer;
-không dùng ngày/tháng làm thứ tự cập nhật (ví dụ bản vá tiếp theo là `1.0.1`).
+không dùng ngày/tháng làm thứ tự cập nhật (ví dụ bản vá tiếp theo là `2.0.1`).

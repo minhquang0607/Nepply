@@ -3,7 +3,7 @@ using Nepply.Modules.Panel;
 
 internal static class LayoutEditSessionTests
 {
-    internal static void Run(Action<string,bool> check)
+    internal static void Run(Action<string, bool> check)
     {
         var session = new LayoutEditSession();
         var settings = new AppSettings { IconOrder = ["a", "b"], WidgetOrder = ["summary", "gpus", "network", "details"] };

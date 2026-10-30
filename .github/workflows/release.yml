@@ -6,7 +6,7 @@ name: Release build
 # Artifacts are UNSIGNED until SignPath (or another approved signer) is
 # integrated. Signing goes between the build and draft-release jobs: submit the
 # unsigned artifact for signing, rebuild Setup with -SignedUninstallerDirectory,
-# then sign Setup and regenerate checksums. See docs/release/PUBLIC_RELEASE_CHECKLIST.md.
+# then sign Setup and regenerate checksums. See docs/release/PUBLIC_RELEASE_CHECKLIST.md (phase 6).
 on:
   push:
     tags: ['v*.*.*']

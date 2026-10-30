@@ -8,7 +8,7 @@ try { $reader = [IO.StreamReader]::new($stream); $raw = $reader.ReadToEnd() }
 finally { if ($null -ne $reader) { $reader.Dispose() } else { $stream.Dispose() } }
 # A live writer may not have finished its last line. Never parse a partial record.
 $lastNewline = $raw.LastIndexOf("`n")
-if ($lastNewline -lt 0) { throw 'Chưa có mẫu hoàn chỉnh.' }
+if ($lastNewline -lt 0) { throw 'No complete sample yet.' }
 $samples = @($raw.Substring(0,$lastNewline).Split("`n") | Where-Object { $_.Trim().Length -gt 0 } | ForEach-Object { $_ | ConvertFrom-Json })
 $intervals = [Collections.Generic.List[object]]::new()
 for ($i=1; $i -lt $samples.Count; $i++) {
@@ -16,7 +16,7 @@ for ($i=1; $i -lt $samples.Count; $i++) {
     $current = $samples[$i]
     $seconds = [double]$current.Seconds - [double]$previous.Seconds
     $cpu = [double]$current.CpuSeconds - [double]$previous.CpuSeconds
-    if ($seconds -le 0 -or $cpu -lt 0) { throw "Mốc thời gian/CPU không đơn điệu ở mẫu $i." }
+    if ($seconds -le 0 -or $cpu -lt 0) { throw "Time/CPU is not monotonic at sample $i." }
     $intervals.Add([pscustomobject]@{
         Seconds=$seconds; CpuSeconds=$cpu; Active=[bool]$current.Active
         StablePhase=($current.Active -eq $previous.Active)
@@ -44,5 +44,5 @@ $ranges = foreach ($metric in @('ManagedBytes','PrivateMemorySize64','HandleCoun
     SummaryPresent=($null -ne $summary); Completed=$summary.Completed
     LongGaps=@($intervals | Where-Object LongGap).Count
     PhaseCpu=$phases; Ranges=$ranges
-    Note='Chỉ phân tích log; không xác nhận tiến trình còn sống, không tự kết luận leak/pass. CPU tính theo một core; bỏ boundary và khoảng cách mẫu trên 90 giây. Cần xác minh PID/session riêng.'
+    Note='Log analysis only; does not confirm the process is alive and does not conclude leak/pass. CPU is per core; boundaries and sample gaps over 90 seconds are skipped. Verify PID/session separately.'
 } | ConvertTo-Json -Depth 5

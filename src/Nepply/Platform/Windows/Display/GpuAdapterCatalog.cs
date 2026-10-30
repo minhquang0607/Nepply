@@ -103,9 +103,9 @@ internal static class GpuAdapterCatalog
     [ComImport, Guid("f0db4c7f-fe5a-42a2-bd62-f2a6cf6fc83e"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     private interface IAdapter
     {
-        [PreserveSig] [return: MarshalAs(UnmanagedType.U1)] bool IsValid();
-        [PreserveSig] [return: MarshalAs(UnmanagedType.U1)] bool IsAttributeSupported(ref Guid attribute);
-        [PreserveSig] [return: MarshalAs(UnmanagedType.U1)] bool IsPropertySupported(AdapterProperty property);
+        [PreserveSig][return: MarshalAs(UnmanagedType.U1)] bool IsValid();
+        [PreserveSig][return: MarshalAs(UnmanagedType.U1)] bool IsAttributeSupported(ref Guid attribute);
+        [PreserveSig][return: MarshalAs(UnmanagedType.U1)] bool IsPropertySupported(AdapterProperty property);
         [PreserveSig] int GetProperty(AdapterProperty property, nuint size, IntPtr buffer);
         [PreserveSig] int GetPropertySize(AdapterProperty property, out nuint size);
     }

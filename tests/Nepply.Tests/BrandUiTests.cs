@@ -11,7 +11,7 @@ internal static class BrandUiTests
         using var stream = Application.GetResourceStream(new Uri("pack://application:,,,/Nepply;component/Resources/icon.ico"))!.Stream;
         var decoder = new IconBitmapDecoder(stream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad);
         check("Brand icon includes all nine DPI sizes", decoder.Frames.Select(f => f.PixelWidth)
-            .Order().SequenceEqual(new[] { 16,20,24,32,40,48,64,128,256 }));
+            .Order().SequenceEqual(new[] { 16, 20, 24, 32, 40, 48, 64, 128, 256 }));
         foreach (var window in new Window[] { new MainWindow(preview:true), new SettingsWindow(new AppSettings()),
             new WelcomeWindow(new AppSettings()), new SensorDiagnosticsWindow("Nepply"), new LayoutDecisionWindow() })
         {

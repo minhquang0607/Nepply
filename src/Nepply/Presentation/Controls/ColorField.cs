@@ -23,16 +23,16 @@ public sealed class ColorField : FrameworkElement
     private static T Frozen<T>(T value) where T : Freezable { value.Freeze(); return value; }
     private static Brush CreateHueRail()
     {
-        var brush = new LinearGradientBrush { StartPoint = new(0,0), EndPoint = new(0,1) };
-        for (int i = 0; i <= 6; i++) brush.GradientStops.Add(new(FromHsv(i*60, 1, 1), i/6d));
+        var brush = new LinearGradientBrush { StartPoint = new(0, 0), EndPoint = new(0, 1) };
+        for (int i = 0; i <= 6; i++) brush.GradientStops.Add(new(FromHsv(i * 60, 1, 1), i / 6d));
         return Frozen(brush);
     }
     public ColorField()
     {
         Focusable = true; Cursor = Cursors.Cross; MinWidth = 240; MinHeight = 190;
-        Unloaded+=(_,_)=>EndDrag();
-        IsVisibleChanged+=(_,e)=> {if(!(bool)e.NewValue) EndDrag();};
-        IsEnabledChanged+=(_,e)=> {if(!(bool)e.NewValue) EndDrag();};
+        Unloaded += (_, _) => EndDrag();
+        IsVisibleChanged += (_, e) => { if (!(bool)e.NewValue) EndDrag(); };
+        IsEnabledChanged += (_, e) => { if (!(bool)e.NewValue) EndDrag(); };
     }
     private static void ColorChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
     {
@@ -57,8 +57,8 @@ public sealed class ColorField : FrameworkElement
     {
         hue = ((hue % 360) + 360) % 360; saturation = Math.Clamp(saturation, 0, 1); value = Math.Clamp(value, 0, 1);
         double c = value * saturation, x = c * (1 - Math.Abs(hue / 60 % 2 - 1)), m = value - c;
-        (double r, double g, double b) = hue switch { < 60 => (c,x,0d), < 120 => (x,c,0d), < 180 => (0d,c,x), < 240 => (0d,x,c), < 300 => (x,0d,c), _ => (c,0d,x) };
-        return Color.FromRgb((byte)Math.Round((r+m)*255), (byte)Math.Round((g+m)*255), (byte)Math.Round((b+m)*255));
+        (double r, double g, double b) = hue switch { < 60 => (c, x, 0d), < 120 => (x, c, 0d), < 180 => (0d, c, x), < 240 => (0d, x, c), < 300 => (x, 0d, c), _ => (c, 0d, x) };
+        return Color.FromRgb((byte)Math.Round((r + m) * 255), (byte)Math.Round((g + m) * 255), (byte)Math.Round((b + m) * 255));
     }
     protected override void OnRender(DrawingContext dc)
     {
@@ -69,14 +69,14 @@ public sealed class ColorField : FrameworkElement
         dc.DrawRectangle(new SolidColorBrush(FromHsv(_h, 1, 1)), null, area);
         dc.DrawRectangle(WhiteOverlay, null, area);
         dc.DrawRectangle(BlackOverlay, null, area); dc.Pop();
-        dc.DrawRoundedRectangle(HueRail, null, new Rect(width+14,0,24,height), 10, 10);
-        var marker = new Point(Math.Clamp(_s*width,7,Math.Max(7,width-7)),Math.Clamp((1-_v)*height,7,Math.Max(7,height-7)));
+        dc.DrawRoundedRectangle(HueRail, null, new Rect(width + 14, 0, 24, height), 10, 10);
+        var marker = new Point(Math.Clamp(_s * width, 7, Math.Max(7, width - 7)), Math.Clamp((1 - _v) * height, 7, Math.Max(7, height - 7)));
         dc.DrawEllipse(null, MarkerShadow, marker, 6, 6);
         dc.DrawEllipse(null, MarkerStroke, marker, 6, 6);
-        dc.DrawRoundedRectangle(null, HueMarkerStroke, new Rect(width+15, Math.Clamp(_h/360*height-3,1,Math.Max(1,height-7)),22,6),3,3);
+        dc.DrawRoundedRectangle(null, HueMarkerStroke, new Rect(width + 15, Math.Clamp(_h / 360 * height - 3, 1, Math.Max(1, height - 7)), 22, 6), 3, 3);
         if (IsKeyboardFocused)
         {
-            var focus = new Rect(2,2,Math.Max(0,width-4),Math.Max(0,height-4));
+            var focus = new Rect(2, 2, Math.Max(0, width - 4), Math.Max(0, height - 4));
             dc.DrawRoundedRectangle(null, MarkerShadow, focus, 8, 8);
             dc.DrawRoundedRectangle(null, MarkerStroke, focus, 8, 8);
         }
@@ -84,43 +84,43 @@ public sealed class ColorField : FrameworkElement
     protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
     {
         Focus();
-        if(!CaptureMouse()) return;
-        _hueDrag = e.GetPosition(this).X > ActualWidth-38;
-        Pick(e.GetPosition(this)); e.Handled=true;
+        if (!CaptureMouse()) return;
+        _hueDrag = e.GetPosition(this).X > ActualWidth - 38;
+        Pick(e.GetPosition(this)); e.Handled = true;
     }
     protected override void OnMouseMove(MouseEventArgs e)
     {
-        if(!IsMouseCaptured) return;
-        if(e.LeftButton!=MouseButtonState.Pressed) {EndDrag();return;}
+        if (!IsMouseCaptured) return;
+        if (e.LeftButton != MouseButtonState.Pressed) { EndDrag(); return; }
         Pick(e.GetPosition(this));
     }
     protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
     {
-        if(!IsMouseCaptured) return;
-        try {Pick(e.GetPosition(this));e.Handled=true;}
-        finally {EndDrag();}
+        if (!IsMouseCaptured) return;
+        try { Pick(e.GetPosition(this)); e.Handled = true; }
+        finally { EndDrag(); }
     }
-    private void EndDrag() {if(IsMouseCaptured) ReleaseMouseCapture();_hueDrag=false;}
+    private void EndDrag() { if (IsMouseCaptured) ReleaseMouseCapture(); _hueDrag = false; }
     private void Pick(Point point)
     {
-        if (_hueDrag) _h = Math.Clamp(point.Y / Math.Max(1,ActualHeight),0,.99999)*360;
-        else { _s = Math.Clamp(point.X/Math.Max(1,ActualWidth-38),0,1); _v = 1-Math.Clamp(point.Y/Math.Max(1,ActualHeight),0,1); }
+        if (_hueDrag) _h = Math.Clamp(point.Y / Math.Max(1, ActualHeight), 0, .99999) * 360;
+        else { _s = Math.Clamp(point.X / Math.Max(1, ActualWidth - 38), 0, 1); _v = 1 - Math.Clamp(point.Y / Math.Max(1, ActualHeight), 0, 1); }
         Commit();
     }
     private void Commit()
     {
-        _updating=true;
-        try {SetCurrentValue(SelectedColorProperty,FromHsv(_h,_s,_v));}
-        finally {_updating=false;}
+        _updating = true;
+        try { SetCurrentValue(SelectedColorProperty, FromHsv(_h, _s, _v)); }
+        finally { _updating = false; }
         InvalidateVisual();
     }
     protected override void OnKeyDown(KeyEventArgs e)
     {
         if (e.Key is not (Key.Left or Key.Right or Key.Up or Key.Down)) return;
-        if((Keyboard.Modifiers & ~ModifierKeys.Shift)!=ModifierKeys.None) return;
+        if ((Keyboard.Modifiers & ~ModifierKeys.Shift) != ModifierKeys.None) return;
         if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift)) _h = (_h + (e.Key is Key.Left or Key.Down ? -3 : 3) + 360) % 360;
-        else if (e.Key is Key.Left or Key.Right) _s = Math.Clamp(_s + (e.Key == Key.Left ? -.01 : .01),0,1);
-        else _v = Math.Clamp(_v + (e.Key == Key.Down ? -.01 : .01),0,1);
+        else if (e.Key is Key.Left or Key.Right) _s = Math.Clamp(_s + (e.Key == Key.Left ? -.01 : .01), 0, 1);
+        else _v = Math.Clamp(_v + (e.Key == Key.Down ? -.01 : .01), 0, 1);
         Commit(); e.Handled = true;
     }
 }

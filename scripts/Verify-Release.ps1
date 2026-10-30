@@ -71,7 +71,7 @@ $artifacts.ToArray()
 Assert-ReleaseMetadata -Artifacts $artifacts.ToArray() -ExpectedVersion $ExpectedVersion -RequireSigned:$RequireSigned -RequireStable:$RequireStable -AllowedSignerThumbprints $AllowedSignerThumbprints
 $guardian = Get-Item -LiteralPath (Join-Path $releaseDirectory 'guardian/Nepply.DesktopGuardian.exe')
 if ($guardian.PSIsContainer -or $guardian.Length -le 0 -or
-    $guardian.VersionInfo.ProductVersion.Split('+')[0] -cne $ExpectedVersion) { throw 'Desktop guardian thiếu hoặc không cùng phiên bản app.' }
+    $guardian.VersionInfo.ProductVersion.Split('+')[0] -cne $ExpectedVersion) { throw 'Desktop guardian is missing or does not match the app version.' }
 if ($RequireSigned -or $RequireStable) {
     $signature = Get-AuthenticodeSignature -LiteralPath $guardian.FullName
     Assert-ArtifactSigner -Artifact ([pscustomobject]@{

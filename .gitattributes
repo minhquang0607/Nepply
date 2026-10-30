@@ -1,0 +1,15 @@
+# Windows-only project: store LF in Git, check out CRLF for every contributor
+# regardless of their core.autocrlf setting.
+* text=auto eol=crlf
+
+# Binary assets: never touch line endings or diff as text.
+*.png binary
+*.ico binary
+*.jpg binary
+*.gif binary
+*.exe binary
+*.dll binary
+*.zip binary
+*.msix binary
+*.pfx binary
+*.p12 binary

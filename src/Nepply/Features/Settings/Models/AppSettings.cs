@@ -88,7 +88,7 @@ public sealed class AppSettings
         if (!Enum.IsDefined(IconSize)) IconSize = IconSizeOption.Medium;
         if (!Enum.IsDefined(Theme)) Theme = ThemeOption.Dark;
         PanelWidth = Math.Clamp(PanelWidth, 320, 600);
-        if(!Nepply.Services.LocalizationService.IsSupported(Language)) Language=Nepply.Services.LocalizationService.SystemDefault;
+        if (!Nepply.Services.LocalizationService.IsSupported(Language)) Language = Nepply.Services.LocalizationService.SystemDefault;
         PanelWidthPercent = ValidPercent(PanelWidthPercent);
         TopPanelWidthPercent = ValidPercent(TopPanelWidthPercent);
         PanelHeightPercent = ValidPercent(PanelHeightPercent);
@@ -98,7 +98,7 @@ public sealed class AppSettings
         GpuColumns = Math.Clamp(GpuColumns, 0, 2);
         IconTileShape = Math.Clamp(IconTileShape, 0, 2);
         GlowStrength = double.IsFinite(GlowStrength) ? Math.Clamp(GlowStrength, 0, .5) : .22;
-        if(!Enum.IsDefined(Motion)) Motion=MotionMode.Smooth;
+        if (!Enum.IsDefined(Motion)) Motion = MotionMode.Smooth;
         WidgetOrder = (WidgetOrder ?? []).Where(x => x is "summary" or "gpus" or "network").Concat(new[] { "summary", "gpus", "network" }).Distinct().ToArray();
         IconOrder = (IconOrder ?? []).Where(x => !string.IsNullOrWhiteSpace(x)).Distinct(StringComparer.OrdinalIgnoreCase).Take(10000).ToArray();
         if (LayoutVersion < 1) { if (PanelHeight == 520) PanelHeight = 320; LayoutVersion = 1; }

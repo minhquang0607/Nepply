@@ -5,5 +5,7 @@
     <NepplyILLinkVersion>10.0.10</NepplyILLinkVersion>
     <RuntimeFrameworkVersion>$(NepplyRuntimeVersion)</RuntimeFrameworkVersion>
     <Deterministic>true</Deterministic>
+    <!-- Strips machine paths from binaries so a build output does not depend on the checkout folder. -->
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
   </PropertyGroup>
 </Project>

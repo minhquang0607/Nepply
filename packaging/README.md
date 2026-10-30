@@ -13,7 +13,7 @@ Một mã nguồn duy nhất ở root repository, không nhân bản app thành 
 
 `scripts/Build-Distribution.ps1 -InternalOnly` tạo bộ EXE/portable. Các cổng license/notices/chữ ký public vẫn giữ nguyên. Version installer lấy từ `Nepply.csproj`, không phải chuỗi hardcode riêng trong Inno.
 
-Mốc hiện tại: **1.0.0-beta.1** (beta công khai chưa ký; bản ký đầu tiên dự kiến `1.0.0`). Metadata Windows dùng `FileVersion=1.0.0.0`; app, Guardian và Setup lấy phiên bản từ cùng nguồn. MSIX có identity QA riêng. Không đổi tên binary cũ thành phiên bản mới: phải dựng lại payload, manifest và bộ cài từ cùng commit. Đây là phiên bản ổn định dự kiến, chưa phải binary đã phát hành; xem [chính sách phiên bản updater](../docs/release/EXE_UPDATES.md#phiên-bản-hiện-hành) trước tạo tag.
+Mốc hiện tại: **2.0.0-rc.1** (bản phát hành thử chưa ký; bản ký đầu tiên dự kiến `2.0.0`). Metadata Windows dùng `FileVersion=2.0.0.1`; app, Guardian và Setup lấy phiên bản từ cùng nguồn. MSIX có identity QA riêng. Không đổi tên binary cũ thành phiên bản mới: phải dựng lại payload, manifest và bộ cài từ cùng commit. Đây là phiên bản ổn định dự kiến, chưa phải binary đã phát hành; xem [chính sách phiên bản updater](../docs/release/EXE_UPDATES.md#phiên-bản-hiện-hành) trước tạo tag.
 
 MSIX không dùng uninstaller của Inno. Khôi phục Desktop, startup và AppData phải kiểm chứng riêng dưới package identity trước khi public. Không mang nguyên kết quả QA EXE sang MSIX.
 

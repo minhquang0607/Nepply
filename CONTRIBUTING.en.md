@@ -4,13 +4,23 @@
 
 For building and contributing. To use the app, start with the [user guide](docs/USER_GUIDE.en.md). Nepply-owned code uses [MIT](LICENSE); dependencies retain their own licenses.
 
+## Quick start
+
+```powershell
+dotnet restore Nepply.slnx --locked-mode
+dotnet build Nepply.slnx -c Release --no-restore
+dotnet run --project tests/Nepply.Tests/Nepply.Tests.csproj -c Release --no-build -- artifacts/current/core --core-only
+```
+
+Before committing C# changes, run `dotnet format whitespace Nepply.slnx`; CI rejects code that does not match `.editorconfig`. To keep `git blame` useful, run `git config blame.ignoreRevsFile .git-blame-ignore-revs` once.
+
 ## Start here
 
 Use Windows x64 and the .NET SDK pinned in `global.json`. Open `Nepply.slnx`. Consult the [source structure](docs/architecture/STRUCTURE.md) and [module boundaries](docs/architecture/MODULES.md); these detailed architecture references are currently in Vietnamese.
 
 ## Change guidelines
 
-- Product version `1.0.0-beta.1` and Windows file version `1.0.0.0` come from `src/Nepply/Nepply.csproj`. Do not change dependency versions or simulated test versions just to match the product.
+- Product version `2.0.0-rc.1` and Windows file version `2.0.0.1` come from `src/Nepply/Nepply.csproj`; repeat both in `src/Nepply.DesktopGuardian/Nepply.DesktopGuardian.csproj`, because the app refuses a guardian with another file version. Each release candidate raises the fourth number (`rc.2` is `2.0.0.2`); the stable release uses `2.0.0.100`, so Windows always sees it as newer. Do not change dependency versions or simulated test versions just to match the product.
 - Put logic in its owning feature, interop in Platform/Windows and shared UI in Presentation. Do not add projects, timers, processes or dependencies solely to split folders.
 - Keep regression tests in tests/Nepply.Tests. Diagnostic tools do not belong in the release payload.
 - Never commit bin/obj/artifacts, personal logs/settings, signing keys or private certificates.

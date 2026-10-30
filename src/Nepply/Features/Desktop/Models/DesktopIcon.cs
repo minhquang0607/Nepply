@@ -9,8 +9,8 @@ public class DesktopIcon : INotifyPropertyChanged
     internal string? GroupIdentity { get; set; }
     public string[] SourcePaths { get; set; } = [];
     public UserMessage SourceDescription => SourcePaths.Length > 1
-        ? UserMessage.FromKey("GroupedShortcutDescription",SourcePaths.Length,Path,string.Join("\n",SourcePaths))
-        : UserMessage.FromKey("DesktopPathDescription",Path);
+        ? UserMessage.FromKey("GroupedShortcutDescription", SourcePaths.Length, Path, string.Join("\n", SourcePaths))
+        : UserMessage.FromKey("DesktopPathDescription", Path);
     internal void RefreshSourceDescription() => OnPropertyChanged(nameof(SourceDescription));
     private string _name = string.Empty;
     private string _path = string.Empty;

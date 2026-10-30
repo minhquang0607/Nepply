@@ -24,11 +24,11 @@ public partial class MainWindow : Window
     private readonly Services.Telemetry.IHardwareMonitor _monitor;
     private readonly DispatcherTimer _edgeTimer = new() { Interval = EdgePolling.Responsive };
     private readonly DispatcherTimer _hideTimer = new();
-    private readonly DispatcherTimer _displayTimer = new() {Interval=TimeSpan.FromMilliseconds(250)};
+    private readonly DispatcherTimer _displayTimer = new() { Interval = TimeSpan.FromMilliseconds(250) };
     private Modules.Search.SearchSession? _searchSession;
     private int _displayAttempts;
     private readonly AnimationService _animation;
-    private readonly SearchReveal _searchReveal=new();
+    private readonly SearchReveal _searchReveal = new();
     internal bool AllowPreviewIsland { get; set; }
     private GlobalHotkeyService? _hotkey;
     private StartupCoordinator? _startup;
@@ -50,75 +50,75 @@ public partial class MainWindow : Window
     private IReadOnlyList<DesktopIcon>? _previewDesktopSnapshot;
     private bool _previewHadDesktop;
     private int _previewRestoreGeneration;
-    private static Modules.Desktop.DesktopScanOptions ScanOptions(AppSettings s) => new(s.ShowHiddenFiles,s.ShowSystemIcons,s.MergeEquivalentShortcuts);
+    private static Modules.Desktop.DesktopScanOptions ScanOptions(AppSettings s) => new(s.ShowHiddenFiles, s.ShowSystemIcons, s.MergeEquivalentShortcuts);
     internal void PreviewSettings(AppSettings candidate)
     {
-        if(_cleaned) return;
-        if(_settingsPreview==null)
+        if (_cleaned) return;
+        if (_settingsPreview == null)
         {
             _previewRestoreGeneration++;
-            _previewDesktopSnapshot=_icons.GetIcons();
-            _previewHadDesktop=_icons.HasScanned;
+            _previewDesktopSnapshot = _icons.GetIcons();
+            _previewHadDesktop = _icons.HasScanned;
         }
         _previewGridOffset ??= IconPanelView.GridOffset;
-        var previous=_settingsPreview ?? _settings;
-        var changes=SettingsChangeSet.Between(previous,candidate);
-        if(changes.CanPreviewWithoutRebuild)
+        var previous = _settingsPreview ?? _settings;
+        var changes = SettingsChangeSet.Between(previous, candidate);
+        if (changes.CanPreviewWithoutRebuild)
         {
-            _settingsPreview=candidate.Clone();
-            if(changes.Has(SettingsChange.Appearance))
+            _settingsPreview = candidate.Clone();
+            if (changes.Has(SettingsChange.Appearance))
             {
                 ThemeService.Apply(candidate);
                 _animation.RefreshMotionPreference();
                 UpdateActionLabels();
             }
-            _hideTimer.Interval=TimeSpan.FromMilliseconds(candidate.HideDelayMs);
-            if(changes.Has(SettingsChange.Grid))
-                IconPanelView.ConfigureLayout(candidate,_editingLayout);
-            if(changes.Has(SettingsChange.Dimensions)
-                && !TryPositionWindow(refreshScreen:false)) ScheduleDisplayRefresh();
+            _hideTimer.Interval = TimeSpan.FromMilliseconds(candidate.HideDelayMs);
+            if (changes.Has(SettingsChange.Grid))
+                IconPanelView.ConfigureLayout(candidate, _editingLayout);
+            if (changes.Has(SettingsChange.Dimensions)
+                && !TryPositionWindow(refreshScreen: false)) ScheduleDisplayRefresh();
             return;
         }
-        if(changes.Has(SettingsChange.Desktop))
+        if (changes.Has(SettingsChange.Desktop))
         {
-            _previewCatalogChanged=true;
+            _previewCatalogChanged = true;
             _icons.Configure(ScanOptions(candidate));
             _icons.ScanDesktopIcons();
         }
-        if(previous.ShowNetwork!=candidate.ShowNetwork || previous.NetworkInterfaceId!=candidate.NetworkInterfaceId || previous.MonitorUpdateIntervalMs!=candidate.MonitorUpdateIntervalMs || previous.EcoMode!=candidate.EcoMode || previous.SuspendMonitorWhenHidden!=candidate.SuspendMonitorWhenHidden)
+        if (previous.ShowNetwork != candidate.ShowNetwork || previous.NetworkInterfaceId != candidate.NetworkInterfaceId || previous.MonitorUpdateIntervalMs != candidate.MonitorUpdateIntervalMs || previous.EcoMode != candidate.EcoMode || previous.SuspendMonitorWhenHidden != candidate.SuspendMonitorWhenHidden)
         {
-            var monitoring=_settings.Clone();
-            monitoring.NetworkInterfaceId=candidate.NetworkInterfaceId;
-            monitoring.ShowNetwork=candidate.ShowNetwork;
-            monitoring.MonitorUpdateIntervalMs=candidate.MonitorUpdateIntervalMs;
-            monitoring.EcoMode=candidate.EcoMode;
-            monitoring.SuspendMonitorWhenHidden=candidate.SuspendMonitorWhenHidden;
-            _monitor.Configure(monitoring,_animation.IsVisible);
+            var monitoring = _settings.Clone();
+            monitoring.NetworkInterfaceId = candidate.NetworkInterfaceId;
+            monitoring.ShowNetwork = candidate.ShowNetwork;
+            monitoring.MonitorUpdateIntervalMs = candidate.MonitorUpdateIntervalMs;
+            monitoring.EcoMode = candidate.EcoMode;
+            monitoring.SuspendMonitorWhenHidden = candidate.SuspendMonitorWhenHidden;
+            _monitor.Configure(monitoring, _animation.IsVisible);
         }
-        _settingsPreview=candidate.Clone();
-        _skipPreviewTheme=!changes.Has(SettingsChange.Appearance);
+        _settingsPreview = candidate.Clone();
+        _skipPreviewTheme = !changes.Has(SettingsChange.Appearance);
         try { ApplySettings(); PositionWindow(); UpdateLayout(); }
-        finally { _skipPreviewTheme=false; }
+        finally { _skipPreviewTheme = false; }
     }
     internal void EndSettingsPreview()
     {
-        _settingsPreview=null;
-        if(_cleaned) return;
+        _settingsPreview = null;
+        if (_cleaned) return;
         ApplySettings(); PositionWindow(); UpdateLayout();
-        if(_previewCatalogChanged && _previewDesktopSnapshot is {} snapshot)
-            _icons.RestorePreviewCatalog(ScanOptions(_settings),snapshot,_previewHadDesktop);
-        if(_previewGridOffset is {} offset)
+        if (_previewCatalogChanged && _previewDesktopSnapshot is { } snapshot)
+            _icons.RestorePreviewCatalog(ScanOptions(_settings), snapshot, _previewHadDesktop);
+        if (_previewGridOffset is { } offset)
         {
-            IconPanelView.GridOffset=offset;
-            int generation=_previewRestoreGeneration;
-            Dispatcher.InvokeAsync(()=>
+            IconPanelView.GridOffset = offset;
+            int generation = _previewRestoreGeneration;
+            Dispatcher.InvokeAsync(() =>
             {
-                if(_cleaned || _settingsPreview!=null || generation!=_previewRestoreGeneration) return;
-                UpdateLayout();IconPanelView.GridOffset=offset;
-            },DispatcherPriority.ContextIdle);
+                if (_cleaned || _settingsPreview != null || generation != _previewRestoreGeneration) return;
+                UpdateLayout(); IconPanelView.GridOffset = offset;
+            }, DispatcherPriority.ContextIdle);
         }
-        _previewGridOffset=null;_previewDesktopSnapshot=null;
-        if(_previewCatalogChanged) { _previewCatalogChanged=false; _icons.ScanDesktopIcons(); }
+        _previewGridOffset = null; _previewDesktopSnapshot = null;
+        if (_previewCatalogChanged) { _previewCatalogChanged = false; _icons.ScanDesktopIcons(); }
     }
     private LayoutDecisionWindow? _layoutDecision;
     private int _suppress;
@@ -136,35 +136,35 @@ public partial class MainWindow : Window
         _icons = services.Desktop;
         try
         {
-        _settings = preview ? new() { HideDesktopIcons = false, HardwareSensorsEnabled = false } : AppSettings.Load();
-        ThemeService.Apply(_settings);
-        InitializeComponent();
-        _animation = new(PanelTranslate, this, _settings, MainPanel);
-        AddHandler(WidgetDrag.ReorderedEvent, new RoutedEventHandler((_, _) => { _settings.WidgetOrder = MonitorPanelView.GetWidgetOrder(); SaveLayout(); }));
-        IconPanelView.LayoutChanged += (_, _) => SaveLayout();
-        _animation.VisibilityChanged += visible => { _monitor.Configure(_settings, visible); MonitorPanelView.SetActive(visible && _settings.ShowMonitor); };
-        _edgeTimer.Tick += EdgeTick; _hideTimer.Tick += HideTick;
-        _displayTimer.Tick += DisplayRefreshTick;
-        _searchSession = new(
-            () => DesktopSearchButton.IsMouseOver || DesktopSearchEditor.IsMouseOver || DesktopSearchHasFocus || DesktopSearchBox.Text.Length > 0,
-            PresentDesktopSearch);
-        IsVisibleChanged += (_,e) => { if (!(bool)e.NewValue) { _searchSession.Suspend(DesktopSearchBox.Text.Length > 0); } };
-        MouseEnter += (_, _) => _hideTimer.Stop();
-        MouseLeave += (_, _) => ScheduleHide();
-        Deactivated += (_,_) => { _keyboardInteraction=false; ScheduleHide(); };
-        PreviewMouseDown += (_,e) =>
-        {
-            _keyboardInteraction=false;
-            if(DesktopSearchEditor.Visibility==Visibility.Visible && SearchHitTest.IsBlank(e.OriginalSource as DependencyObject,this))
+            _settings = preview ? new() { HideDesktopIcons = false, HardwareSensorsEnabled = false } : AppSettings.Load();
+            ThemeService.Apply(_settings);
+            InitializeComponent();
+            _animation = new(PanelTranslate, this, _settings, MainPanel);
+            AddHandler(WidgetDrag.ReorderedEvent, new RoutedEventHandler((_, _) => { _settings.WidgetOrder = MonitorPanelView.GetWidgetOrder(); SaveLayout(); }));
+            IconPanelView.LayoutChanged += (_, _) => SaveLayout();
+            _animation.VisibilityChanged += visible => { _monitor.Configure(_settings, visible); MonitorPanelView.SetActive(visible && _settings.ShowMonitor); };
+            _edgeTimer.Tick += EdgeTick; _hideTimer.Tick += HideTick;
+            _displayTimer.Tick += DisplayRefreshTick;
+            _searchSession = new(
+                () => DesktopSearchButton.IsMouseOver || DesktopSearchEditor.IsMouseOver || DesktopSearchHasFocus || DesktopSearchBox.Text.Length > 0,
+                PresentDesktopSearch);
+            IsVisibleChanged += (_, e) => { if (!(bool)e.NewValue) { _searchSession.Suspend(DesktopSearchBox.Text.Length > 0); } };
+            MouseEnter += (_, _) => _hideTimer.Stop();
+            MouseLeave += (_, _) => ScheduleHide();
+            Deactivated += (_, _) => { _keyboardInteraction = false; ScheduleHide(); };
+            PreviewMouseDown += (_, e) =>
             {
-                Keyboard.ClearFocus();
-                _searchSession.DismissAndClear(DesktopSearchBox.Clear);
-            }
-            ScheduleHide();
-        };
-        Microsoft.Win32.SystemEvents.DisplaySettingsChanged += DisplayChanged;
-        Microsoft.Win32.SystemEvents.UserPreferenceChanged += PreferenceChanged;
-        LocalizationService.Changed += RefreshLanguage;
+                _keyboardInteraction = false;
+                if (DesktopSearchEditor.Visibility == Visibility.Visible && SearchHitTest.IsBlank(e.OriginalSource as DependencyObject, this))
+                {
+                    Keyboard.ClearFocus();
+                    _searchSession.DismissAndClear(DesktopSearchBox.Clear);
+                }
+                ScheduleHide();
+            };
+            Microsoft.Win32.SystemEvents.DisplaySettingsChanged += DisplayChanged;
+            Microsoft.Win32.SystemEvents.UserPreferenceChanged += PreferenceChanged;
+            LocalizationService.Changed += RefreshLanguage;
         }
         catch
         {
@@ -180,27 +180,27 @@ public partial class MainWindow : Window
         ApplySettings(); PositionWindow();
         if (_preview)
         {
-            FooterState.SetResourceReference(TextBlock.TextProperty,"Loc.PanelPreview");
-            if(AllowPreviewIsland)
+            FooterState.SetResourceReference(TextBlock.TextProperty, "Loc.PanelPreview");
+            if (AllowPreviewIsland)
             {
                 _edgeTimer.Start();
                 // A first ShowPanel can raise Loaded synchronously inside Show().
                 // Never cancel that explicit reveal from initialization.
-                if(!_animation.IsVisible) Dispatcher.BeginInvoke(new Action(()=>
-                { if(!_cleaned && !_animation.IsVisible) _animation.HideInstantly(); }));
+                if (!_animation.IsVisible) Dispatcher.BeginInvoke(new Action(() =>
+                { if (!_cleaned && !_animation.IsVisible) _animation.HideInstantly(); }));
             }
             if (_smokeTest) { _icons.ScanDesktopIcons(); _monitor.Start(); _animation.HideInstantly(); ShowPanel(); }
             return;
         }
-        try { _desktopUpdates = new(this,_icons); }
-        catch (Exception ex) { AppLogger.Error(ex,"Start Desktop updates"); _icons.ScanDesktopIcons(); }
+        try { _desktopUpdates = new(this, _icons); }
+        catch (Exception ex) { AppLogger.Error(ex, "Start Desktop updates"); _icons.ScanDesktopIcons(); }
         _monitor.Start();
         if (AppSettings.RecoveryNotice is { } notice)
-            MessageBox.Show(LocalizationService.Render(notice),"Nepply",MessageBoxButton.OK,MessageBoxImage.Information);
+            MessageBox.Show(LocalizationService.Render(notice), "Nepply", MessageBoxButton.OK, MessageBoxImage.Information);
         _animation.HideInstantly();
         _edgeTimer.Start();
         RegisterHotkey();
-        ApplyShellSettings(true,true,userInitiated:false);
+        ApplyShellSettings(true, true, userInitiated: false);
         if (!_settings.HasCompletedOnboarding && AppSettings.RecoveryNotice == null)
             Dispatcher.BeginInvoke(ShowWelcome);
     }
@@ -233,23 +233,23 @@ public partial class MainWindow : Window
     private void RegisterHotkey()
     {
         _hotkey ??= new(new WindowInteropHelper(this).Handle, RunGlobalShortcut);
-        var bindings=ShortcutBindings.Global.ToDictionary(action=>action,action=>ShortcutBindings.Get(_settings,action));
-        var failed=_hotkey.Register(bindings);
+        var bindings = ShortcutBindings.Global.ToDictionary(action => action, action => ShortcutBindings.Get(_settings, action));
+        var failed = _hotkey.Register(bindings);
         PresentHotkeyStatus(!failed.Contains(ShortcutAction.TogglePanel));
-        PresentShortcutFailures(failed.Where(action=>action!=ShortcutAction.TogglePanel).Select(action=>bindings[action]).ToArray());
+        PresentShortcutFailures(failed.Where(action => action != ShortcutAction.TogglePanel).Select(action => bindings[action]).ToArray());
     }
     private UserMessage? _shortcutFailureNotice;
     internal void PresentShortcutFailures(IReadOnlyList<ShortcutGesture> failed)
     {
-        if(_shortcutFailureNotice!=null) { IconPanelView.DismissActionFailure(_shortcutFailureNotice); _shortcutFailureNotice=null; }
-        if(failed.Count==0) return;
-        _shortcutFailureNotice=UserMessage.FromKey("ShortcutUnavailableNotice",string.Join(", ",failed.Select(g=>g.ToString())));
+        if (_shortcutFailureNotice != null) { IconPanelView.DismissActionFailure(_shortcutFailureNotice); _shortcutFailureNotice = null; }
+        if (failed.Count == 0) return;
+        _shortcutFailureNotice = UserMessage.FromKey("ShortcutUnavailableNotice", string.Join(", ", failed.Select(g => g.ToString())));
         IconPanelView.ShowActionFailure(_shortcutFailureNotice);
     }
     internal void RunGlobalShortcut(ShortcutAction action)
     {
-        if(_cleaned) return;
-        if(action==ShortcutAction.TogglePanel)
+        if (_cleaned) return;
+        if (action == ShortcutAction.TogglePanel)
         {
             if (_openingSettings || _layoutDecision != null) OpenForInteraction();
             else if (_animation.IsVisible) HidePanel();
@@ -257,24 +257,24 @@ public partial class MainWindow : Window
             return;
         }
         // Leave the hotkey message hook before showing UI; Settings opens a modal loop.
-        Dispatcher.BeginInvoke(()=>
+        Dispatcher.BeginInvoke(() =>
         {
-            if(_cleaned) return;
-            bool dialogOpen=_openingSettings || _layoutDecision!=null;
-            switch(action)
+            if (_cleaned) return;
+            bool dialogOpen = _openingSettings || _layoutDecision != null;
+            switch (action)
             {
                 case ShortcutAction.SearchDesktop:
                     OpenForInteraction();
-                    if(!dialogOpen) FocusDesktopSearch();
+                    if (!dialogOpen) FocusDesktopSearch();
                     break;
                 case ShortcutAction.TogglePin:
-                    if(dialogOpen) { OpenForInteraction(); break; }
+                    if (dialogOpen) { OpenForInteraction(); break; }
                     TogglePin();
-                    if(_pinned) OpenForInteraction();
+                    if (_pinned) OpenForInteraction();
                     break;
                 case ShortcutAction.ToggleDesktopIcons:
                     // An open Settings draft owns this option until it is saved or cancelled.
-                    if(dialogOpen) { OpenForInteraction(); break; }
+                    if (dialogOpen) { OpenForInteraction(); break; }
                     ToggleDesktopIcons();
                     break;
                 case ShortcutAction.OpenSettings:
@@ -285,24 +285,24 @@ public partial class MainWindow : Window
     }
     private void ToggleDesktopIcons()
     {
-        _settings.HideDesktopIcons=!_settings.HideDesktopIcons;
-        try { if(!_preview) _settings.Save(); }
-        catch(Exception ex)
+        _settings.HideDesktopIcons = !_settings.HideDesktopIcons;
+        try { if (!_preview) _settings.Save(); }
+        catch (Exception ex)
         {
-            _settings.HideDesktopIcons=!_settings.HideDesktopIcons;
-            AppLogger.Error(ex,"Save Desktop icon shortcut");
+            _settings.HideDesktopIcons = !_settings.HideDesktopIcons;
+            AppLogger.Error(ex, "Save Desktop icon shortcut");
             IconPanelView.ShowActionFailure(UserMessage.From(ex));
             return;
         }
-        ApplyShellSettings(false,true);
+        ApplyShellSettings(false, true);
     }
     internal void PresentHotkeyStatus(bool registered)
     {
-        _hotkeyRegistered=registered;
+        _hotkeyRegistered = registered;
         RefreshHotkeyText();
         if (!registered)
         {
-            _hotkeyFailureNotice = UserMessage.FromKey("HotkeyUnavailableNotice",HotkeyLabel(_settings));
+            _hotkeyFailureNotice = UserMessage.FromKey("HotkeyUnavailableNotice", HotkeyLabel(_settings));
             IconPanelView.ShowActionFailure(_hotkeyFailureNotice);
         }
         else if (_hotkeyFailureNotice != null)
@@ -313,15 +313,15 @@ public partial class MainWindow : Window
     }
     private void RefreshHotkeyText()
     {
-        if(_hotkeyRegistered is not {} registered) return;
-        string label=HotkeyLabel(_settings);
-        HotkeyText.Text=registered ? label : string.Format(LocalizationService.Get("HotkeyUnavailableLabel"),label);
-        HotkeyText.ToolTip=LocalizationService.Get(registered ? "HotkeyToggleHint" : "HotkeyChangeHint");
-        System.Windows.Automation.AutomationProperties.SetName(HotkeyText,HotkeyText.Text);
+        if (_hotkeyRegistered is not { } registered) return;
+        string label = HotkeyLabel(_settings);
+        HotkeyText.Text = registered ? label : string.Format(LocalizationService.Get("HotkeyUnavailableLabel"), label);
+        HotkeyText.ToolTip = LocalizationService.Get(registered ? "HotkeyToggleHint" : "HotkeyChangeHint");
+        System.Windows.Automation.AutomationProperties.SetName(HotkeyText, HotkeyText.Text);
     }
     private void RefreshLanguage()
     {
-        if(_cleaned) return;
+        if (_cleaned) return;
         UpdateActionLabels();
         // Refresh wording, not registration or notice visibility: a dismissed
         // warning must not reappear just because the language changed.
@@ -329,31 +329,31 @@ public partial class MainWindow : Window
         MonitorPanelView.RefreshLanguage();
     }
     public static string HotkeyLabel(AppSettings settings) =>
-        HotkeyGesture.Format(settings.HotkeyModifiers,settings.HotkeyKey);
+        HotkeyGesture.Format(settings.HotkeyModifiers, settings.HotkeyKey);
     public void ApplySettings()
     {
         var _settings = _settingsPreview ?? this._settings;
-        _settings.Validate(); if(!_skipPreviewTheme) ThemeService.Apply(_settings); MainPanel.Opacity = 1;
+        _settings.Validate(); if (!_skipPreviewTheme) ThemeService.Apply(_settings); MainPanel.Opacity = 1;
         UpdateActionLabels();
         _animation.RefreshMotionPreference();
         _hideTimer.Interval = TimeSpan.FromMilliseconds(_settings.HideDelayMs);
         MonitorPanelView.ConfigureLayout(_settings, _editingLayout);
         MonitorPanelView.PreviewConfiguration(_settingsPreview);
         IconPanelView.ConfigureLayout(_settings, _editingLayout);
-        if(_settingsPreview==null) _icons.Configure(new Modules.Desktop.DesktopScanOptions(_settings.ShowHiddenFiles,
+        if (_settingsPreview == null) _icons.Configure(new Modules.Desktop.DesktopScanOptions(_settings.ShowHiddenFiles,
             _settings.ShowSystemIcons, _settings.MergeEquivalentShortcuts));
         MonitorScroller.Visibility = ContentSeparator.Visibility = _settings.ShowMonitor ? Visibility.Visible : Visibility.Collapsed;
         ContentGrid.RowDefinitions.Clear(); ContentGrid.ColumnDefinitions.Clear();
         bool top = _settings.EdgePosition.IsHorizontal();
-        PanelHeader.Margin = top ? new(24,12,20,10) : new(20,18,16,14);
+        PanelHeader.Margin = top ? new(24, 12, 20, 10) : new(20, 18, 16, 14);
         BrandTitle.Width = BrandTitle.Height = top ? 30 : 36;
         BrandUnderline.Visibility = Visibility.Collapsed;
         UpdateSearchHeader(_searchSession?.IsExpanded == true);
-        PanelFooter.Padding = top ? new(20,3,20,5) : new(20,11,20,11);
+        PanelFooter.Padding = top ? new(20, 3, 20, 5) : new(20, 11, 20, 11);
         ContentGrid.ClipToBounds = true;
         if (_settings.EdgePosition.IsHorizontal())
         {
-            double availableWidth = _screen == null ? _settings.TopPanelWidth : PanelDimensions.Resolve(_settings,_screen).Top;
+            double availableWidth = _screen == null ? _settings.TopPanelWidth : PanelDimensions.Resolve(_settings, _screen).Top;
             // Reconfiguration can rebuild columns without a SizeChanged event (e.g. swapping sections).
             if (ContentGrid.ActualWidth > 0) availableWidth = Math.Min(availableWidth, ContentGrid.ActualWidth);
             double monitorWidth = PanelGeometry.MonitorWidth(_settings.ShowMonitor, _settings.MonitorAreaWidth, availableWidth);
@@ -376,12 +376,12 @@ public partial class MainWindow : Window
             ContentSeparator.ResizeDirection = GridResizeDirection.Rows; ContentSeparator.Width = double.NaN; ContentSeparator.Height = 8; ContentSeparator.Margin = new(20, 0, 20, 0);
         }
         ContentSeparator.IsEnabled = _editingLayout;
-        if(_settingsPreview==null) _monitor.Configure(_settings, _animation.IsVisible);
+        if (_settingsPreview == null) _monitor.Configure(_settings, _animation.IsVisible);
         MonitorPanelView.SetActive(_animation.IsVisible && _settings.ShowMonitor);
     }
     public void PositionWindow()
     {
-        if(!TryPositionWindow()) ScheduleDisplayRefresh();
+        if (!TryPositionWindow()) ScheduleDisplayRefresh();
     }
     private void ContentGrid_SizeChanged(object sender, SizeChangedEventArgs e)
     {
@@ -392,17 +392,17 @@ public partial class MainWindow : Window
         ContentGrid.ColumnDefinitions[column].Width = new(PanelGeometry.MonitorWidth(
             _settings.ShowMonitor, _settings.MonitorAreaWidth, e.NewSize.Width));
     }
-    private bool TryPositionWindow(bool refreshScreen=true)
+    private bool TryPositionWindow(bool refreshScreen = true)
     {
         var _settings = _settingsPreview ?? this._settings;
-        var availableScreen=!refreshScreen && _screen!=null ? _screen
-            : ScreenManager.SelectAvailable(ScreenManager.GetScreens(),_settings.MonitorDevice);
+        var availableScreen = !refreshScreen && _screen != null ? _screen
+            : ScreenManager.SelectAvailable(ScreenManager.GetScreens(), _settings.MonitorDevice);
         // Display topology may be temporarily empty during a reconnect. Keep
         // existing geometry until Windows reports usable bounds again.
-        if(availableScreen==null) return false;
+        if (availableScreen == null) return false;
         _screen = availableScreen;
         double scale = _screen.Scale;
-        var dimensions = PanelDimensions.Resolve(_settings,_screen);
+        var dimensions = PanelDimensions.Resolve(_settings, _screen);
         var placement = PanelGeometry.Calculate(_screen.Left, _screen.Top, _screen.Width, _screen.Height,
             scale, _settings.EdgePosition, dimensions.Side, dimensions.Top, dimensions.Height, _editingLayout);
         Width = placement.Width;
@@ -418,7 +418,7 @@ public partial class MainWindow : Window
         MainPanel.CornerRadius = new(26);
         var handle = new WindowInteropHelper(this).Handle;
         if (handle != IntPtr.Zero) ScreenManager.SetWindowPos(handle, IntPtr.Zero, x, y, width, height, 0x0014);
-       
+
         return true;
     }
     public void ShowPanel()
@@ -427,21 +427,21 @@ public partial class MainWindow : Window
     }
     public void OpenForInteraction()
     {
-        if(_cleaned) return;
-        if(_settingsWindow is { IsVisible:true }) { FocusDialog(_settingsWindow); return; }
-        if(_layoutDecision is { IsVisible:true }) { FocusDialog(_layoutDecision); return; }
+        if (_cleaned) return;
+        if (_settingsWindow is { IsVisible: true }) { FocusDialog(_settingsWindow); return; }
+        if (_layoutDecision is { IsVisible: true }) { FocusDialog(_layoutDecision); return; }
         ShowPanel();
         Activate();
-        _keyboardInteraction=IsActive;
-        if(_keyboardInteraction) _hideTimer.Stop();
+        _keyboardInteraction = IsActive;
+        if (_keyboardInteraction) _hideTimer.Stop();
         // Let the tray menu finish closing before moving focus into the dock.
-        Dispatcher.BeginInvoke(DispatcherPriority.Input,new Action(() =>
+        Dispatcher.BeginInvoke(DispatcherPriority.Input, new Action(() =>
         {
-            if(_cleaned || !_animation.IsVisible || !KeyboardInteractionActive) return;
+            if (_cleaned || !_animation.IsVisible || !KeyboardInteractionActive) return;
             IconPanelView.FocusSearch();
         }));
     }
-    public void HidePanel() { if (_suppress == 0) { _keyboardInteraction=false; _edgeGate.Disarm(); _pinned = false; UpdateActionLabels(); _animation.Hide(); } }
+    public void HidePanel() { if (_suppress == 0) { _keyboardInteraction = false; _edgeGate.Disarm(); _pinned = false; UpdateActionLabels(); _animation.Hide(); } }
     public void HidePanelInstantly() => _animation.HideInstantly();
     // Closing the window raises Deactivated after Cleanup; never restart the timer then.
     private void ScheduleHide() { if (!_cleaned && _animation.IsVisible && !_pinned && _suppress == 0 && !KeyboardInteractionActive) { _hideTimer.Stop(); _hideTimer.Start(); } }
@@ -454,7 +454,7 @@ public partial class MainWindow : Window
         // the pointer is still inside the dock. Poll stable screen bounds instead.
         // DispatcherTimer repeats: explicitly cancel or restart so an old false leave
         // cannot consume the delay and hide immediately on the next real leave.
-        switch (AutoHidePolicy.Decide(_pinned, _suppress > 0, _animation.IsAnimating, PointerInsidePanel(point.X,point.Y),KeyboardInteractionActive))
+        switch (AutoHidePolicy.Decide(_pinned, _suppress > 0, _animation.IsAnimating, PointerInsidePanel(point.X, point.Y), KeyboardInteractionActive))
         {
             case AutoHideAction.Cancel:
                 _hideTimer.Stop();
@@ -473,7 +473,7 @@ public partial class MainWindow : Window
     {
         if (_cleaned || _screen == null || _displayTimer.IsEnabled) return;
         var context = ReadPointerContext();
-        if (context is not {} point) { _edgeGate.Disarm(); return; }
+        if (context is not { } point) { _edgeGate.Disarm(); return; }
         AdjustEdgePolling(point);
         // Windows also hides the cursor while the user types in another app, so a pinned
         // panel must not read a hidden cursor as a full-screen app taking over.
@@ -489,14 +489,14 @@ public partial class MainWindow : Window
         }
         if (_animation.IsVisible)
         {
-            bool inside=PointerInsidePanel(point.X,point.Y);
+            bool inside = PointerInsidePanel(point.X, point.Y);
             if (inside || _pinned || _suppress > 0 || KeyboardInteractionActive) _hideTimer.Stop();
             else if (!_hideTimer.IsEnabled) ScheduleHide();
         }
         else _hideTimer.Stop();
         int zone = (int)Math.Ceiling(_settings.TriggerZoneSize * _screen.Scale);
-        bool InZone(PointerContext sample, int size) => EdgeHitTest.Contains(_settings.EdgePosition,sample.X,sample.Y,
-            _screen.Left,_screen.Top,_screen.Right,_screen.Bottom,size);
+        bool InZone(PointerContext sample, int size) => EdgeHitTest.Contains(_settings.EdgePosition, sample.X, sample.Y,
+            _screen.Left, _screen.Top, _screen.Right, _screen.Bottom, size);
         bool insideMonitor = point.X >= _screen.Left && point.X < _screen.Right &&
             point.Y >= _screen.Top && point.Y < _screen.Bottom;
         if (_edgeGate.Update(context, insideMonitor, InZone(point, zone),
@@ -505,7 +505,7 @@ public partial class MainWindow : Window
             Environment.TickCount64, _settings.TriggerDelayMs))
         {
             var current = ReadPointerContext();
-            if (PointerActivationGate.CanCommit(point, current, current is {} latest && InZone(latest, zone))) ShowPanel();
+            if (PointerActivationGate.CanCommit(point, current, current is { } latest && InZone(latest, zone))) ShowPanel();
             else _edgeGate.Disarm();
         }
     }
@@ -519,67 +519,67 @@ public partial class MainWindow : Window
         // Assigning Interval restarts a DispatcherTimer; change it only on transitions.
         if (_edgeTimer.Interval != interval) _edgeTimer.Interval = interval;
     }
-    private bool PointerInsidePanel(int screenX,int screenY)
+    private bool PointerInsidePanel(int screenX, int screenY)
     {
         // A closed or not-yet-shown window has no screen mapping.
         if (!_animation.IsVisible || PresentationSource.FromVisual(this) == null) return false;
         var local = PointFromScreen(new Point(screenX, screenY));
         // The 12-DIP floating gap is a transit corridor, not a mouse leave.
-        double left=_settings.EdgePosition==EdgePosition.Left ? -16 : -4;
-        double right=_settings.EdgePosition==EdgePosition.Right ? ActualWidth+16 : ActualWidth+4;
-        double top=_settings.EdgePosition==EdgePosition.Top ? -16 : -4;
-        double bottom=_settings.EdgePosition==EdgePosition.Bottom ? ActualHeight+16 : ActualHeight+4;
+        double left = _settings.EdgePosition == EdgePosition.Left ? -16 : -4;
+        double right = _settings.EdgePosition == EdgePosition.Right ? ActualWidth + 16 : ActualWidth + 4;
+        double top = _settings.EdgePosition == EdgePosition.Top ? -16 : -4;
+        double bottom = _settings.EdgePosition == EdgePosition.Bottom ? ActualHeight + 16 : ActualHeight + 4;
         return local.X >= left && local.Y >= top && local.X <= right && local.Y <= bottom;
     }
     private void DisplayChanged(object? sender, EventArgs e) => Dispatcher.InvokeAsync(() =>
     {
-        if(_cleaned) return;
+        if (_cleaned) return;
         _edgeGate.Disarm(); _hideTimer.Stop();
         ScheduleDisplayRefresh();
     });
     private void ScheduleDisplayRefresh()
     {
-        if(_cleaned) return;
-        _displayAttempts=4;
+        if (_cleaned) return;
+        _displayAttempts = 4;
         _displayTimer.Stop(); _displayTimer.Start();
     }
-    private void DisplayRefreshTick(object? sender,EventArgs e)
+    private void DisplayRefreshTick(object? sender, EventArgs e)
     {
         _displayTimer.Stop();
-        if(_cleaned) return;
-        if(TryPositionWindow())
+        if (_cleaned) return;
+        if (TryPositionWindow())
         {
-            bool keepOpen=_animation.IsVisible && (_pinned || _editingLayout || KeyboardInteractionActive);
-            if(keepOpen) _animation.RefreshGeometry();
+            bool keepOpen = _animation.IsVisible && (_pinned || _editingLayout || KeyboardInteractionActive);
+            if (keepOpen) _animation.RefreshGeometry();
             else _animation.HideInstantly();
         }
-        else if(--_displayAttempts>0) _displayTimer.Start();
+        else if (--_displayAttempts > 0) _displayTimer.Start();
     }
-    private void PreferenceChanged(object sender, Microsoft.Win32.UserPreferenceChangedEventArgs e) => Dispatcher.InvokeAsync(() => { if (!_cleaned) { ThemeService.Apply(_settingsPreview ?? _settings); MainPanel.Opacity=1; _animation.RefreshMotionPreference(); } });
-    private void Window_KeyDown(object sender, KeyEventArgs e) => HandlePanelKey(e,ShortcutInput.FromEvent(e));
-    internal void HandlePanelKey(KeyEventArgs e,ShortcutGesture pressed)
+    private void PreferenceChanged(object sender, Microsoft.Win32.UserPreferenceChangedEventArgs e) => Dispatcher.InvokeAsync(() => { if (!_cleaned) { ThemeService.Apply(_settingsPreview ?? _settings); MainPanel.Opacity = 1; _animation.RefreshMotionPreference(); } });
+    private void Window_KeyDown(object sender, KeyEventArgs e) => HandlePanelKey(e, ShortcutInput.FromEvent(e));
+    internal void HandlePanelKey(KeyEventArgs e, ShortcutGesture pressed)
     {
-        bool escape=pressed==new ShortcutGesture(0,KeyInterop.VirtualKeyFromKey(Key.Escape));
+        bool escape = pressed == new ShortcutGesture(0, KeyInterop.VirtualKeyFromKey(Key.Escape));
         // One press dismisses one layer; holding Esc must not also hide the panel.
-        if(e.IsRepeat && escape) { e.Handled=true; return; }
-        if(IsActive && IsKeyboardFocusWithin) { _keyboardInteraction=true; _hideTimer.Stop(); }
+        if (e.IsRepeat && escape) { e.Handled = true; return; }
+        if (IsActive && IsKeyboardFocusWithin) { _keyboardInteraction = true; _hideTimer.Stop(); }
         if (escape)
         {
             // Esc (fixed, not rebindable) backs out of the current layer, then hides the panel.
-            if (_editingLayout) { FinishLayout(false); e.Handled=true; return; }
-            if (IconPanelView.ClearFocusedSearch()) { e.Handled=true; return; }
-            if (DesktopSearchEditor.Visibility==Visibility.Visible && DesktopSearchBox.Text.Length==0)
-            { DesktopSearchButton.Focus(); SetDesktopSearchExpanded(false); e.Handled=true; return; }
+            if (_editingLayout) { FinishLayout(false); e.Handled = true; return; }
+            if (IconPanelView.ClearFocusedSearch()) { e.Handled = true; return; }
+            if (DesktopSearchEditor.Visibility == Visibility.Visible && DesktopSearchBox.Text.Length == 0)
+            { DesktopSearchButton.Focus(); SetDesktopSearchExpanded(false); e.Handled = true; return; }
         }
-        if (escape) { HidePanel(); e.Handled=true; return; }
-        if (ShortcutInput.Matches(_settings,ShortcutAction.FocusSearch,pressed)) { IconPanelView.FocusSearch(); e.Handled = true; return; }
-        if (ShortcutInput.Matches(_settings,ShortcutAction.RefreshDesktop,pressed)) { RefreshIcons(); e.Handled = true; }
+        if (escape) { HidePanel(); e.Handled = true; return; }
+        if (ShortcutInput.Matches(_settings, ShortcutAction.FocusSearch, pressed)) { IconPanelView.FocusSearch(); e.Handled = true; return; }
+        if (ShortcutInput.Matches(_settings, ShortcutAction.RefreshDesktop, pressed)) { RefreshIcons(); e.Handled = true; }
     }
     private void SaveLayout()
     {
         if (_editingLayout || _finishingLayout) return;
         try { if (!_preview) _settings.Save(); }
-        catch (Exception ex) { AppLogger.Error(ex,"Save layout"); MessageBox.Show(LocalizationService.Get("LayoutSaveError") + LocalizationService.Render(UserMessage.From(ex))); }
+        catch (Exception ex) { AppLogger.Error(ex, "Save layout"); MessageBox.Show(LocalizationService.Get("LayoutSaveError") + LocalizationService.Render(UserMessage.From(ex))); }
     }
     private void EditLayout_Click(object sender, RoutedEventArgs e)
     {
@@ -587,18 +587,18 @@ public partial class MainWindow : Window
         _layoutEdit.Begin(_settings);
         SuppressHide();
         LayoutActions.Visibility = Visibility.Visible;
-        EditLayoutButton.SetResourceReference(Control.ForegroundProperty,_editingLayout ? "AccentBrush" : "MutedBrush");
+        EditLayoutButton.SetResourceReference(Control.ForegroundProperty, _editingLayout ? "AccentBrush" : "MutedBrush");
         FooterState.Visibility = Visibility.Collapsed; // Editing instructions live in the guide.
         ApplySettings(); PositionWindow();
     }
-    private void DoneLayout_Click(object sender,RoutedEventArgs e) => FinishLayout(true);
-    private void SwapSections_Click(object sender,RoutedEventArgs e)
+    private void DoneLayout_Click(object sender, RoutedEventArgs e) => FinishLayout(true);
+    private void SwapSections_Click(object sender, RoutedEventArgs e)
     {
         if (!_editingLayout) return;
         _settings.IconsFirst = !_settings.IconsFirst;
         ApplySettings();
     }
-    private void CancelLayout_Click(object sender,RoutedEventArgs e) => FinishLayout(false);
+    private void CancelLayout_Click(object sender, RoutedEventArgs e) => FinishLayout(false);
     public void FinishLayout(bool commit)
     {
         if (!_editingLayout) return;
@@ -606,13 +606,13 @@ public partial class MainWindow : Window
         try
         {
             try { _layoutEdit.Complete(commit, settings => { if (!_preview) settings.Save(); }); }
-            catch(Exception ex) { AppLogger.Error(ex,"Commit layout"); FooterState.SetResourceReference(TextBlock.TextProperty,"Loc.LayoutCommitError"); FooterState.Visibility=Visibility.Visible; return; }
-            LayoutActions.Visibility=Visibility.Collapsed;
-            FooterState.Visibility=Visibility.Collapsed;
-            EditLayoutButton.SetResourceReference(Control.ForegroundProperty,"MutedBrush");
+            catch (Exception ex) { AppLogger.Error(ex, "Commit layout"); FooterState.SetResourceReference(TextBlock.TextProperty, "Loc.LayoutCommitError"); FooterState.Visibility = Visibility.Visible; return; }
+            LayoutActions.Visibility = Visibility.Collapsed;
+            FooterState.Visibility = Visibility.Collapsed;
+            EditLayoutButton.SetResourceReference(Control.ForegroundProperty, "MutedBrush");
             ApplySettings(); PositionWindow(); IconPanelView.RefreshLayout();
         }
-        finally { _finishingLayout=false; if (!_editingLayout) ResumeHide(); }
+        finally { _finishingLayout = false; if (!_editingLayout) ResumeHide(); }
     }
     private void ResizeLayout_End(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
     {
@@ -631,18 +631,18 @@ public partial class MainWindow : Window
     }
     private void UpdateActionLabels()
     {
-        string pinLabel=LocalizationService.Get(_pinned ? "Unpin" : "PinTip");
-        string editLabel=LocalizationService.Get(_editingLayout ? "SaveLayout" : "EditLayout");
-        PinButton.ToolTip=ShortcutInput.Label(pinLabel,_settings,ShortcutAction.TogglePin);
-        DesktopSearchButton.ToolTip=ShortcutInput.Label(LocalizationService.Get("SearchDesktopTip"),_settings,ShortcutAction.FocusSearch);
-        RefreshDesktopButton.ToolTip=ShortcutInput.Label(LocalizationService.Get("Refresh"),_settings,ShortcutAction.RefreshDesktop);
-        PanelSettingsButton.ToolTip=ShortcutInput.Label(LocalizationService.Get("Settings"),_settings,ShortcutAction.OpenSettings);
-        PinButton.IsChecked=_pinned;
-        EditLayoutButton.ToolTip=editLabel;
-        System.Windows.Automation.AutomationProperties.SetName(PinButton,pinLabel);
-        System.Windows.Automation.AutomationProperties.SetItemStatus(PinButton,LocalizationService.Get(_pinned ? "Pinned" : "AutoHide"));
-        System.Windows.Automation.AutomationProperties.SetName(EditLayoutButton,editLabel);
-        System.Windows.Automation.AutomationProperties.SetItemStatus(EditLayoutButton,_editingLayout ? LocalizationService.Get("EditingStatus") : "");
+        string pinLabel = LocalizationService.Get(_pinned ? "Unpin" : "PinTip");
+        string editLabel = LocalizationService.Get(_editingLayout ? "SaveLayout" : "EditLayout");
+        PinButton.ToolTip = ShortcutInput.Label(pinLabel, _settings, ShortcutAction.TogglePin);
+        DesktopSearchButton.ToolTip = ShortcutInput.Label(LocalizationService.Get("SearchDesktopTip"), _settings, ShortcutAction.FocusSearch);
+        RefreshDesktopButton.ToolTip = ShortcutInput.Label(LocalizationService.Get("Refresh"), _settings, ShortcutAction.RefreshDesktop);
+        PanelSettingsButton.ToolTip = ShortcutInput.Label(LocalizationService.Get("Settings"), _settings, ShortcutAction.OpenSettings);
+        PinButton.IsChecked = _pinned;
+        EditLayoutButton.ToolTip = editLabel;
+        System.Windows.Automation.AutomationProperties.SetName(PinButton, pinLabel);
+        System.Windows.Automation.AutomationProperties.SetItemStatus(PinButton, LocalizationService.Get(_pinned ? "Pinned" : "AutoHide"));
+        System.Windows.Automation.AutomationProperties.SetName(EditLayoutButton, editLabel);
+        System.Windows.Automation.AutomationProperties.SetItemStatus(EditLayoutButton, _editingLayout ? LocalizationService.Get("EditingStatus") : "");
     }
     private void Refresh_Click(object sender, RoutedEventArgs e) => RefreshIcons();
     public void RefreshIcons() => _icons.ScanDesktopIcons();
@@ -650,32 +650,32 @@ public partial class MainWindow : Window
     public void OpenSettings()
     {
         Modules.Updates.PreparedUpdate? pendingUpdate = null;
-        if(_cleaned) return;
-        if(_openingSettings)
+        if (_cleaned) return;
+        if (_openingSettings)
         {
             FocusDialog(_settingsWindow ?? (Window?)_layoutDecision);
             return;
         }
-        _openingSettings=true;
+        _openingSettings = true;
         try
         {
             if (!ConfirmLeaveLayout()) return;
             SuppressHide();
             try
             {
-            var snapshot = _monitor.GetSnapshot();
-            var settings = new SettingsWindow(_settings, snapshot.Hardware.Gpus, snapshot) { Owner = this, WindowStartupLocation = WindowStartupLocation.CenterScreen };
-            _settingsWindow=settings;
-            settings.PreviewChanged+=PreviewSettings;
-            settings.SettingsCommitted+=SettingsApplied;
-            settings.PreviewViewport=()=>IconPanelView.GridViewport;
-            ShowPanel();
-            settings.ShowDialog();
-            pendingUpdate = settings.PendingUpdate;
+                var snapshot = _monitor.GetSnapshot();
+                var settings = new SettingsWindow(_settings, snapshot.Hardware.Gpus, snapshot) { Owner = this, WindowStartupLocation = WindowStartupLocation.CenterScreen };
+                _settingsWindow = settings;
+                settings.PreviewChanged += PreviewSettings;
+                settings.SettingsCommitted += SettingsApplied;
+                settings.PreviewViewport = () => IconPanelView.GridViewport;
+                ShowPanel();
+                settings.ShowDialog();
+                pendingUpdate = settings.PendingUpdate;
             }
-            finally { EndSettingsPreview(); _settingsWindow=null; ResumeHide(); }
+            finally { EndSettingsPreview(); _settingsWindow = null; ResumeHide(); }
         }
-        finally { _openingSettings=false; }
+        finally { _openingSettings = false; }
         if (pendingUpdate != null)
         {
             using (pendingUpdate)
@@ -698,71 +698,71 @@ public partial class MainWindow : Window
     }
     private void SettingsApplied()
     {
-        if(_cleaned) return;
-        var changes=_settingsWindow?.LastCommittedChanges ?? new SettingsChangeSet(
+        if (_cleaned) return;
+        var changes = _settingsWindow?.LastCommittedChanges ?? new SettingsChangeSet(
             SettingsChange.Hotkey | SettingsChange.AutoStart | SettingsChange.DesktopVisibility | SettingsChange.Desktop);
-        _settingsPreview=null;
+        _settingsPreview = null;
         _previewRestoreGeneration++;
-        _previewGridOffset=null; _previewDesktopSnapshot=null; _previewCatalogChanged=false;
+        _previewGridOffset = null; _previewDesktopSnapshot = null; _previewCatalogChanged = false;
         ApplySettings(); PositionWindow();
-        if(!_preview)
+        if (!_preview)
         {
-            if(changes.Has(SettingsChange.Hotkey)) RegisterHotkey();
-            if(changes.Has(SettingsChange.AutoStart | SettingsChange.DesktopVisibility))
-                ApplyShellSettings(changes.Has(SettingsChange.AutoStart),changes.Has(SettingsChange.DesktopVisibility));
-            if(changes.Has(SettingsChange.Desktop)) _icons.ScanDesktopIcons();
+            if (changes.Has(SettingsChange.Hotkey)) RegisterHotkey();
+            if (changes.Has(SettingsChange.AutoStart | SettingsChange.DesktopVisibility))
+                ApplyShellSettings(changes.Has(SettingsChange.AutoStart), changes.Has(SettingsChange.DesktopVisibility));
+            if (changes.Has(SettingsChange.Desktop)) _icons.ScanDesktopIcons();
         }
     }
     private static void FocusDialog(Window? dialog)
     {
-        if(dialog==null || !dialog.IsVisible) return;
-        if(dialog.WindowState==WindowState.Minimized) dialog.WindowState=WindowState.Normal;
+        if (dialog == null || !dialog.IsVisible) return;
+        if (dialog.WindowState == WindowState.Minimized) dialog.WindowState = WindowState.Normal;
         dialog.Activate();
     }
-    public void ApplyShellSettings() => ApplyShellSettings(true,true);
-    private void ApplyShellSettings(bool autoStart,bool desktopVisibility,bool userInitiated=true)
+    public void ApplyShellSettings() => ApplyShellSettings(true, true);
+    private void ApplyShellSettings(bool autoStart, bool desktopVisibility, bool userInitiated = true)
     {
         if (_preview) return;
-        if (autoStart) _ = ApplyStartupAsync(_settings.AutoStart,userInitiated);
+        if (autoStart) _ = ApplyStartupAsync(_settings.AutoStart, userInitiated);
         if (desktopVisibility) _ = ApplyDesktopVisibilityAsync(_settings.HideDesktopIcons);
     }
     private async Task ApplyDesktopVisibilityAsync(bool hide)
     {
         try
         {
-            var notice=await _icons.SetDesktopIconsHiddenAsync(hide);
-            if(!_cleaned && notice is not null) IconPanelView.ShowActionFailure(notice);
+            var notice = await _icons.SetDesktopIconsHiddenAsync(hide);
+            if (!_cleaned && notice is not null) IconPanelView.ShowActionFailure(notice);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
-            AppLogger.Error(ex,"Apply Desktop visibility");
-            if(!_cleaned) IconPanelView.ShowActionFailure(UserMessage.FromKey("DesktopVisibilityError"));
+            AppLogger.Error(ex, "Apply Desktop visibility");
+            if (!_cleaned) IconPanelView.ShowActionFailure(UserMessage.FromKey("DesktopVisibilityError"));
         }
     }
     public void SuppressHide() { _suppress++; _hideTimer.Stop(); }
-    private async Task ApplyStartupAsync(bool requested,bool userInitiated)
+    private async Task ApplyStartupAsync(bool requested, bool userInitiated)
     {
-        var settingsView=_settingsWindow;
-        int revision=settingsView?.AutoStartRevision ?? 0;
+        var settingsView = _settingsWindow;
+        int revision = settingsView?.AutoStartRevision ?? 0;
         try
         {
             _startup ??= new StartupCoordinator(ProcessPackageIdentity.IsPackaged
                 ? new PackagedStartupBackend() : new RegistryStartupBackend());
-            var outcome=await _startup.ApplyAsync(requested,userInitiated);
-            if (_cleaned || outcome==null) return;
+            var outcome = await _startup.ApplyAsync(requested, userInitiated);
+            if (_cleaned || outcome == null) return;
             if (outcome.Enabled is bool actual)
             {
-                bool changed=_settings.AutoStart!=actual;
-                _settings.AutoStart=actual;
-                _settingsWindow?.SynchronizeAutoStart(requested,actual,ReferenceEquals(settingsView,_settingsWindow) ? revision : 0);
-                if(changed) _settings.Save();
+                bool changed = _settings.AutoStart != actual;
+                _settings.AutoStart = actual;
+                _settingsWindow?.SynchronizeAutoStart(requested, actual, ReferenceEquals(settingsView, _settingsWindow) ? revision : 0);
+                if (changed) _settings.Save();
             }
-            if(outcome.Notice!=null) IconPanelView.ShowActionFailure(outcome.Notice);
+            if (outcome.Notice != null) IconPanelView.ShowActionFailure(outcome.Notice);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
-            AppLogger.Error(ex,"Autostart");
-            if(!_cleaned) IconPanelView.ShowActionFailure(UserMessage.FromKey("AutoStartUpdateError"));
+            AppLogger.Error(ex, "Autostart");
+            if (!_cleaned) IconPanelView.ShowActionFailure(UserMessage.FromKey("AutoStartUpdateError"));
         }
     }
     public bool ConfirmExit()
@@ -784,22 +784,22 @@ public partial class MainWindow : Window
     }
     public bool ConfirmLeaveLayout()
     {
-        if(_layoutDecision!=null) { FocusDialog(_layoutDecision); return false; }
-        if(!_editingLayout) return true;
-        if(!_layoutEdit.HasChanges)
+        if (_layoutDecision != null) { FocusDialog(_layoutDecision); return false; }
+        if (!_editingLayout) return true;
+        if (!_layoutEdit.HasChanges)
         { FinishLayout(false); return true; }
         SuppressHide();
         try
         {
             ShowPanel();
-            var decision=new LayoutDecisionWindow {Owner=this};
-            _layoutDecision=decision;
-            if(decision.ShowDialog()!=true) return false;
+            var decision = new LayoutDecisionWindow { Owner = this };
+            _layoutDecision = decision;
+            if (decision.ShowDialog() != true) return false;
             FinishLayout(decision.SaveRequested);
             // Saving can fail: remain in the editor instead of losing the draft.
             return !_editingLayout;
         }
-        finally { _layoutDecision=null; ResumeHide(); }
+        finally { _layoutDecision = null; ResumeHide(); }
     }
     public void ResumeHide() { _suppress = Math.Max(0, _suppress - 1); ScheduleHide(); }
     public void Cleanup()
@@ -812,12 +812,12 @@ public partial class MainWindow : Window
         Microsoft.Win32.SystemEvents.UserPreferenceChanged -= PreferenceChanged;
         LocalizationService.Changed -= RefreshLanguage;
         CleanupSequence.Run(
-            ("Layout draft",()=>_layoutEdit.Complete(false, _ => { })),
-            ("Desktop updates",()=>_desktopUpdates?.Dispose()),
-            ("Global hotkey",()=>_hotkey?.Dispose()),
-            ("Icon view",()=>IconPanelView?.Cleanup()),
-            ("Monitor view",()=>MonitorPanelView?.Cleanup()),
-            ("Owned window services",_services.Dispose));
+            ("Layout draft", () => _layoutEdit.Complete(false, _ => { })),
+            ("Desktop updates", () => _desktopUpdates?.Dispose()),
+            ("Global hotkey", () => _hotkey?.Dispose()),
+            ("Icon view", () => IconPanelView?.Cleanup()),
+            ("Monitor view", () => MonitorPanelView?.Cleanup()),
+            ("Owned window services", _services.Dispose));
     }
     protected override void OnClosed(EventArgs e) { Cleanup(); base.OnClosed(e); }
     protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
@@ -840,9 +840,9 @@ public partial class MainWindow : Window
     private void PresentDesktopSearch(bool expanded)
     {
         UpdateSearchHeader(expanded);
-        _searchReveal.Set(DesktopSearchEditor,DesktopSearchButton,expanded);
-        DesktopSearchButton.SetResourceReference(Control.ForegroundProperty,expanded ? "AccentBrush" : "MutedBrush");
-        if(expanded) DesktopSearchButton.SetResourceReference(System.Windows.Automation.AutomationProperties.ItemStatusProperty,"Loc.SearchOpenStatus");
+        _searchReveal.Set(DesktopSearchEditor, DesktopSearchButton, expanded);
+        DesktopSearchButton.SetResourceReference(Control.ForegroundProperty, expanded ? "AccentBrush" : "MutedBrush");
+        if (expanded) DesktopSearchButton.SetResourceReference(System.Windows.Automation.AutomationProperties.ItemStatusProperty, "Loc.SearchOpenStatus");
         else DesktopSearchButton.ClearValue(System.Windows.Automation.AutomationProperties.ItemStatusProperty);
     }
     private void PanelHeader_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -856,19 +856,19 @@ public partial class MainWindow : Window
         var secondary = expanded && PanelHeader.ActualWidth < 420 ? Visibility.Collapsed : Visibility.Visible;
         EditLayoutButton.Visibility = PinButton.Visibility = RefreshDesktopButton.Visibility = secondary;
     }
-    private void DesktopSearch_Click(object sender,RoutedEventArgs e) => FocusDesktopSearch();
-    private void DesktopSearch_Enter(object sender,MouseEventArgs e) => SetDesktopSearchExpanded(true);
-    private void DesktopSearch_Leave(object sender,MouseEventArgs e) => _searchSession?.RequestDismiss();
-    private void DesktopSearch_Focused(object sender,KeyboardFocusChangedEventArgs e) => SetDesktopSearchExpanded(true);
-    private void DesktopSearch_Unfocused(object sender,KeyboardFocusChangedEventArgs e) => _searchSession?.RequestDismiss();
-    private void DesktopSearch_Changed(object sender,TextChangedEventArgs e)
+    private void DesktopSearch_Click(object sender, RoutedEventArgs e) => FocusDesktopSearch();
+    private void DesktopSearch_Enter(object sender, MouseEventArgs e) => SetDesktopSearchExpanded(true);
+    private void DesktopSearch_Leave(object sender, MouseEventArgs e) => _searchSession?.RequestDismiss();
+    private void DesktopSearch_Focused(object sender, KeyboardFocusChangedEventArgs e) => SetDesktopSearchExpanded(true);
+    private void DesktopSearch_Unfocused(object sender, KeyboardFocusChangedEventArgs e) => _searchSession?.RequestDismiss();
+    private void DesktopSearch_Changed(object sender, TextChangedEventArgs e)
     {
-        if (DesktopSearchEditor==null || DesktopSearchButton==null) return;
-        if (DesktopSearchBox.Text.Length>0) SetDesktopSearchExpanded(true);
+        if (DesktopSearchEditor == null || DesktopSearchButton == null) return;
+        if (DesktopSearchBox.Text.Length > 0) SetDesktopSearchExpanded(true);
         else _searchSession?.RequestDismiss();
     }
-    private void DesktopSearch_Clear(object sender,RoutedEventArgs e) { DesktopSearchBox.Clear(); FocusDesktopSearch(); }
-    private void DesktopSearch_KeyDown(object sender,KeyEventArgs e) => IconPanelView.HandleSearchKey(e);
+    private void DesktopSearch_Clear(object sender, RoutedEventArgs e) { DesktopSearchBox.Clear(); FocusDesktopSearch(); }
+    private void DesktopSearch_KeyDown(object sender, KeyEventArgs e) => IconPanelView.HandleSearchKey(e);
     public int DesktopItemCount => _icons.GetIcons().Count;
     internal Modules.Desktop.DesktopScanState CurrentDesktopScanState => _icons.ScanState;
     internal string? DesktopScanDiagnostic => _icons.ScanFailureDiagnostic;

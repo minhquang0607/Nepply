@@ -90,11 +90,21 @@ internal sealed class UpdateService : IDisposable
     {
         if (UpdatePolicy.Signers.Length == 0) throw new InvalidOperationException("Signing policy has not been configured.");
         string installed = UpdatePolicy.InstalledDirectory() ?? throw new InvalidOperationException("Not an installed EXE distribution.");
+        string root = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Nepply", "Updates");
+        return await DownloadVerifiedAsync(release, root, installed, path =>
+        {
+            AuthenticodeVerifier.Verify(path, UpdatePolicy.Signers);
+            VerifyVersion(path, release.Version);
+        }, progress, cancellation).ConfigureAwait(false);
+    }
+    // Trust decisions arrive through verify, so the transfer, checksum and cleanup rules
+    // run in tests without a signed installer. Production always passes Authenticode.
+    internal async Task<PreparedUpdate> DownloadVerifiedAsync(UpdateRelease release, string root, string installed, Action<string> verify, IProgress<double> progress, CancellationToken cancellation)
+    {
         if (!UpdatePolicy.IsAssetUri(release.Asset) || release.Bytes <= 0 || release.Bytes > MaximumInstallerBytes) throw new FormatException("Invalid asset.");
         using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellation);
         timeout.CancelAfter(TimeSpan.FromMinutes(10));
         var token = timeout.Token;
-        string root = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Nepply", "Updates");
         Directory.CreateDirectory(root);
         RejectLinks(root);
         CleanStaleDownloads(root);
@@ -115,7 +125,7 @@ internal sealed class UpdateService : IDisposable
             guard = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
             string actual = Convert.ToHexString(await SHA256.HashDataAsync(guard, token).ConfigureAwait(false));
             if (!actual.Equals(release.Sha256, StringComparison.OrdinalIgnoreCase)) throw new CryptographicException("Installer checksum mismatch.");
-            await Task.Run(() => { AuthenticodeVerifier.Verify(path, UpdatePolicy.Signers); VerifyVersion(path, release.Version); }, token).ConfigureAwait(false);
+            await Task.Run(() => verify(path), token).ConfigureAwait(false);
             token.ThrowIfCancellationRequested();
             var prepared = new PreparedUpdate(path, installed, guard); guard = null;
             return prepared;

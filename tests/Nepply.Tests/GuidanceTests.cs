@@ -21,7 +21,7 @@ internal static class GuidanceTests
             foreach (var node in Tree(child)) yield return node;
     }
 
-    internal static void Run(Action<string,bool> check, Action<int> pump, string output, Action<FrameworkElement,int,int,string> render)
+    internal static void Run(Action<string, bool> check, Action<int> pump, string output, Action<FrameworkElement, int, int, string> render)
     {
         LocalizationService.Apply("vi");
         check("Explanatory hint texts are gone from the language resources", RemovedHints.All(key => !LocalizationService.TryGet(key, out _)));
@@ -56,6 +56,8 @@ internal static class GuidanceTests
         check("Welcome language choice previews immediately",
             LocalizationService.CurrentLanguage == other && firstRun.SelectedLanguage == other
             && Equals(((Button)firstRun.FindName("StartButton")).Content, LocalizationService.Get("WelcomeStart")));
+        LocalizationService.Apply(before); // What a Windows preference change does through ThemeService.
+        check("Welcome language preview survives a Windows preference change", LocalizationService.CurrentLanguage == other && firstRun.SelectedLanguage == other);
         firstRun.Close();
         check("Closing the welcome without starting restores the saved language", LocalizationService.CurrentLanguage == new AppSettings().Language);
         LocalizationService.Apply(before);

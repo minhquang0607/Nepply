@@ -2,7 +2,7 @@
 
 **English** · [Tiếng Việt](USER_GUIDE.md) · [Home](../README.md) · [Troubleshooting](TROUBLESHOOTING.en.md)
 
-For **Nepply 1.0.0-beta.1**, the first public beta (unsigned), currently in preparation. No official signed downloads are available yet.
+For **Nepply 2.0.0-rc.1**, a release candidate (unsigned) currently in preparation. No official signed downloads are available yet.
 
 ## 🖱️ Open and close the panel
 

@@ -7,17 +7,17 @@ param(
 $ErrorActionPreference = 'Stop'
 $repo = Split-Path $PSScriptRoot -Parent
 . (Join-Path $PSScriptRoot 'Release-Layout.ps1')
-if (-not $InternalOnly) { throw 'MSIX public chưa bật: identity Store, notices và nghiệm thu lifecycle chưa hoàn tất.' }
+if (-not $InternalOnly) { throw 'Public MSIX is not enabled: Store identity, notices and lifecycle acceptance are incomplete.' }
 $identity = Get-Content -LiteralPath (Join-Path $repo $IdentityFile) -Raw | ConvertFrom-Json
 if ($identity.InternalOnly -ne $true -or $identity.Name -cne 'Nepply.Internal.Preview' -or
     $identity.Publisher -cne 'CN=Nepply Internal Preview' -or
-    $identity.Version -notmatch '^\d+\.\d+\.\d+\.0$') { throw 'Chỉ chấp nhận identity QA riêng; không giả mạo identity Store.' }
+    $identity.Version -notmatch '^\d+\.\d+\.\d+\.0$') { throw 'Only the separate QA identity is accepted; never impersonate the Store identity.' }
 $parsedVersion = [version]$identity.Version
 if ($parsedVersion.Major -gt 65535 -or $parsedVersion.Minor -gt 65535 -or $parsedVersion.Build -gt 65535) {
-    throw 'Package version vượt giới hạn.'
+    throw 'Package version is out of range.'
 }
 if (-not (Test-Path -LiteralPath $MakeAppx -PathType Leaf) -or (Get-AuthenticodeSignature -LiteralPath $MakeAppx).Status -ne 'Valid') {
-    throw 'Cần MakeAppx chính thức có chữ ký hợp lệ từ Windows SDK.'
+    throw 'Requires the official, validly signed MakeAppx from the Windows SDK.'
 }
 $output = New-NepplyArtifactDirectory -Repository $repo -Path $OutputDirectory
 $layout = Join-Path $output 'layout'
@@ -25,17 +25,17 @@ $app = Join-Path $layout 'App'
 Push-Location $repo
 try {
     & dotnet restore src/Nepply/Nepply.csproj --locked-mode
-    if ($LASTEXITCODE -ne 0) { throw 'Restore MSIX thất bại.' }
-    # MSIX đã nén payload: không cần self-extract DLL ra temp như portable single-file.
+    if ($LASTEXITCODE -ne 0) { throw 'MSIX restore failed.' }
+    # MSIX already compresses the payload: no need to self-extract DLLs to temp like the portable single file.
     & dotnet publish src/Nepply/Nepply.csproj -c Release --no-restore -p:PublishSingleFile=false -p:IncludeNativeLibrariesForSelfExtract=false -p:DebugType=None -p:DebugSymbols=false -o $app
-    if ($LASTEXITCODE -ne 0) { throw 'Publish MSIX thất bại.' }
+    if ($LASTEXITCODE -ne 0) { throw 'MSIX publish failed.' }
     & (Join-Path $PSScriptRoot 'Publish-DesktopGuardian.ps1') -OutputDirectory (Join-Path $app 'guardian')
     & (Join-Path $PSScriptRoot 'Verify-RuntimePayload.ps1') -Directory $app
     & (Join-Path $PSScriptRoot 'Collect-ThirdPartyNotices.ps1') -Destination ([IO.Path]::GetRelativePath($repo,(Join-Path $app 'licenses')))
-    Copy-Item -LiteralPath 'src/Nepply/Resources/BETA_NOTICE.txt' -Destination $app
+    Copy-Item -LiteralPath 'src/Nepply/Resources/RELEASE_NOTICE.txt' -Destination $app
     $assets = Join-Path $layout 'Assets'
     New-Item -ItemType Directory -Path $assets | Out-Null
-    # Chỉ đổi kích thước asset hiện có để đóng gói, không thiết kế lại icon.
+    # Only resizes existing assets for packaging; does not redesign the icon.
     Add-Type -AssemblyName System.Drawing
     $image = [Drawing.Image]::FromFile((Join-Path $repo 'src/Nepply/Resources/nepply.png'))
     try {
@@ -63,24 +63,24 @@ try {
     & (Join-Path $PSScriptRoot 'Release-Manifest.ps1') -Directory $layout -Mode Verify
     $package = Join-Path $output "Nepply-Internal-$($identity.Version)-x64.msix"
     & $MakeAppx pack /d $layout /p $package /o *> (Join-Path $output 'makeappx-pack.log')
-    if ($LASTEXITCODE -ne 0) { throw 'MakeAppx validation/pack thất bại.' }
+    if ($LASTEXITCODE -ne 0) { throw 'MakeAppx validation/pack failed.' }
     $unpacked = Join-Path $output 'verification-unpacked'
     & $MakeAppx unpack /p $package /d $unpacked /o *> (Join-Path $output 'makeappx-unpack.log')
-    if ($LASTEXITCODE -ne 0) { throw 'Không giải kiểm tra được MSIX.' }
-    # Generated Appx block map/content types là packaging metadata, không thuộc payload baseline.
+    if ($LASTEXITCODE -ne 0) { throw 'Could not unpack the MSIX for verification.' }
+    # Generated Appx block map/content types are packaging metadata, not part of the payload baseline.
     $baseline = Get-Content -LiteralPath (Join-Path $layout 'release-manifest.json') -Raw | ConvertFrom-Json
     foreach ($file in $baseline.Files) {
         $actual = Join-Path $unpacked $file.Path
         if (-not (Test-Path -LiteralPath $actual -PathType Leaf) -or
             (Get-FileHash -LiteralPath $actual -Algorithm SHA256).Hash -cne $file.SHA256) {
-            throw "MSIX payload không khớp: $($file.Path)"
+            throw "MSIX payload mismatch: $($file.Path)"
         }
     }
     [ordered]@{
         Package=(Split-Path $package -Leaf); SHA256=(Get-FileHash -LiteralPath $package -Algorithm SHA256).Hash
         Identity=$identity; SourceVersion=(Get-NepplyReleaseVersion -Repository $repo).Version
         SemanticValidation=$true; PayloadHashesVerified=$true; Signed=$false; Installed=$false
-        StoreReady=$false; Pending=@('StartupTask Settings trong package thật và logon','Desktop recovery khi gỡ/update','Packaged runtime QA','Notices','Identity Store','License decision trước open-source')
+        StoreReady=$false; Pending=@('StartupTask settings in a real package and at logon','Desktop recovery on uninstall/update','Packaged runtime QA','Notices','Identity Store','License decision before open source')
     } | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath (Join-Path $output 'msix-build.json') -Encoding utf8
-    Write-Output 'MSIX nội bộ đã pack/unpack và đối chiếu payload; chưa ký/cài/submit Store.'
+    Write-Output 'Internal MSIX packed, unpacked and payload verified; not signed, installed or submitted to the Store.'
 } finally { Pop-Location }

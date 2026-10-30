@@ -2,7 +2,7 @@
 
 [English](CHANGELOG.en.md) · **Tiếng Việt** · [Trang chính](README.vi.md)
 
-## 1.0.0-beta.1 — Chưa phát hành
+## 2.0.0-rc.1 — Chưa phát hành
 
 Bản tổng hợp ngày **17/10/2026**, gom các thay đổi trong giai đoạn phát triển thành một mốc phiên bản. Các tính năng dưới đây thuộc bản đang chuẩn bị, chưa phải thông báo có bản tải ổn định. Số phiên bản đã chốt; ngày tổng hợp không phải ngày công bố. Việc chốt phiên bản không có nghĩa binary đã ký hoặc đã phát hành.
 
@@ -40,6 +40,9 @@ Bản tổng hợp ngày **17/10/2026**, gom các thay đổi trong giai đoạn
 
 - Cửa sổ kiểm tra cập nhật hiển thị phiên bản, nội dung mới, tiến độ và lựa chọn thử lại khi gặp lỗi.
 - Khi bản đang dùng chưa tự cài được cập nhật (portable hoặc chưa ký số), cửa sổ cập nhật có nút **Mở trang tải** tới trang phát hành chính thức trên GitHub.
+- Ghi chú phát hành trong cửa sổ cập nhật hiển thị dạng văn bản gọn thay vì ký hiệu Markdown thô.
+- Bộ cài theo ngôn ngữ của Windows: Việt, Anh, Nhật, Đức, Trung giản thể, Nga, Pháp và Thái.
+- Nút **Báo lỗi** (Cài đặt → Ứng dụng) chép chẩn đoán vào clipboard và mở form báo lỗi GitHub đã điền sẵn phiên bản Nepply và Windows.
 - Hỗ trợ khôi phục icon Desktop khi ứng dụng kết thúc bất thường; vẫn có giới hạn nếu tiến trình hỗ trợ cũng bị dừng hoặc Explorer không hoạt động.
 
 ### Giới hạn hiện tại
