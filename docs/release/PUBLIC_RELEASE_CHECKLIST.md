@@ -8,7 +8,7 @@ Cập nhật 30/10/2026. Đây là kế hoạch duy nhất từ hiện tại đ�
 | --- | --- | --- |
 | 0 | Nền tảng đã có | Xong |
 | 1 | Sửa các lỗi nhỏ từ đợt rà soát | Xong |
-| 2 | Đưa code lên GitHub | Chờ bạn duyệt diff |
+| 2 | Đưa code lên GitHub | Hai PR đã mở, CI xanh; chờ bạn duyệt và merge |
 | 3 | Chuẩn bị repo công khai | Chưa làm |
 | 4 | Phát hành `2.0.0-rc.1` chưa ký | Chưa làm |
 | 5 | Xin chữ ký số | Chưa làm |
@@ -51,8 +51,8 @@ Kết quả rà 30/10/2026: build từ clone sạch đạt; cấy 20 lỗi thử
 ## Giai đoạn 2. Đưa code lên GitHub
 
 - [ ] **[Bạn]** Xem diff hai nhánh; bỏ qua commit format `79c57b8` vì chỉ đổi khoảng trắng.
-- [ ] **[Claude]** Push `fix/release-readiness` và `chore/pro-polish`, mở PR.
-- [ ] **[Cả hai]** Merge theo thứ tự: `fix/release-readiness`, rồi `chore/pro-polish`. Theo dõi CI lần đầu chạy kiểm format.
+- [x] **[Claude]** Push `fix/release-readiness` và `chore/pro-polish`, mở PR #8 và #9. Lần chạy đầu cho thấy CI đỏ vì hết dung lượng artifact, không phải vì lỗi code; đã sửa workflow để upload không chặn các gate. CI của cả hai PR xanh.
+- [ ] **[Cả hai]** Merge #8 vào `main`, đổi base của #9 sang `main`, rồi merge #9.
 - [ ] **[Bạn]** Xóa Release nháp của beta.1 trên trang Releases nếu còn. Nếu bản đó đã publish thì dừng lại, đừng xóa.
 - [ ] **[Bạn]** Chạy thử bộ cài trên máy của bạn: trang thông báo và chữ tiếng Việt hiển thị đúng, cài và gỡ được.
 
@@ -88,6 +88,7 @@ Làm trước khi chuyển Public, vì sau đó nội dung có thể đã bị l
 ## Giai đoạn 4. Phát hành `2.0.0-rc.1` chưa ký
 
 - [ ] **[Claude]** Viết ghi chú phát hành RC song ngữ, ghi rõ bản chưa ký và cách xử lý cảnh báo Windows.
+- [ ] **[Bạn]** Kiểm tra dung lượng artifact trong Settings → Billing and licensing. `release.yml` cần upload bản build để tạo Release, nên hết dung lượng sẽ làm phát hành thất bại. Artifact cũ tự hết hạn; dung lượng được tính lại sau 6 đến 12 giờ.
 - [ ] **[Bạn]** Chạy thử: Actions → *Release build* → Run workflow (chỉ build, không tạo Release). Đây là lần đầu workflow chạy trên GitHub; kiểm tra artifact `nepply-release-unsigned`.
 - [ ] **[Cả hai]** Tạo tag `v2.0.0-rc.1` từ `main` và push. Bạn duyệt bước `release` khi GitHub hỏi.
 - [ ] **[Bạn]** Mở Release nháp, đánh dấu *pre-release*, dán ghi chú, bấm Publish.
