@@ -32,7 +32,7 @@ PrivilegesRequired=lowest
 MinVersion=10.0.19041
 ArchitecturesAllowed=x64compatible
 OutputDir={#ReleaseOutputDir}
-InfoBeforeFile=..\..\src\Nepply\Resources\BETA_NOTICE.txt
+InfoBeforeFile=..\..\src\Nepply\Resources\RELEASE_NOTICE.txt
 SetupIconFile=..\..\src\Nepply\Resources\icon.ico
 #ifdef SignedUninstallerDir
 ; Two-pass external signing (remote signers such as SignPath): the first compile
@@ -81,7 +81,7 @@ Source: "{#PayloadRoot}\PRIVACY.md"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#PayloadRoot}\SECURITY.md"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#PayloadRoot}\release-manifest.json"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#PayloadRoot}\licenses\*"; DestDir: "{app}\licenses"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "..\..\src\Nepply\Resources\BETA_NOTICE.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\src\Nepply\Resources\RELEASE_NOTICE.txt"; DestDir: "{app}"; Flags: ignoreversion
 
 #ifndef InstallerQA
 [InstallDelete]

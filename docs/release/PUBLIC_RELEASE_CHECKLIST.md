@@ -27,8 +27,8 @@ Trạng thái ngày 19/10/2026. Đánh dấu từng mục khi hoàn tất; khôn
 
 SignPath Foundation yêu cầu dự án **đã phát hành** ở dạng sẽ được ký. Quyết định số phiên bản trước:
 
-- **Đã chốt (20/10/2026):** phát hành `1.0.0-beta.1` (prerelease) chưa ký, để bản ký đầu tiên vẫn là `1.0.0` và updater không nhận nhầm thứ tự. Cần đổi `<Version>` trong `src/Nepply/Nepply.csproj`, CHANGELOG và README.
-- (Phương án không chọn: phát hành `1.0.0` chưa ký, rồi bản ký đầu tiên là `1.0.1`.)
+- **Đã chốt (30/10/2026):** bản chính là `2.0.0`. Trước đó phát hành `2.0.0-rc.1` (prerelease) chưa ký để đủ điều kiện SignPath; bản ký đầu tiên là `2.0.0` và updater nhận đúng thứ tự. Chưa tạo tag: tag cũ `v1.0.0-beta.1` đã xóa ngày 30/10/2026, chỉ tạo tag mới lúc phát hành.
+- (Phương án không chọn: phát hành `2.0.0` chưa ký, rồi bản ký đầu tiên là `2.0.1`. Bản ổn định chưa ký sẽ bị Smart App Control chặn.)
 
 Quy trình:
 
@@ -50,6 +50,9 @@ Quy trình:
 - [ ] Mở public mode trong `scripts/Build-Distribution.ps1` (hiện từ chối khi thiếu `-InternalOnly`).
 - [ ] `Verify-Release.ps1 -RequireSigned -AllowedSignerThumbprints <thumbprint> -Uninstaller <unins000.exe từ lượt cài thật>`.
 - [ ] Bổ sung attribution SignPath đúng yêu cầu vào README và chính sách ký.
+- [ ] Đổi `Version`/`InformationalVersion` thành `2.0.0` và `FileVersion` thành `2.0.0.100` trong `Nepply.csproj` và `Nepply.DesktopGuardian.csproj`.
+- [ ] Bỏ trang thông báo `RELEASE_NOTICE.txt` khỏi bộ cài (`InfoBeforeFile`, `[Files]`, hai script đóng gói) và banner RC trong README, hướng dẫn, ghi chú phát hành.
+- [ ] Tạo lại ảnh README theo `docs/images/README.md` (ảnh hiện tại lấy từ `ff63ba9`, trước các thay đổi giao diện gần đây).
 
 ## 5. Nghiệm thu bằng đúng file đã ký (bạn làm, trên VM)
 

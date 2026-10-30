@@ -14,6 +14,8 @@ function Reject([string]$Name,[scriptblock]$Action) {
     Check $Name $rejected
 }
 $version = Get-NepplyReleaseVersion -Repository $repo
+[xml]$guardianProject = Get-Content -LiteralPath (Join-Path $repo 'src/Nepply.DesktopGuardian/Nepply.DesktopGuardian.csproj') -Raw
+Check 'Guardian project repeats the app version the app requires' ([string]$guardianProject.Project.PropertyGroup.Version -ceq $version.Version -and [string]$guardianProject.Project.PropertyGroup.FileVersion -ceq $version.FileVersion)
 Check 'Single version source with semver and file version' ($version.Version -match '^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$' -and $version.FileVersion -match '^\d+\.\d+\.\d+\.\d+$')
 Reject 'Refuses to write to the artifacts root' { New-NepplyArtifactDirectory -Repository $repo -Path 'artifacts' }
 Reject 'Refuses traversal outside artifacts' { New-NepplyArtifactDirectory -Repository $repo -Path 'artifacts/../../outside-nepply' }

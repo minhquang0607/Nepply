@@ -1,6 +1,6 @@
 param(
     [string]$Assets = 'src/Nepply/obj/project.assets.json',
-    [string]$Destination = 'artifacts/release-beta/licenses',
+    [string]$Destination = 'artifacts/release/licenses',
     [switch]$RequireComplete
 )
 $ErrorActionPreference = 'Stop'

@@ -32,7 +32,7 @@ try {
     & (Join-Path $PSScriptRoot 'Publish-DesktopGuardian.ps1') -OutputDirectory (Join-Path $app 'guardian')
     & (Join-Path $PSScriptRoot 'Verify-RuntimePayload.ps1') -Directory $app
     & (Join-Path $PSScriptRoot 'Collect-ThirdPartyNotices.ps1') -Destination ([IO.Path]::GetRelativePath($repo,(Join-Path $app 'licenses')))
-    Copy-Item -LiteralPath 'src/Nepply/Resources/BETA_NOTICE.txt' -Destination $app
+    Copy-Item -LiteralPath 'src/Nepply/Resources/RELEASE_NOTICE.txt' -Destination $app
     $assets = Join-Path $layout 'Assets'
     New-Item -ItemType Directory -Path $assets | Out-Null
     # Only resizes existing assets for packaging; does not redesign the icon.

@@ -1,6 +1,6 @@
 # 📚 Nepply documentation · Tài liệu
 
-**1.0.0 · 17 October / tháng 10 năm 2026**
+**2.0.0 · October / tháng 10 năm 2026**
 
 Choose your language below. Both user-facing editions describe the same release status.
 
@@ -34,7 +34,7 @@ Các tài liệu triển khai chi tiết dưới đây hiện bằng tiếng Vi�
 
 ## 📦 For maintainers · Dành cho người phát hành
 
-- [Release 1.0.0 draft — English / Tiếng Việt](release/RELEASE_1.0.0.md)
+- [Release 2.0.0 draft — English / Tiếng Việt](release/RELEASE_2.0.0.md)
 - [Packaging / Đóng gói](../packaging/README.md) · [MSIX / Store](../packaging/msix/README.md)
 - [Public release checklist / Checklist phát hành công khai](release/PUBLIC_RELEASE_CHECKLIST.md)
 - [Signing & acceptance / Ký và nghiệm thu](release/RELEASE_SIGNING.md) · Signing policy: [English](release/CODE_SIGNING_POLICY.en.md) · [Tiếng Việt](release/CODE_SIGNING_POLICY.md)

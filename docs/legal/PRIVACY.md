@@ -4,7 +4,7 @@
 
 ## Tiếng Việt
 
-Cập nhật: 17/10/2026 · Nepply 1.0.0
+Cập nhật: 30/10/2026 · Nepply 2.0.0
 
 Nhà phát triển: Minh Quang  
 Hỗ trợ: https://github.com/minhquang0607/Nepply/issues
@@ -41,6 +41,8 @@ Mở file, shortcut, URL hoặc menu Shell là hành động do người dùng y
 
 Khi Nepply đã đóng và icon Desktop đã được khôi phục, người dùng có thể xóa thư mục cấu hình và Logs để đặt lại dữ liệu cục bộ. Việc gỡ cài đặt hiện giữ cấu hình để hỗ trợ cài lại. Không xóa `desktop-visibility.lease` nếu icon Desktop đang bị ẩn; hãy mở lại Nepply hoặc bật lại icon trong Windows trước.
 
+Nút **Báo lỗi** trong Cài đặt chép báo cáo chẩn đoán vào clipboard và mở form GitHub trong trình duyệt; địa chỉ form chỉ chứa phiên bản Nepply và Windows. Nepply không tự gửi báo cáo; chỉ những gì bạn dán và đăng mới được chia sẻ.
+
 Nếu người dùng tự gửi log, ảnh chụp hoặc báo cáo qua GitHub Issues hoặc GitHub Private vulnerability reporting, việc truyền dữ liệu do người dùng chủ động và còn chịu chính sách của GitHub. Issue là công khai. Hãy che đường dẫn, tên tài khoản và dữ liệu cá nhân; không gửi mật khẩu, token, khóa ký số hoặc tài liệu riêng tư.
 
 ## Kiểm tra và tải cập nhật
@@ -53,7 +55,7 @@ Hiện không có kiểm tra nền theo lịch, analytics hoặc crash upload. �
 
 ## English
 
-Updated: 17 October 2026 · Nepply 1.0.0. Developer: Minh Quang. Support: https://github.com/minhquang0607/Nepply/issues
+Updated: 30 October 2026 · Nepply 2.0.0. Developer: Minh Quang. Support: https://github.com/minhquang0607/Nepply/issues
 
 ### Summary
 
@@ -86,6 +88,8 @@ Opening files, shortcuts, URLs or Shell menus is user-requested. Launched progra
 ### Removal and sharing
 
 After Nepply exits and Desktop icons are restored, configuration and log folders can be removed to reset local data. Uninstall currently retains settings for reinstallation. Do not delete the recovery marker while icons are hidden; reopen Nepply or show icons through Windows first.
+
+**Report a problem** in Settings copies the diagnostic report to the clipboard and opens the GitHub form in your browser; the form address contains only the Nepply and Windows versions. Nepply never sends the report itself; only what you paste and post is shared.
 
 Sending logs, screenshots or reports through GitHub Issues or GitHub Private vulnerability reporting is voluntary and also subject to GitHub policies. Issues are public. Redact paths, account names and personal data; never send passwords, tokens, signing keys or private documents.
 

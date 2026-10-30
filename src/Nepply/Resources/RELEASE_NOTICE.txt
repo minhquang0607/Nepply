@@ -1,8 +1,8 @@
-﻿Nepply beta - please read before installing
+﻿Nepply release candidate - please read before installing
 
-This is a public beta. Nepply is not code-signed yet, so Windows SmartScreen
-may warn you. Continue only if you downloaded this file from the official
-release page: https://github.com/minhquang0607/Nepply/releases
+This is a release candidate. Nepply is not code-signed yet, so Windows
+SmartScreen may warn you. Continue only if you downloaded this file from the
+official release page: https://github.com/minhquang0607/Nepply/releases
 Never turn off Windows security features to install or run Nepply.
 
 - Desktop icons: Nepply hides your Desktop icons only if you turn that option
@@ -20,9 +20,9 @@ License: MIT (see LICENSE). Third-party components keep their own licenses
 
 ------------------------------------------------------------------------------
 
-Nepply bản beta - vui lòng đọc trước khi cài
+Nepply bản phát hành thử (RC) - vui lòng đọc trước khi cài
 
-Đây là bản beta công khai. Nepply chưa được ký số nên Windows SmartScreen có
+Đây là bản phát hành thử. Nepply chưa được ký số nên Windows SmartScreen có
 thể cảnh báo. Chỉ tiếp tục nếu bạn tải file này từ trang phát hành chính thức:
 https://github.com/minhquang0607/Nepply/releases
 Không tắt các tính năng bảo mật của Windows để cài hoặc chạy Nepply.

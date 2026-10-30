@@ -54,7 +54,7 @@ try {
     $portable = Join-Path $output 'portable'
     Invoke-Checked { dotnet publish src/Nepply/Nepply.csproj -c Release --no-restore -p:DebugType=None -p:DebugSymbols=false -o $portable }
     & "$PSScriptRoot/Publish-DesktopGuardian.ps1" -OutputDirectory (Join-Path $portable 'guardian')
-    Copy-Item -LiteralPath 'src/Nepply/Resources/BETA_NOTICE.txt' -Destination $portable
+    Copy-Item -LiteralPath 'src/Nepply/Resources/RELEASE_NOTICE.txt' -Destination $portable
     & "$PSScriptRoot/Collect-ThirdPartyNotices.ps1" -Destination ([IO.Path]::GetRelativePath($repo,(Join-Path $portable 'licenses'))) -RequireComplete
     & "$PSScriptRoot/Release-Manifest.ps1" -Directory $portable -Mode Create
     $innoArguments = @("/DPayloadRoot=$portable", "/DReleaseOutputDir=$(Join-Path $output 'installer')", "/DReleaseVersion=$($releaseVersion.Version)", "/DReleaseFileVersion=$($releaseVersion.FileVersion)")

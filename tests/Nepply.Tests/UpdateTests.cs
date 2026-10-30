@@ -17,6 +17,9 @@ internal static class UpdateTests
         check("Stable 1.0.0 supersedes dated release", ReleaseVersion.Parse("1.0.0").CompareTo(dated) > 0);
         check("First signed 1.0.0 supersedes public beta", ReleaseVersion.Parse("1.0.0").CompareTo(ReleaseVersion.Parse("1.0.0-beta.1")) > 0
             && ReleaseVersion.Parse("1.0.0-beta.2").CompareTo(ReleaseVersion.Parse("1.0.0-beta.1")) > 0);
+        check("First signed 2.0.0 supersedes the release candidate", ReleaseVersion.Parse("2.0.0").CompareTo(ReleaseVersion.Parse("2.0.0-rc.1")) > 0
+            && ReleaseVersion.Parse("2.0.0-rc.2").CompareTo(ReleaseVersion.Parse("2.0.0-rc.1")) > 0
+            && UpdateService.ParseReleases(Feed("v2.0.0"), ReleaseVersion.Parse("2.0.0-rc.1")) != null);
         check("Beta build accepts the first signed stable release", UpdateService.ParseReleases(Feed("v1.0.0"), ReleaseVersion.Parse("1.0.0-beta.1")) != null);
         check("Release page is built locally for the official repository",
             UpdatePolicy.ReleasePageUri("v1.0.0").AbsoluteUri == "https://github.com/minhquang0607/Nepply/releases/tag/v1.0.0"
