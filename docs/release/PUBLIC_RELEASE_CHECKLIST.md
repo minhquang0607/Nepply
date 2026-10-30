@@ -7,7 +7,7 @@ Cập nhật 30/10/2026. Đây là kế hoạch duy nhất từ hiện tại đ�
 | Giai đoạn | Mục tiêu | Trạng thái |
 | --- | --- | --- |
 | 0 | Nền tảng đã có | Xong |
-| 1 | Sửa các lỗi nhỏ từ đợt rà soát | Chưa làm |
+| 1 | Sửa các lỗi nhỏ từ đợt rà soát | Xong |
 | 2 | Đưa code lên GitHub | Chờ bạn duyệt diff |
 | 3 | Chuẩn bị repo công khai | Chưa làm |
 | 4 | Phát hành `2.0.0-rc.1` chưa ký | Chưa làm |
@@ -36,15 +36,15 @@ Cập nhật 30/10/2026. Đây là kế hoạch duy nhất từ hiện tại đ�
 
 ## Giai đoạn 1. Sửa các lỗi nhỏ từ đợt rà soát
 
-Kết quả rà 30/10/2026: build từ clone sạch đạt; cấy 20 lỗi thử thì 17 bị bắt, 3 lọt, 1 trong số bị bắt làm test treo.
+Kết quả rà 30/10/2026: build từ clone sạch đạt; cấy 20 lỗi thử thì 17 bị bắt, 3 lọt, 1 trong số bị bắt làm test treo. Sau khi sửa: cả 3 lỗi đã lọt đều bị bắt, thêm 5 lỗi cấy mới ở phần tải cập nhật và màn chào cũng bị bắt, test treo hoặc crash đều báo đúng tên.
 
-- [ ] **[Claude]** Màn chào: giữ ngôn ngữ đang xem trước khi Windows đổi cài đặt giao diện. Hiện `PreferenceChanged` áp lại ngôn ngữ đã lưu.
-- [ ] **[Claude]** Thêm timeout cho từng nhóm test, báo đúng tên nhóm bị treo. Hiện CI chờ hết 20 phút mà không biết test nào hỏng.
-- [ ] **[Claude]** Sửa test giới hạn kích thước file cài đặt: dùng JSON hợp lệ quá 2 MiB, vì test hiện tại đạt nhờ lỗi parse.
-- [ ] **[Claude]** Thêm test `IsAllowedPath` từ chối thư mục khác `HoverBox`.
-- [ ] **[Claude]** Tách phần tải bản cập nhật để test tự động được checksum, kích thước và redirect mà không cần chữ ký thật.
-- [ ] **[Claude]** Bật `ContinuousIntegrationBuild` trên CI để build tái lập được ở mọi thư mục.
-- [ ] **[Claude]** Chuyển các test logic thuần đang nằm sau điểm thoát `--core-only` về đúng bộ core.
+- [x] **[Claude]** Màn chào: giữ ngôn ngữ đang xem trước khi Windows đổi cài đặt giao diện. Trước đây `PreferenceChanged` áp lại ngôn ngữ đã lưu.
+- [x] **[Claude]** Thêm timeout cho từng nhóm test, báo đúng vị trí bị treo. Trước đây CI chờ hết 20 phút mà không biết test nào hỏng.
+- [x] **[Claude]** Sửa test giới hạn kích thước file cài đặt: dùng JSON hợp lệ quá 2 MiB, vì test cũ đạt nhờ lỗi parse.
+- [x] **[Claude]** Thêm test `IsAllowedPath` từ chối thư mục khác `HoverBox`.
+- [x] **[Claude]** Tách phần tải bản cập nhật để test tự động được checksum, kích thước và redirect mà không cần chữ ký thật.
+- [x] **[Claude]** Bật `ContinuousIntegrationBuild` trên CI để build tái lập được ở mọi thư mục.
+- [x] **[Claude]** Chuyển các test logic thuần về bộ core. Một số test trước đây CI không chạy ở bộ nào.
 
 **Xong khi:** các lỗi cấy thử đã lọt đều bị test bắt; toàn bộ test và gate đạt.
 
