@@ -202,6 +202,7 @@ internal static class Program
         }
         StartHangWatchdog(output);
         UpdateTests.Run(Check);
+        UpdateDownloadTests.Run(output, Check);
         SignerRuleTests.Run(Check);
         LocalizationKeyTests.Run(Check);
         PointerActivationTests.Run(Check);
