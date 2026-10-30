@@ -26,6 +26,7 @@ internal static class UpdateDownloadTests
                 return false;
             }
             catch (TException) { return true; }
+            catch (Exception) { return false; } // Report the named check instead of ending the run.
         }
 
         string? verified = null;
@@ -40,7 +41,7 @@ internal static class UpdateDownloadTests
                 try { File.Delete(path); }
                 catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { deleteBlocked = true; }
             }, new Progress<double>(), CancellationToken.None).GetAwaiter().GetResult();
-            check("Update download hands the exact verified bytes to the trust check", verified != null && File.ReadAllBytes(verified).SequenceEqual(payload));
+            check("Update download hands the exact verified bytes to the trust check", verified != null && File.Exists(verified) && File.ReadAllBytes(verified).SequenceEqual(payload));
             check("Verified installer stays protected from replacement", writeBlocked && deleteBlocked);
             prepared.Dispose();
         }

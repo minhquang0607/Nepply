@@ -58,6 +58,8 @@ internal static class Program
         // New settings follow the Windows display language. Fixtures were authored against
         // the Vietnamese UI, so pin it: CI hosts and contributors' machines must agree.
         System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = System.Globalization.CultureInfo.CurrentUICulture = new("vi-VN");
+        // A crash otherwise ends the run with only a process exit code.
+        AppDomain.CurrentDomain.UnhandledException += (_, e) => Console.WriteLine($"FAIL Test run crashed after \"{_lastCheck}\": {e.ExceptionObject}");
         string output = Path.GetFullPath(args.FirstOrDefault() ?? "artifacts/qa");
         Directory.CreateDirectory(output);
         if (args.Contains("--update-ui-only"))
