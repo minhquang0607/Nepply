@@ -21,7 +21,7 @@ foreach($file in Get-ChildItem -LiteralPath (Join-Path $repo 'packaging/inno/Mes
     $messages[$code]=@{}
     foreach($line in [IO.File]::ReadAllLines($file.FullName)) { if($line -match '^([A-Za-z]+)=(.+)$') { $messages[$code][$Matches[1]]=$Matches[2] } }
 }
-$languageFiles=@([regex]::Matches($source,'(?m)^Name: "[a-z]+"; MessagesFile: "compiler:[^,"]+,Messages\\Nepply\.([a-z]+)\.isl"\s*$') | ForEach-Object { $_.Groups[1].Value })
+$languageFiles=@([regex]::Matches($source,'(?m)^Name: "[a-z]+"; MessagesFile: "[^,"]+\.isl,Messages\\Nepply\.([a-z]+)\.isl"\s*$') | ForEach-Object { $_.Groups[1].Value })
 $usedMessages=@([regex]::Matches($source,"CustomMessage\('([A-Za-z]+)'\)") | ForEach-Object { $_.Groups[1].Value } | Sort-Object -Unique)
 $checks=[ordered]@{
     'Every Setup language has its own complete Nepply messages'=$messages.ContainsKey('en') -and $languageFiles.Count -eq $messages.Count -and

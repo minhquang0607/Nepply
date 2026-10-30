@@ -55,8 +55,10 @@ CloseApplications=no
 RestartApplications=no
 
 [Languages]
-; Inno Setup ships these translations; Messages\Nepply.*.isl adds Nepply's own text.
+; Inno Setup ships these translations except Vietnamese, kept in Languages\.
+; Messages\Nepply.*.isl adds Nepply's own text.
 Name: "english"; MessagesFile: "compiler:Default.isl,Messages\Nepply.en.isl"
+Name: "vietnamese"; MessagesFile: "Languages\Vietnamese.isl,Messages\Nepply.vi.isl"
 Name: "japanese"; MessagesFile: "compiler:Languages\Japanese.isl,Messages\Nepply.ja.isl"
 Name: "german"; MessagesFile: "compiler:Languages\German.isl,Messages\Nepply.de.isl"
 Name: "chinesesimplified"; MessagesFile: "compiler:Languages\ChineseSimplified.isl,Messages\Nepply.zh.isl"
