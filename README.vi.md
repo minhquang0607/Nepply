@@ -33,7 +33,7 @@ Nepply nằm ở cạnh màn hình Windows. Mở mục Desktop, tìm theo tên v
 </tr>
 </table>
 
-Ảnh render mới từ cùng **build Release 1.0.0**, source `15cdbb2`. Đây là các view WPF thật trong fixture UI cô lập, không phải ảnh Desktop cá nhân. Tên mục, icon và số đo panel là dữ liệu minh họa; ảnh dùng giao diện tiếng Việt. Settings chuyển sang tab ngang khi cửa sổ hẹp. [Nguồn ảnh →](docs/images/README.md)
+Ảnh render mới từ **build Release 1.0.0-beta.1** sạch, source `ff63ba9`. Đây là các view WPF thật trong fixture UI cô lập, không phải ảnh Desktop cá nhân. Tên mục, icon và số đo panel là dữ liệu minh họa; ảnh dùng giao diện tiếng Việt. Settings chuyển sang tab ngang khi cửa sổ hẹp. [Nguồn ảnh →](docs/images/README.md)
 
 ## 📦 Tải ứng dụng
 

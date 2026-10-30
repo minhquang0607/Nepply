@@ -49,7 +49,7 @@ public sealed class AppSettings
     public bool SuspendMonitorWhenHidden { get; set; } = true;
     public bool MetallicEnabled { get; set; } = true;
     public bool NeonEnabled { get; set; } = true;
-    public string Language { get; set; } = "vi";
+    public string Language { get; set; } = Nepply.Services.LocalizationService.SystemDefault;
     public MotionMode Motion { get; set; } = MotionMode.Smooth;
     public bool DynamicMaterial { get; set; } = true;
     public double GlowStrength { get; set; } = .22;
@@ -88,7 +88,7 @@ public sealed class AppSettings
         if (!Enum.IsDefined(IconSize)) IconSize = IconSizeOption.Medium;
         if (!Enum.IsDefined(Theme)) Theme = ThemeOption.Dark;
         PanelWidth = Math.Clamp(PanelWidth, 320, 600);
-        if(!Nepply.Services.LocalizationService.IsSupported(Language)) Language="vi";
+        if(!Nepply.Services.LocalizationService.IsSupported(Language)) Language=Nepply.Services.LocalizationService.SystemDefault;
         PanelWidthPercent = ValidPercent(PanelWidthPercent);
         TopPanelWidthPercent = ValidPercent(TopPanelWidthPercent);
         PanelHeightPercent = ValidPercent(PanelHeightPercent);
@@ -142,7 +142,8 @@ public sealed class AppSettings
     private const int ModControl = 2;
     private static string ValidIdentifier(string? value) => value is { Length: <= MaximumIdentifierLength } ? value : "";
     private static double ValidPercent(double value) => double.IsFinite(value) ? Math.Clamp(value, 0, 100) : 0;
-    public void ResetToDefaults() => CopyFrom(new AppSettings { HasCompletedOnboarding = HasCompletedOnboarding });
+    // Language is the user's reading choice, not a look-and-feel preference: keep it.
+    public void ResetToDefaults() => CopyFrom(new AppSettings { HasCompletedOnboarding = HasCompletedOnboarding, Language = Language });
     private static Services.SettingsStore Store = new(SettingsPath,
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ProductIdentity.LegacyName, "settings.json"));
     internal static void UseTestSettingsStore(string path) => Store = new(path);

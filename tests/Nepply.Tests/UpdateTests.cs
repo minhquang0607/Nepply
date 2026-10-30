@@ -18,6 +18,12 @@ internal static class UpdateTests
         check("First signed 1.0.0 supersedes public beta", ReleaseVersion.Parse("1.0.0").CompareTo(ReleaseVersion.Parse("1.0.0-beta.1")) > 0
             && ReleaseVersion.Parse("1.0.0-beta.2").CompareTo(ReleaseVersion.Parse("1.0.0-beta.1")) > 0);
         check("Beta build accepts the first signed stable release", UpdateService.ParseReleases(Feed("v1.0.0"), ReleaseVersion.Parse("1.0.0-beta.1")) != null);
+        check("Release page is built locally for the official repository",
+            UpdatePolicy.ReleasePageUri("v1.0.0").AbsoluteUri == "https://github.com/minhquang0607/Nepply/releases/tag/v1.0.0"
+            && UpdatePolicy.ReleasePageUri("v1.0.0-beta.2").AbsoluteUri == "https://github.com/minhquang0607/Nepply/releases/tag/v1.0.0-beta.2");
+        bool rejectedPage = false;
+        try { UpdatePolicy.ReleasePageUri("v1.0.0/../../evil"); } catch (FormatException) { rejectedPage = true; }
+        check("Release page refuses a tag that is not a release version", rejectedPage);
         check("Next patch supersedes dated release across month boundary", ReleaseVersion.Parse("1.0.1-1.11.26").CompareTo(dated) > 0);
         foreach (string invalid in new[] { "../1.0.0", "01.0.0", "1.0.0-beta.01", "1.0", "v1.0.0/evil" })
         {

@@ -48,6 +48,7 @@
      <Button x:Name="LaterButton" Content="{DynamicResource Loc.UpdateLater}" Click="Close_Click" IsCancel="True" Padding="18,10" Margin="0,4,8,0"/>
      <Button x:Name="RetryButton" Content="{DynamicResource Loc.UpdateRetry}" Click="Check" Visibility="Collapsed" Padding="18,10" Margin="0,4,0,0" Style="{StaticResource PrimaryButton}"/>
      <Button x:Name="_install" Content="{DynamicResource Loc.UpdateNow}" Click="Install" Visibility="Collapsed" IsEnabled="False" Padding="18,10" Margin="0,4,0,0" Style="{StaticResource PrimaryButton}"/>
+     <Button x:Name="OpenReleaseButton" Content="{DynamicResource Loc.UpdateOpenPage}" Click="OpenRelease" Visibility="Collapsed" Padding="18,10" Margin="0,4,0,0" Style="{StaticResource PrimaryButton}"/>
     </WrapPanel>
    </StackPanel>
   </Grid>

@@ -20,6 +20,13 @@ internal static class UpdatePolicy
         var executable = Path.GetFullPath(Path.Combine(full, "Nepply.exe"));
         return string.Equals(executable, Environment.ProcessPath, StringComparison.OrdinalIgnoreCase) ? full : null;
     }
+    // Built locally from a tag that already parsed as a release version; the feed's own
+    // html_url is never opened. Manual download is the path while auto-install is unavailable.
+    internal static Uri ReleasePageUri(string tag)
+    {
+        _ = ReleaseVersion.Parse(tag);
+        return new($"https://github.com/{Repository}/releases/tag/{Uri.EscapeDataString(tag)}");
+    }
     internal static bool IsAssetUri(Uri uri) => uri.Scheme == "https" && uri.IsDefaultPort && uri.UserInfo.Length == 0
         && uri.Host == "github.com" && uri.AbsolutePath.StartsWith("/" + Repository + "/releases/download/", StringComparison.Ordinal)
         && uri.Query.Length == 0 && uri.Fragment.Length == 0;

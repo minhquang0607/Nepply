@@ -30,6 +30,9 @@ public sealed class SettingsStore(string path, string? legacyPath = null)
         // Existing installations keep their choices without a new first-run prompt.
         if (!document.RootElement.TryGetProperty(nameof(AppSettings.HasCompletedOnboarding), out _))
             value.HasCompletedOnboarding = true;
+        // Files written before the Windows-language default kept Vietnamese implicitly.
+        if (!document.RootElement.TryGetProperty(nameof(AppSettings.Language), out _))
+            value.Language = "vi";
         value.Validate(); value.SchemaVersion = CurrentSchema;
         return value;
     }

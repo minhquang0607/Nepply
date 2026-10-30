@@ -75,6 +75,21 @@ internal static class ReleaseHardeningTests
         var store = new SettingsStore(path);
         var fresh = store.Load();
         check("Fresh install keeps Desktop visible before onboarding",!fresh.HasCompletedOnboarding && !fresh.HideDesktopIcons);
+        check("Fresh install starts in the Windows display language",fresh.Language == LocalizationService.SystemDefault);
+        foreach(var (culture,expected) in new[] {("vi-VN","vi"),("en-US","en"),("en-GB","en"),("ja-JP","ja"),("de-AT","de"),("zh-CN","zh"),("zh-SG","zh"),("ru-RU","ru"),("fr-CA","fr"),("th-TH","th"),
+            ("zh-TW","en"),("zh-HK","en"),("zh-Hant","en"),("ko-KR","en"),("pt-BR","en")})
+            check($"Windows language {culture} opens Nepply in {expected}",LocalizationService.DefaultFor(new System.Globalization.CultureInfo(culture))==expected);
+        check("Invariant Windows language falls back to English",LocalizationService.DefaultFor(System.Globalization.CultureInfo.InvariantCulture)=="en");
+        var languagePath=Path.Combine(root,"language.json");
+        File.WriteAllText(languagePath,"{\"HasCompletedOnboarding\":true,\"PanelWidth\":400}");
+        check("Settings saved before the Windows default keep Vietnamese",new SettingsStore(languagePath).Load().Language=="vi");
+        File.WriteAllText(languagePath,"{\"HasCompletedOnboarding\":true,\"Language\":\"ja\"}");
+        check("Saved language choice wins over the Windows default",new SettingsStore(languagePath).Load().Language=="ja");
+        var resetLanguage=new AppSettings {Language="fr",PanelWidth=500}; resetLanguage.ResetToDefaults();
+        check("Reset preferences keeps the chosen language",resetLanguage.Language=="fr" && resetLanguage.PanelWidth==new AppSettings().PanelWidth);
+        var welcomeChoice=new AppSettings();
+        OnboardingService.Complete(welcomeChoice,EdgePosition.Left,false,_ => { },"de");
+        check("Onboarding saves the language picked on the welcome screen",welcomeChoice.Language=="de" && welcomeChoice.HasCompletedOnboarding);
         File.WriteAllText(path,"{\"HideDesktopIcons\":true,\"EdgePosition\":1}");
         var legacy = store.Load();
         check("Existing settings migrate without repeating onboarding",legacy.HasCompletedOnboarding && legacy.HideDesktopIcons && legacy.EdgePosition == EdgePosition.Right);

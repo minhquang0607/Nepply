@@ -33,10 +33,13 @@ jobs:
           global-json-file: global.json
       - name: Tag matches project version
         if: github.ref_type == 'tag'
+        # Pass the tag as data, never as script text: ref names may contain quotes.
+        env:
+          TAG: ${{ github.ref_name }}
         run: |
           [xml]$project = Get-Content src/Nepply/Nepply.csproj -Raw
           $expected = 'v' + [string]$project.Project.PropertyGroup.Version
-          if ('${{ github.ref_name }}' -cne $expected) { throw "Tag ${{ github.ref_name }} does not match project version $expected." }
+          if ($env:TAG -cne $expected) { throw "Tag $env:TAG does not match project version $expected." }
       - name: Install Inno Setup ${{ env.INNO_VERSION }} (signature verified)
         run: |
           $installer = Join-Path $env:RUNNER_TEMP 'innosetup.exe'
@@ -94,7 +97,7 @@ jobs:
           TAG: ${{ github.ref_name }}
         run: |
           $files = Join-Path $env:RUNNER_TEMP 'release'
-          gh run download '${{ github.run_id }}' --name nepply-release-unsigned --dir $files
+          gh run download $env:GITHUB_RUN_ID --name nepply-release-unsigned --dir $files
           if ($LASTEXITCODE -ne 0) { throw 'Could not download the build artifact.' }
           $assets = @(Get-ChildItem -LiteralPath $files -File | ForEach-Object FullName)
           $existing = gh release view $env:TAG --json isDraft 2>$null | ConvertFrom-Json

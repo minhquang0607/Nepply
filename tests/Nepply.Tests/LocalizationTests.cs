@@ -58,7 +58,7 @@ internal static class LocalizationTests
         }
         PanelLocalizationTests.Run(check,pump);
         var invalid=new AppSettings {Language="missing"};invalid.Validate();
-        check("Unknown language safely falls back to Vietnamese",invalid.Language=="vi");
+        check("Unknown language safely falls back to the Windows default",invalid.Language==LocalizationService.SystemDefault);
         check("Sheen is exactly five percent faster",Math.Abs(Nepply.Views.MetallicSurface.SweepDuration.TotalSeconds-22/1.05)<.00001);
         ThemeService.Apply(new());
     }

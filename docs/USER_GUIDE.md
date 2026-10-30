@@ -6,6 +6,8 @@ Hướng dẫn cho **Nepply 1.0.0-beta.1**, bản beta công khai đầu tiên (
 
 ## Mở và đóng panel
 
+Lần chạy đầu, màn chào dùng ngôn ngữ của Windows; bạn có thể chọn ngôn ngữ khác ngay tại đó hoặc sau này trong **Cài đặt → Giao diện**.
+
 Đưa chuột tới cạnh màn hình đã chọn để mở panel, hoặc dùng **Ctrl + Space** nếu chưa đổi phím tắt trong Cài đặt.
 
 - Dùng nút ghim để giữ panel mở, kể cả khi bạn chuyển sang gõ phím ở ứng dụng khác.
@@ -81,7 +83,7 @@ Bật tùy chọn tự khởi động trong Cài đặt rồi bấm **Áp dụng
 
 Mở **Cài đặt → Ứng dụng → Kiểm tra cập nhật** để chủ động kiểm tra. Khi có bản phù hợp, cửa sổ cập nhật hiển thị phiên bản và ghi chú để bạn quyết định cập nhật hay để sau. Nepply hiện không tự kiểm tra định kỳ trong nền.
 
-**Giới hạn hiện tại:** tự cài cập nhật EXE chưa được bật cho phát hành vì chưa hoàn tất cấu hình ký số và nghiệm thu. Portable chưa tự thay thế file ứng dụng. Không coi bản build thử là kênh cập nhật chính thức; xem [Releases](https://github.com/minhquang0607/Nepply/releases) khi bản tải được công bố.
+**Giới hạn hiện tại:** tự cài cập nhật EXE chưa được bật cho phát hành vì chưa hoàn tất cấu hình ký số và nghiệm thu. Portable chưa tự thay thế file ứng dụng. Khi đó cửa sổ cập nhật có nút **Mở trang tải** dẫn tới trang phát hành chính thức để bạn tự tải bộ cài mới. Không coi bản build thử là kênh cập nhật chính thức; xem [Releases](https://github.com/minhquang0607/Nepply/releases) khi bản tải được công bố.
 
 ## Gỡ ứng dụng và dữ liệu
 

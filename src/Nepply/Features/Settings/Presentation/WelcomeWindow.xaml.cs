@@ -23,9 +23,26 @@ public partial class WelcomeWindow : Window
         Loaded+=(_,_)=>Helpers.DialogPlacement.FitInitial(this);
         EdgeChoice.SelectedIndex = (int)settings.EdgePosition;
         HideIcons.IsChecked = false;
+        LanguageChoice.ItemsSource = LocalizationService.Languages;
+        LanguageChoice.SelectedValue = settings.Language;
+        _languageReady = true;
         RefreshLanguage((int)settings.EdgePosition);
         LocalizationService.Changed+=LanguageChanged;
-        Closed+=(_,_)=>LocalizationService.Changed-=LanguageChanged;
+        Closed+=(_,_)=>
+        {
+            LocalizationService.Changed-=LanguageChanged;
+            // Only a preview from this window needs undoing; a completed start already saved it.
+            if (_previewedLanguage) LocalizationService.Apply(_settings.Language);
+        };
+    }
+    private bool _languageReady, _previewedLanguage;
+    internal string SelectedLanguage => LanguageChoice.SelectedValue as string ?? _settings.Language;
+    // The first choice is shown live so the rest of the screen is readable before starting.
+    private void LanguageChoice_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+    {
+        if (!_languageReady || LanguageChoice.SelectedValue is not string language || language == LocalizationService.CurrentLanguage) return;
+        _previewedLanguage = true;
+        LocalizationService.Apply(language);
     }
     private void LanguageChanged()=>RefreshLanguage(EdgeChoice.SelectedIndex);
     private void RefreshLanguage(int selected)
@@ -48,7 +65,7 @@ public partial class WelcomeWindow : Window
         try
         {
             OnboardingService.Complete(_settings, (EdgePosition)EdgeChoice.SelectedIndex,
-                HideIcons.IsChecked == true, draft => draft.Save());
+                HideIcons.IsChecked == true, draft => draft.Save(), SelectedLanguage);
             DialogResult = true;
         }
         catch (Exception ex)
