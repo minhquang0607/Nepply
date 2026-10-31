@@ -1,6 +1,6 @@
 # Kế hoạch phát hành Nepply 2.0.0
 
-Cập nhật 30/10/2026. Đây là kế hoạch duy nhất từ hiện tại đến sau bản chính thức. Làm từng giai đoạn theo thứ tự; giai đoạn sau chỉ bắt đầu khi giai đoạn trước đạt điều kiện **Xong khi**.
+Cập nhật 31/10/2026. Đây là kế hoạch duy nhất từ hiện tại đến sau bản chính thức. Làm từng giai đoạn theo thứ tự; giai đoạn sau chỉ bắt đầu khi giai đoạn trước đạt điều kiện **Xong khi**.
 
 Đánh dấu một mục khi đã hoàn tất và kiểm chứng thật, không đánh dấu theo dự đoán. **[Bạn]** là việc chỉ chủ dự án làm được (tài khoản, duyệt, máy thật); **[Claude]** là việc code hoặc tài liệu trong repo; **[Cả hai]** cần phối hợp.
 
@@ -8,7 +8,7 @@ Cập nhật 30/10/2026. Đây là kế hoạch duy nhất từ hiện tại đ�
 | --- | --- | --- |
 | 0 | Nền tảng đã có | Xong |
 | 1 | Sửa các lỗi nhỏ từ đợt rà soát | Xong |
-| 2 | Đưa code lên GitHub | Hai PR đã mở, CI xanh; chờ bạn duyệt và merge |
+| 2 | Đưa code lên GitHub | Đã merge vào `main`, CI xanh; còn các mục chưa đánh dấu bên dưới |
 | 3 | Chuẩn bị repo công khai | Chưa làm |
 | 4 | Phát hành `2.0.0-rc.1` chưa ký | Chưa làm |
 | 5 | Xin chữ ký số | Chưa làm |
@@ -31,7 +31,7 @@ Cập nhật 30/10/2026. Đây là kế hoạch duy nhất từ hiện tại đ�
 - [x] `.github/SECURITY.md`, `CODE_OF_CONDUCT.md`, issue templates, chính sách ký mã tiếng Anh, Dependabot cho NuGet.
 - [x] Workflow `release.yml`: tag `vX.Y.Z` → build trên GitHub runner → Release **nháp** chưa ký. Chưa xác nhận từng chạy thành công.
 - [x] Luồng ký uninstaller (`-SignedUninstallerDirectory`), kiểm chữ ký cập nhật theo nhà phát hành + CA (`Get-SignerPolicy.ps1`).
-- [x] Cửa sổ cập nhật có nút mở trang tải; ngôn ngữ đầu tiên theo Windows; bộ cài 8 ngôn ngữ; nút Báo lỗi; ghi chú phát hành dạng văn bản (nhánh `fix/release-readiness`, `chore/pro-polish`, chưa push).
+- [x] Cửa sổ cập nhật có nút mở trang tải; ngôn ngữ đầu tiên theo Windows; bộ cài 8 ngôn ngữ; nút Báo lỗi; ghi chú phát hành dạng văn bản.
 - [x] `.gitattributes`, `.editorconfig`, kiểm format trong CI, CodeQL.
 
 ## Giai đoạn 1. Sửa các lỗi nhỏ từ đợt rà soát
@@ -52,7 +52,8 @@ Kết quả rà 30/10/2026: build từ clone sạch đạt; cấy 20 lỗi thử
 
 - [ ] **[Bạn]** Xem diff hai nhánh; bỏ qua commit format `79c57b8` vì chỉ đổi khoảng trắng.
 - [x] **[Claude]** Push `fix/release-readiness` và `chore/pro-polish`, mở PR #8 và #9. Lần chạy đầu cho thấy CI đỏ vì hết dung lượng artifact, không phải vì lỗi code; đã sửa workflow để upload không chặn các gate. CI của cả hai PR xanh.
-- [ ] **[Cả hai]** Merge #8 vào `main`, đổi base của #9 sang `main`, rồi merge #9.
+- [x] **[Cả hai]** Merge #8 vào `main`, đổi base của #9 sang `main`, rồi merge #9. `main` ở `1ac08b9` chứa đủ commit của cả hai PR; Verify chạy tay trên commit này xanh. GitHub không xử lý sự kiện push của lần merge #9 nên #9 kẹt ở Open và đã được đóng tay ngày 31/10/2026. Dòng "Closed with unmerged commits" trên trang #9 là dữ liệu cũ.
+- [ ] **[Claude]** Xác nhận push lên `main` tự chạy Verify trở lại, bằng lần merge đầu tiên sau `1ac08b9`.
 - [ ] **[Bạn]** Xóa Release nháp của beta.1 trên trang Releases nếu còn. Nếu bản đó đã publish thì dừng lại, đừng xóa.
 - [ ] **[Bạn]** Chạy thử bộ cài trên máy của bạn: trang thông báo và chữ tiếng Việt hiển thị đúng, cài và gỡ được.
 
