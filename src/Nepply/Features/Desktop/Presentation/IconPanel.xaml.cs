@@ -80,9 +80,19 @@ public partial class IconPanel : UserControl
         e.Handled = true;
     }
     private void DismissLaunchError_Click(object sender, RoutedEventArgs e) => ShowActionFailure(null);
-    private void Launch(DesktopIcon icon)
+    private async void Launch(DesktopIcon icon)
     {
-        ShowActionFailure(_service?.LaunchIcon(icon));
+        ShowActionFailure(null);
+        if (_service is not { } service) return;
+        try
+        {
+            if (await service.LaunchIconAsync(icon) is { } failure) ShowActionFailure(failure);
+        }
+        catch (Exception ex)
+        {
+            AppLogger.Error(ex, "Launch desktop item");
+            ShowActionFailure(UserMessage.FromKey("DesktopLaunchFailed", icon.Name, UserMessage.FromKey("DesktopLaunchError")));
+        }
     }
     internal void ShowActionNotice(string? key)
         => ShowActionFailure(key == null ? null : UserMessage.FromKey(key));

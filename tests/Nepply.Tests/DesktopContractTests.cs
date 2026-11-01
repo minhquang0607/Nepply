@@ -110,7 +110,7 @@ internal static class DesktopContractTests
     {
         internal int Refreshes;
         public void Refresh() => Refreshes++;
-        public Nepply.UserMessage? LaunchIcon(DesktopIcon icon) => throw new InvalidOperationException("Native action must not run in this fixture");
+        public Task<Nepply.UserMessage?> LaunchIconAsync(DesktopIcon icon) => throw new InvalidOperationException("Native action must not run in this fixture");
         public Nepply.UserMessage? ShowShellContextMenu(DesktopIcon icon, IntPtr hwnd, System.Windows.Point? screenAnchor = null)
             => throw new InvalidOperationException("Native menu must not run in this fixture");
     }

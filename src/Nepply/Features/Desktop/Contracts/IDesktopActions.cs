@@ -11,6 +11,6 @@ namespace Nepply.Modules.Desktop;
 public interface IDesktopActions
 {
     void Refresh();
-    UserMessage? LaunchIcon(DesktopIcon icon);
+    Task<UserMessage?> LaunchIconAsync(DesktopIcon icon);
     UserMessage? ShowShellContextMenu(DesktopIcon icon, IntPtr hwnd, System.Windows.Point? screenAnchor = null);
 }

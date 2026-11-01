@@ -182,7 +182,9 @@ public class DesktopIconService : IDisposable, IDesktopCatalog, IDesktopActions
 
     #region Context Menu Actions
 
-    public UserMessage? LaunchIcon(DesktopIconModel icon)
+    private readonly ShellLaunchQueue _launches = new();
+    public Task<UserMessage?> LaunchIconAsync(DesktopIconModel icon) => _launches.Run(icon.Path, () => LaunchIcon(icon));
+    private static UserMessage? LaunchIcon(DesktopIconModel icon)
     {
         try
         {

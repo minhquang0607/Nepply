@@ -307,7 +307,7 @@ internal static class ErrorLocalizationTests
     private sealed class Actions : IDesktopActions
     {
         public void Refresh() => throw new InvalidOperationException("Unexpected fixture action");
-        public UserMessage? LaunchIcon(DesktopIcon icon) => throw new InvalidOperationException("Unexpected fixture action");
+        public Task<UserMessage?> LaunchIconAsync(DesktopIcon icon) => throw new InvalidOperationException("Unexpected fixture action");
         public UserMessage? ShowShellContextMenu(DesktopIcon icon, IntPtr hwnd, Point? screenAnchor = null) => throw new InvalidOperationException("Unexpected fixture action");
     }
 }

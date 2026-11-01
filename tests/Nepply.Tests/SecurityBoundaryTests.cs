@@ -2,6 +2,7 @@ using System.IO;
 using System.IO.Pipes;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Nepply;
 using Nepply.Helpers;
 using Nepply.Models;
 using Nepply.Services;
@@ -27,7 +28,45 @@ internal static class SecurityBoundaryTests
         var path = @"C:\Desktop\日本語 & test.lnk";
         var file = DesktopIconService.CreateLaunchInfo(new DesktopIcon { Path = path });
         check("Physical item remains Shell association without command concatenation", file.FileName == path && file.UseShellExecute && file.ArgumentList.Count == 0 && file.Arguments.Length == 0);
+        VerifyLaunchQueue(check).GetAwaiter().GetResult();
         VerifyPipe(check).GetAwaiter().GetResult();
+    }
+
+    private static async Task VerifyLaunchQueue(Action<string, bool> check)
+    {
+        var queue = new ShellLaunchQueue();
+        using var release = new ManualResetEventSlim();
+        var caller = Environment.CurrentManagedThreadId;
+        var launches = 0;
+        var apartment = ApartmentState.Unknown;
+        var background = false;
+        var launchThread = caller;
+        var failure = UserMessage.FromKey("DesktopLaunchError");
+        var stuck = queue.Run(@"C:\Desktop\offline.lnk", () =>
+        {
+            Interlocked.Increment(ref launches);
+            launchThread = Environment.CurrentManagedThreadId;
+            apartment = Thread.CurrentThread.GetApartmentState();
+            background = Thread.CurrentThread.IsBackground;
+            release.Wait(TimeSpan.FromSeconds(10));
+            return failure;
+        });
+        check("A launch stuck in Windows does not hold the caller", !stuck.IsCompleted);
+        var repeated = queue.Run(@"c:\desktop\OFFLINE.lnk", () => { Interlocked.Increment(ref launches); return failure; });
+        check("Repeated clicks during a stuck launch start nothing", repeated.IsCompleted && await repeated == null);
+        var other = await queue.Run(@"C:\Desktop\other.lnk", () => null).WaitAsync(TimeSpan.FromSeconds(5));
+        check("A stuck launch does not delay other items", other == null && !stuck.IsCompleted);
+        release.Set();
+        var result = await stuck.WaitAsync(TimeSpan.FromSeconds(5));
+        check("Launch runs on its own STA background thread", launchThread != caller && apartment == ApartmentState.STA && background);
+        check("Launch failure reaches the caller", ReferenceEquals(result, failure) && Volatile.Read(ref launches) == 1);
+        var again = await queue.Run(@"C:\Desktop\offline.lnk", () => { Interlocked.Increment(ref launches); return null; }).WaitAsync(TimeSpan.FromSeconds(5));
+        check("An item opens again after its launch ended", again == null && Volatile.Read(ref launches) == 2);
+        var thrown = queue.Run(@"C:\Desktop\broken.lnk", () => throw new InvalidOperationException("launch"));
+        await Task.WhenAny(thrown, Task.Delay(TimeSpan.FromSeconds(5)));
+        check("Unexpected launch exception faults the task", thrown.IsFaulted);
+        var retried = await queue.Run(@"C:\Desktop\broken.lnk", () => failure).WaitAsync(TimeSpan.FromSeconds(5));
+        check("An item that threw can be opened again", ReferenceEquals(retried, failure));
     }
 
     private static async Task VerifyPipe(Action<string, bool> check)

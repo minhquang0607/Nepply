@@ -133,7 +133,7 @@ Bản chưa ký không thể tự cập nhật, nên phải có một RC đã k�
 
 Không chặn việc xin chữ ký, có thể làm song song từ giai đoạn 4.
 
-- [ ] **[AI]** Mở mục Desktop không chặn luồng giao diện, để shortcut trỏ tới ổ mạng mất kết nối không làm panel đơ.
+- [x] **[AI]** Mở mục Desktop không chặn luồng giao diện, để shortcut trỏ tới ổ mạng mất kết nối không làm panel đơ.
 - [ ] **[Cả hai]** Chạy bài đo dài 24 giờ (`scripts/Run-UiSoak.ps1`), phân tích CPU, RAM, handle.
 - [ ] **[AI]** Rà trợ năng: điều hướng bằng bàn phím, trình đọc màn hình, High Contrast.
 - [ ] **[Bạn]** Nhờ người bản ngữ duyệt bản dịch Nhật, Đức, Trung, Nga, Pháp, Thái, cả app lẫn bộ cài.
