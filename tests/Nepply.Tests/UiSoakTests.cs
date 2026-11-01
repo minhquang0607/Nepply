@@ -20,7 +20,7 @@ internal static class UiSoakTests
 
     internal static int Run(string output, int minutes, string profile = "normal")
     {
-        if (minutes is < 1 or > 480) throw new ArgumentOutOfRangeException(nameof(minutes));
+        if (minutes is < 1 or > 1440) throw new ArgumentOutOfRangeException(nameof(minutes));
         if (profile is not ("normal" or "active" or "static" or "no-monitor" or "no-sweep" or "no-glow" or "cache-readings" or "split-glow" or "opaque" or "visible-active" or "visible-opaque" or "visible-no-sweep" or "visible-no-glow")) throw new ArgumentException("Unknown soak profile.", nameof(profile));
         bool visibleProfile = profile.StartsWith("visible-", StringComparison.Ordinal);
         var app = new App(testHost: true); app.InitializeComponent();

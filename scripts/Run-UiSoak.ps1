@@ -1,6 +1,6 @@
 #requires -Version 7.4
 param(
-    [ValidateRange(1,480)][int]$Minutes=480,
+    [ValidateRange(1,1440)][int]$Minutes=1440,
     [string]$TestExecutable
 )
 $ErrorActionPreference='Stop'

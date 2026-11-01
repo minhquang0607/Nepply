@@ -152,7 +152,7 @@ internal static class Program
         {
             int durationIndex = Array.IndexOf(args, "--minutes");
             if (durationIndex < 0 || durationIndex + 1 >= args.Length || !int.TryParse(args[durationIndex + 1], out int minutes))
-                throw new ArgumentException("UI soak requires --minutes (1–480).");
+                throw new ArgumentException("UI soak requires --minutes (1–1440).");
             int profileIndex = Array.IndexOf(args, "--profile");
             if (profileIndex >= 0 && profileIndex + 1 >= args.Length) throw new ArgumentException("Missing soak profile.");
             return UiSoakTests.Run(output, minutes, profileIndex < 0 ? "normal" : args[profileIndex + 1]);
