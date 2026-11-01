@@ -167,7 +167,7 @@ public partial class SettingsWindow : Window
     {
         (UIElement Control, string Name)[] fields = [
             (ThemeChoice,"Theme"),(AccentChoice,"Materials"),(CustomAccent,"CustomColor"),(ColorButton,"ColorPicker"),
-            (GlowSlider,"Glow"),(OpacitySlider,"Opacity"),(EdgeChoice,"Edge"),(ScreenChoice,"Screen"),
+            (MotionChoice,"Motion"),(GlowSlider,"Glow"),(OpacitySlider,"Opacity"),(EdgeChoice,"Edge"),(ScreenChoice,"Screen"),
             (WidthSlider,"Width"),(TopWidthSlider,"TopWidth"),(HeightSlider,"TopHeight"),
             (ZoneSlider,"TriggerZone"),(DwellSlider,"TriggerDelay"),(DelaySlider,"HideDelay"),
             (HotkeyButton,"Hotkey"),(GridPicker,"IconGrid"),

@@ -13,7 +13,7 @@ Cập nhật 02/11/2026. Đây là kế hoạch duy nhất từ hiện tại đ�
 | 4 | Phát hành `2.0.0-rc.1` chưa ký | Ghi chú và chạy thử đã xong; chờ repo Public |
 | 5 | Xin chữ ký số | Chưa làm |
 | 6 | Tích hợp ký và phát hành RC đã ký | Chưa làm |
-| 7 | Hoàn thiện chất lượng | Chưa làm |
+| 7 | Hoàn thiện chất lượng | Phần của AI đã xong; còn bài đo 24 giờ và các mục của bạn |
 | 8 | Nghiệm thu trên máy thật | Chưa làm |
 | 9 | Phát hành `2.0.0` | Chưa làm |
 | 10 | Trả nợ kỹ thuật sau 2.0.0 | Chưa làm |
@@ -135,7 +135,8 @@ Không chặn việc xin chữ ký, có thể làm song song từ giai đoạn 4
 
 - [x] **[AI]** Mở mục Desktop không chặn luồng giao diện, để shortcut trỏ tới ổ mạng mất kết nối không làm panel đơ.
 - [ ] **[Cả hai]** Chạy bài đo dài 24 giờ (`scripts/Run-UiSoak.ps1`), phân tích CPU, RAM, handle.
-- [ ] **[AI]** Rà trợ năng: điều hướng bằng bàn phím, trình đọc màn hình, High Contrast.
+- [x] **[AI]** Rà trợ năng bằng test tự động trên cây giao diện thật: mọi nút, ô nhập, thanh trượt và danh sách trong Cài đặt, màn chào, panel và các hộp thoại đều có tên cho trình đọc màn hình và đi tới được bằng bàn phím. Đã sửa ô Hiệu ứng chuyển động thiếu tên. Giao diện High Contrast đã có test sẵn.
+- [ ] **[Bạn]** Thử thật với Narrator và chế độ tương phản cao của Windows, vì test tự động không thay được việc nghe thử.
 - [ ] **[Bạn]** Nhờ người bản ngữ duyệt bản dịch Nhật, Đức, Trung, Nga, Pháp, Thái, cả app lẫn bộ cài.
 - [ ] **[Bạn]** Nhờ người đọc lại bản dịch tiếng Việt của bộ cài.
 - [x] **[AI]** Tùy chọn tự kiểm tra cập nhật mỗi ngày, mặc định tắt, chỉ báo ở khay hệ thống. Đã cập nhật chính sách quyền riêng tư và hướng dẫn. Bản dịch hai chuỗi mới thuộc mục duyệt bản dịch bên dưới.
