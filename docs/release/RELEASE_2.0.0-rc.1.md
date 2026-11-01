@@ -41,7 +41,7 @@ Extract the complete portable archive and run `Nepply.exe`; keep `guardian` and 
 - Internal `2.5.0-*` builds do not see this version as an upgrade. Exit the old build, back up settings and switch manually.
 - Nepply restores Desktop icons it hid when exiting. If abnormal termination leaves icons hidden, right-click the Desktop and choose View > Show desktop icons.
 
-[User guide](https://github.com/minhquang0607/Nepply/blob/main/docs/USER_GUIDE.en.md) · [Troubleshooting](https://github.com/minhquang0607/Nepply/blob/main/docs/TROUBLESHOOTING.en.md) · [Report a bug](https://github.com/minhquang0607/Nepply/issues)
+[User guide](https://github.com/minhquang0607/Nepply/blob/main/docs/USER_GUIDE.en.md) · [Troubleshooting](https://github.com/minhquang0607/Nepply/blob/main/docs/TROUBLESHOOTING.en.md) · [Code signing policy](https://github.com/minhquang0607/Nepply/blob/main/docs/release/CODE_SIGNING_POLICY.en.md) · [Report a bug](https://github.com/minhquang0607/Nepply/issues)
 
 Include Windows/Nepply versions and reproduction steps; **Settings → Application → Copy diagnostics** copies the version, Windows and sensor details for you. Redact paths, account names and personal data from screenshots or logs.
 
@@ -88,7 +88,7 @@ Với portable, giải nén **toàn bộ** và chạy `Nepply.exe`; không tách
 - Nếu đang dùng bản thử `2.5.0-*`, updater không coi bản này là bản nâng cấp. Thoát bản cũ và chuyển thủ công; sao lưu cấu hình trước khi chuyển.
 - Khi thoát, Nepply khôi phục icon Desktop do app đã ẩn. Nếu app đóng bất thường và icon chưa trở lại, nhấp chuột phải vào Desktop và chọn Xem > Hiển thị biểu tượng màn hình nền.
 
-[Hướng dẫn sử dụng](https://github.com/minhquang0607/Nepply/blob/main/docs/USER_GUIDE.md) · [Xử lý sự cố](https://github.com/minhquang0607/Nepply/blob/main/docs/TROUBLESHOOTING.md) · [Báo lỗi](https://github.com/minhquang0607/Nepply/issues)
+[Hướng dẫn sử dụng](https://github.com/minhquang0607/Nepply/blob/main/docs/USER_GUIDE.md) · [Xử lý sự cố](https://github.com/minhquang0607/Nepply/blob/main/docs/TROUBLESHOOTING.md) · [Chính sách ký mã](https://github.com/minhquang0607/Nepply/blob/main/docs/release/CODE_SIGNING_POLICY.md) · [Báo lỗi](https://github.com/minhquang0607/Nepply/issues)
 
 Khi báo lỗi, gửi phiên bản Windows/Nepply và các bước tái hiện; nút **Cài đặt → Ứng dụng → Sao chép chẩn đoán** chép sẵn phiên bản, Windows và thông tin cảm biến. Che đường dẫn, tên tài khoản và dữ liệu cá nhân trong ảnh hoặc log.
 

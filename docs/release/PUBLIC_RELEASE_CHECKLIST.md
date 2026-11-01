@@ -9,7 +9,7 @@ Cập nhật 02/11/2026. Đây là kế hoạch duy nhất từ hiện tại đ�
 | 0 | Nền tảng đã có | Xong |
 | 1 | Sửa các lỗi nhỏ từ đợt rà soát | Xong |
 | 2 | Đưa code lên GitHub | Đã merge vào `main`, CI xanh; còn các mục chưa đánh dấu bên dưới |
-| 3 | Chuẩn bị repo công khai | Đang làm; phần trong repo đã xong, còn các mục cài đặt của bạn |
+| 3 | Chuẩn bị repo công khai | Đang làm; lịch sử đã sạch, repo mới đã tạo, còn các mục cài đặt của bạn |
 | 4 | Phát hành `2.0.0-rc.1` chưa ký | Ghi chú và chạy thử đã xong; chờ repo Public |
 | 5 | Xin chữ ký số | Chưa làm |
 | 6 | Tích hợp ký và phát hành RC đã ký | Chưa làm |
@@ -54,8 +54,7 @@ Kết quả rà 30/10/2026: build từ clone sạch đạt; cấy 20 lỗi thử
 - [x] **[AI]** Push `fix/release-readiness` và `chore/pro-polish`, mở PR #8 và #9. Lần chạy đầu cho thấy CI đỏ vì hết dung lượng artifact, không phải vì lỗi code; đã sửa workflow để upload không chặn các gate. CI của cả hai PR xanh.
 - [x] **[Cả hai]** Merge #8 vào `main`, đổi base của #9 sang `main`, rồi merge #9. `main` ở `e1d92e8` chứa đủ commit của cả hai PR; Verify chạy tay trên commit này xanh. GitHub không xử lý sự kiện push của lần merge #9 nên #9 kẹt ở Open và đã được đóng tay ngày 31/10/2026. Dòng "Closed with unmerged commits" trên trang #9 là dữ liệu cũ.
 - [x] **[AI]** Xác nhận push lên `main` tự chạy Verify trở lại: merge #10 (`a0b0525`) tự chạy Verify #54, xanh.
-- [ ] **[Bạn]** Xóa Release nháp "Nepply 1.0.0" trên trang Releases. Ngày 01/11/2026 bản này vẫn là Draft, chưa publish.
-- [ ] **[Bạn]** Xóa các nhánh đã merge trên GitHub (trang Branches), nhánh nào cũng đã nằm trong `main`. Ngày 02/11/2026 còn `fix/release-readiness`.
+- [x] **[Cả hai]** Release nháp "Nepply 1.0.0" và các nhánh cũ không còn ở repo `Nepply`; chúng nằm lại trong kho lưu trữ Private `Nepply-archive` từ ngày 02/11/2026.
 - [ ] **[Bạn]** Chạy thử bộ cài trên máy của bạn: trang thông báo và chữ tiếng Việt hiển thị đúng, cài và gỡ được.
 
 **Xong khi:** `main` có đủ thay đổi và CI xanh.
@@ -67,23 +66,30 @@ Làm trước khi chuyển Public, vì sau đó nội dung có thể đã bị l
 ### Quyết định về lịch sử Git
 
 - [x] **[Cả hai]** Xóa link liên hệ cá nhân cũ khỏi lịch sử: ngày 02/11/2026 viết lại 91 commit, thay link bằng trang Issues rồi force push `main` và `fix/release-readiness`. Mọi mã commit đã đổi; quét toàn bộ object của hai nhánh này không còn link, đối chứng trên lịch sử cũ tìm thấy link. 10 commit từng mang tên `MQuang07` nay có tác giả Minh Quang.
-- [ ] **[Bạn]** Trước khi Public, xử lý bản cũ còn sót: `refs/pull/1` đến `refs/pull/12` trên GitHub vẫn giữ commit cũ có link, trang PR và link trực tiếp tới commit cũ vẫn mở được, và người dùng không tự xóa được các ref này. Có hai cách: nhờ GitHub Support gỡ, hoặc xóa repo rồi tạo lại cùng tên từ lịch sử mới (mất trang PR, lịch sử Actions và Release nháp).
+- [x] **[Cả hai]** Xử lý bản cũ còn sót: `refs/pull/1` đến `refs/pull/12` vẫn giữ commit cũ có link và không tự xóa được, nên ngày 02/11/2026 repo cũ được đổi tên thành `Nepply-archive` (vẫn Private, còn đủ PR, lịch sử Actions và Release nháp), rồi tạo repo `Nepply` mới và chỉ đẩy `main`. Repo mới có đúng một ref; commit cũ `46cd02f` trả về 404.
+- [ ] **[Bạn]** Luôn giữ `Nepply-archive` ở Private vì nó vẫn chứa link. Đừng push các nhánh local cũ lên repo mới. Chỉ xóa kho này khi chắc chắn không cần xem lại.
 - [x] **[AI]** Rà toàn bộ lịch sử: quét 86 commit trên mọi nhánh ngày 01/11/2026, không thấy mẫu khóa hay token, đường dẫn máy cá nhân, email cá nhân hay file nhạy cảm từng được thêm. Đối chứng: cùng cách quét tìm đúng 19 commit chứa link liên hệ. Đây là quét theo mẫu, không chứng minh tuyệt đối. Quét lại nếu có thêm nhiều commit trước khi Public.
 
 ### Cài đặt GitHub
 
+Repo `Nepply` tạo ngày 02/11/2026 không mang theo cài đặt của repo cũ. Các số PR, số lần chạy CI và *Release build* ghi trong kế hoạch trước ngày này thuộc `Nepply-archive`. Giá trị bên dưới được đối chiếu với repo cũ, nên làm đúng từng mục là đủ.
+
 - [ ] **[Bạn] Tên hiển thị**: GitHub → Settings → Public profile → Name: `Minh Quang`. Commit merge trên web đang lấy tên `MQuang07` từ hồ sơ, nên chưa đổi thì commit merge mới vẫn mang tên đó.
 - [ ] **[Bạn] MFA tài khoản**: Settings (tài khoản) → Password and authentication → bật Two-factor authentication. Lưu recovery codes ngoài máy.
-- [ ] **[Bạn] Bảo mật repo**: repo → Settings → *Code security* (có thể tên *Advanced Security*): bật Dependency graph, Dependabot alerts, Dependabot security updates, **Private vulnerability reporting**, Secret scanning và Push protection.
+- [ ] **[Bạn] Bảo mật repo**: repo → Settings → *Advanced Security*: bật Dependency graph, Dependabot alerts, Dependabot security updates và Grouped security updates.
 - [ ] **[Bạn] Actions**: Settings → Actions → General:
-  - Workflow permissions: *Read repository contents and packages permissions*.
-  - Bỏ chọn *Allow GitHub Actions to create and approve pull requests*.
-  - Fork pull request workflows: *Require approval for all external contributors*.
-- [ ] **[Bạn] Bảo vệ nhánh `main`**: Settings → Rules → Rulesets → New branch ruleset, target `main`: chặn force push và xóa nhánh, yêu cầu status check `build` (workflow *Verify Windows build*). Có thể bật *Require a pull request* với 0 approval nếu muốn mọi thay đổi đi qua PR.
-- [ ] **[Bạn] Bảo vệ tag**: thêm tag ruleset cho `v*`, chỉ bạn được tạo/xóa.
-- [ ] **[Bạn] Môi trường release**: Settings → Environments → New environment `release` → *Required reviewers*: chính bạn; *Deployment branches and tags*: chỉ tag `v*`.
+  - Bật *Require actions to be pinned to a full-length commit SHA*. Repo mới đang tắt mục này.
+  - Workflow permissions: *Read repository contents and packages permissions*. Repo mới đã đúng.
+  - Bỏ chọn *Allow GitHub Actions to create and approve pull requests*. Repo mới đã đúng.
+- [ ] **[Bạn] Bảo vệ nhánh `main`**: Settings → Rules → Rulesets → New ruleset → Import a ruleset, chọn [`rulesets/protect-main.json`](rulesets/protect-main.json): chặn force push và xóa nhánh, yêu cầu status check `build`, Repository admin được bỏ qua. Nếu import lỗi thì tạo tay theo đúng các giá trị đó.
+- [ ] **[Bạn] Bảo vệ tag**: import [`rulesets/protect-release-tags.json`](rulesets/protect-release-tags.json) cho tag `v*`: chặn sửa, xóa và force push, Repository admin được bỏ qua.
+- [ ] **[Bạn] Môi trường release**: Settings → Environments → New environment `release` → *Deployment branches and tags*: *Selected branches and tags*, thêm tag rule `v*`.
 - [x] **[Bạn]** Duyệt hoặc đóng các PR Dependabot đang mở (CI phải xanh trước khi merge). Ngày 01/11/2026 không có PR nào đang mở.
 - [ ] **[Bạn] Chuyển Public**: Settings → General → Danger Zone → Change repository visibility → Public.
+- [ ] **[Bạn] Ngay sau khi Public**, làm các mục GitHub chỉ cho bật ở repo công khai:
+  - Settings → *Advanced Security*: bật **Private vulnerability reporting**, Secret scanning và Push protection.
+  - Settings → Actions → General → Fork pull request workflows: *Require approval for all external contributors*.
+  - Settings → Environments → `release` → *Required reviewers*: chính bạn.
 - [ ] **[Bạn]** Sau khi Public, mở thử `…/security/advisories/new` và trang Issues. Xem workflow CodeQL đã chạy (trước đó nó tự bỏ qua).
 - [ ] **[Bạn]** Thêm status check của CodeQL vào ruleset nếu muốn bắt buộc.
 
@@ -103,8 +109,9 @@ Làm trước khi chuyển Public, vì sau đó nội dung có thể đã bị l
 
 ## Giai đoạn 5. Xin chữ ký số
 
-- [ ] **[Bạn]** Kiểm tra trước khi nộp: repo Public; giấy phép MIT và dependency đều là giấy phép OSI (xem `docs/legal/THIRD_PARTY_NOTICES.md`); README có link *Code signing policy*; trang chính sách ghi vai trò (author/reviewer/approver = bạn) và link privacy policy; MFA đã bật; đã có Release công khai; có uninstaller; app chỉ ẩn icon Desktop khi người dùng tự bật và có hướng dẫn khôi phục.
-- [ ] **[Bạn]** Nộp đơn tại <https://signpath.org> (mục apply cho dự án OSS), dùng link repo, Release và `docs/release/CODE_SIGNING_POLICY.en.md`.
+- [x] **[AI]** Đối chiếu repo với điều kiện SignPath ngày 02/11/2026 và soạn sẵn câu trả lời: [SIGNPATH_APPLICATION.md](SIGNPATH_APPLICATION.md). Giấy phép dependency đều là giấy phép OSI; ghi chú rc.1 đã có link *Code signing policy*.
+- [ ] **[Bạn]** Kiểm tra trước khi nộp: repo Public, MFA đã bật, đã có Release công khai.
+- [ ] **[Bạn]** Tự nộp đơn tại <https://signpath.org/apply> theo [SIGNPATH_APPLICATION.md](SIGNPATH_APPLICATION.md). Form tạo tài khoản đứng tên bạn và yêu cầu bạn cam kết với Code of Conduct, nên AI không nộp thay được. Bật MFA cho tài khoản SignPath sau khi được cấp.
 - [ ] **[Bạn]** Khi được duyệt, SignPath cung cấp organization ID, project/policy slug và API token. Lưu token vào Settings → Environments → `release` → *Environment secrets* (không để ở repository secret chung).
 - [ ] **[Bạn]** Nếu bị từ chối: dùng chứng thư OV cho người làm OSS (ví dụ Certum Open Source Code Signing). Azure Artifact Signing chỉ cấp cho cá nhân ở Mỹ/Canada.
 
