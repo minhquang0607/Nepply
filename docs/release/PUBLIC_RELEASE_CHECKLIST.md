@@ -1,8 +1,8 @@
 # Kế hoạch phát hành Nepply 2.0.0
 
-Cập nhật 31/10/2026. Đây là kế hoạch duy nhất từ hiện tại đến sau bản chính thức. Làm từng giai đoạn theo thứ tự; giai đoạn sau chỉ bắt đầu khi giai đoạn trước đạt điều kiện **Xong khi**.
+Cập nhật 01/11/2026. Đây là kế hoạch duy nhất từ hiện tại đến sau bản chính thức. Làm từng giai đoạn theo thứ tự; giai đoạn sau chỉ bắt đầu khi giai đoạn trước đạt điều kiện **Xong khi**.
 
-Đánh dấu một mục khi đã hoàn tất và kiểm chứng thật, không đánh dấu theo dự đoán. **[Bạn]** là việc chỉ chủ dự án làm được (tài khoản, duyệt, máy thật); **[Claude]** là việc code hoặc tài liệu trong repo; **[Cả hai]** cần phối hợp.
+Đánh dấu một mục khi đã hoàn tất và kiểm chứng thật, không đánh dấu theo dự đoán. **[Bạn]** là việc chỉ Minh Quang làm được (tài khoản, duyệt, máy thật); **[AI]** là việc code hoặc tài liệu trong repo do đội ngũ AI (Codex, Claude) làm; **[Cả hai]** cần phối hợp.
 
 | Giai đoạn | Mục tiêu | Trạng thái |
 | --- | --- | --- |
@@ -38,22 +38,22 @@ Cập nhật 31/10/2026. Đây là kế hoạch duy nhất từ hiện tại đ�
 
 Kết quả rà 30/10/2026: build từ clone sạch đạt; cấy 20 lỗi thử thì 17 bị bắt, 3 lọt, 1 trong số bị bắt làm test treo. Sau khi sửa: cả 3 lỗi đã lọt đều bị bắt, thêm 5 lỗi cấy mới ở phần tải cập nhật và màn chào cũng bị bắt, test treo hoặc crash đều báo đúng tên.
 
-- [x] **[Claude]** Màn chào: giữ ngôn ngữ đang xem trước khi Windows đổi cài đặt giao diện. Trước đây `PreferenceChanged` áp lại ngôn ngữ đã lưu.
-- [x] **[Claude]** Thêm timeout cho từng nhóm test, báo đúng vị trí bị treo. Trước đây CI chờ hết 20 phút mà không biết test nào hỏng.
-- [x] **[Claude]** Sửa test giới hạn kích thước file cài đặt: dùng JSON hợp lệ quá 2 MiB, vì test cũ đạt nhờ lỗi parse.
-- [x] **[Claude]** Thêm test `IsAllowedPath` từ chối thư mục khác `HoverBox`.
-- [x] **[Claude]** Tách phần tải bản cập nhật để test tự động được checksum, kích thước và redirect mà không cần chữ ký thật.
-- [x] **[Claude]** Bật `ContinuousIntegrationBuild` trên CI để build tái lập được ở mọi thư mục.
-- [x] **[Claude]** Chuyển các test logic thuần về bộ core. Một số test trước đây CI không chạy ở bộ nào.
+- [x] **[AI]** Màn chào: giữ ngôn ngữ đang xem trước khi Windows đổi cài đặt giao diện. Trước đây `PreferenceChanged` áp lại ngôn ngữ đã lưu.
+- [x] **[AI]** Thêm timeout cho từng nhóm test, báo đúng vị trí bị treo. Trước đây CI chờ hết 20 phút mà không biết test nào hỏng.
+- [x] **[AI]** Sửa test giới hạn kích thước file cài đặt: dùng JSON hợp lệ quá 2 MiB, vì test cũ đạt nhờ lỗi parse.
+- [x] **[AI]** Thêm test `IsAllowedPath` từ chối thư mục khác `HoverBox`.
+- [x] **[AI]** Tách phần tải bản cập nhật để test tự động được checksum, kích thước và redirect mà không cần chữ ký thật.
+- [x] **[AI]** Bật `ContinuousIntegrationBuild` trên CI để build tái lập được ở mọi thư mục.
+- [x] **[AI]** Chuyển các test logic thuần về bộ core. Một số test trước đây CI không chạy ở bộ nào.
 
 **Xong khi:** các lỗi cấy thử đã lọt đều bị test bắt; toàn bộ test và gate đạt.
 
 ## Giai đoạn 2. Đưa code lên GitHub
 
 - [ ] **[Bạn]** Xem diff hai nhánh; bỏ qua commit format `79c57b8` vì chỉ đổi khoảng trắng.
-- [x] **[Claude]** Push `fix/release-readiness` và `chore/pro-polish`, mở PR #8 và #9. Lần chạy đầu cho thấy CI đỏ vì hết dung lượng artifact, không phải vì lỗi code; đã sửa workflow để upload không chặn các gate. CI của cả hai PR xanh.
+- [x] **[AI]** Push `fix/release-readiness` và `chore/pro-polish`, mở PR #8 và #9. Lần chạy đầu cho thấy CI đỏ vì hết dung lượng artifact, không phải vì lỗi code; đã sửa workflow để upload không chặn các gate. CI của cả hai PR xanh.
 - [x] **[Cả hai]** Merge #8 vào `main`, đổi base của #9 sang `main`, rồi merge #9. `main` ở `1ac08b9` chứa đủ commit của cả hai PR; Verify chạy tay trên commit này xanh. GitHub không xử lý sự kiện push của lần merge #9 nên #9 kẹt ở Open và đã được đóng tay ngày 31/10/2026. Dòng "Closed with unmerged commits" trên trang #9 là dữ liệu cũ.
-- [ ] **[Claude]** Xác nhận push lên `main` tự chạy Verify trở lại, bằng lần merge đầu tiên sau `1ac08b9`.
+- [x] **[AI]** Xác nhận push lên `main` tự chạy Verify trở lại: merge #10 (`be89077`) tự chạy Verify #54, xanh.
 - [ ] **[Bạn]** Xóa Release nháp của beta.1 trên trang Releases nếu còn. Nếu bản đó đã publish thì dừng lại, đừng xóa.
 - [ ] **[Bạn]** Chạy thử bộ cài trên máy của bạn: trang thông báo và chữ tiếng Việt hiển thị đúng, cài và gỡ được.
 
@@ -66,7 +66,7 @@ Làm trước khi chuyển Public, vì sau đó nội dung có thể đã bị l
 ### Quyết định về lịch sử Git
 
 - [ ] **[Bạn]** Quyết định về link liên hệ cá nhân cũ: link không còn trong code hiện tại nhưng vẫn nằm trong lịch sử, ở 19 commit (các file `SECURITY.md`, `PRIVACY.md`, `Nepply.iss`, `SettingsWindow.xaml.cs`, `BETA_NOTICE.txt`, `README.md`). Giữ nguyên thì link công khai cùng repo. Muốn xóa phải viết lại lịch sử `main`, nên làm khi chưa có fork hay PR nào.
-- [ ] **[Claude]** Rà lại toàn bộ lịch sử ngay trước khi Public: lần rà cũ chỉ có 25 commit, nay repo có hơn 70 commit trên mọi nhánh. Không tìm thấy khóa hay token ở lần quét 26/10/2026, nhưng phải quét lại bản cuối.
+- [x] **[AI]** Rà toàn bộ lịch sử: quét 86 commit trên mọi nhánh ngày 01/11/2026, không thấy mẫu khóa hay token, đường dẫn máy cá nhân, email cá nhân hay file nhạy cảm từng được thêm. Đối chứng: cùng cách quét tìm đúng 19 commit chứa link liên hệ. Đây là quét theo mẫu, không chứng minh tuyệt đối. Quét lại nếu có thêm nhiều commit trước khi Public.
 
 ### Cài đặt GitHub
 
@@ -79,7 +79,7 @@ Làm trước khi chuyển Public, vì sau đó nội dung có thể đã bị l
 - [ ] **[Bạn] Bảo vệ nhánh `main`**: Settings → Rules → Rulesets → New branch ruleset, target `main`: chặn force push và xóa nhánh, yêu cầu status check `build` (workflow *Verify Windows build*). Có thể bật *Require a pull request* với 0 approval nếu muốn mọi thay đổi đi qua PR.
 - [ ] **[Bạn] Bảo vệ tag**: thêm tag ruleset cho `v*`, chỉ bạn được tạo/xóa.
 - [ ] **[Bạn] Môi trường release**: Settings → Environments → New environment `release` → *Required reviewers*: chính bạn; *Deployment branches and tags*: chỉ tag `v*`.
-- [ ] **[Bạn]** Duyệt hoặc đóng các PR Dependabot đang mở (CI phải xanh trước khi merge).
+- [x] **[Bạn]** Duyệt hoặc đóng các PR Dependabot đang mở (CI phải xanh trước khi merge). Ngày 01/11/2026 không có PR nào đang mở.
 - [ ] **[Bạn] Chuyển Public**: Settings → General → Danger Zone → Change repository visibility → Public.
 - [ ] **[Bạn]** Sau khi Public, mở thử `…/security/advisories/new` và trang Issues. Xem workflow CodeQL đã chạy (trước đó nó tự bỏ qua).
 - [ ] **[Bạn]** Thêm status check của CodeQL vào ruleset nếu muốn bắt buộc.
@@ -88,7 +88,7 @@ Làm trước khi chuyển Public, vì sau đó nội dung có thể đã bị l
 
 ## Giai đoạn 4. Phát hành `2.0.0-rc.1` chưa ký
 
-- [ ] **[Claude]** Viết ghi chú phát hành RC song ngữ, ghi rõ bản chưa ký và cách xử lý cảnh báo Windows.
+- [x] **[AI]** Viết ghi chú phát hành RC song ngữ, ghi rõ bản chưa ký và cách xử lý cảnh báo Windows: [RELEASE_2.0.0-rc.1.md](RELEASE_2.0.0-rc.1.md).
 - [ ] **[Bạn]** Kiểm tra dung lượng artifact trong Settings → Billing and licensing. `release.yml` cần upload bản build để tạo Release, nên hết dung lượng sẽ làm phát hành thất bại. Artifact cũ tự hết hạn; dung lượng được tính lại sau 6 đến 12 giờ.
 - [ ] **[Bạn]** Chạy thử: Actions → *Release build* → Run workflow (chỉ build, không tạo Release). Đây là lần đầu workflow chạy trên GitHub; kiểm tra artifact `nepply-release-unsigned`.
 - [ ] **[Cả hai]** Tạo tag `v2.0.0-rc.1` từ `main` và push. Bạn duyệt bước `release` khi GitHub hỏi.
@@ -111,10 +111,10 @@ Làm trước khi chuyển Public, vì sau đó nội dung có thể đã bị l
 
 Bản chưa ký không thể tự cập nhật, nên phải có một RC đã ký để kiểm thật đường cập nhật lên `2.0.0`.
 
-- [ ] **[Claude]** Thêm bước gửi ký vào `release.yml` (action SignPath pin theo SHA): ký `Nepply.exe` + `Nepply.DesktopGuardian.exe`, dựng lại Setup với `-SignedUninstallerDirectory`, ký Setup, tạo checksum sau ký.
-- [ ] **[Claude]** Ký một bản thử rồi chạy `pwsh scripts/Get-SignerPolicy.ps1 -File <Setup-đã-ký>`, đưa kết quả vào `UpdatePolicy.Signers` để bật tự cập nhật.
-- [ ] **[Claude]** Mở public mode trong `scripts/Build-Distribution.ps1` (hiện từ chối khi thiếu `-InternalOnly`).
-- [ ] **[Claude]** Bổ sung attribution SignPath đúng yêu cầu vào README và chính sách ký.
+- [ ] **[AI]** Thêm bước gửi ký vào `release.yml` (action SignPath pin theo SHA): ký `Nepply.exe` + `Nepply.DesktopGuardian.exe`, dựng lại Setup với `-SignedUninstallerDirectory`, ký Setup, tạo checksum sau ký.
+- [ ] **[AI]** Ký một bản thử rồi chạy `pwsh scripts/Get-SignerPolicy.ps1 -File <Setup-đã-ký>`, đưa kết quả vào `UpdatePolicy.Signers` để bật tự cập nhật.
+- [ ] **[AI]** Mở public mode trong `scripts/Build-Distribution.ps1` (hiện từ chối khi thiếu `-InternalOnly`).
+- [ ] **[AI]** Bổ sung attribution SignPath đúng yêu cầu vào README và chính sách ký.
 - [ ] **[Cả hai]** Phát hành `2.0.0-rc.2` (hoặc RC kế tiếp) đã ký. Chạy `Verify-Release.ps1 -RequireSigned -AllowedSignerThumbprints <thumbprint> -Uninstaller <unins000.exe từ lượt cài thật>`.
 
 **Xong khi:** một bản RC đã ký được phát hành và qua `Verify-Release`.
@@ -123,13 +123,13 @@ Bản chưa ký không thể tự cập nhật, nên phải có một RC đã k�
 
 Không chặn việc xin chữ ký, có thể làm song song từ giai đoạn 4.
 
-- [ ] **[Claude]** Mở mục Desktop không chặn luồng giao diện, để shortcut trỏ tới ổ mạng mất kết nối không làm panel đơ.
+- [ ] **[AI]** Mở mục Desktop không chặn luồng giao diện, để shortcut trỏ tới ổ mạng mất kết nối không làm panel đơ.
 - [ ] **[Cả hai]** Chạy bài đo dài 24 giờ (`scripts/Run-UiSoak.ps1`), phân tích CPU, RAM, handle.
-- [ ] **[Claude]** Rà trợ năng: điều hướng bằng bàn phím, trình đọc màn hình, High Contrast.
+- [ ] **[AI]** Rà trợ năng: điều hướng bằng bàn phím, trình đọc màn hình, High Contrast.
 - [ ] **[Bạn]** Nhờ người bản ngữ duyệt bản dịch Nhật, Đức, Trung, Nga, Pháp, Thái, cả app lẫn bộ cài.
 - [ ] **[Bạn]** Nhờ người đọc lại bản dịch tiếng Việt của bộ cài.
-- [ ] **[Claude]** Tùy chọn tự kiểm tra cập nhật định kỳ, mặc định tắt, cập nhật chính sách quyền riêng tư.
-- [ ] **[Claude]** Chứng thực nguồn gốc build (`actions/attest-build-provenance`) để người dùng kiểm file đúng từ source.
+- [ ] **[AI]** Tùy chọn tự kiểm tra cập nhật định kỳ, mặc định tắt, cập nhật chính sách quyền riêng tư.
+- [ ] **[AI]** Chứng thực nguồn gốc build (`actions/attest-build-provenance`) để người dùng kiểm file đúng từ source.
 - [ ] **[Cả hai]** Xử lý các lỗi nhận được từ bản RC.
 
 **Xong khi:** không còn lỗi nặng đang mở; bài đo 24 giờ không có dấu hiệu rò rỉ.
@@ -154,10 +154,10 @@ Làm bằng đúng file đã ký. Dùng VM Windows 11 cài mới (Hyper-V hoặc
 
 ## Giai đoạn 9. Phát hành `2.0.0`
 
-- [ ] **[Claude]** Đổi `Version`/`InformationalVersion` thành `2.0.0` và `FileVersion` thành `2.0.0.100` trong `Nepply.csproj` và `Nepply.DesktopGuardian.csproj`.
-- [ ] **[Claude]** Bỏ trang thông báo `RELEASE_NOTICE.txt` khỏi bộ cài (`InfoBeforeFile`, `[Files]`, hai script đóng gói) và banner RC trong README, hướng dẫn, ghi chú phát hành.
-- [ ] **[Claude]** Tạo lại ảnh README theo `docs/images/README.md` (ảnh hiện tại lấy từ `ff63ba9`, trước các thay đổi giao diện gần đây).
-- [ ] **[Claude]** Hoàn thiện `RELEASE_2.0.0.md` và CHANGELOG; cập nhật mục giới hạn về tự cài cập nhật.
+- [ ] **[AI]** Đổi `Version`/`InformationalVersion` thành `2.0.0` và `FileVersion` thành `2.0.0.100` trong `Nepply.csproj` và `Nepply.DesktopGuardian.csproj`.
+- [ ] **[AI]** Bỏ trang thông báo `RELEASE_NOTICE.txt` khỏi bộ cài (`InfoBeforeFile`, `[Files]`, hai script đóng gói) và banner RC trong README, hướng dẫn, ghi chú phát hành.
+- [ ] **[AI]** Tạo lại ảnh README theo `docs/images/README.md` (ảnh hiện tại lấy từ `ff63ba9`, trước các thay đổi giao diện gần đây).
+- [ ] **[AI]** Hoàn thiện `RELEASE_2.0.0.md` và CHANGELOG; cập nhật mục giới hạn về tự cài cập nhật.
 - [ ] **[Cả hai]** Tạo tag `v2.0.0`, phát hành Release chính thức (không đánh dấu pre-release). Chạy `Verify-Release.ps1 -RequireSigned -RequireStable`.
 - [ ] **[Bạn]** Kiểm tra người dùng RC đã ký nhận được bản 2.0.0 qua cửa sổ cập nhật.
 
@@ -169,31 +169,31 @@ Làm dần, mỗi mục một PR riêng. Không gộp với thay đổi tính n�
 
 ### Test
 
-- [ ] **[Claude]** Chuyển test sang xUnit hoặc MSTest theo từng nhóm, để chạy được bằng `dotnet test` và báo giá trị thực tế so với mong đợi.
-- [ ] **[Claude]** Tách `tests/Nepply.Tests/Program.cs` (hơn 1500 dòng) thành các file theo tính năng.
-- [ ] **[Claude]** Thay các test phụ thuộc thời gian bằng đồng hồ giả hoặc chờ theo điều kiện.
+- [ ] **[AI]** Chuyển test sang xUnit hoặc MSTest theo từng nhóm, để chạy được bằng `dotnet test` và báo giá trị thực tế so với mong đợi.
+- [ ] **[AI]** Tách `tests/Nepply.Tests/Program.cs` (hơn 1500 dòng) thành các file theo tính năng.
+- [ ] **[AI]** Thay các test phụ thuộc thời gian bằng đồng hồ giả hoặc chờ theo điều kiện.
 
 ### Cấu trúc
 
-- [ ] **[Claude]** Sửa namespace cho khớp thư mục (`Nepply.Features.*`, `Nepply.Platform.*`), một PR cơ học riêng.
-- [ ] **[Claude]** Tách `MainWindow` (876 dòng): vị trí cửa sổ, kích hoạt từ cạnh, xem trước Settings, bố cục.
-- [ ] **[Claude]** Tách `SettingsWindow` (745 dòng) theo từng nhóm cài đặt.
-- [ ] **[Claude]** Tách `AppSettings` thành dữ liệu thuần; bỏ phụ thuộc vào giao diện và kho lưu file.
-- [ ] **[Claude]** Bỏ các lời gọi ngược lên `MainWindow` từ `IconPanel`, `MonitorPanel`, `TrayMenu`, `WelcomeWindow`.
-- [ ] **[Claude]** Bỏ các constructor chỉ dành cho test trong `DesktopIconService`, dùng một interface scanner.
-- [ ] **[Claude]** Tách các dòng dồn nhiều lệnh và bỏ biến `_settings` cục bộ che field trong `MainWindow`.
+- [ ] **[AI]** Sửa namespace cho khớp thư mục (`Nepply.Features.*`, `Nepply.Platform.*`), một PR cơ học riêng.
+- [ ] **[AI]** Tách `MainWindow` (876 dòng): vị trí cửa sổ, kích hoạt từ cạnh, xem trước Settings, bố cục.
+- [ ] **[AI]** Tách `SettingsWindow` (745 dòng) theo từng nhóm cài đặt.
+- [ ] **[AI]** Tách `AppSettings` thành dữ liệu thuần; bỏ phụ thuộc vào giao diện và kho lưu file.
+- [ ] **[AI]** Bỏ các lời gọi ngược lên `MainWindow` từ `IconPanel`, `MonitorPanel`, `TrayMenu`, `WelcomeWindow`.
+- [ ] **[AI]** Bỏ các constructor chỉ dành cho test trong `DesktopIconService`, dùng một interface scanner.
+- [ ] **[AI]** Tách các dòng dồn nhiều lệnh và bỏ biến `_settings` cục bộ che field trong `MainWindow`.
 
 ### Đơn giản hóa và dung lượng
 
 - [ ] **[Cả hai]** Xem lại Guardian: exe 70 MB và khoảng 770 dòng cho việc khôi phục icon. Thử bản biên dịch native để giảm dung lượng.
 - [ ] **[Cả hai]** Giảm dung lượng app: `Nepply.exe` 194 MB, Setup 78 MB. Thử nén single-file, đo ảnh hưởng tới thời gian khởi động.
 - [ ] **[Bạn]** Quyết định về Microsoft Store: làm tiếp hoặc bỏ code và script MSIX.
-- [ ] **[Claude]** Gom bớt script kiểm tra trùng lặp, thêm số phiên bản lấy tự động từ tag.
+- [ ] **[AI]** Gom bớt script kiểm tra trùng lặp, thêm số phiên bản lấy tự động từ tag.
 
 ### Phân phối và vận hành
 
 - [ ] **[Cả hai]** Đưa Nepply lên winget sau khi có bản ký.
-- [ ] **[Claude]** Khi Inno Setup trong `release.yml` đổi phiên bản, đối chiếu `packaging/inno/Languages/Vietnamese.isl` với `Default.isl` mới.
-- [ ] **[Claude]** Bỏ dần tên legacy `HoverBox` (mutex `Local\HoverBox-SetupGuard`, thư mục `%LOCALAPPDATA%\HoverBox`) sau khi không còn người dùng bản cũ; giữ ít nhất một bản phát hành có migration.
+- [ ] **[AI]** Khi Inno Setup trong `release.yml` đổi phiên bản, đối chiếu `packaging/inno/Languages/Vietnamese.isl` với `Default.isl` mới.
+- [ ] **[AI]** Bỏ dần tên legacy `HoverBox` (mutex `Local\HoverBox-SetupGuard`, thư mục `%LOCALAPPDATA%\HoverBox`) sau khi không còn người dùng bản cũ; giữ ít nhất một bản phát hành có migration.
 - [ ] **[Bạn]** Ký mọi bản bằng cùng chứng thư: uy tín SmartScreen tăng dần theo lượt tải của cùng chứng thư.
 - [ ] **[Bạn]** Nếu nhận donate: kiểm lại điều kiện giấy phép thương mại của Inno Setup.

@@ -2,6 +2,8 @@
 
 **2.0.0 · October / tháng 10 năm 2026**
 
+Author / Tác giả: Minh Quang · AI team / Đội ngũ AI: Codex, Claude
+
 Choose your language below. Both user-facing editions describe the same release status.
 
 Chọn ngôn ngữ bên dưới. Hai bản hướng dẫn người dùng giữ cùng trạng thái phát hành.
@@ -34,6 +36,7 @@ Các tài liệu triển khai chi tiết dưới đây hiện bằng tiếng Vi�
 
 ## 📦 For maintainers · Dành cho người phát hành
 
+- [Release 2.0.0-rc.1 — English / Tiếng Việt](release/RELEASE_2.0.0-rc.1.md)
 - [Release 2.0.0 draft — English / Tiếng Việt](release/RELEASE_2.0.0.md)
 - [Packaging / Đóng gói](../packaging/README.md) · [MSIX / Store](../packaging/msix/README.md)
 - [Release plan / Kế hoạch phát hành](release/PUBLIC_RELEASE_CHECKLIST.md)
