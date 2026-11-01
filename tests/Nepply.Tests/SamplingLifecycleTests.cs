@@ -103,8 +103,9 @@ internal static class SamplingLifecycleTests
         check("Disabling network clears published rates", SpinWait.SpinUntil(() => monitor.GetSnapshot().Sequence > sequence, 3000)
             && monitor.GetSnapshot().NetDownload == null && monitor.GetSnapshot().NetworkName == "");
         long count = monitor.NetworkSampleCount;
-        Thread.Sleep(1150);
-        check("Network stays asleep while CPU/RAM still update", monitor.NetworkSampleCount == count && monitor.GetSnapshot().Sequence > sequence + 1);
+        // Wait for samples, not for a fixed time: a busy CI runner can miss a 1 s interval.
+        bool sampled = SpinWait.SpinUntil(() => monitor.GetSnapshot().Sequence > sequence + 2, 5000);
+        check("Network stays asleep while CPU/RAM still update", sampled && monitor.NetworkSampleCount == count);
         monitor.Dispose(); check("Network lifecycle fixture shuts down", monitor.Completion.Wait(3000));
     }
 }
