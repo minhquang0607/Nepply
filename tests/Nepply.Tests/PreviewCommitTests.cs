@@ -28,6 +28,24 @@ internal static class PreviewCommitTests
             catch (Exception ex) { check("Apply fixture: " + ex, false); appliedWindow.Close(); }
         }));
         appliedWindow.ShowDialog();
+        var updateTarget = new AppSettings(); int updateWrites = 0;
+        var updateWindow = new SettingsWindow(updateTarget, _ => updateWrites++) { Left = -10000, Top = -10000, ShowInTaskbar = false };
+        updateWindow.Dispatcher.BeginInvoke(new Action(() =>
+        {
+            try
+            {
+                var autoCheck = (CheckBox)updateWindow.FindName("AutoCheckUpdates");
+                check("Daily update check starts unticked and visible", autoCheck.IsChecked == false && autoCheck.Visibility == Visibility.Visible);
+                autoCheck.IsChecked = true;
+                typeof(SettingsWindow).GetMethod("Apply_Click", BindingFlags.Instance | BindingFlags.NonPublic)!
+                    .Invoke(updateWindow, new object[] { updateWindow, new RoutedEventArgs() });
+                check("Apply saves the daily update check", updateTarget.AutoCheckUpdates && updateWrites == 1);
+                check("Settings search finds the daily update check", Nepply.Services.SettingsSearch.Find("cập nhật").Any(entry => entry.Control == "AutoCheckUpdates"));
+            }
+            catch (Exception ex) { check("Daily update fixture: " + ex, false); }
+            updateWindow.Close();
+        }));
+        updateWindow.ShowDialog();
         foreach (bool fail in new[] { true, false })
         {
             var target = new AppSettings(); int writes = 0;

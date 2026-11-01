@@ -49,7 +49,7 @@ internal readonly record struct SettingsChangeSet(SettingsChange Changes)
         nameof(AppSettings.GridColumns) or nameof(AppSettings.GridRows)
             or nameof(AppSettings.TopGridColumns) or nameof(AppSettings.TopGridRows) => SettingsChange.Grid,
         nameof(AppSettings.HideDelayMs) or nameof(AppSettings.TriggerDelayMs)
-            or nameof(AppSettings.TriggerZoneSize) => SettingsChange.Interaction,
+            or nameof(AppSettings.TriggerZoneSize) or nameof(AppSettings.AutoCheckUpdates) => SettingsChange.Interaction,
         nameof(AppSettings.ShowHiddenFiles) or nameof(AppSettings.ShowSystemIcons)
             or nameof(AppSettings.MergeEquivalentShortcuts) => SettingsChange.Desktop,
         nameof(AppSettings.ShowMonitor) or nameof(AppSettings.HardwareSensorsEnabled)

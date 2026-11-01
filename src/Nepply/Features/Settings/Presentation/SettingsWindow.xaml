@@ -95,6 +95,7 @@
      
      <WrapPanel><Button Content="{DynamicResource Loc.Privacy}" Tag="PRIVACY.md" Click="OpenLocalDocument_Click" Margin="0,0,8,8"/><Button Content="{DynamicResource Loc.ThirdParty}" Tag="THIRD_PARTY_NOTICES.md" Click="OpenLocalDocument_Click" Margin="0,0,8,8"/><Button x:Name="ReportProblemButton" Content="{DynamicResource Loc.ReportProblem}" Click="ReportProblem_Click" Margin="0,0,8,8"/><Button Content="{DynamicResource Loc.Support}" Click="OpenSupport_Click" Margin="0,0,0,8"/></WrapPanel>
      <WrapPanel Margin="0,4,0,8"><Button Content="{DynamicResource Loc.UpdateCheck}" Click="CheckUpdate_Click" Margin="0,0,8,0"/><Button x:Name="GuideButton" Content="{DynamicResource Loc.GuideOpen}" Click="Guide_Click" Margin="0,0,8,0"/><Button x:Name="CopyDiagnosticsButton" Content="{DynamicResource Loc.CopyDiagnostics}" Click="CopyDiagnostics_Click"/></WrapPanel>
+     <CheckBox x:Name="AutoCheckUpdates" Content="{DynamicResource Loc.UpdateAutoCheck}" Margin="0,0,0,8"/>
      <TextBlock x:Name="InfoStatus" TextWrapping="Wrap" Style="{StaticResource Caption}" AutomationProperties.LiveSetting="Polite"/>
     </StackPanel></Border>
     <Border x:Name="ShortcutsSection" Visibility="Collapsed" Style="{StaticResource SectionCard}" Margin="0,0,0,14" Padding="20"><StackPanel>

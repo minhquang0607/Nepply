@@ -22,6 +22,7 @@ internal static class ReleaseHardeningTests
         AccentPaletteTests.Run(check);
         DesktopScanReplyTests.Run(check);
         SecurityBoundaryTests.Run(check);
+        BackgroundUpdateCheckTests.Run(check);
         SecurityRegressionTests.Run(output, check);
         SamplingLifecycleTests.Run(check);
         PackageIdentityTests.Run(check);

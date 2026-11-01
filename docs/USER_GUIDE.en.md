@@ -81,7 +81,7 @@ Enable startup in Settings and choose Apply or OK. Windows may manage or disable
 
 ## 🔄 Updates
 
-Open **Settings → Application → Check for updates**. A suitable release shows its version and notes so you can update or defer. There is no scheduled background update check.
+Open **Settings → Application → Check for updates**. A suitable release shows its version and notes so you can update or defer. Turn on **Check for updates daily** to get a tray notification when a new version exists; the option is off by default and never downloads anything by itself.
 
 **Current limit:** automatic EXE installation is not enabled for public release until signing configuration and acceptance testing are complete. Portable cannot replace its own files. In those cases the update window offers **Open download page**, linking to the official release so you can download the new installer yourself. Internal builds are not an official update channel; check [Releases](https://github.com/minhquang0607/Nepply/releases) when downloads are published.
 

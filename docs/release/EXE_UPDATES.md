@@ -2,7 +2,9 @@
 
 ## Phạm vi hiện tại
 
-Settings → Ứng dụng → Kiểm tra cập nhật. Không polling nền. Bản cài EXE có
+Settings → Ứng dụng → Kiểm tra cập nhật. Tùy chọn **Tự kiểm tra cập nhật mỗi
+ngày** mặc định tắt, tối đa một yêu cầu mỗi ngày và chỉ báo ở khay hệ thống,
+không tải hay cài. Bản cài EXE có
 luồng tải/xác minh/bàn giao Setup; portable chỉ xem thông tin, chưa thay file;
 MSIX dùng Store và không gọi feed EXE.
 

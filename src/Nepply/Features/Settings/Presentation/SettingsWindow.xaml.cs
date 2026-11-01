@@ -303,6 +303,8 @@ public partial class SettingsWindow : Window
         IntervalSlider.Value = _draft.MonitorUpdateIntervalMs;
         SuspendMonitor.IsChecked = _draft.SuspendMonitorWhenHidden;
         HideIcons.IsChecked = _draft.HideDesktopIcons; AutoStart.IsChecked = _draft.AutoStart;
+        AutoCheckUpdates.IsChecked = _draft.AutoCheckUpdates;
+        AutoCheckUpdates.Visibility = Services.ProcessPackageIdentity.IsPackaged ? Visibility.Collapsed : Visibility.Visible;
         SingleClick.IsChecked = _draft.SingleClickToOpen;
         MergeShortcuts.IsChecked = _draft.MergeEquivalentShortcuts;
         CustomAccent.Text = _draft.CustomAccent; GpuModeChoice.SelectedIndex = (int)_draft.GpuDisplay;
@@ -405,6 +407,7 @@ public partial class SettingsWindow : Window
         _draft.MonitorUpdateIntervalMs = (int)IntervalSlider.Value;
         _draft.SuspendMonitorWhenHidden = SuspendMonitor.IsChecked == true;
         _draft.HideDesktopIcons = HideIcons.IsChecked == true; _draft.AutoStart = AutoStart.IsChecked == true;
+        _draft.AutoCheckUpdates = AutoCheckUpdates.IsChecked == true;
         _draft.SingleClickToOpen = SingleClick.IsChecked == true;
         _draft.GpuDisplay = (GpuDisplayMode)Math.Max(0, GpuModeChoice.SelectedIndex);
         _draft.GpuIdentifier = GpuChoice.SelectedValue as string ?? ""; _draft.IntegratedGpuIdentifier = IntegratedGpuChoice.SelectedValue as string ?? "";

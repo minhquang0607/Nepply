@@ -647,6 +647,14 @@ public partial class MainWindow : Window
     private void Refresh_Click(object sender, RoutedEventArgs e) => RefreshIcons();
     public void RefreshIcons() => _icons.ScanDesktopIcons();
     private void Settings_Click(object sender, RoutedEventArgs e) => OpenSettings();
+    private const int ApplicationSettingsSection = 4;
+    private int? _settingsStartSection;
+    internal void OpenUpdateSettings()
+    {
+        _settingsStartSection = ApplicationSettingsSection;
+        OpenSettings();
+        _settingsStartSection = null;
+    }
     public void OpenSettings()
     {
         Modules.Updates.PreparedUpdate? pendingUpdate = null;
@@ -669,6 +677,7 @@ public partial class MainWindow : Window
                 settings.PreviewChanged += PreviewSettings;
                 settings.SettingsCommitted += SettingsApplied;
                 settings.PreviewViewport = () => IconPanelView.GridViewport;
+                if (_settingsStartSection is { } section) settings.ShowSettingsSection(section);
                 ShowPanel();
                 settings.ShowDialog();
                 pendingUpdate = settings.PendingUpdate;

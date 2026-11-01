@@ -13,6 +13,8 @@ public partial class App : Application
     public App() { }
     public App(bool testHost) : this() => _testHost = testHost;
     private TaskbarIcon? _tray;
+    private Modules.Updates.UpdateService? _updateService;
+    private Modules.Updates.BackgroundUpdateCheck? _updateCheck;
     private Action? _detachTrayLanguage;
     private Icon? _icon;
     private Mutex? _instance;
@@ -197,6 +199,13 @@ public partial class App : Application
         _tray.ContextMenu = new Views.TrayMenu(window, OpenLogDirectory,
             () => { if (!window.ConfirmExit()) return; window.Cleanup(); Shutdown(); });
         _tray.TrayMouseDoubleClick += (_, _) => window.OpenForInteraction();
+        // Preview and smoke sessions must stay off the network.
+        if (_preview || ProcessPackageIdentity.IsPackaged) return;
+        _tray.TrayBalloonTipClicked += (_, _) => window.OpenUpdateSettings();
+        _updateService = new Modules.Updates.UpdateService();
+        _updateCheck = new Modules.Updates.BackgroundUpdateCheck(() => window.Settings.AutoCheckUpdates, _updateService.CheckAsync, release =>
+            _tray.ShowBalloonTip("Nepply", LocalizationService.Render(UserMessage.FromKey("UpdateAutoFound", release.Tag.TrimStart('v'))), BalloonIcon.Info));
+        _ = _updateCheck.RunAsync();
     }
     internal static Action AttachTrayLanguage(TaskbarIcon tray)
     {
@@ -233,6 +242,8 @@ public partial class App : Application
     {
         Helpers.CleanupSequence.Run(
             ("Main window", () => (MainWindow as MainWindow)?.Cleanup()),
+            ("Update check", () => { _updateCheck?.Dispose(); _updateService?.Dispose(); }
+        ),
             ("Tray language", () => { _detachTrayLanguage?.Invoke(); _detachTrayLanguage = null; }
         ),
             ("Tray", () => _tray?.Dispose()),

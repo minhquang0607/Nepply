@@ -40,6 +40,7 @@ Consolidated **17 October 2026**. This is a summary of development changes, not 
 ### Updates & recovery
 
 - Update window with version, notes, progress and retry states.
+- **Check for updates daily** option, off by default, shows a tray notification when a new version exists.
 - When this build cannot install an update itself (portable or not yet signed), the update window offers **Open download page**, linking to the official GitHub release.
 - Release notes in the update window appear as clean text instead of raw Markdown.
 - Setup follows your Windows language: Vietnamese, English, Japanese, German, Simplified Chinese, Russian, French and Thai.

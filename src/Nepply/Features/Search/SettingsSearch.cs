@@ -46,6 +46,7 @@ internal static class SettingsSearch
         new("Theo dõi · Tiết kiệm khi ẩn",3,"EcoMode","monitor eco tài nguyên cpu ram"),
         new("Theo dõi · Kết nối mạng",3,"NetworkChoice","monitor wifi ethernet network"),
         new("Ứng dụng · Khởi động Windows",4,"AutoStart","startup tự chạy nền"),
+        new("Ứng dụng · Tự kiểm tra cập nhật",4,"AutoCheckUpdates","update phiên bản mới định kỳ hằng ngày"),
         new("Ứng dụng · Bố cục mẫu",4,"PresetCards","preset gọn thoáng dải ngang mẫu"),
         new("Ứng dụng · Bố cục",4,"ProfileStatus","profile nhập xuất bố cục chia sẻ"),
         new("Ứng dụng · Quyền riêng tư",4,"AboutVersion","privacy dữ liệu analytics hỗ trợ tác giả phiên bản")
@@ -95,6 +96,7 @@ internal static class SettingsSearch
             "EcoMode" => "Eco",
             "NetworkChoice" => "NetworkAdapter",
             "AutoStart" => "Startup",
+            "AutoCheckUpdates" => "UpdateAutoCheck",
             "PresetCards" or "ProfileStatus" => "Layouts",
             "AboutVersion" => "About",
             { } control when control.StartsWith("Shortcut", StringComparison.Ordinal) => control,

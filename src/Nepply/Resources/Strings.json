@@ -6,6 +6,8 @@
   "UpdateRetry": ["Thử lại","Try again","再試行","Erneut versuchen","重试","Повторить","Réessayer","ลองอีกครั้ง"],
   "UpdateVerifying": ["Đang xác minh gói cập nhật…","Verifying the update…","更新を検証中…","Update wird geprüft…","正在验证更新…","Проверка обновления…","Vérification de la mise à jour…","กำลังตรวจสอบแพ็กเกจอัปเดต…"],
   "UpdateCheck": ["Kiểm tra cập nhật","Check for updates","更新を確認","Nach Updates suchen","检查更新","Проверить обновления","Rechercher des mises à jour","ตรวจสอบการอัปเดต"],
+  "UpdateAutoCheck": ["Tự kiểm tra cập nhật mỗi ngày","Check for updates daily","更新を毎日確認","Täglich nach Updates suchen","每天检查更新","Проверять обновления ежедневно","Rechercher des mises à jour chaque jour","ตรวจสอบการอัปเดตทุกวัน"],
+  "UpdateAutoFound": ["Đã có Nepply {0}. Bấm để mở Cài đặt.","Nepply {0} is available. Click to open Settings.","Nepply {0} が利用可能です。クリックして設定を開きます。","Nepply {0} ist verfügbar. Klicken, um die Einstellungen zu öffnen.","Nepply {0} 已发布。点击打开设置。","Доступна версия Nepply {0}. Нажмите, чтобы открыть настройки.","Nepply {0} est disponible. Cliquez pour ouvrir les paramètres.","Nepply {0} พร้อมใช้งานแล้ว คลิกเพื่อเปิดการตั้งค่า"],
   "UpdateLater": ["Để sau","Later","後で","Später","稍后","Позже","Plus tard","ภายหลัง"],
   "UpdateNow": ["Cập nhật ngay","Update now","今すぐ更新","Jetzt aktualisieren","立即更新","Обновить сейчас","Mettre à jour","อัปเดตตอนนี้"],
   "UpdateChecking": ["Đang kiểm tra phiên bản mới…","Checking for updates…","更新を確認中…","Updates werden geprüft…","正在检查更新…","Проверка обновлений…","Recherche de mises à jour…","กำลังตรวจสอบการอัปเดต…"],

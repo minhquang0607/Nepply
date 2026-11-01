@@ -4,7 +4,7 @@
 
 ## Tiếng Việt
 
-Cập nhật: 30/10/2026 · Nepply 2.0.0
+Cập nhật: 02/11/2026 · Nepply 2.0.0
 
 Nhà phát triển: Minh Quang  
 Hỗ trợ: https://github.com/minhquang0607/Nepply/issues
@@ -51,11 +51,11 @@ Khi bạn bấm **Kiểm tra cập nhật**, bản EXE/portable gửi yêu cầu
 
 Chỉ khi bạn chọn **Cập nhật ngay**, bản cài EXE mới tải Setup từ GitHub/CDN GitHub vào `%LOCALAPPDATA%/Nepply/Updates`. Windows có thể kết nối tới dịch vụ chứng thư để kiểm tra độ tin cậy/thu hồi chữ ký. Việc tự cài bị khóa nếu chưa cấu hình nhà phát hành tin cậy. Bản Store dùng cơ chế của Microsoft Store; portable chưa tự thay file.
 
-Hiện không có kiểm tra nền theo lịch, analytics hoặc crash upload. Đóng cửa sổ cập nhật hủy yêu cầu đang chờ/tải; xác minh chữ ký Windows đang chạy có thể cần thêm thời gian để kết thúc. Gói tải bị hủy/lỗi được dọn theo khả năng truy cập; Setup đã bắt đầu chạy được giữ lại để tránh xóa file nó đang cần. Lần tải tiếp theo dọn các gói cache do updater tạo đã cũ hơn 7 ngày, không xóa nội dung lạ hoặc file đang khóa.
+Tùy chọn **Tự kiểm tra cập nhật mỗi ngày** mặc định tắt. Khi bạn bật, bản EXE/portable gửi đúng yêu cầu trên tới GitHub tối đa một lần mỗi ngày trong lúc Nepply chạy. Nếu có bản mới, Nepply chỉ hiện thông báo ở khay hệ thống, không tự tải hay cài. Bản Store không có tùy chọn này. Không có analytics hoặc crash upload. Đóng cửa sổ cập nhật hủy yêu cầu đang chờ/tải; xác minh chữ ký Windows đang chạy có thể cần thêm thời gian để kết thúc. Gói tải bị hủy/lỗi được dọn theo khả năng truy cập; Setup đã bắt đầu chạy được giữ lại để tránh xóa file nó đang cần. Lần tải tiếp theo dọn các gói cache do updater tạo đã cũ hơn 7 ngày, không xóa nội dung lạ hoặc file đang khóa.
 
 ## English
 
-Updated: 30 October 2026 · Nepply 2.0.0. Developer: Minh Quang. Support: https://github.com/minhquang0607/Nepply/issues
+Updated: 2 November 2026 · Nepply 2.0.0. Developer: Minh Quang. Support: https://github.com/minhquang0607/Nepply/issues
 
 ### Summary
 
@@ -99,4 +99,4 @@ Choosing Check for updates sends an HTTPS request from the EXE/portable app to t
 
 Only choosing Update now starts a Setup download for the installed EXE edition from GitHub/CDN into `%LOCALAPPDATA%/Nepply/Updates`. Windows may contact certificate services for trust/revocation checks. Automatic installation is blocked without a configured trusted publisher. Store packages use Microsoft Store updates; portable does not replace its own files.
 
-There are no scheduled background checks, analytics or crash uploads. Closing the update window cancels pending requests/downloads; a Windows signature check already running may take longer to finish. Cancelled/failed downloads are removed where access permits; a running Setup is retained. A subsequent download removes updater-owned cache packages older than seven days, not unknown contents or locked files.
+The **Check for updates daily** option is off by default. When you turn it on, the EXE/portable app sends the same request to GitHub at most once a day while Nepply runs. If a new version exists, Nepply only shows a tray notification; it does not download or install anything. The Store edition does not have this option. There are no analytics or crash uploads. Closing the update window cancels pending requests/downloads; a Windows signature check already running may take longer to finish. Cancelled/failed downloads are removed where access permits; a running Setup is retained. A subsequent download removes updater-owned cache packages older than seven days, not unknown contents or locked files.
