@@ -139,7 +139,7 @@ Không chặn việc xin chữ ký, có thể làm song song từ giai đoạn 4
 - [ ] **[Bạn]** Nhờ người bản ngữ duyệt bản dịch Nhật, Đức, Trung, Nga, Pháp, Thái, cả app lẫn bộ cài.
 - [ ] **[Bạn]** Nhờ người đọc lại bản dịch tiếng Việt của bộ cài.
 - [ ] **[AI]** Tùy chọn tự kiểm tra cập nhật định kỳ, mặc định tắt, cập nhật chính sách quyền riêng tư.
-- [ ] **[AI]** Chứng thực nguồn gốc build (`actions/attest-build-provenance`) để người dùng kiểm file đúng từ source.
+- [x] **[AI]** Chứng thực nguồn gốc build (`actions/attest-build-provenance`) trong bước `draft-release`, chỉ chạy khi repo Public. Chưa chạy thật lần nào; kiểm bằng `gh attestation verify` trên tệp của bản đầu tiên có tag.
 - [ ] **[Cả hai]** Xử lý các lỗi nhận được từ bản RC.
 
 **Xong khi:** không còn lỗi nặng đang mở; bài đo 24 giờ không có dấu hiệu rò rỉ.

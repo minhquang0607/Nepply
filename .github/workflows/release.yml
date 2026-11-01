@@ -89,17 +89,30 @@ jobs:
     permissions:
       contents: write
       actions: read
+      attestations: write
+      id-token: write
     steps:
+      - name: Download build
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh run download $env:GITHUB_RUN_ID --name nepply-release-unsigned --dir release
+          if ($LASTEXITCODE -ne 0) { throw 'Could not download the build artifact.' }
+      # Lets users run `gh attestation verify` on the files attached below. Once
+      # signing lands, attest after it: signing changes the files' hashes.
+      - name: Attest build provenance
+        if: ${{ !github.event.repository.private }}
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: release/*
       - name: Attach to draft release
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           TAG: ${{ github.ref_name }}
         run: |
-          $files = Join-Path $env:RUNNER_TEMP 'release'
-          gh run download $env:GITHUB_RUN_ID --name nepply-release-unsigned --dir $files
-          if ($LASTEXITCODE -ne 0) { throw 'Could not download the build artifact.' }
-          $assets = @(Get-ChildItem -LiteralPath $files -File | ForEach-Object FullName)
+          $assets = @(Get-ChildItem -LiteralPath release -File | ForEach-Object FullName)
           $existing = gh release view $env:TAG --json isDraft 2>$null | ConvertFrom-Json
           if ($null -eq $existing) {
             gh release create $env:TAG @assets --draft --verify-tag --title "Nepply $($env:TAG.TrimStart('v'))" --notes 'UNSIGNED build. Review the assets and CHANGELOG before publishing.'

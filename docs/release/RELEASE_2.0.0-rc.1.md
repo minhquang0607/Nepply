@@ -24,6 +24,7 @@ Extract the complete portable archive and run `Nepply.exe`; keep `guardian` and 
 
 - Windows SmartScreen may warn about an unknown publisher, and Smart App Control may block the file.
 - Continue only if you downloaded it from this page and its SHA-256 matches `SHA256.json`.
+- To confirm a file was built from this repository, run `gh attestation verify <file> --repo minhquang0607/Nepply` with the GitHub CLI.
 - Never turn off Windows security features to install or run Nepply.
 - This build cannot update itself. The update window opens the Releases page, so install later versions by hand.
 
@@ -71,6 +72,7 @@ Với portable, giải nén **toàn bộ** và chạy `Nepply.exe`; không tách
 
 - Windows SmartScreen có thể cảnh báo nhà phát hành không xác định, và Smart App Control có thể chặn file.
 - Chỉ tiếp tục nếu bạn tải từ trang này và SHA-256 khớp với `SHA256.json`.
+- Muốn xác nhận file được build từ repo này, chạy `gh attestation verify <file> --repo minhquang0607/Nepply` bằng GitHub CLI.
 - Không tắt các tính năng bảo mật của Windows để cài hoặc chạy Nepply.
 - Bản này không tự cập nhật được. Cửa sổ cập nhật sẽ mở trang Releases, nên các bản sau cần cài tay.
 
