@@ -1,6 +1,6 @@
 # Kế hoạch phát hành Nepply 2.0.0
 
-Cập nhật 01/11/2026. Đây là kế hoạch duy nhất từ hiện tại đến sau bản chính thức. Làm từng giai đoạn theo thứ tự; giai đoạn sau chỉ bắt đầu khi giai đoạn trước đạt điều kiện **Xong khi**.
+Cập nhật 02/11/2026. Đây là kế hoạch duy nhất từ hiện tại đến sau bản chính thức. Làm từng giai đoạn theo thứ tự; giai đoạn sau chỉ bắt đầu khi giai đoạn trước đạt điều kiện **Xong khi**.
 
 Đánh dấu một mục khi đã hoàn tất và kiểm chứng thật, không đánh dấu theo dự đoán. **[Bạn]** là việc chỉ Minh Quang làm được (tài khoản, duyệt, máy thật); **[AI]** là việc code hoặc tài liệu trong repo do đội ngũ AI (Codex, Claude) làm; **[Cả hai]** cần phối hợp.
 
@@ -50,12 +50,12 @@ Kết quả rà 30/10/2026: build từ clone sạch đạt; cấy 20 lỗi thử
 
 ## Giai đoạn 2. Đưa code lên GitHub
 
-- [ ] **[Bạn]** Xem diff hai nhánh; bỏ qua commit format `79c57b8` vì chỉ đổi khoảng trắng.
+- [ ] **[Bạn]** Xem diff hai nhánh; bỏ qua commit format `f80d742` vì chỉ đổi khoảng trắng.
 - [x] **[AI]** Push `fix/release-readiness` và `chore/pro-polish`, mở PR #8 và #9. Lần chạy đầu cho thấy CI đỏ vì hết dung lượng artifact, không phải vì lỗi code; đã sửa workflow để upload không chặn các gate. CI của cả hai PR xanh.
-- [x] **[Cả hai]** Merge #8 vào `main`, đổi base của #9 sang `main`, rồi merge #9. `main` ở `1ac08b9` chứa đủ commit của cả hai PR; Verify chạy tay trên commit này xanh. GitHub không xử lý sự kiện push của lần merge #9 nên #9 kẹt ở Open và đã được đóng tay ngày 31/10/2026. Dòng "Closed with unmerged commits" trên trang #9 là dữ liệu cũ.
-- [x] **[AI]** Xác nhận push lên `main` tự chạy Verify trở lại: merge #10 (`be89077`) tự chạy Verify #54, xanh.
+- [x] **[Cả hai]** Merge #8 vào `main`, đổi base của #9 sang `main`, rồi merge #9. `main` ở `e1d92e8` chứa đủ commit của cả hai PR; Verify chạy tay trên commit này xanh. GitHub không xử lý sự kiện push của lần merge #9 nên #9 kẹt ở Open và đã được đóng tay ngày 31/10/2026. Dòng "Closed with unmerged commits" trên trang #9 là dữ liệu cũ.
+- [x] **[AI]** Xác nhận push lên `main` tự chạy Verify trở lại: merge #10 (`a0b0525`) tự chạy Verify #54, xanh.
 - [ ] **[Bạn]** Xóa Release nháp "Nepply 1.0.0" trên trang Releases. Ngày 01/11/2026 bản này vẫn là Draft, chưa publish.
-- [ ] **[Bạn]** Xóa các nhánh đã merge trên GitHub (trang Branches), nhánh nào cũng đã nằm trong `main`.
+- [ ] **[Bạn]** Xóa các nhánh đã merge trên GitHub (trang Branches), nhánh nào cũng đã nằm trong `main`. Ngày 02/11/2026 còn `fix/release-readiness`.
 - [ ] **[Bạn]** Chạy thử bộ cài trên máy của bạn: trang thông báo và chữ tiếng Việt hiển thị đúng, cài và gỡ được.
 
 **Xong khi:** `main` có đủ thay đổi và CI xanh.
@@ -66,12 +66,13 @@ Làm trước khi chuyển Public, vì sau đó nội dung có thể đã bị l
 
 ### Quyết định về lịch sử Git
 
-- [ ] **[Bạn]** Quyết định về link liên hệ cá nhân cũ: link không còn trong code hiện tại nhưng vẫn nằm trong lịch sử, ở 19 commit (các file `SECURITY.md`, `PRIVACY.md`, `Nepply.iss`, `SettingsWindow.xaml.cs`, `BETA_NOTICE.txt`, `README.md`). Giữ nguyên thì link công khai cùng repo. Muốn xóa phải viết lại lịch sử `main`, nên làm khi chưa có fork hay PR nào.
+- [x] **[Cả hai]** Xóa link liên hệ cá nhân cũ khỏi lịch sử: ngày 02/11/2026 viết lại 91 commit, thay link bằng trang Issues rồi force push `main` và `fix/release-readiness`. Mọi mã commit đã đổi; quét toàn bộ object của hai nhánh này không còn link, đối chứng trên lịch sử cũ tìm thấy link. 10 commit từng mang tên `MQuang07` nay có tác giả Minh Quang.
+- [ ] **[Bạn]** Trước khi Public, xử lý bản cũ còn sót: `refs/pull/1` đến `refs/pull/12` trên GitHub vẫn giữ commit cũ có link, trang PR và link trực tiếp tới commit cũ vẫn mở được, và người dùng không tự xóa được các ref này. Có hai cách: nhờ GitHub Support gỡ, hoặc xóa repo rồi tạo lại cùng tên từ lịch sử mới (mất trang PR, lịch sử Actions và Release nháp).
 - [x] **[AI]** Rà toàn bộ lịch sử: quét 86 commit trên mọi nhánh ngày 01/11/2026, không thấy mẫu khóa hay token, đường dẫn máy cá nhân, email cá nhân hay file nhạy cảm từng được thêm. Đối chứng: cùng cách quét tìm đúng 19 commit chứa link liên hệ. Đây là quét theo mẫu, không chứng minh tuyệt đối. Quét lại nếu có thêm nhiều commit trước khi Public.
 
 ### Cài đặt GitHub
 
-- [ ] **[Bạn] Tên hiển thị**: GitHub → Settings → Public profile → Name: `Minh Quang`. Commit merge trên web đang lấy tên `MQuang07` từ hồ sơ; 8 commit cũ giữ tên đó nếu không viết lại lịch sử.
+- [ ] **[Bạn] Tên hiển thị**: GitHub → Settings → Public profile → Name: `Minh Quang`. Commit merge trên web đang lấy tên `MQuang07` từ hồ sơ, nên chưa đổi thì commit merge mới vẫn mang tên đó.
 - [ ] **[Bạn] MFA tài khoản**: Settings (tài khoản) → Password and authentication → bật Two-factor authentication. Lưu recovery codes ngoài máy.
 - [ ] **[Bạn] Bảo mật repo**: repo → Settings → *Code security* (có thể tên *Advanced Security*): bật Dependency graph, Dependabot alerts, Dependabot security updates, **Private vulnerability reporting**, Secret scanning và Push protection.
 - [ ] **[Bạn] Actions**: Settings → Actions → General:
@@ -92,7 +93,7 @@ Làm trước khi chuyển Public, vì sau đó nội dung có thể đã bị l
 
 - [x] **[AI]** Viết ghi chú phát hành RC song ngữ, ghi rõ bản chưa ký và cách xử lý cảnh báo Windows: [RELEASE_2.0.0-rc.1.md](RELEASE_2.0.0-rc.1.md).
 - [x] **[Cả hai]** Kiểm tra dung lượng artifact: lần chạy thử ngày 01/11/2026 upload được 186 MB. `release.yml` cần upload bản build để tạo Release; nếu lần tag báo lỗi upload, xem Settings → Billing and licensing và xóa artifact cũ. Dung lượng được tính lại sau 6 đến 12 giờ.
-- [x] **[Cả hai]** Chạy thử: *Release build* #3 trên `2241652` xanh, gồm biên dịch bộ cài và artifact `nepply-release-unsigned`. Bước `draft-release` chỉ chạy khi có tag.
+- [x] **[Cả hai]** Chạy thử: *Release build* #3 trên `f030380` (trước khi viết lại lịch sử là `2241652`) xanh, gồm biên dịch bộ cài và artifact `nepply-release-unsigned`. Bước `draft-release` chỉ chạy khi có tag.
 - [ ] **[Cả hai]** Tạo tag `v2.0.0-rc.1` từ `main` và push. Bạn duyệt bước `release` khi GitHub hỏi.
 - [ ] **[Bạn]** Mở Release nháp, đánh dấu *pre-release*, dán ghi chú, bấm Publish.
 - [ ] **[Bạn]** Tải file từ trang Release về một máy và cài thử.
@@ -158,7 +159,7 @@ Làm bằng đúng file đã ký. Dùng VM Windows 11 cài mới (Hyper-V hoặc
 
 - [ ] **[AI]** Đổi `Version`/`InformationalVersion` thành `2.0.0` và `FileVersion` thành `2.0.0.100` trong `Nepply.csproj` và `Nepply.DesktopGuardian.csproj`.
 - [ ] **[AI]** Bỏ trang thông báo `RELEASE_NOTICE.txt` khỏi bộ cài (`InfoBeforeFile`, `[Files]`, hai script đóng gói) và banner RC trong README, hướng dẫn, ghi chú phát hành.
-- [ ] **[AI]** Tạo lại ảnh README theo `docs/images/README.md` (ảnh hiện tại lấy từ `ff63ba9`, trước các thay đổi giao diện gần đây).
+- [ ] **[AI]** Tạo lại ảnh README theo `docs/images/README.md` (ảnh hiện tại lấy từ `482575f`, trước các thay đổi giao diện gần đây).
 - [ ] **[AI]** Hoàn thiện `RELEASE_2.0.0.md` và CHANGELOG; cập nhật mục giới hạn về tự cài cập nhật.
 - [ ] **[Cả hai]** Tạo tag `v2.0.0`, phát hành Release chính thức (không đánh dấu pre-release). Chạy `Verify-Release.ps1 -RequireSigned -RequireStable`.
 - [ ] **[Bạn]** Kiểm tra người dùng RC đã ký nhận được bản 2.0.0 qua cửa sổ cập nhật.

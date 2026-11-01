@@ -8,9 +8,9 @@ Hai ảnh được tạo cùng lượt ngày **24/10/2026** từ Release rebuild
 
 | Field / Trường | Value / Giá trị |
 | --- | --- |
-| Commit | `ff63ba91eb9a421153933326734f6b4585779757` — branch `chore/release-prep`, clean tree before build / nhánh `chore/release-prep`, cây sạch trước build |
+| Commit | `482575f32724eb57e1add3e26359503ee3d167a7` — branch `chore/release-prep`, clean tree before build / nhánh `chore/release-prep`, cây sạch trước build |
 | src Git tree | `2f7dd41022a8150a2f558c9afe2e977e419b0b7c` |
-| ProductVersion | `1.0.0-beta.1+ff63ba91eb9a421153933326734f6b4585779757` |
+| ProductVersion | `1.0.0-beta.1+482575f32724eb57e1add3e26359503ee3d167a7` |
 | Build | Release · Windows x64 |
 | Nepply.dll SHA-256 | `BEA8B425FB8CB71A51CF5901F6E759A5DB798B7D7D03A5B8ECEFE057BB4F6FCC` |
 | UI verification / Kiểm thử | 1970 passed / đạt · 0 failed / lỗi; native collector disabled / tắt collector thật |

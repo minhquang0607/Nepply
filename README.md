@@ -33,7 +33,7 @@ The app supports Vietnamese, English, Japanese, German, Simplified Chinese, Russ
 </tr>
 </table>
 
-Fresh renders from a clean **Release build**, source `ff63ba9`. These are real WPF views rendered in an isolated UI fixture, not personal desktop screenshots. Panel items, icons and metrics are illustrative; the screenshots show the Vietnamese UI. Settings switches to horizontal tabs in narrow windows. [Image provenance →](docs/images/README.md)
+Fresh renders from a clean **Release build**, source `482575f`. These are real WPF views rendered in an isolated UI fixture, not personal desktop screenshots. Panel items, icons and metrics are illustrative; the screenshots show the Vietnamese UI. Settings switches to horizontal tabs in narrow windows. [Image provenance →](docs/images/README.md)
 
 ## 📦 Download
 
