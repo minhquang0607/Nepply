@@ -2,7 +2,7 @@
 
 **English** · [Tiếng Việt](CONTRIBUTING.md) · [Documentation](docs/README.md)
 
-For building and contributing. To use the app, start with the [user guide](docs/USER_GUIDE.en.md). Nepply-owned code uses [MIT](LICENSE); dependencies retain their own licenses.
+For building and contributing. To use the app, start with the [user guide](docs/USER_GUIDE.en.md). Nepply-owned code uses [MIT](LICENSE); dependencies retain their own licenses. Author and maintainer: Minh Quang. AI team: Codex and Claude.
 
 ## Quick start
 

@@ -2,7 +2,7 @@
 
 [English](CONTRIBUTING.en.md) · **Tiếng Việt** · [Tài liệu](docs/README.md)
 
-Tài liệu này dành cho người muốn tự build hoặc đóng góp mã nguồn. Nếu bạn chỉ muốn sử dụng ứng dụng, xem [hướng dẫn người dùng](docs/USER_GUIDE.md). Mã do Nepply sở hữu dùng [MIT License](LICENSE); dependency giữ giấy phép riêng.
+Tài liệu này dành cho người muốn tự build hoặc đóng góp mã nguồn. Nếu bạn chỉ muốn sử dụng ứng dụng, xem [hướng dẫn người dùng](docs/USER_GUIDE.md). Mã do Nepply sở hữu dùng [MIT License](LICENSE); dependency giữ giấy phép riêng. Tác giả và người bảo trì: Minh Quang. Đội ngũ AI: Codex và Claude.
 
 ## Bắt đầu nhanh
 

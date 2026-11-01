@@ -12,10 +12,13 @@ never asked to disable Windows protection instead.
 
 ## Planned roles
 
-- Repository owner and maintainer: [minhquang0607](https://github.com/minhquang0607).
-- Release reviewer and signing approver: the project owner, configured
-  explicitly in the signing service once approved. Every production signing
-  request is approved manually.
+- Author, repository owner and maintainer: Minh Quang
+  ([minhquang0607](https://github.com/minhquang0607)).
+- Release reviewer and signing approver: Minh Quang, configured explicitly in
+  the signing service once approved. Every production signing request is
+  approved manually.
+- AI team: Codex and Claude help with code and documentation. They do not
+  approve releases or signing requests.
 - Every participating GitHub/SignPath account uses MFA; tokens are never shared.
 
 ## Trust boundaries

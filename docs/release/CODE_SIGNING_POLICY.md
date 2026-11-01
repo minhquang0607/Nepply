@@ -11,9 +11,12 @@ hoặc yêu cầu người dùng tắt bảo vệ Windows để thay thế chữ
 
 ## Vai trò dự kiến
 
-- Chủ repository/người bảo trì: [minhquang0607](https://github.com/minhquang0607).
-- Người duyệt release và yêu cầu ký: chủ dự án; cần cấu hình rõ trong dịch vụ
+- Tác giả, chủ repository và người bảo trì: Minh Quang
+  ([minhquang0607](https://github.com/minhquang0607)).
+- Người duyệt release và yêu cầu ký: Minh Quang; cần cấu hình rõ trong dịch vụ
   ký sau khi được chấp thuận. Mỗi yêu cầu sản xuất phải được duyệt thủ công.
+- Đội ngũ AI: Codex và Claude hỗ trợ viết code và tài liệu, không duyệt release
+  hay yêu cầu ký.
 - Mọi tài khoản GitHub/SignPath tham gia phải bật MFA; không chia sẻ token.
 
 ## Ranh giới tin cậy
