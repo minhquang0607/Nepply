@@ -9,8 +9,8 @@ Cập nhật 01/11/2026. Đây là kế hoạch duy nhất từ hiện tại đ�
 | 0 | Nền tảng đã có | Xong |
 | 1 | Sửa các lỗi nhỏ từ đợt rà soát | Xong |
 | 2 | Đưa code lên GitHub | Đã merge vào `main`, CI xanh; còn các mục chưa đánh dấu bên dưới |
-| 3 | Chuẩn bị repo công khai | Chưa làm |
-| 4 | Phát hành `2.0.0-rc.1` chưa ký | Chưa làm |
+| 3 | Chuẩn bị repo công khai | Đang làm; phần trong repo đã xong, còn các mục cài đặt của bạn |
+| 4 | Phát hành `2.0.0-rc.1` chưa ký | Ghi chú và chạy thử đã xong; chờ repo Public |
 | 5 | Xin chữ ký số | Chưa làm |
 | 6 | Tích hợp ký và phát hành RC đã ký | Chưa làm |
 | 7 | Hoàn thiện chất lượng | Chưa làm |
@@ -54,7 +54,8 @@ Kết quả rà 30/10/2026: build từ clone sạch đạt; cấy 20 lỗi thử
 - [x] **[AI]** Push `fix/release-readiness` và `chore/pro-polish`, mở PR #8 và #9. Lần chạy đầu cho thấy CI đỏ vì hết dung lượng artifact, không phải vì lỗi code; đã sửa workflow để upload không chặn các gate. CI của cả hai PR xanh.
 - [x] **[Cả hai]** Merge #8 vào `main`, đổi base của #9 sang `main`, rồi merge #9. `main` ở `1ac08b9` chứa đủ commit của cả hai PR; Verify chạy tay trên commit này xanh. GitHub không xử lý sự kiện push của lần merge #9 nên #9 kẹt ở Open và đã được đóng tay ngày 31/10/2026. Dòng "Closed with unmerged commits" trên trang #9 là dữ liệu cũ.
 - [x] **[AI]** Xác nhận push lên `main` tự chạy Verify trở lại: merge #10 (`be89077`) tự chạy Verify #54, xanh.
-- [ ] **[Bạn]** Xóa Release nháp của beta.1 trên trang Releases nếu còn. Nếu bản đó đã publish thì dừng lại, đừng xóa.
+- [ ] **[Bạn]** Xóa Release nháp "Nepply 1.0.0" trên trang Releases. Ngày 01/11/2026 bản này vẫn là Draft, chưa publish.
+- [ ] **[Bạn]** Xóa các nhánh đã merge trên GitHub (trang Branches), nhánh nào cũng đã nằm trong `main`.
 - [ ] **[Bạn]** Chạy thử bộ cài trên máy của bạn: trang thông báo và chữ tiếng Việt hiển thị đúng, cài và gỡ được.
 
 **Xong khi:** `main` có đủ thay đổi và CI xanh.
@@ -70,6 +71,7 @@ Làm trước khi chuyển Public, vì sau đó nội dung có thể đã bị l
 
 ### Cài đặt GitHub
 
+- [ ] **[Bạn] Tên hiển thị**: GitHub → Settings → Public profile → Name: `Minh Quang`. Commit merge trên web đang lấy tên `MQuang07` từ hồ sơ; 8 commit cũ giữ tên đó nếu không viết lại lịch sử.
 - [ ] **[Bạn] MFA tài khoản**: Settings (tài khoản) → Password and authentication → bật Two-factor authentication. Lưu recovery codes ngoài máy.
 - [ ] **[Bạn] Bảo mật repo**: repo → Settings → *Code security* (có thể tên *Advanced Security*): bật Dependency graph, Dependabot alerts, Dependabot security updates, **Private vulnerability reporting**, Secret scanning và Push protection.
 - [ ] **[Bạn] Actions**: Settings → Actions → General:
@@ -89,8 +91,8 @@ Làm trước khi chuyển Public, vì sau đó nội dung có thể đã bị l
 ## Giai đoạn 4. Phát hành `2.0.0-rc.1` chưa ký
 
 - [x] **[AI]** Viết ghi chú phát hành RC song ngữ, ghi rõ bản chưa ký và cách xử lý cảnh báo Windows: [RELEASE_2.0.0-rc.1.md](RELEASE_2.0.0-rc.1.md).
-- [ ] **[Bạn]** Kiểm tra dung lượng artifact trong Settings → Billing and licensing. `release.yml` cần upload bản build để tạo Release, nên hết dung lượng sẽ làm phát hành thất bại. Artifact cũ tự hết hạn; dung lượng được tính lại sau 6 đến 12 giờ.
-- [ ] **[Bạn]** Chạy thử: Actions → *Release build* → Run workflow (chỉ build, không tạo Release). Đây là lần đầu workflow chạy trên GitHub; kiểm tra artifact `nepply-release-unsigned`.
+- [x] **[Cả hai]** Kiểm tra dung lượng artifact: lần chạy thử ngày 01/11/2026 upload được 186 MB. `release.yml` cần upload bản build để tạo Release; nếu lần tag báo lỗi upload, xem Settings → Billing and licensing và xóa artifact cũ. Dung lượng được tính lại sau 6 đến 12 giờ.
+- [x] **[Cả hai]** Chạy thử: *Release build* #3 trên `2241652` xanh, gồm biên dịch bộ cài và artifact `nepply-release-unsigned`. Bước `draft-release` chỉ chạy khi có tag.
 - [ ] **[Cả hai]** Tạo tag `v2.0.0-rc.1` từ `main` và push. Bạn duyệt bước `release` khi GitHub hỏi.
 - [ ] **[Bạn]** Mở Release nháp, đánh dấu *pre-release*, dán ghi chú, bấm Publish.
 - [ ] **[Bạn]** Tải file từ trang Release về một máy và cài thử.
