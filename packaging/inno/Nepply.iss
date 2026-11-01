@@ -26,6 +26,7 @@ OutputBaseFilename=Nepply-{#ReleaseVersion}-Setup
 AppVersion={#ReleaseVersion}
 VersionInfoVersion={#ReleaseFileVersion}
 AppPublisher=Minh Quang
+AppCopyright=Copyright (c) 2026 Minh Quang
 AppSupportURL=https://github.com/minhquang0607/Nepply/issues
 DisableProgramGroupPage=yes
 PrivilegesRequired=lowest

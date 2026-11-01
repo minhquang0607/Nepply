@@ -19,8 +19,8 @@ Hai ảnh được tạo cùng lượt ngày **24/10/2026** từ Release rebuild
 
 | Image | Render | SHA-256 |
 | --- | --- | --- |
-| `panel-1.0.0.png` | MainWindow.Content · 380 × 880 DIP · 96 DPI | `7F612A9D956760D0A8EA4AACBF72D2A4A0C5061CF107A5E567FB6896F55E30BD` |
-| `settings-1.0.0-wide.png` | SettingsWindow.Content · 820 × 740 DIP · 96 DPI | `6C9C99F0702DFA222E00EEE2E7EA19D2ABA19078C403AC1CA8A0C8A6B867CEDC` |
+| `panel.png` | MainWindow.Content · 380 × 880 DIP · 96 DPI | `7F612A9D956760D0A8EA4AACBF72D2A4A0C5061CF107A5E567FB6896F55E30BD` |
+| `settings-wide.png` | SettingsWindow.Content · 820 × 740 DIP · 96 DPI | `6C9C99F0702DFA222E00EEE2E7EA19D2ABA19078C403AC1CA8A0C8A6B867CEDC` |
 
 Dark/Champagne, Vietnamese UI. Real WPF views rendered in an isolated fixture; not screenshots of the user's running desktop. Panel names, icons and telemetry are illustrative. Settings uses vertical navigation at this width and shows the Shortcuts section, translated buttons and no explanatory captions.
 

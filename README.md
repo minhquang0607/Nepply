@@ -28,8 +28,8 @@ The app supports Vietnamese, English, Japanese, German, Simplified Chinese, Russ
 <table>
 <tr><th>Desktop panel</th><th>Settings · wide layout</th></tr>
 <tr>
-<td valign="top" width="32%"><img src="docs/images/panel-1.0.0.png" width="300" alt="Nepply panel with system cards and sample Desktop items"></td>
-<td valign="top" width="68%"><img src="docs/images/settings-1.0.0-wide.png" width="640" alt="Nepply Settings with vertical navigation and appearance options"></td>
+<td valign="top" width="32%"><img src="docs/images/panel.png" width="300" alt="Nepply panel with system cards and sample Desktop items"></td>
+<td valign="top" width="68%"><img src="docs/images/settings-wide.png" width="640" alt="Nepply Settings with vertical navigation and appearance options"></td>
 </tr>
 </table>
 
@@ -70,6 +70,6 @@ No ads, analytics or automatic crash uploads. Update checks contact GitHub only 
 
 ## 🧩 Source & license
 
-Built by **Minh Quang** with WPF / .NET. Nepply-owned code uses the [MIT License](LICENSE); dependencies retain their [own licenses and notices](docs/legal/THIRD_PARTY_NOTICES.md).
+Built by **Minh Quang** with WPF / .NET. AI team: Codex and Claude. Nepply-owned code uses the [MIT License](LICENSE); dependencies retain their [own licenses and notices](docs/legal/THIRD_PARTY_NOTICES.md).
 
 [Contribute / build](CONTRIBUTING.en.md) · [Documentation](docs/README.md) · [Code signing policy](docs/release/CODE_SIGNING_POLICY.en.md) · [Code of conduct](CODE_OF_CONDUCT.md)

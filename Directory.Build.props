@@ -5,6 +5,9 @@
     <NepplyILLinkVersion>10.0.10</NepplyILLinkVersion>
     <RuntimeFrameworkVersion>$(NepplyRuntimeVersion)</RuntimeFrameworkVersion>
     <Deterministic>true</Deterministic>
+    <Authors>Minh Quang</Authors>
+    <Company>Minh Quang</Company>
+    <Copyright>Copyright (c) 2026 Minh Quang</Copyright>
     <!-- Strips machine paths from binaries so a build output does not depend on the checkout folder. -->
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
   </PropertyGroup>

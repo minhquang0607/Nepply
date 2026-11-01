@@ -28,8 +28,8 @@ Nepply nằm ở cạnh màn hình Windows. Mở mục Desktop, tìm theo tên v
 <table>
 <tr><th>Panel Desktop</th><th>Cài đặt · bố cục rộng</th></tr>
 <tr>
-<td valign="top" width="32%"><img src="docs/images/panel-1.0.0.png" width="300" alt="Panel Nepply với thẻ hệ thống và các mục Desktop mẫu"></td>
-<td valign="top" width="68%"><img src="docs/images/settings-1.0.0-wide.png" width="640" alt="Cài đặt Nepply với menu dọc và tùy chọn giao diện"></td>
+<td valign="top" width="32%"><img src="docs/images/panel.png" width="300" alt="Panel Nepply với thẻ hệ thống và các mục Desktop mẫu"></td>
+<td valign="top" width="68%"><img src="docs/images/settings-wide.png" width="640" alt="Cài đặt Nepply với menu dọc và tùy chọn giao diện"></td>
 </tr>
 </table>
 
@@ -70,6 +70,6 @@ Không quảng cáo, analytics hay tự gửi báo cáo lỗi. Kiểm tra cập 
 
 ## 🧩 Mã nguồn & giấy phép
 
-Phát triển bởi **Minh Quang** bằng WPF / .NET. Mã Nepply sở hữu dùng [MIT License](LICENSE); thư viện giữ [giấy phép và thông báo riêng](docs/legal/THIRD_PARTY_NOTICES.md).
+Phát triển bởi **Minh Quang** bằng WPF / .NET. Đội ngũ AI: Codex và Claude. Mã Nepply sở hữu dùng [MIT License](LICENSE); thư viện giữ [giấy phép và thông báo riêng](docs/legal/THIRD_PARTY_NOTICES.md).
 
 [Đóng góp / tự build](CONTRIBUTING.md) · [Tài liệu](docs/README.md) · [Chính sách ký mã](docs/release/CODE_SIGNING_POLICY.md) · [Quy tắc ứng xử](CODE_OF_CONDUCT.md)

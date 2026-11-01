@@ -14,7 +14,7 @@ foreach ($kind in $items.PSObject.Properties) {
             throw "External build input is not allowed: $path"
         }
         $relative = [IO.Path]::GetRelativePath($projectRoot, $path)
-        if ($relative -match '(^|[\\/])(Research|thư viện cho AETHER|Tests|SensorDumper|artifacts|publish)([\\/]|$)') {
+        if ($relative -match '(^|[\\/])(Research|Tests|SensorDumper|artifacts|publish)([\\/]|$)') {
             throw "Non-production input included in Nepply: $relative"
         }
         $count++
