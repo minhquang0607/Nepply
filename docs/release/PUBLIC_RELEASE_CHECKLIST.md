@@ -99,7 +99,7 @@ Repo `Nepply` tạo ngày 02/11/2026 không mang theo cài đặt của repo cũ
 
 - [x] **[AI]** Viết ghi chú phát hành RC song ngữ, ghi rõ bản chưa ký và cách xử lý cảnh báo Windows: [RELEASE_2.0.0-rc.1.md](RELEASE_2.0.0-rc.1.md).
 - [x] **[Cả hai]** Kiểm tra dung lượng artifact: lần chạy thử ngày 01/11/2026 upload được 186 MB. `release.yml` cần upload bản build để tạo Release; nếu lần tag báo lỗi upload, xem Settings → Billing and licensing và xóa artifact cũ. Dung lượng được tính lại sau 6 đến 12 giờ.
-- [x] **[Cả hai]** Chạy thử: *Release build* #3 trên `f030380` (trước khi viết lại lịch sử là `2241652`) xanh, gồm biên dịch bộ cài và artifact `nepply-release-unsigned`. Bước `draft-release` chỉ chạy khi có tag.
+- [x] **[Cả hai]** Chạy thử: *Release build* #3 trên `f030380` (trước khi viết lại lịch sử là `2241652`) xanh, gồm biên dịch bộ cài và artifact `nepply-release-unsigned`. Bước `draft-release` chỉ chạy khi có tag. Repo mới: *Release build* #1 trên `245af2f` cũng xanh ngày 02/11/2026.
 - [ ] **[Cả hai]** Tạo tag `v2.0.0-rc.1` từ `main` và push. Bạn duyệt bước `release` khi GitHub hỏi.
 - [ ] **[Bạn]** Mở Release nháp, đánh dấu *pre-release*, dán ghi chú, bấm Publish.
 - [ ] **[Bạn]** Tải file từ trang Release về một máy và cài thử.
@@ -134,7 +134,7 @@ Bản chưa ký không thể tự cập nhật, nên phải có một RC đã k�
 Không chặn việc xin chữ ký, có thể làm song song từ giai đoạn 4.
 
 - [x] **[AI]** Mở mục Desktop không chặn luồng giao diện, để shortcut trỏ tới ổ mạng mất kết nối không làm panel đơ.
-- [ ] **[Cả hai]** Chạy bài đo dài 24 giờ (`scripts/Run-UiSoak.ps1`), phân tích CPU, RAM, handle.
+- [ ] **[Cả hai]** Chạy bài đo dài 24 giờ (`pwsh scripts/Run-UiSoak.ps1`), máy phải bật suốt thời gian đo, rồi phân tích CPU, RAM, handle.
 - [x] **[AI]** Rà trợ năng bằng test tự động trên cây giao diện thật: mọi nút, ô nhập, thanh trượt và danh sách trong Cài đặt, màn chào, panel và các hộp thoại đều có tên cho trình đọc màn hình và đi tới được bằng bàn phím. Đã sửa ô Hiệu ứng chuyển động thiếu tên. Giao diện High Contrast đã có test sẵn.
 - [ ] **[Bạn]** Thử thật với Narrator và chế độ tương phản cao của Windows, vì test tự động không thay được việc nghe thử.
 - [ ] **[Bạn]** Nhờ người bản ngữ duyệt bản dịch Nhật, Đức, Trung, Nga, Pháp, Thái, cả app lẫn bộ cài.
