@@ -1,0 +1,11 @@
+﻿Nepply bản phát hành thử (RC) - vui lòng đọc trước khi cài
+
+Đây là bản phát hành thử. Nepply chưa được ký số nên Windows SmartScreen có thể cảnh báo. Chỉ tiếp tục nếu bạn tải file này từ trang phát hành chính thức: https://github.com/minhquang0607/Nepply/releases
+Không tắt các tính năng bảo mật của Windows để cài hoặc chạy Nepply.
+
+- Biểu tượng Desktop: Nepply chỉ ẩn biểu tượng Desktop khi bạn bật tùy chọn này. File không bao giờ bị di chuyển hay xóa, và biểu tượng trở lại khi thoát Nepply. Nếu vẫn bị ẩn, nhấp chuột phải vào Desktop và chọn Xem > Hiển thị biểu tượng màn hình nền.
+- Theo dõi hệ thống: số đo hiển thị được tùy phần cứng, driver và quyền truy cập. Nhiều máy không đọc được nhiệt độ CPU. Bộ cài này không cài driver nào.
+- Quyền riêng tư: không quảng cáo, không analytics, không tự gửi báo cáo lỗi.
+
+Báo lỗi: https://github.com/minhquang0607/Nepply/issues
+Giấy phép: MIT (xem LICENSE). Thành phần bên thứ ba giữ giấy phép riêng (THIRD_PARTY_NOTICES.md).

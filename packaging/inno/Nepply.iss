@@ -33,7 +33,6 @@ PrivilegesRequired=lowest
 MinVersion=10.0.19041
 ArchitecturesAllowed=x64compatible
 OutputDir={#ReleaseOutputDir}
-InfoBeforeFile=..\..\src\Nepply\Resources\RELEASE_NOTICE.txt
 SetupIconFile=..\..\src\Nepply\Resources\icon.ico
 WizardImageFile=Images\WizardImage.bmp,Images\WizardImage@2x.bmp
 WizardSmallImageFile=Images\WizardSmall.bmp,Images\WizardSmall@2x.bmp
@@ -60,20 +59,20 @@ RestartApplications=no
 
 [Languages]
 ; Inno Setup ships these translations except Vietnamese, kept in Languages\.
-; Messages\Nepply.*.isl adds Nepply's own text.
-Name: "english"; MessagesFile: "compiler:Default.isl,Messages\Nepply.en.isl"
-Name: "vietnamese"; MessagesFile: "Languages\Vietnamese.isl,Messages\Nepply.vi.isl"
-Name: "japanese"; MessagesFile: "compiler:Languages\Japanese.isl,Messages\Nepply.ja.isl"
-Name: "german"; MessagesFile: "compiler:Languages\German.isl,Messages\Nepply.de.isl"
-Name: "chinesesimplified"; MessagesFile: "compiler:Languages\ChineseSimplified.isl,Messages\Nepply.zh.isl"
-Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl,Messages\Nepply.ru.isl"
-Name: "french"; MessagesFile: "compiler:Languages\French.isl,Messages\Nepply.fr.isl"
-Name: "thai"; MessagesFile: "compiler:Languages\Thai.isl,Messages\Nepply.th.isl"
+; Messages\Nepply.*.isl adds Nepply's own text, Notices\ the page shown before installing.
+Name: "english"; MessagesFile: "compiler:Default.isl,Messages\Nepply.en.isl"; InfoBeforeFile: "Notices\Notice.en.txt"
+Name: "vietnamese"; MessagesFile: "Languages\Vietnamese.isl,Messages\Nepply.vi.isl"; InfoBeforeFile: "Notices\Notice.vi.txt"
+Name: "japanese"; MessagesFile: "compiler:Languages\Japanese.isl,Messages\Nepply.ja.isl"; InfoBeforeFile: "Notices\Notice.ja.txt"
+Name: "german"; MessagesFile: "compiler:Languages\German.isl,Messages\Nepply.de.isl"; InfoBeforeFile: "Notices\Notice.de.txt"
+Name: "chinesesimplified"; MessagesFile: "compiler:Languages\ChineseSimplified.isl,Messages\Nepply.zh.isl"; InfoBeforeFile: "Notices\Notice.zh.txt"
+Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl,Messages\Nepply.ru.isl"; InfoBeforeFile: "Notices\Notice.ru.txt"
+Name: "french"; MessagesFile: "compiler:Languages\French.isl,Messages\Nepply.fr.isl"; InfoBeforeFile: "Notices\Notice.fr.txt"
+Name: "thai"; MessagesFile: "compiler:Languages\Thai.isl,Messages\Nepply.th.isl"; InfoBeforeFile: "Notices\Notice.th.txt"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
-; Never inherited: a silent update must not undo turning startup off in Nepply.
-Name: "startup"; Description: "{cm:TaskStartup}"; GroupDescription: "{cm:TaskGroupStartup}"; Flags: unchecked dontinheritcheck
+; First install only: an update must not undo turning startup off in Nepply.
+Name: "startup"; Description: "{cm:TaskStartup}"; GroupDescription: "{cm:TaskGroupStartup}"; Check: IsFirstInstall
 
 [Files]
 Source: "{#PayloadRoot}\Nepply.exe"; DestDir: "{app}"; Flags: ignoreversion
@@ -106,7 +105,8 @@ Name: "{autodesktop}\Nepply"; Filename: "{app}\Nepply.exe"; Tasks: desktopicon
 ; Read and cleared by InstallerChoices at the next start.
 Root: HKCU; Subkey: "Software\Nepply"; Flags: uninsdeletekeyifempty
 Root: HKCU; Subkey: "Software\Nepply\Setup"; ValueType: string; ValueName: "Language"; ValueData: "{cm:LanguageId}"; Flags: uninsdeletekey
-Root: HKCU; Subkey: "Software\Nepply\Setup"; ValueType: dword; ValueName: "AutoStart"; ValueData: 1; Tasks: startup
+Root: HKCU; Subkey: "Software\Nepply\Setup"; ValueType: dword; ValueName: "AutoStart"; ValueData: 1; Tasks: startup; Check: IsFirstInstall
+Root: HKCU; Subkey: "Software\Nepply\Setup"; ValueType: dword; ValueName: "AutoStart"; ValueData: 0; Tasks: not startup; Check: IsFirstInstall
 
 [Run]
 Filename: "{app}\Nepply.exe"; Parameters: "--show"; Description: "{cm:LaunchProgram,Nepply}"; Flags: nowait postinstall skipifsilent
@@ -115,11 +115,19 @@ Filename: "{app}\Nepply.exe"; Parameters: "--show"; Flags: nowait skipifnotsilen
 
 [Code]
 const
+#ifdef InstallerQA
+  UninstallEntry = 'Nepply.Internal.InstallerQA_is1';
+#else
+  UninstallEntry = '{5E9F4A2B-1A8D-4C9C-8A5E-F7C4E8A1D3B2}_is1';
+#endif
   DesktopLease = '{localappdata}\HoverBox\desktop-visibility.lease';
   DesktopLeaseMarker = 'restore-visible-v1';
   ExplorerAdvancedKey = 'Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced';
   StartupApprovedKey = 'Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run';
   RecoveryAppRunning = 2;
+
+var
+  FirstInstall: Boolean;
 
 { HWND-typed WindowName keeps the NULL title pointer-sized on every Setup architecture. }
 function FindWindowEx(Parent, ChildAfter: HWND; ClassName: String; WindowName: HWND): HWND;
@@ -130,6 +138,11 @@ function IsWindowVisible(Wnd: HWND): Boolean;
 function IsNepplyUpdate(): Boolean;
 begin
   Result := ExpandConstant('{param:NEPPLYUPDATE|0}') = '1';
+end;
+
+function IsFirstInstall(): Boolean;
+begin
+  Result := FirstInstall;
 end;
 
 procedure InitializeWizard();
@@ -147,6 +160,8 @@ var
   Attempts: Integer;
 begin
   Result := True;
+  { Read once: Setup writes this entry itself while installing. }
+  FirstInstall := not RegKeyExists(HKCU, 'Software\Microsoft\Windows\CurrentVersion\Uninstall\' + UninstallEntry);
   if not IsNepplyUpdate() then Exit;
   { Parent starts the verified Setup before a normal shutdown. Never kill it. }
   Attempts := 0;
@@ -361,7 +376,6 @@ begin
   DelTree(ExpandConstant('{localappdata}\Nepply'), True, True, True);
   DelTree(ExpandConstant('{localappdata}\HoverBox\Logs'), True, True, True);
   RemoveDir(ExpandConstant('{localappdata}\HoverBox'));
-  RegDeleteValue(HKCU, StartupApprovedKey, 'Nepply');
 end;
 
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
@@ -394,4 +408,7 @@ begin
     else
       Log('Preserved Nepply startup entry: it does not belong to this installation.');
   end;
+  { Windows keeps this switch by entry name and would turn a later install off. }
+  if not RegValueExists(HKCU, 'Software\Microsoft\Windows\CurrentVersion\Run', 'Nepply') then
+    RegDeleteValue(HKCU, StartupApprovedKey, 'Nepply');
 end;

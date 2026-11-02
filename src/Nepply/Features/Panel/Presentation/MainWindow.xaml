@@ -44,7 +44,7 @@
       </DockPanel>
      </Border>
     <DockPanel><TextBlock x:Name="FooterState" Visibility="Collapsed" Text="{DynamicResource Loc.Tagline}" Style="{StaticResource Caption}"/>
-     <TextBlock x:Name="HotkeyText" Text="Ctrl + Space" Foreground="{DynamicResource AccentBrush}" FontSize="10" HorizontalAlignment="Right"/>
+     <TextBlock x:Name="HotkeyText" Text="Ctrl + Alt + Space" Foreground="{DynamicResource AccentBrush}" FontSize="10" HorizontalAlignment="Right"/>
     </DockPanel>
     </StackPanel>
    </Border>

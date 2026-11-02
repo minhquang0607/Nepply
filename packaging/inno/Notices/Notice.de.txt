@@ -1,0 +1,11 @@
+﻿Nepply Release Candidate - bitte vor der Installation lesen
+
+Dies ist ein Release Candidate. Nepply ist noch nicht codesigniert, daher kann Windows SmartScreen eine Warnung anzeigen. Fahren Sie nur fort, wenn Sie diese Datei von der offiziellen Release-Seite heruntergeladen haben: https://github.com/minhquang0607/Nepply/releases
+Deaktivieren Sie niemals Sicherheitsfunktionen von Windows, um Nepply zu installieren oder auszuführen.
+
+- Desktopsymbole: Nepply blendet Ihre Desktopsymbole nur aus, wenn Sie diese Option aktivieren. Dateien werden nie verschoben oder gelöscht, und die Symbole erscheinen wieder, wenn Nepply beendet wird. Falls sie ausgeblendet bleiben, klicken Sie mit der rechten Maustaste auf den Desktop und wählen Sie Ansicht > Desktopsymbole anzeigen.
+- Systemmonitor: Welche Werte verfügbar sind, hängt von Hardware, Treibern und Berechtigungen ab. Die CPU-Temperatur ist auf vielen PCs nicht verfügbar. Dieses Installationsprogramm installiert keine Treiber.
+- Datenschutz: keine Werbung, keine Analysen und kein automatisches Hochladen von Absturzberichten.
+
+Problem melden: https://github.com/minhquang0607/Nepply/issues
+Lizenz: MIT (siehe LICENSE). Komponenten von Drittanbietern behalten ihre eigenen Lizenzen (THIRD_PARTY_NOTICES.md).

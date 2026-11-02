@@ -40,8 +40,9 @@ internal sealed class RegistryStartupBackend : IStartupBackend
     {
         if (!isCurrent()) return Task.FromResult(new StartupOutcome(null, null));
         var notice = AutoStartService.Apply(enabled);
-        if (notice == null && enabled && AutoStartService.IsTurnedOffInWindows())
-            return Task.FromResult(new StartupOutcome(true, UserMessage.FromKey("AutoStartOffInWindows")));
+        // Turning it off in Windows is a choice too: Settings shows it, only a request here warns.
+        if (notice == null && enabled && userInitiated && AutoStartService.IsTurnedOffInWindows())
+            return Task.FromResult(new StartupOutcome(true, UserMessage.FromKey(AutoStartService.TurnedOffNotice)));
         return Task.FromResult(new StartupOutcome(notice == null ? enabled : null, notice));
     }
 }

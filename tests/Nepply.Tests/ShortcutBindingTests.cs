@@ -7,9 +7,11 @@ internal static class ShortcutBindingTests
     internal static void Run(Action<string, bool> check)
     {
         var settings = new AppSettings();
-        check("Shortcut defaults keep the existing keys",
-            ShortcutBindings.Get(settings, ShortcutAction.TogglePanel) == new ShortcutGesture(2, Space)
+        check("Shortcut defaults leave Ctrl + Space to other apps",
+            ShortcutBindings.Get(settings, ShortcutAction.TogglePanel) == new ShortcutGesture(3, Space)
+            && ShortcutBindings.Get(settings, ShortcutAction.TogglePanel) == ShortcutBindings.Default(ShortcutAction.TogglePanel)
             && ShortcutBindings.Get(settings, ShortcutAction.FocusSearch) == new ShortcutGesture(2, F));
+        check("A saved Ctrl + Space is kept", ShortcutBindings.Get(new AppSettings { HotkeyModifiers = 2, HotkeyKey = Space }, ShortcutAction.TogglePanel) == new ShortcutGesture(2, Space));
         check("New shortcut actions start unassigned",
             new[] { ShortcutAction.SearchDesktop, ShortcutAction.ToggleDesktopIcons, ShortcutAction.TogglePin, ShortcutAction.OpenSettings, ShortcutAction.RefreshDesktop }
                 .All(a => ShortcutBindings.Get(settings, a).IsEmpty));
@@ -58,7 +60,7 @@ internal static class ShortcutBindingTests
         var damaged = new AppSettings
         {
             Shortcuts = ["Unknown:2:68", "SearchDesktop:x:1", "3:2:68", "TogglePanel:1:65", "OpenSettings:4:68",
-            "TogglePin:2:32", "SearchDesktop:2:82", "RefreshDesktop:2:82", null!, "FocusSearch:0:0", "HidePanel:9:27"]
+            "TogglePin:3:32", "SearchDesktop:2:82", "RefreshDesktop:2:82", null!, "FocusSearch:0:0", "HidePanel:9:27"]
         };
         damaged.Validate();
         check("Validation drops malformed, unknown, invalid and duplicate shortcuts",
@@ -68,7 +70,7 @@ internal static class ShortcutBindingTests
             && ShortcutBindings.Get(damaged, ShortcutAction.OpenSettings).IsEmpty
             && ShortcutBindings.Get(damaged, ShortcutAction.FocusSearch).IsEmpty
             && !damaged.Shortcuts.Any(e => e.StartsWith("HidePanel:"))
-            && damaged.HotkeyModifiers == 2 && damaged.HotkeyKey == Space);
+            && damaged.HotkeyModifiers == 3 && damaged.HotkeyKey == Space);
         var legacyFunction = new AppSettings { HotkeyModifiers = 2, HotkeyKey = F5 };
         legacyFunction.Validate();
         check("Open/close accepts Ctrl or Alt with a function key", legacyFunction.HotkeyKey == F5);

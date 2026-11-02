@@ -1,0 +1,11 @@
+﻿Nepply version candidate - à lire avant l'installation
+
+Ceci est une version candidate. Nepply n'est pas encore signé numériquement, Windows SmartScreen peut donc afficher un avertissement. Continuez uniquement si vous avez téléchargé ce fichier depuis la page officielle des versions : https://github.com/minhquang0607/Nepply/releases
+Ne désactivez jamais les fonctions de sécurité de Windows pour installer ou exécuter Nepply.
+
+- Icônes du Bureau : Nepply masque vos icônes du Bureau uniquement si vous activez cette option. Les fichiers ne sont jamais déplacés ni supprimés, et les icônes reviennent lorsque Nepply se ferme. Si elles restent masquées, faites un clic droit sur le Bureau et choisissez Affichage > Afficher les icônes du Bureau.
+- Moniteur système : les mesures disponibles dépendent du matériel, des pilotes et des autorisations. La température du processeur n'est pas disponible sur de nombreux PC. Ce programme d'installation n'installe aucun pilote.
+- Confidentialité : ni publicité, ni statistiques, ni envoi automatique de rapports de plantage.
+
+Signaler un problème : https://github.com/minhquang0607/Nepply/issues
+Licence : MIT (voir LICENSE). Les composants tiers conservent leurs propres licences (THIRD_PARTY_NOTICES.md).

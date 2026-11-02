@@ -8,7 +8,7 @@ Hướng dẫn cho **Nepply 2.0.0-rc.1**, bản phát hành thử (chưa ký) đ
 
 Lần chạy đầu, màn chào dùng ngôn ngữ của Windows; bạn có thể chọn ngôn ngữ khác ngay tại đó hoặc sau này trong **Cài đặt → Giao diện**.
 
-Đưa chuột tới cạnh màn hình đã chọn để mở panel, hoặc dùng **Ctrl + Space** nếu chưa đổi phím tắt trong Cài đặt.
+Đưa chuột tới cạnh màn hình đã chọn để mở panel, hoặc dùng **Ctrl + Alt + Space** nếu chưa đổi phím tắt trong Cài đặt.
 
 - Dùng nút ghim để giữ panel mở, kể cả khi bạn chuyển sang gõ phím ở ứng dụng khác.
 - **Ctrl + F** đưa con trỏ vào phần tìm kiếm.
@@ -27,7 +27,7 @@ Mọi phím tắt đổi được trong **Cài đặt → Phím tắt**. Bấm v
 
 | Chức năng | Mặc định | Dùng khi |
 | --- | --- | --- |
-| Mở / đóng panel | Ctrl + Space | Ở mọi nơi |
+| Mở / đóng panel | Ctrl + Alt + Space | Ở mọi nơi |
 | Mở panel và tìm | Chưa đặt | Ở mọi nơi |
 | Ẩn / hiện icon Desktop | Chưa đặt | Ở mọi nơi |
 | Ghim / bỏ ghim panel | Chưa đặt | Ở mọi nơi |
@@ -77,7 +77,7 @@ Tốc độ tải xuống/tải lên là lưu lượng của adapter, không ph�
 
 ## Khởi động cùng Windows
 
-Bật tùy chọn tự khởi động trong Cài đặt rồi bấm **Áp dụng** hoặc **OK**. Windows có thể quản lý hoặc vô hiệu hóa mục này trong phần ứng dụng khởi động. Với bản portable, giữ nguyên vị trí thư mục ứng dụng; nếu di chuyển, mở lại app ở vị trí mới và lưu lại tùy chọn tự khởi động.
+Bộ cài có sẵn ô **Khởi động cùng Windows** ở lần cài đầu; bỏ chọn nếu không muốn. Sau đó, đổi trong Cài đặt rồi bấm **Áp dụng** hoặc **OK**. Task Manager và Cài đặt Windows có công tắc riêng cho mục này. Nếu công tắc đó đang tắt, Cài đặt của Nepply báo ngay dưới ô chọn và Nepply không tự bật lại; bật ở **Task Manager → Startup apps** là cảnh báo tự mất. Với bản portable, giữ nguyên vị trí thư mục ứng dụng; nếu di chuyển, mở lại app ở vị trí mới và lưu lại tùy chọn tự khởi động.
 
 ## Cập nhật
 

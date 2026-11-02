@@ -106,6 +106,7 @@ public partial class IconPanel : UserControl
         LaunchNoticeText.Text = LocalizationService.Render(_actionNotice);
         LaunchNotice.Visibility = _actionNotice == null ? Visibility.Collapsed : Visibility.Visible;
     }
+    internal bool ShowsActionNotice(string key) => _actionNotice?.Key == key;
     internal void DismissActionNotice(string key)
     {
         if (_actionNotice?.Key == key && _actionNotice.Arguments.IsEmpty) ShowActionFailure(null);

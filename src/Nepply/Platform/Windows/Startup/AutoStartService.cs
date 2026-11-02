@@ -8,6 +8,9 @@ namespace Nepply.Services;
 
 internal static class AutoStartService
 {
+    internal const string TurnedOffNotice = "AutoStartOffInWindows";
+    private const string StartupApprovedKey = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run";
+
     internal static UserMessage? Apply(bool enabled)
     {
         // HKCU Run/Startup shortcut migration belongs only to unpackaged installs.
@@ -23,6 +26,7 @@ internal static class AutoStartService
         }
         string previousExecutable = Path.Combine(Path.GetDirectoryName(executable)!, ProductIdentity.LegacyName + ".exe");
         var previous = key.GetValue(ProductIdentity.LegacyName, null, RegistryValueOptions.DoNotExpandEnvironmentNames);
+        if (enabled && existing == null) ForgetOrphanedState();
         if (enabled) key.SetValue("Nepply", "\"" + executable + "\"", RegistryValueKind.String);
         else key.DeleteValue("Nepply", false);
         // Only migrate an exact, argument-free entry in this installation directory, or
@@ -46,8 +50,24 @@ internal static class AutoStartService
     // choice, so report it instead of changing it.
     internal static bool IsTurnedOffInWindows()
     {
-        using var approved = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run");
+        using var approved = Registry.CurrentUser.OpenSubKey(StartupApprovedKey);
         return IsStartupStateOff(approved?.GetValue("Nepply"));
+    }
+
+    // Windows keeps that switch by entry name and never removes it, so one left behind
+    // by a removed entry would silently turn off the new entry. Only a live entry has a
+    // switch worth respecting; never call this while one exists.
+    internal static void ForgetOrphanedState(string keyPath = StartupApprovedKey)
+    {
+        try
+        {
+            using var approved = Registry.CurrentUser.OpenSubKey(keyPath, writable: true);
+            approved?.DeleteValue("Nepply", false);
+        }
+        catch (Exception ex) when (ex is UnauthorizedAccessException or System.Security.SecurityException or IOException)
+        {
+            AppLogger.Error(ex, "Clear orphaned Windows startup state");
+        }
     }
 
     internal static bool IsStartupStateOff(object? state) => state is byte[] { Length: > 0 } bytes && (bytes[0] & 1) != 0;

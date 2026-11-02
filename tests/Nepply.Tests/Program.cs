@@ -1269,6 +1269,11 @@ internal static class Program
         typeof(HardwareMonitorViewModel).GetField("_display", BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(vm, demo with { MonotonicTimestamp = System.Diagnostics.Stopwatch.GetTimestamp() });
         Pump(2200);
         Check("Fresh sample clears stale warning", ((FrameworkElement)monitorPanel.FindName("StaleNotice")).Visibility == Visibility.Collapsed);
+        preview.IconPanelView.ShowActionFailure(UserMessage.FromKey(AutoStartService.TurnedOffNotice));
+        preview.ShowPanel();
+        Check("Opening the panel re-reads the Windows startup warning", preview.IconPanelView.ShowsActionNotice(AutoStartService.TurnedOffNotice) == AutoStartService.IsTurnedOffInWindows());
+        preview.IconPanelView.ShowActionFailure(null);
+        preview.HidePanelInstantly();
         vm.SetActive(false);
         preview.Cleanup(); settingsWindow.Close(); preview.Close();
         bindingListener.Flush();

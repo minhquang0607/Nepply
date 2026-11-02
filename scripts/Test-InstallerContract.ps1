@@ -21,7 +21,13 @@ foreach($file in Get-ChildItem -LiteralPath (Join-Path $repo 'packaging/inno/Mes
     $messages[$code]=@{}
     foreach($line in [IO.File]::ReadAllLines($file.FullName)) { if($line -match '^([A-Za-z]+)=(.+)$') { $messages[$code][$Matches[1]]=$Matches[2] } }
 }
-$languageFiles=@([regex]::Matches($source,'(?m)^Name: "[a-z]+"; MessagesFile: "[^,"]+\.isl,Messages\\Nepply\.([a-z]+)\.isl"\s*$') | ForEach-Object { $_.Groups[1].Value })
+$languageFiles=@([regex]::Matches($source,'(?m)^Name: "[a-z]+"; MessagesFile: "[^,"]+\.isl,Messages\\Nepply\.([a-z]+)\.isl"') | ForEach-Object { $_.Groups[1].Value })
+$noticeFiles=@([regex]::Matches($source,'(?m)^Name: "[a-z]+"; MessagesFile: "[^,"]+\.isl,Messages\\Nepply\.([a-z]+)\.isl"; InfoBeforeFile: "Notices\\Notice\.\1\.txt"\s*$') | ForEach-Object { $_.Groups[1].Value })
+$notices=@{}
+foreach($code in $noticeFiles) {
+    $path=Join-Path $repo "packaging/inno/Notices/Notice.$code.txt"
+    if(Test-Path -LiteralPath $path) { $notices[$code]=Get-Content -LiteralPath $path -Raw -Encoding utf8 }
+}
 # {cm:Name} also reaches Inno Setup's own messages, so only Nepply's keys count.
 $usedMessages=@(@([regex]::Matches($source,"CustomMessage\('([A-Za-z]+)'\)") | ForEach-Object { $_.Groups[1].Value }) +
     @([regex]::Matches($source,'\{cm:([A-Za-z]+)') | ForEach-Object { $_.Groups[1].Value } | Where-Object { $messages['en'].ContainsKey($_) }) | Sort-Object -Unique)
@@ -54,7 +60,15 @@ $checks=[ordered]@{
     'Every Setup language hands its own code to the app'=@($messages.Keys | Where-Object { $messages[$_]['LanguageId'] -cne $_ }).Count -eq 0
     'Removing user data is opt-in, defaults to No and skips silent runs'=$source.Contains("(not UninstallSilent()) and (MsgBox(CustomMessage('UninstallRemoveData'), mbConfirmation, MB_YESNO or MB_DEFBUTTON2) = IDYES)")
     'Legacy Desktop lease survives data removal'=$source.Contains("DelTree(ExpandConstant('{localappdata}\HoverBox\Logs')") -and -not $source.Contains("DelTree(ExpandConstant('{localappdata}\HoverBox')")
-    'Startup task is never inherited by updates'=$source -match '(?m)^Name: "startup";.*dontinheritcheck\s*$'
+    'Every Setup language shows only its own notice'=$noticeFiles.Count -eq $languageFiles.Count -and $notices.Count -eq $languageFiles.Count -and
+        -not ($source -match '(?m)^InfoBeforeFile=') -and
+        @($notices.Values | Where-Object { -not $_.Contains('https://github.com/minhquang0607/Nepply/releases') -or -not $_.Contains('LICENSE') }).Count -eq 0 -and
+        @($notices.Keys | Where-Object { $_ -ne 'en' -and $notices[$_].Contains('Never turn off Windows security') }).Count -eq 0 -and
+        @($notices.Keys | Where-Object { $_ -ne 'vi' -and $notices[$_].Contains('Không tắt các tính năng') }).Count -eq 0
+    'Startup task is offered on the first install only and starts ticked'=$source -match '(?m)^Name: "startup";[^\r\n]*; Check: IsFirstInstall\s*$' -and -not ($source -match '(?m)^Name: "startup";[^\r\n]*Flags:')
+    'Setup hands over the startup choice on the first install only'=$source.Contains('ValueData: 1; Tasks: startup; Check: IsFirstInstall') -and $source.Contains('ValueData: 0; Tasks: not startup; Check: IsFirstInstall')
+    'First install is decided before Setup writes its own entry'=$source.Contains("FirstInstall := not RegKeyExists(HKCU, 'Software\Microsoft\Windows\CurrentVersion\Uninstall\' + UninstallEntry);") -and $source.Contains("UninstallEntry = '{5E9F4A2B-1A8D-4C9C-8A5E-F7C4E8A1D3B2}_is1';")
+    'Uninstall removes the Windows startup switch once its entry is gone'=$source.Contains("if not RegValueExists(HKCU, 'Software\Microsoft\Windows\CurrentVersion\Run', 'Nepply') then") -and $source.Contains("RegDeleteValue(HKCU, StartupApprovedKey, 'Nepply');")
     'Automatic relaunch is update-only'=$source.Contains('Flags: nowait skipifnotsilent; Check: IsNepplyUpdate')
 }
 foreach($entry in $checks.GetEnumerator()) { if(-not $entry.Value) { throw "FAIL $($entry.Key)" }; Write-Output "PASS $($entry.Key)" }

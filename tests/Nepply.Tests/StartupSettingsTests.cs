@@ -20,6 +20,14 @@ internal static class StartupSettingsTests
             check("Startup preserves newer checkbox edit even after toggle-back", checkbox.IsChecked == true && window.AutoStartRevision == revision + 2);
             window.SynchronizeAutoStart(true, false, window.AutoStartRevision);
             check("Startup current result can correct checkbox after rejection", checkbox.IsChecked == false);
+            var notice = (TextBlock)window.FindName("AutoStartWindowsNotice");
+            window.ShowAutoStartState(true);
+            check("Unticked startup has nothing to warn about", notice.Visibility != System.Windows.Visibility.Visible);
+            checkbox.IsChecked = true;
+            window.ShowAutoStartState(true);
+            check("Ticked startup says when Windows has it off", notice.Visibility == System.Windows.Visibility.Visible);
+            window.ShowAutoStartState(false);
+            check("The startup warning leaves once Windows has it on again", notice.Visibility != System.Windows.Visibility.Visible);
         }
         finally { window.Close(); }
     }

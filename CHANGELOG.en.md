@@ -8,18 +8,18 @@ Consolidated **17 October 2026**. This is a summary of development changes, not 
 
 ### Desktop & interaction
 
-- Open from the screen edge or a hotkey, and pin when needed.
+- Open from the screen edge or a hotkey, and pin when needed. The default hotkey is Ctrl + Alt + Space, leaving Ctrl + Space to code completion and input methods. A hotkey saved by an earlier build is kept.
 - Search/open Desktop items with the Windows context menu.
 - Opening a shortcut to a disconnected network drive no longer freezes the panel.
 - Choose columns × rows and screen-relative panel dimensions.
 - Avoid automatic edge activation when a game hides the pointer for character control.
 - A pinned panel stays open while you type in another app (when Windows hides the pointer).
 - The Desktop item context menu closes when you click elsewhere, like the tray menu.
-- A hotkey saved in the settings file must include Ctrl or Alt; a Shift-only combination falls back to Ctrl so it cannot block normal typing.
+- A hotkey saved in the settings file must include Ctrl or Alt; a Shift-only combination falls back to the default so it cannot block normal typing.
 
 ### Appearance & personalization
 
-- Light, dark and system themes; colors, neon and mouse-interactive metallic effects.
+- Light, dark and system themes (following Windows by default); colors, neon and mouse-interactive metallic effects.
 - Preview before saving: Apply saves, OK saves/closes, Cancel discards unsaved changes.
 - Vietnamese, English, Japanese, German, Simplified Chinese, Russian, French and Thai.
 - The first run uses your Windows display language (English when Nepply lacks it), and the welcome screen lets you pick another. Existing settings keep their language; Reset does not change it.
@@ -42,12 +42,12 @@ Consolidated **17 October 2026**. This is a summary of development changes, not 
 
 - Update window with version, notes, progress and retry states.
 - **Check for updates daily** option, on by default and available on the welcome screen, shows a tray notification when a new version exists.
-- Turning on startup while Windows has it turned off now shows where to turn it back on.
+- When the Windows startup switch is off, Settings says so under the checkbox and shows where to turn it on; the warning goes away once you do, without reopening the app. A switch left over from an earlier install no longer turns off the new entry.
 - When this build cannot install an update itself (portable or not yet signed), the update window offers **Open download page**, linking to the official GitHub release.
 - Release notes in the update window appear as clean text instead of raw Markdown.
 - Setup asks for a language when it opens, preselecting your Windows language: Vietnamese, English, Japanese, German, Simplified Chinese, Russian, French and Thai. The app uses that language on its first run.
-- Setup has a dark look with Nepply artwork, plus an option to start with Windows.
-- Uninstalling asks whether to remove settings and logs too (kept by default) and clears the extraction folder in Temp.
+- Setup has a dark look with Nepply artwork. The information page shows only the language you picked. Start with Windows is ticked on the first install, and updates leave that choice alone.
+- Uninstalling asks whether to remove settings and logs too (kept by default), clears the extraction folder in Temp and drops the startup switch of the removed entry.
 - **Report a problem** (Settings → App) copies diagnostics and opens the GitHub bug form with the Nepply and Windows versions filled in.
 - Desktop icon recovery after abnormal termination, subject to helper/Explorer availability.
 

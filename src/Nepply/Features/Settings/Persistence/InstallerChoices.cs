@@ -19,9 +19,10 @@ internal static class InstallerChoices
             settings.Language = language;
             changed = true;
         }
-        if (key.GetValue("AutoStart") is int and not 0 && !settings.AutoStart)
+        // Settings kept from an earlier install must not overrule the box just unticked.
+        if (key.GetValue("AutoStart") is int autoStart && (autoStart != 0) != settings.AutoStart)
         {
-            settings.AutoStart = true;
+            settings.AutoStart = autoStart != 0;
             changed = true;
         }
         if (changed) save();

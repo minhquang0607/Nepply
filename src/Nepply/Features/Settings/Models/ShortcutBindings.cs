@@ -33,10 +33,10 @@ public static class ShortcutBindings
 
     public static bool IsGlobal(ShortcutAction action) => Array.IndexOf(Global, action) >= 0;
 
-    /// <summary>Defaults are the keys Nepply already used; new actions start unassigned.</summary>
+    /// <summary>Only what people expect to work at once has a default; the rest starts unassigned.</summary>
     public static ShortcutGesture Default(ShortcutAction action) => action switch
     {
-        ShortcutAction.TogglePanel => new(ShortcutGesture.Control, 0x20),
+        ShortcutAction.TogglePanel => new(ShortcutGesture.Control | ShortcutGesture.Alt, 0x20),
         ShortcutAction.FocusSearch => new(ShortcutGesture.Control, 0x46),
         _ => ShortcutGesture.None
     };

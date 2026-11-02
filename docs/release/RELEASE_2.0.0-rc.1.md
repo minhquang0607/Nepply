@@ -30,7 +30,7 @@ Extract the complete portable archive and run `Nepply.exe`; keep `guardian` and 
 
 ### 🧪 Please try
 
-- Installing, opening the panel from a screen edge or with Ctrl + Space, and uninstalling.
+- Installing, opening the panel from a screen edge or with Ctrl + Alt + Space, and uninstalling.
 - Choosing a language on the welcome screen. The first language follows Windows.
 - Hiding Desktop icons, then exiting Nepply: the icons must come back.
 - Monitoring on your hardware, and Report a problem in Settings.
@@ -78,7 +78,7 @@ Với portable, giải nén **toàn bộ** và chạy `Nepply.exe`; không tách
 
 ### 🧪 Nên thử
 
-- Cài đặt, mở panel từ cạnh màn hình hoặc Ctrl + Space, rồi gỡ cài đặt.
+- Cài đặt, mở panel từ cạnh màn hình hoặc Ctrl + Alt + Space, rồi gỡ cài đặt.
 - Chọn ngôn ngữ ở màn chào. Ngôn ngữ đầu tiên theo Windows.
 - Ẩn icon Desktop rồi thoát Nepply: icon phải trở lại.
 - Theo dõi hệ thống trên phần cứng của bạn, và mục Báo lỗi trong Cài đặt.

@@ -8,7 +8,7 @@ For **Nepply 2.0.0-rc.1**, a release candidate (unsigned) currently in preparati
 
 On first run the welcome screen uses your Windows language; pick another there or later in **Settings → Appearance**.
 
-Move to your selected screen edge, or press **Ctrl + Space** unless you changed the hotkey.
+Move to your selected screen edge, or press **Ctrl + Alt + Space** unless you changed the hotkey.
 
 - Pin the panel to keep it open, including while you type in another app.
 - **Ctrl + F** focuses search.
@@ -27,7 +27,7 @@ Every shortcut can be changed in **Settings → Shortcuts**. Click a key box and
 
 | Action | Default | Works |
 | --- | --- | --- |
-| Show / hide panel | Ctrl + Space | Anywhere |
+| Show / hide panel | Ctrl + Alt + Space | Anywhere |
 | Open panel and search | Not set | Anywhere |
 | Hide / show desktop icons | Not set | Anywhere |
 | Pin / unpin panel | Not set | Anywhere |
@@ -77,7 +77,7 @@ Upload/download figures describe adapter traffic, not an Internet speed test. Do
 
 ## ⚡ Start with Windows
 
-Enable startup in Settings and choose Apply or OK. Windows may manage or disable it in Startup apps. Keep a portable installation in a fixed location; after moving it, open the app from the new location and save the startup preference again.
+Setup offers **Start with Windows**, ticked by default, on the first install; untick it if you prefer. After that, change it in Settings and choose Apply or OK. Task Manager and Windows Settings have their own switch for this entry. If that switch is off, Nepply says so under the checkbox and does not turn it back on; turn it on in **Task Manager → Startup apps** and the warning goes away. Keep a portable installation in a fixed location; after moving it, open the app from the new location and save the startup preference again.
 
 ## 🔄 Updates
 

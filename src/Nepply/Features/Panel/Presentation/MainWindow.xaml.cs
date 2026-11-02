@@ -457,7 +457,13 @@ public partial class MainWindow : Window
     }
     public void ShowPanel()
     {
-        if (_cleaned) return; _edgeGate.Disarm(); _hideTimer.Stop(); _animation.Show(); ScheduleHide();
+        if (_cleaned) return; _edgeGate.Disarm(); _hideTimer.Stop(); RefreshStartupNotice(); _animation.Show(); ScheduleHide();
+    }
+    // The warning is raised once, so it has to notice being fixed in Task Manager.
+    private void RefreshStartupNotice()
+    {
+        if (IconPanelView.ShowsActionNotice(AutoStartService.TurnedOffNotice) && !AutoStartService.IsTurnedOffInWindows())
+            IconPanelView.DismissActionNotice(AutoStartService.TurnedOffNotice);
     }
     public void OpenForInteraction()
     {

@@ -30,6 +30,11 @@ internal static class ReleaseHardeningTests
             check("Reinstalling keeps the language chosen in Nepply", Run(true, "ja", 0, out _).Language == "en");
             check("Unknown Setup language is ignored", Run(false, "xx", 0, out int unknownSaves).Language == "en" && unknownSaves == 0);
             check("Setup without the startup task leaves startup off", !Run(false, "de", 0, out _).AutoStart);
+            using (var key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(path))
+                key.SetValue("AutoStart", 0, Microsoft.Win32.RegistryValueKind.DWord);
+            var kept = new AppSettings { AutoStart = true };
+            InstallerChoices.Apply(kept, () => { }, path);
+            check("Unticking startup in Setup overrules settings kept from an earlier install", !kept.AutoStart);
             var untouched = new AppSettings { Language = "en" };
             InstallerChoices.Apply(untouched, () => throw new InvalidOperationException(), path + "-missing");
             check("A run without Setup choices changes nothing", untouched.Language == "en");
@@ -128,6 +133,21 @@ internal static class ReleaseHardeningTests
         check("Windows startup off state is recognised", AutoStartService.IsStartupStateOff(new byte[] { 3, 0, 0, 0 }));
         check("Windows startup on state is recognised", !AutoStartService.IsStartupStateOff(new byte[] { 2, 0, 0, 0 }));
         check("Missing Windows startup state is not off", !AutoStartService.IsStartupStateOff(null) && !AutoStartService.IsStartupStateOff(Array.Empty<byte>()));
+        string approvedPath = @"Software\Nepply-Tests\" + Guid.NewGuid().ToString("N");
+        try
+        {
+            using (var approved = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(approvedPath))
+            {
+                approved.SetValue("Nepply", new byte[] { 3, 0, 0, 0 });
+                approved.SetValue("Other", new byte[] { 3, 0, 0, 0 });
+            }
+            AutoStartService.ForgetOrphanedState(approvedPath);
+            using (var approved = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(approvedPath)!)
+                check("A startup switch left by a removed entry is forgotten, others stay", approved.GetValue("Nepply") == null && approved.GetValue("Other") != null);
+            AutoStartService.ForgetOrphanedState(approvedPath + "-missing");
+            check("Forgetting a startup switch tolerates a missing key", true);
+        }
+        finally { Microsoft.Win32.Registry.CurrentUser.DeleteSubKeyTree(@"Software\Nepply-Tests", false); }
         check("Onboarding saves the language picked on the welcome screen", welcomeChoice.Language == "de" && welcomeChoice.HasCompletedOnboarding);
         File.WriteAllText(path, "{\"HideDesktopIcons\":true,\"EdgePosition\":1}");
         var legacy = store.Load();

@@ -88,8 +88,10 @@ public partial class SettingsWindow : Window
         RefreshLanguageChoices();
         Closed += (_, _) => { Services.LocalizationService.Changed -= RefreshLanguageChoices; Services.LocalizationService.Apply(settings.Language); };
         LoadDraft();
-        AutoStart.Checked += (_, _) => { if (!_loadingDraft) AutoStartRevision++; };
-        AutoStart.Unchecked += (_, _) => { if (!_loadingDraft) AutoStartRevision++; };
+        AutoStart.Checked += (_, _) => { if (!_loadingDraft) AutoStartRevision++; RefreshAutoStartState(); };
+        AutoStart.Unchecked += (_, _) => { if (!_loadingDraft) AutoStartRevision++; RefreshAutoStartState(); };
+        // Re-read on return, because the switch that clears this lives in Task Manager.
+        Activated += (_, _) => RefreshAutoStartState();
         EdgeChoice.SelectionChanged += (_, _) => { if (_loadingDraft) return; StoreGrid(); LoadGrid((EdgePosition)Math.Max(0, EdgeChoice.SelectedIndex)); };
         ShowSettingsSection(0);
         SetAccessibleNames();
@@ -371,6 +373,9 @@ public partial class SettingsWindow : Window
     private void Apply_Click(object sender, RoutedEventArgs e) => SaveSettings(close: false);
     internal event Action? SettingsCommitted;
     internal int AutoStartRevision { get; private set; }
+    private void RefreshAutoStartState() => ShowAutoStartState(!Services.ProcessPackageIdentity.IsPackaged && Services.AutoStartService.IsTurnedOffInWindows());
+    internal void ShowAutoStartState(bool turnedOffInWindows) =>
+        AutoStartWindowsNotice.Visibility = turnedOffInWindows && AutoStart.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
     internal void SynchronizeAutoStart(bool requested, bool actual, int expectedRevision)
     {
         // Preserve a newer uncommitted checkbox edit while a request was pending.

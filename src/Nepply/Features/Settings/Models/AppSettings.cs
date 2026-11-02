@@ -67,7 +67,7 @@ public sealed class AppSettings
     public bool ShowHiddenFiles { get; set; }
     public bool ShowSystemIcons { get; set; } = true;
     public bool MergeEquivalentShortcuts { get; set; } = true;
-    public ThemeOption Theme { get; set; } = ThemeOption.Dark;
+    public ThemeOption Theme { get; set; } = ThemeOption.System;
     public string Accent { get; set; } = "Champagne";
     public string CustomAccent { get; set; } = "#D9BC8B";
     public GpuDisplayMode GpuDisplay { get; set; } = GpuDisplayMode.All;
@@ -75,7 +75,8 @@ public sealed class AppSettings
     public string MonitorDevice { get; set; } = "";
     public string NetworkInterfaceId { get; set; } = "";
     public string GpuIdentifier { get; set; } = "";
-    public int HotkeyModifiers { get; set; } = 2;
+    // Ctrl + Space stays free for code completion and input method switching.
+    public int HotkeyModifiers { get; set; } = ModControl | ModAlt;
     public int HotkeyKey { get; set; } = 32;
     // Rebound shortcuts other than TogglePanel; see ShortcutBindings for the format.
     public string[] Shortcuts { get; set; } = [];
@@ -87,7 +88,7 @@ public sealed class AppSettings
     {
         if (!Enum.IsDefined(EdgePosition)) EdgePosition = EdgePosition.Left;
         if (!Enum.IsDefined(IconSize)) IconSize = IconSizeOption.Medium;
-        if (!Enum.IsDefined(Theme)) Theme = ThemeOption.Dark;
+        if (!Enum.IsDefined(Theme)) Theme = ThemeOption.System;
         PanelWidth = Math.Clamp(PanelWidth, 320, 600);
         if (!Nepply.Services.LocalizationService.IsSupported(Language)) Language = Nepply.Services.LocalizationService.SystemDefault;
         PanelWidthPercent = ValidPercent(PanelWidthPercent);
@@ -128,7 +129,7 @@ public sealed class AppSettings
         // Same rule as the hotkey recorder: Ctrl or Alt is required, so a bare
         // Shift+key can never be registered globally and swallow normal typing.
         if (!ShortcutBindings.IsValid(ShortcutAction.TogglePanel, new(HotkeyModifiers, HotkeyKey)))
-        { HotkeyModifiers = ModControl; HotkeyKey = 32; }
+        { HotkeyModifiers = ModControl | ModAlt; HotkeyKey = 32; }
         Shortcuts = ShortcutBindings.Normalize(this);
     }
     public static bool IsHexColor(string? color) => color is { Length: 7 } && color[0] == '#' && color.AsSpan(1).ToArray().All(Uri.IsHexDigit);
@@ -140,7 +141,7 @@ public sealed class AppSettings
         Validate();
     }
     internal const int MaximumIdentifierLength = 2048;
-    private const int ModControl = 2;
+    private const int ModAlt = 1, ModControl = 2;
     private static string ValidIdentifier(string? value) => value is { Length: <= MaximumIdentifierLength } ? value : "";
     private static double ValidPercent(double value) => double.IsFinite(value) ? Math.Clamp(value, 0, 100) : 0;
     // Language is the user's reading choice, not a look-and-feel preference: keep it.

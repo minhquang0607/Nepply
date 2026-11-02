@@ -22,7 +22,7 @@ Extract the complete portable archive and run `Nepply.exe`; keep `guardian` and 
 
 ### ✨ What's included
 
-- Screen-edge or Ctrl + Space activation, with pinning.
+- Screen-edge or Ctrl + Alt + Space activation, with pinning.
 - Desktop search, launch and Windows context menus.
 - Columns × rows grid and screen-relative panel dimensions.
 - Light/dark themes, neon/metallic effects and Settings preview; Apply or OK to save.
@@ -66,7 +66,7 @@ Với portable, giải nén **toàn bộ** và chạy `Nepply.exe`; không tách
 
 ### ✨ Có gì trong 2.0.0?
 
-- Mở panel từ cạnh màn hình hoặc Ctrl + Space; ghim khi cần.
+- Mở panel từ cạnh màn hình hoặc Ctrl + Alt + Space; ghim khi cần.
 - Tìm và mở mục Desktop, dùng menu chuột phải của Windows.
 - Chỉnh lưới cột × hàng, bố cục và kích thước theo màn hình.
 - Giao diện sáng/tối, neon và ánh kim; xem trước cài đặt, Áp dụng hoặc OK để lưu.

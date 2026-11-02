@@ -1,0 +1,11 @@
+﻿Nepply 候选发布版 - 安装前请阅读
+
+这是候选发布版。Nepply 尚未进行代码签名，因此 Windows SmartScreen 可能会显示警告。只有在你从官方发布页面下载此文件时才继续：https://github.com/minhquang0607/Nepply/releases
+切勿为了安装或运行 Nepply 而关闭 Windows 安全功能。
+
+- 桌面图标：只有在你打开相应选项时，Nepply 才会隐藏桌面图标。文件绝不会被移动或删除，退出 Nepply 后图标会恢复。如果图标仍然隐藏，请右键单击桌面，选择“查看”>“显示桌面图标”。
+- 系统监视：可显示的读数取决于硬件、驱动程序和权限。许多电脑无法读取 CPU 温度。此安装程序不会安装任何驱动程序。
+- 隐私：没有广告、没有分析，也不会自动上传崩溃报告。
+
+报告问题：https://github.com/minhquang0607/Nepply/issues
+许可证：MIT（参见 LICENSE）。第三方组件保留各自的许可证（THIRD_PARTY_NOTICES.md）。

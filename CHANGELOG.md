@@ -8,18 +8,18 @@ Bản tổng hợp ngày **17/10/2026**, gom các thay đổi trong giai đoạn
 
 ### Desktop và thao tác
 
-- Mở panel từ cạnh màn hình hoặc phím tắt, ghim khi cần giữ mở.
+- Mở panel từ cạnh màn hình hoặc phím tắt, ghim khi cần giữ mở. Phím mặc định là Ctrl + Alt + Space, để không chiếm Ctrl + Space của gợi ý code và bộ gõ. Phím đã lưu từ bản trước được giữ nguyên.
 - Tìm kiếm và mở các mục trên Desktop, sử dụng menu chuột phải của Windows.
 - Mở shortcut trỏ tới ổ mạng mất kết nối không còn làm panel đơ.
 - Chỉnh lưới bằng số cột × hàng, với kích thước panel thích ứng theo màn hình.
 - Hạn chế tự mở panel khi trò chơi ẩn con trỏ để điều khiển nhân vật.
 - Panel đã ghim vẫn mở khi bạn gõ phím ở ứng dụng khác (lúc Windows tạm ẩn con trỏ).
 - Menu chuột phải của mục Desktop đóng lại khi bấm ra ngoài, giống menu ở khay hệ thống.
-- Phím tắt trong tệp cài đặt phải có Ctrl hoặc Alt; tổ hợp chỉ có Shift sẽ trở về Ctrl để không chặn việc gõ chữ bình thường.
+- Phím tắt trong tệp cài đặt phải có Ctrl hoặc Alt; tổ hợp chỉ có Shift sẽ trở về mặc định để không chặn việc gõ chữ bình thường.
 
 ### Giao diện và cá nhân hóa
 
-- Giao diện sáng, tối hoặc theo hệ thống; bảng màu, hiệu ứng neon và ánh kim tương tác với chuột.
+- Giao diện sáng, tối hoặc theo hệ thống (mặc định theo Windows); bảng màu, hiệu ứng neon và ánh kim tương tác với chuột.
 - Xem trước trên panel khi chỉnh cài đặt; Áp dụng để lưu, OK để lưu và đóng, Hủy để bỏ thay đổi chưa lưu.
 - Hỗ trợ tám ngôn ngữ: Việt, Anh, Nhật, Đức, Trung giản thể, Nga, Pháp và Thái.
 - Lần chạy đầu dùng ngôn ngữ hiển thị của Windows (tiếng Anh nếu Nepply chưa có ngôn ngữ đó) và màn chào cho chọn lại ngôn ngữ. Cài đặt cũ giữ nguyên ngôn ngữ đã dùng; Đặt lại cũng không đổi ngôn ngữ.
@@ -42,12 +42,12 @@ Bản tổng hợp ngày **17/10/2026**, gom các thay đổi trong giai đoạn
 
 - Cửa sổ kiểm tra cập nhật hiển thị phiên bản, nội dung mới, tiến độ và lựa chọn thử lại khi gặp lỗi.
 - Tùy chọn **Tự kiểm tra cập nhật mỗi ngày**, mặc định bật, chọn được ngay ở màn hình chào, chỉ báo ở khay hệ thống khi có bản mới.
-- Bật tự khởi động trong khi Windows đang tắt mục này giờ có thông báo chỉ chỗ bật lại.
+- Công tắc tự khởi động trong Windows đang tắt thì Cài đặt báo ngay dưới ô chọn và chỉ chỗ bật lại; bật xong cảnh báo tự mất mà không cần mở lại app. Công tắc cũ còn sót từ lần cài trước không còn làm tắt mục mới.
 - Khi bản đang dùng chưa tự cài được cập nhật (portable hoặc chưa ký số), cửa sổ cập nhật có nút **Mở trang tải** tới trang phát hành chính thức trên GitHub.
 - Ghi chú phát hành trong cửa sổ cập nhật hiển thị dạng văn bản gọn thay vì ký hiệu Markdown thô.
 - Bộ cài hỏi ngôn ngữ khi mở, chọn sẵn theo Windows: Việt, Anh, Nhật, Đức, Trung giản thể, Nga, Pháp và Thái. App dùng luôn ngôn ngữ đã chọn trong lần chạy đầu.
-- Bộ cài có giao diện tối và hình ảnh Nepply, cùng tùy chọn khởi động cùng Windows.
-- Khi gỡ, bộ cài hỏi có xóa luôn cài đặt và nhật ký không (mặc định giữ lại), và dọn thư mục giải nén trong Temp.
+- Bộ cài có giao diện tối và hình ảnh Nepply. Trang thông tin chỉ hiện đúng ngôn ngữ đã chọn. Ô khởi động cùng Windows được chọn sẵn ở lần cài đầu, và bản cập nhật không đổi lựa chọn đó.
+- Khi gỡ, bộ cài hỏi có xóa luôn cài đặt và nhật ký không (mặc định giữ lại), dọn thư mục giải nén trong Temp và bỏ công tắc tự khởi động của mục đã gỡ.
 - Nút **Báo lỗi** (Cài đặt → Ứng dụng) chép chẩn đoán vào clipboard và mở form báo lỗi GitHub đã điền sẵn phiên bản Nepply và Windows.
 - Hỗ trợ khôi phục icon Desktop khi ứng dụng kết thúc bất thường; vẫn có giới hạn nếu tiến trình hỗ trợ cũng bị dừng hoặc Explorer không hoạt động.
 
