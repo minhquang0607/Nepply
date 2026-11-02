@@ -10,7 +10,7 @@ Hai ảnh được tạo cùng lượt ngày **02/11/2026** từ Release rebuild
 | --- | --- |
 | Commit | `2fa1e783f911450194aff400fc7de7a80c018498` — the source of tag `v2.0.0-rc.1` / mã nguồn của tag `v2.0.0-rc.1` |
 | src Git tree | `737bd204bb428d5fd7c96ca153464e3163753fe4` |
-| ProductVersion | `2.0.0-rc.1+2fa1e783f911450194aff400fc7de7a80c018498` (built just before that commit, from the same `src` tree / dựng ngay trước commit đó, cùng cây `src`) |
+| ProductVersion | `2.0.0-rc.1+2fa1e783f911450194aff400fc7de7a80c018498` (the images were rendered just before that commit from the same `src` tree / ảnh được render ngay trước commit đó từ cùng cây `src`) |
 | Build | Release · Windows x64 |
 | Nepply.dll SHA-256 | `73197FD030967E4E99C5C25BA5C80575BF11D5C6D10B6796E0A44DC1C0E20625` |
 | UI verification / Kiểm thử | 2151 passed / đạt · 0 failed / lỗi; native collector disabled / tắt collector thật |
