@@ -78,7 +78,7 @@ cấu hình ký hoặc nghiệm thu cập nhật có chữ ký trên máy thật
 ## Phiên bản hiện hành
 
 Phiên bản hiện tại là `2.0.0-rc.1` (chốt 30/10/2026), metadata Windows
-`2.0.0.1`: bản phát hành thử công khai **chưa ký**, đáp ứng điều kiện "đã phát
+`2.0.0.1`: bản phát hành thử công khai **chưa ký**, phát hành ngày 02/11/2026, đáp ứng điều kiện "đã phát
 hành" của SignPath. Tag `v2.0.0-rc.1`, asset `Nepply-2.0.0-rc.1-Setup.exe`, đánh
 dấu prerelease trên GitHub. Bản ký đầu tiên là `2.0.0` (metadata `2.0.0.100`),
 cao hơn `2.0.0-rc.1` theo SemVer nên updater nhận đúng thứ tự. Nhãn cũ

@@ -8,15 +8,15 @@ Cập nhật 02/11/2026. Đây là kế hoạch duy nhất từ hiện tại đ�
 | --- | --- | --- |
 | 0 | Nền tảng đã có | Xong |
 | 1 | Sửa các lỗi nhỏ từ đợt rà soát | Xong |
-| 2 | Đưa code lên GitHub | Đã merge vào `main`, CI xanh; còn các mục chưa đánh dấu bên dưới |
-| 3 | Chuẩn bị repo công khai | Cài đặt đã kiểm chứng ngày 02/11/2026; còn thử trang báo lỗ hổng và Issues |
+| 2 | Đưa code lên GitHub | Xong |
+| 3 | Chuẩn bị repo công khai | Xong; còn tùy chọn thêm CodeQL vào ruleset |
 | 3A | Sửa lỗi từ các lượt cài thử | Xong; bạn báo đạt ngày 02/11/2026 |
-| 4 | Phát hành `2.0.0-rc.1` chưa ký | Đã công khai ngày 02/11/2026; còn cài thử từ trang Release và nhận phản hồi |
+| 4 | Phát hành `2.0.0-rc.1` chưa ký | Đã công khai và đối chiếu ngày 02/11/2026; đang nhận phản hồi |
 | 5 | Xin chữ ký số | Đã nộp đơn ngày 02/11/2026; chờ SignPath trả lời |
 | 6 | Tích hợp ký và phát hành RC đã ký | Chưa làm |
-| 7 | Hoàn thiện chất lượng | Phần của AI đã xong; còn bài đo 24 giờ và các mục của bạn |
+| 7 | Hoàn thiện chất lượng | Bài đo 24 giờ đang chạy; còn các mục của bạn |
 | 8 | Nghiệm thu trên máy thật | Chưa làm |
-| 9 | Phát hành `2.0.0` | Chưa làm |
+| 9 | Phát hành `2.0.0` | Đã tạo lại ảnh README; phần còn lại chờ RC đã ký |
 | 10 | Trả nợ kỹ thuật sau 2.0.0 | Chưa làm |
 
 ## Quyết định đã chốt
@@ -30,7 +30,7 @@ Cập nhật 02/11/2026. Đây là kế hoạch duy nhất từ hiện tại đ�
 ## Giai đoạn 0. Nền tảng đã có
 
 - [x] `.github/SECURITY.md`, `CODE_OF_CONDUCT.md`, issue templates, chính sách ký mã tiếng Anh, Dependabot cho NuGet.
-- [x] Workflow `release.yml`: tag `vX.Y.Z` → build trên GitHub runner → Release **nháp** chưa ký. Chưa xác nhận từng chạy thành công.
+- [x] Workflow `release.yml`: tag `vX.Y.Z` → build trên GitHub runner → Release **nháp** chưa ký. Đã chạy thật với tag `v2.0.0-rc.1` ngày 02/11/2026.
 - [x] Luồng ký uninstaller (`-SignedUninstallerDirectory`), kiểm chữ ký cập nhật theo nhà phát hành + CA (`Get-SignerPolicy.ps1`).
 - [x] Cửa sổ cập nhật có nút mở trang tải; ngôn ngữ đầu tiên theo Windows; bộ cài 8 ngôn ngữ; nút Báo lỗi; ghi chú phát hành dạng văn bản.
 - [x] `.gitattributes`, `.editorconfig`, kiểm format trong CI, CodeQL.
@@ -62,7 +62,7 @@ Kết quả rà 30/10/2026: build từ clone sạch đạt; cấy 20 lỗi thử
 
 ## Giai đoạn 3. Chuẩn bị repo công khai
 
-Rà nội dung trước khi chuyển Public, vì sau đó nội dung có thể đã bị lưu lại ở nơi khác. Repo đã Public ngày 02/11/2026 sau lần quét 100 commit sạch, còn các mục cài đặt bên dưới chưa làm. Chúng vẫn làm được khi repo Public và phải xong trước khi tạo tag.
+Rà nội dung trước khi chuyển Public, vì sau đó nội dung có thể đã bị lưu lại ở nơi khác. Repo đã Public ngày 02/11/2026 sau lần quét 100 commit sạch. Các mục cài đặt bên dưới đã xong trước khi tạo tag.
 
 ### Quyết định về lịch sử Git
 

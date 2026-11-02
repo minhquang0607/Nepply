@@ -34,7 +34,7 @@ Con trỏ bị ẩn/chặn trong game được xét trước tự mở cạnh. K
 
 `SettingsEditSession` giữ draft và lưu candidate trước khi công bố vào target; `SettingsChangeSet` phân loại thay đổi cho preview và commit. Apply lưu và giữ mở; OK lưu rồi đóng; Cancel chỉ bỏ phần chưa lưu.
 
-`SettingsStore` phụ trách persistence/backup/migration. SettingsWindow trình bày controls và lỗi; preview không được tạo scanner hoặc collector thứ hai. Startup/hotkey/Desktop visibility chỉ áp dụng khi lưu theo nhóm thay đổi. Công cụ chỉ dành cho phát triển không phải tính năng Release cho người dùng.
+`SettingsStore` phụ trách persistence/backup/migration. `InstallerChoices` đọc một lần lựa chọn ngôn ngữ và tự khởi động do Setup để lại. SettingsWindow trình bày controls và lỗi; preview không được tạo scanner hoặc collector thứ hai. Startup/hotkey/Desktop visibility chỉ áp dụng khi lưu theo nhóm thay đổi. Công cụ chỉ dành cho phát triển không phải tính năng Release cho người dùng.
 
 ## Telemetry
 

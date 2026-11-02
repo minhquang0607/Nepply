@@ -4,9 +4,9 @@
 <p align="center"><strong>English</strong> · <a href="README.vi.md">Tiếng Việt</a></p>
 <p align="center"><a href="#-download">Download</a> · <a href="docs/USER_GUIDE.en.md">User guide</a> · <a href="CHANGELOG.en.md">What's new</a> · <a href="docs/README.md">Documentation</a></p>
 
-> **2.0.0-rc.1 · Release candidate (unsigned) in preparation**
+> **2.0.0-rc.1 · Release candidate, available now (unsigned)**
 >
-> Signed downloads are not available yet; 2.0.0 will be the first signed release. Internal builds are not public release binaries.
+> This build is not code-signed, so Windows may warn you. 2.0.0 will be the first signed release.
 
 ## ✨ A small panel, close at hand
 
@@ -33,20 +33,20 @@ The app supports Vietnamese, English, Japanese, German, Simplified Chinese, Russ
 </tr>
 </table>
 
-Fresh renders from a clean **Release build**, source `482575f`. These are real WPF views rendered in an isolated UI fixture, not personal desktop screenshots. Panel items, icons and metrics are illustrative; the screenshots show the Vietnamese UI. Settings switches to horizontal tabs in narrow windows. [Image provenance →](docs/images/README.md)
+Fresh renders from a **Release build**, source `2fa1e78`. These are real WPF views rendered in an isolated UI fixture, not personal desktop screenshots. Panel items, icons and metrics are illustrative; the screenshots show the Vietnamese UI. Settings switches to horizontal tabs in narrow windows. [Image provenance →](docs/images/README.md)
 
 ## 📦 Download
 
 **Windows 10 version 2004 (build 19041) or later / Windows 11 · x64**
 
-| Choose | Planned file | How to use |
+| Choose | File | How to use |
 | --- | --- | --- |
 | **Setup — recommended** | `Nepply-2.0.0-rc.1-Setup.exe` | Run the installer. Uninstall through Windows Installed apps. |
 | **Portable** | `Nepply-2.0.0-rc.1-win-x64-portable.zip` | Extract everything, then run `Nepply.exe`. Keep `guardian` and all companion files. |
 
 [Open GitHub Releases →](https://github.com/minhquang0607/Nepply/releases)
 
-**Downloads are not open yet.** When published, choose the file under **Assets**. GitHub's “Source code” archives are for developers, not ready-to-run apps. Both distributions bundle .NET; no SDK installation is needed. Portable still stores settings in your Windows user profile.
+Choose the file under **Assets** on the Releases page. GitHub's “Source code” archives are for developers, not ready-to-run apps. Both distributions bundle .NET; no SDK installation is needed. Portable still stores settings in your Windows user profile.
 
 Only use the official release channel. If Windows blocks a file, check its source and release information. **Do not disable Windows protection to run Nepply.**
 

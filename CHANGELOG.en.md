@@ -2,9 +2,9 @@
 
 **English** · [Tiếng Việt](CHANGELOG.md) · [Home](README.md)
 
-## 2.0.0-rc.1 — Unreleased
+## 2.0.0-rc.1 — 2 November 2026
 
-Consolidated **17 October 2026**. This is a summary of development changes, not a download announcement. The version is finalized; the summary date is not a publication date, and does not imply signed binaries are available.
+First public release candidate, published **2 November 2026**, not code-signed. The list below summarizes the changes made during development.
 
 ### Desktop & interaction
 

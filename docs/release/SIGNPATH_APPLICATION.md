@@ -2,7 +2,7 @@
 
 Bản nháp câu trả lời cho form <https://signpath.org/apply>, đối chiếu với form và điều kiện tại <https://signpath.org/terms> ngày 02/11/2026.
 
-Minh Quang phải tự nộp, vì form tạo tài khoản SignPath đứng tên người nộp và yêu cầu cam kết tuân thủ Code of Conduct.
+Minh Quang phải tự nộp, vì form tạo tài khoản SignPath đứng tên người nộp và yêu cầu cam kết tuân thủ Code of Conduct. Trạng thái: Minh Quang báo đã nộp ngày 02/11/2026, đang chờ SignPath trả lời.
 
 ## Điều kiện trước khi nộp
 

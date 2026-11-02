@@ -51,9 +51,9 @@ Nepply has a recovery helper, but recovery is not guaranteed if that process is 
 
 ## Windows blocks the file, or updates fail
 
-There are no official signed downloads yet. Do not disable SmartScreen, App Control or antivirus to bypass a block. Verify the source and information on [Releases](https://github.com/minhquang0607/Nepply/releases).
+The current build is not code-signed, so Windows may warn you. Do not disable SmartScreen, App Control or antivirus to bypass a block. Verify the source and information on [Releases](https://github.com/minhquang0607/Nepply/releases).
 
-For update-check errors, check connectivity and retry. A private repository or absence of suitable releases can also prevent updates. Production automatic installation and portable self-replacement are not currently enabled.
+For update-check errors, check connectivity and retry. Production automatic installation and portable self-replacement are not currently enabled.
 
 ## Reset settings
 

@@ -51,9 +51,9 @@ Nepply có tiến trình hỗ trợ phục hồi, nhưng không bảo đảm n�
 
 ## Windows chặn tệp hoặc cập nhật không thành công
 
-Hiện chưa có bộ tải chính thức đã ký số. Không tắt SmartScreen, App Control hay antivirus để vượt chặn. Kiểm tra đúng nguồn tải và thông tin tại [Releases](https://github.com/minhquang0607/Nepply/releases).
+Bản hiện tại chưa ký số nên Windows có thể cảnh báo. Không tắt SmartScreen, App Control hay antivirus để vượt chặn. Kiểm tra đúng nguồn tải và thông tin tại [Releases](https://github.com/minhquang0607/Nepply/releases).
 
-Nếu kiểm tra cập nhật báo lỗi, kiểm tra kết nối Internet rồi thử lại. Repo chưa công khai hoặc chưa có release phù hợp cũng có thể khiến chức năng chưa dùng được. Chưa hỗ trợ tự cài production hoặc tự thay tệp portable ở giai đoạn hiện tại.
+Nếu kiểm tra cập nhật báo lỗi, kiểm tra kết nối Internet rồi thử lại. Chưa hỗ trợ tự cài production hoặc tự thay tệp portable ở giai đoạn hiện tại.
 
 ## Đặt lại cấu hình
 

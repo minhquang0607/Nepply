@@ -2,9 +2,9 @@
 
 [English](CHANGELOG.en.md) · **Tiếng Việt** · [Trang chính](README.vi.md)
 
-## 2.0.0-rc.1 — Chưa phát hành
+## 2.0.0-rc.1 — 02/11/2026
 
-Bản tổng hợp ngày **17/10/2026**, gom các thay đổi trong giai đoạn phát triển thành một mốc phiên bản. Các tính năng dưới đây thuộc bản đang chuẩn bị, chưa phải thông báo có bản tải ổn định. Số phiên bản đã chốt; ngày tổng hợp không phải ngày công bố. Việc chốt phiên bản không có nghĩa binary đã ký hoặc đã phát hành.
+Bản phát hành thử công khai đầu tiên, phát hành ngày **02/11/2026**, chưa ký số. Danh sách dưới đây gom các thay đổi trong giai đoạn phát triển.
 
 ### Desktop và thao tác
 

@@ -2,11 +2,11 @@
 
 [English](USER_GUIDE.en.md) · **Tiếng Việt** · [Trang chính](../README.vi.md) · [Xử lý sự cố](TROUBLESHOOTING.md)
 
-Hướng dẫn cho **Nepply 2.0.0-rc.1**, bản phát hành thử (chưa ký) đang chuẩn bị; chưa có bộ tải chính thức đã ký số.
+Hướng dẫn cho **Nepply 2.0.0-rc.1**, bản phát hành thử chưa ký số. Bản ký số đầu tiên sẽ là 2.0.0.
 
 ## Mở và đóng panel
 
-Lần chạy đầu, màn chào dùng ngôn ngữ của Windows; bạn có thể chọn ngôn ngữ khác ngay tại đó hoặc sau này trong **Cài đặt → Giao diện**.
+Bộ cài hỏi ngôn ngữ và chọn sẵn theo Windows; app dùng luôn ngôn ngữ đó ở lần chạy đầu. Bản portable dùng ngôn ngữ của Windows. Bạn có thể đổi ở màn chào hoặc sau này trong **Cài đặt → Giao diện**.
 
 Đưa chuột tới cạnh màn hình đã chọn để mở panel, hoặc mở từ biểu tượng khay hệ thống. Nepply không đặt sẵn phím mở panel, vì các tổ hợp dễ bấm thường đã thuộc về ứng dụng khác; bạn tự chọn phím trong **Cài đặt → Phím tắt**.
 
@@ -65,7 +65,7 @@ Bạn có thể đổi cạnh, kích thước, lưới, màu, chế độ sáng/
 
 Nếu đã bấm Áp dụng, Hủy sau đó chỉ bỏ những thay đổi mới kể từ lần Áp dụng đó. Các thao tác hệ thống như tự khởi động được áp dụng khi lưu, không phải hiệu ứng xem trước.
 
-Có thể bật/tắt neon và ánh kim. Nếu muốn giao diện tĩnh, giảm hoặc tắt chuyển động trong tùy chọn giao diện. Dùng xuất/nhập bố cục để lưu cách trình bày; file bố cục không phải bản sao lưu toàn bộ cấu hình và Desktop.
+Giao diện mặc định theo chế độ sáng/tối của Windows. Có thể bật/tắt neon và ánh kim. Nếu muốn giao diện tĩnh, giảm hoặc tắt chuyển động trong tùy chọn giao diện. Dùng xuất/nhập bố cục để lưu cách trình bày; file bố cục không phải bản sao lưu toàn bộ cấu hình và Desktop.
 
 ## Theo dõi hệ thống
 

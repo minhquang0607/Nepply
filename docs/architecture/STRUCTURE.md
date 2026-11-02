@@ -21,7 +21,7 @@ Nepply là modular monolith WPF: một assembly ứng dụng, nhóm mã theo tí
 | `src/Nepply.DesktopGuardian` | Helper không WPF, tồn tại theo phiên ẩn Desktop; chờ owner thoát và phục hồi, không đăng ký persistence |
 | `tests/Nepply.Tests` | Chương trình kiểm thử và fixture WPF |
 | `tools/SensorDumper` | Công cụ chẩn đoán cảm biến độc lập; không thuộc payload ứng dụng |
-| `packaging/inno` | Cấu hình bộ cài chính và entry point tương thích |
+| `packaging/inno` | Cấu hình bộ cài chính, ảnh, thông điệp và trang thông báo theo từng ngôn ngữ |
 | `scripts` | Kiểm tra build, dependency, notice, manifest và ký mã |
 | `docs` | Hướng dẫn người dùng, xử lý sự cố, ảnh minh họa, architecture, release và legal |
 | `artifacts` | Kết quả build/test có thể tái tạo, không commit |

@@ -4,9 +4,9 @@
 <p align="center"><a href="README.md">English</a> · <strong>Tiếng Việt</strong></p>
 <p align="center"><a href="#-tải-ứng-dụng">Tải ứng dụng</a> · <a href="docs/USER_GUIDE.md">Hướng dẫn</a> · <a href="CHANGELOG.md">Có gì mới</a> · <a href="docs/README.md">Tài liệu</a></p>
 
-> **2.0.0-rc.1 · Đang chuẩn bị bản phát hành thử (chưa ký)**
+> **2.0.0-rc.1 · Bản phát hành thử, đã có bản tải (chưa ký số)**
 >
-> Chưa có bản tải chính thức đã ký số; 2.0.0 sẽ là bản ký đầu tiên. Bản build nội bộ không phải binary phát hành công khai.
+> Bản này chưa ký số nên Windows có thể cảnh báo. 2.0.0 sẽ là bản ký đầu tiên.
 
 ## ✨ Panel nhỏ, tiện ngay bên cạnh
 
@@ -33,20 +33,20 @@ Nepply nằm ở cạnh màn hình Windows. Mở mục Desktop, tìm theo tên v
 </tr>
 </table>
 
-Ảnh render mới từ **build Release** sạch, source `482575f`. Đây là các view WPF thật trong fixture UI cô lập, không phải ảnh Desktop cá nhân. Tên mục, icon và số đo panel là dữ liệu minh họa; ảnh dùng giao diện tiếng Việt. Settings chuyển sang tab ngang khi cửa sổ hẹp. [Nguồn ảnh →](docs/images/README.md)
+Ảnh render mới từ **build Release**, source `2fa1e78`. Đây là các view WPF thật trong fixture UI cô lập, không phải ảnh Desktop cá nhân. Tên mục, icon và số đo panel là dữ liệu minh họa; ảnh dùng giao diện tiếng Việt. Settings chuyển sang tab ngang khi cửa sổ hẹp. [Nguồn ảnh →](docs/images/README.md)
 
 ## 📦 Tải ứng dụng
 
 **Windows 10 phiên bản 2004 (build 19041) trở lên / Windows 11 · x64**
 
-| Lựa chọn | Tệp dự kiến | Cách dùng |
+| Lựa chọn | Tệp | Cách dùng |
 | --- | --- | --- |
 | **Setup — khuyên dùng** | `Nepply-2.0.0-rc.1-Setup.exe` | Chạy bộ cài; gỡ qua danh sách ứng dụng của Windows. |
 | **Portable** | `Nepply-2.0.0-rc.1-win-x64-portable.zip` | Giải nén toàn bộ rồi chạy `Nepply.exe`. Giữ `guardian` và các file đi kèm. |
 
 [Mở GitHub Releases →](https://github.com/minhquang0607/Nepply/releases)
 
-**Chưa mở tải.** Khi công bố, chọn tệp trong **Assets**. Các gói “Source code” của GitHub là mã nguồn cho người phát triển, không phải app chạy ngay. Cả hai bản đóng gói sẵn .NET, không cần cài SDK. Portable vẫn lưu cấu hình trong tài khoản Windows.
+Chọn tệp trong **Assets** ở trang Releases. Các gói “Source code” của GitHub là mã nguồn cho người phát triển, không phải app chạy ngay. Cả hai bản đóng gói sẵn .NET, không cần cài SDK. Portable vẫn lưu cấu hình trong tài khoản Windows.
 
 Chỉ tải từ kênh phát hành chính thức. Nếu Windows chặn file, kiểm tra nguồn và thông tin release. **Không tắt bảo vệ Windows để chạy Nepply.**
 

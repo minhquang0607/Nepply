@@ -5,8 +5,8 @@
 ## Status
 
 Nepply-owned code is MIT licensed; dependencies keep their own licenses.
-An application to SignPath Foundation is being prepared. **It has not been
-approved, no certificate has been issued and no production binary is signed.**
+An application to SignPath Foundation was submitted on 2 November 2026.
+**It has not been approved, no certificate has been issued and no production binary is signed.**
 QA certificates are never a substitute for release signatures, and users are
 never asked to disable Windows protection instead.
 

@@ -5,7 +5,7 @@
 ## Trạng thái
 
 Nepply dùng MIT cho mã do dự án sở hữu; dependency giữ giấy phép riêng.
-Đang chuẩn bị đăng ký SignPath Foundation. **Chưa được phê duyệt, chưa nhận
+Đã nộp đơn cho SignPath Foundation ngày 02/11/2026. **Chưa được phê duyệt, chưa nhận
 tài trợ/chứng thư và chưa có binary ký sản xuất.** Không dùng chứng thư QA
 hoặc yêu cầu người dùng tắt bảo vệ Windows để thay thế chữ ký phát hành.
 

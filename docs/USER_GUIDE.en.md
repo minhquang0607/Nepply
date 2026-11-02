@@ -2,11 +2,11 @@
 
 **English** · [Tiếng Việt](USER_GUIDE.md) · [Home](../README.md) · [Troubleshooting](TROUBLESHOOTING.en.md)
 
-For **Nepply 2.0.0-rc.1**, a release candidate (unsigned) currently in preparation. No official signed downloads are available yet.
+For **Nepply 2.0.0-rc.1**, a release candidate that is not code-signed. 2.0.0 will be the first signed release.
 
 ## 🖱️ Open and close the panel
 
-On first run the welcome screen uses your Windows language; pick another there or later in **Settings → Appearance**.
+Setup asks for a language, preselecting your Windows language, and the app uses it on its first run. The portable build uses your Windows language. Change it on the welcome screen or later in **Settings → Appearance**.
 
 Move to your selected screen edge, or open the panel from the tray icon. Nepply sets no hotkey for this, because easy combinations usually belong to another app; choose your own in **Settings → Shortcuts**.
 
@@ -65,7 +65,7 @@ Change edge, dimensions, grid, colors, theme and effects in Settings. Supported 
 
 Cancel does not undo an earlier Apply. System changes such as startup registration are applied when saving, not as a visual preview.
 
-Neon and metallic effects can be toggled. Reduce or disable motion for a static interface. Layout export/import saves presentation preferences, not a full backup of settings or Desktop files.
+The look follows Windows' light or dark mode by default. Neon and metallic effects can be toggled. Reduce or disable motion for a static interface. Layout export/import saves presentation preferences, not a full backup of settings or Desktop files.
 
 ## 📊 System monitoring
 
