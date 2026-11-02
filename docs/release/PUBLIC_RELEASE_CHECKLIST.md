@@ -130,7 +130,7 @@ Nguyên nhân: khi ẩn, app bỏ mốc đo CPU và mạng nên lần đọc đ�
 
 ### Nghiệm thu
 
-- [ ] **[AI]** Dựng Setup mới, chạy đủ test và gate, CI xanh.
+- [x] **[AI]** Dựng Setup mới từ `4df9608`, core 1034 và UI 2135 test đạt, các gate đạt, Verify #15 và CodeQL #16 xanh. Bản thử nằm ở `artifacts/dist-final-112127/installer`, chưa qua `Release build` trên GitHub.
 - [ ] **[Bạn]** Cài lại và thử: chọn ngôn ngữ, góc màn hình, độ nhanh của monitor, rồi gỡ và chọn xóa dữ liệu.
 
 **Xong khi:** các mục trên đạt và bạn đồng ý với bản cài mới.
