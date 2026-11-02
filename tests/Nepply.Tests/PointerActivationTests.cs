@@ -57,5 +57,31 @@ internal static class PointerActivationTests
         check("Dwell bằng không vẫn yêu cầu lượt rê hợp lệ", gate.Update(visible, true, true, true, false, 1, 0));
         gate.Disarm();
         check("Disarm không cho mở ngay dù dwell bằng không", !gate.Update(visible, true, true, true, false, 2, 0));
+        gate = new();
+        gate.Update(visible, true, false, false, false, 0, 120);
+        gate.Update(visible, true, true, true, false, 100, 120);
+        gate.Update(visible, false, false, false, false, 200, 120, besideEdge: true);
+        check("Quay lại từ góc thanh tác vụ vẫn cần dwell", !gate.Update(visible, true, true, true, false, 300, 120));
+        check("Đi dọc cạnh từ góc thanh tác vụ mở panel", gate.Update(visible, true, true, true, false, 420, 120));
+        gate = new();
+        gate.Update(visible, false, false, false, false, 0, 120, besideEdge: true);
+        gate.Update(visible, true, true, true, false, 100, 120);
+        check("Khởi động tại góc thanh tác vụ rồi đi lên mở được", gate.Update(visible, true, true, true, false, 220, 120));
+        gate = new();
+        gate.Update(visible, false, false, false, false, 0, 120);
+        gate.Update(visible, true, true, true, false, 100, 120);
+        check("Chuột sang từ màn hình khác vẫn không mở panel", !gate.Update(visible, true, true, true, false, 300, 120));
+        gate = new();
+        gate.Update(visible, true, false, false, false, 0, 120);
+        gate.Update(visible, false, false, false, true, 100, 120, besideEdge: true);
+        gate.Update(visible, true, true, true, false, 200, 120);
+        check("Góc thanh tác vụ không bỏ qua trạng thái bị chặn", !gate.Update(visible, true, true, true, false, 400, 120));
+        var taskbar = new Nepply.Helpers.DisplayScreen("fixture", 0, 0, 1920, 1040, 1, true) { Monitor = (0, 0, 1920, 1080) };
+        check("Thanh tác vụ nằm trên màn hình nhưng ngoài vùng làm việc", taskbar.OnMonitor(2, 1060) && !taskbar.Contains(2, 1060));
+        check("Màn hình khác không nằm trên màn hình này", !taskbar.OnMonitor(2, 1100) && !taskbar.OnMonitor(-2, 500));
+        check("Bản ghi không có thông tin màn hình dùng vùng làm việc", !new Nepply.Helpers.DisplayScreen("fixture", 0, 0, 1920, 1040, 1, true).OnMonitor(2, 1060));
+        check("Góc thanh tác vụ nằm cạnh mép trái", Nepply.Modules.Panel.EdgeHitTest.BesideEdge(Nepply.Models.EdgePosition.Left, 2, 1060, 0, 0, 1920, 1040, 16));
+        check("Giữa thanh tác vụ không nằm cạnh mép trái", !Nepply.Modules.Panel.EdgeHitTest.BesideEdge(Nepply.Models.EdgePosition.Left, 400, 1060, 0, 0, 1920, 1040, 16));
+        check("Góc thanh tác vụ nằm cạnh mép phải", Nepply.Modules.Panel.EdgeHitTest.BesideEdge(Nepply.Models.EdgePosition.Right, 1919, 1060, 0, 0, 1920, 1040, 16));
     }
 }

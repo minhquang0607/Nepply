@@ -15,7 +15,7 @@ internal sealed class PointerActivationGate
     }
 
     internal bool Update(PointerContext? context, bool insideMonitor, bool onEdge,
-        bool inReleaseZone, bool blocked, long nowMs, int dwellMs)
+        bool inReleaseZone, bool blocked, long nowMs, int dwellMs, bool besideEdge = false)
     {
         if (context is not { CursorVisible: true } sample || sample.Foreground == 0 || sample.ProcessId == 0)
         {
@@ -28,15 +28,22 @@ internal sealed class PointerActivationGate
             _processId = sample.ProcessId;
             Disarm();
         }
-        if (blocked || !insideMonitor)
+        if (blocked || (!insideMonitor && !besideEdge))
         {
             Disarm();
             return false;
         }
+        // The taskbar corner belongs to this display, so coming back along the edge may open the panel.
+        if (!insideMonitor)
+        {
+            _needsInterior = false;
+            _edge.Update(false, false, false, nowMs, dwellMs);
+            return false;
+        }
         // Another display cannot arm this panel; a restored cursor at the edge cannot either.
-        if (insideMonitor && !inReleaseZone) _needsInterior = false;
+        if (!inReleaseZone) _needsInterior = false;
         if (_needsInterior) return false;
-        return _edge.Update(onEdge && insideMonitor, inReleaseZone, false, nowMs, dwellMs);
+        return _edge.Update(onEdge, inReleaseZone, false, nowMs, dwellMs);
     }
 
     internal static bool CanCommit(PointerContext previous, PointerContext? current, bool onEdge) =>

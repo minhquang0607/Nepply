@@ -18,7 +18,8 @@ internal static class PanelGeometryTests
             && EdgeHitTest.DistanceToEdge(EdgePosition.Top, -100, -195, -1920, -200, 0, 880) == 5
             && EdgeHitTest.DistanceToEdge(EdgePosition.Bottom, -100, 879, -1920, -200, 0, 880) == 0);
         check("Edge distance is unknown on another display", EdgeHitTest.DistanceToEdge(EdgePosition.Bottom, 1, 879, -1920, -200, 0, 880) == null);
-        check("Edge polling stays responsive near the edge", EdgePolling.Interval(false, 100, 164) == EdgePolling.Responsive);
+        check("Edge polling is fastest near the edge", EdgePolling.Interval(false, 100, 164) == EdgePolling.NearEdge && EdgePolling.NearEdge < EdgePolling.Responsive);
+        check("Near-edge polling ends the default trigger delay on time", new AppSettings().TriggerDelayMs % (int)EdgePolling.NearEdge.TotalMilliseconds == 0);
         check("Edge polling stays responsive while the panel is active", EdgePolling.Interval(true, null, 164) == EdgePolling.Responsive);
         check("Edge polling idles far from the edge", EdgePolling.Interval(false, 165, 164) == EdgePolling.Idle
             && EdgePolling.Interval(false, null, 164) == EdgePolling.Idle && EdgePolling.Idle > EdgePolling.Responsive);

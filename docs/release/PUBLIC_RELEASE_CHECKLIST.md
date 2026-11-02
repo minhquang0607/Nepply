@@ -104,9 +104,9 @@ Bạn cài Release build #1 ngày 02/11/2026 và thấy các vấn đề dưới
 
 ### Kích hoạt panel
 
-- [ ] **[AI]** Sửa lỗi di vào góc mà panel không trượt ra. Vùng làm việc không tính thanh tác vụ, nên chuột vào góc dưới trái bị coi là ra khỏi màn hình. `PointerActivationGate` khi đó đòi chuột rời cạnh hơn 16 DIP rồi mới cho mở lại, nên đi tiếp lên dọc cạnh không mở được. Giữ quy tắc chuột sang từ màn hình khác không được mở panel.
-- [ ] **[AI]** Giảm độ trễ khi lao nhanh tới cạnh: chuột ở xa được đọc 250 ms một lần, cộng thêm 80 ms và 120 ms chờ, nên chậm nhất khoảng 450 ms. Mục tiêu: panel bắt đầu trượt trong 200 ms mà không tăng CPU lúc rảnh.
-- [ ] **[AI]** Đo khung hình lúc trượt. Bản phát hành chưa bật ReadyToRun nên code của app được biên dịch lúc chạy, và cửa sổ trong suốt tốn hơn khi di chuyển. Bật ReadyToRun nếu đo thấy lợi, ghi lại Setup tăng bao nhiêu MB, và dời việc nặng ra sau khi animation bắt đầu.
+- [x] **[AI]** Sửa lỗi di vào góc mà panel không trượt ra. Vùng làm việc không tính thanh tác vụ, nên chuột vào góc dưới trái bị coi là ra khỏi màn hình. `PointerActivationGate` khi đó đòi chuột rời cạnh hơn 16 DIP rồi mới cho mở lại, nên đi tiếp lên dọc cạnh không mở được. Giờ góc thanh tác vụ của chính màn hình đó được tính là đã rời cạnh; chuột sang từ màn hình khác vẫn không mở panel.
+- [x] **[AI]** Giảm độ trễ tới cạnh: trước đây chuột ở xa được đọc 250 ms một lần, cộng 80 ms và 120 ms chờ, nên chậm nhất khoảng 450 ms. Giờ đọc 125 ms ở xa và 40 ms gần cạnh, nên tính theo chu kỳ là 120 đến 160 ms khi đi bình thường, tối đa khoảng 245 ms khi lao rất nhanh. Timer cạnh chạy ở mức ưu tiên Input. Cảm nhận thật do bạn xác nhận ở bước nghiệm thu.
+- [x] **[AI]** Đo khung hình lúc trượt bằng 3 lượt smoke test, mỗi lượt 3 lần mở: luồng giao diện chỉ bị chặn 3 ms, khung hình chậm nhất khoảng 20 ms ở cả hai bản, nên animation không phải nguyên nhân. ReadyToRun không cải thiện đáng kể mà làm `Nepply.exe` tăng từ 194 lên 256 MB, nên **không bật**. Smoke test giờ ghi các số này để phát hiện thoái lui. Lượt đo tắt cảm biến và panel mới ẩn 300 ms, nên chưa phủ trường hợp ẩn rất lâu.
 
 ### Monitor khi mở panel
 

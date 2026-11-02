@@ -22,7 +22,8 @@ public partial class MainWindow : Window
     private readonly DesktopIconService _icons;
     private DesktopUpdateCoordinator? _desktopUpdates;
     private readonly Services.Telemetry.IHardwareMonitor _monitor;
-    private readonly DispatcherTimer _edgeTimer = new() { Interval = EdgePolling.Responsive };
+    // Default Background priority would let a busy UI thread hold back the reveal.
+    private readonly DispatcherTimer _edgeTimer = new(DispatcherPriority.Input) { Interval = EdgePolling.Responsive };
     private readonly DispatcherTimer _hideTimer = new();
     private readonly DispatcherTimer _displayTimer = new() { Interval = TimeSpan.FromMilliseconds(250) };
     private Modules.Search.SearchSession? _searchSession;
@@ -189,7 +190,13 @@ public partial class MainWindow : Window
                 if (!_animation.IsVisible) Dispatcher.BeginInvoke(new Action(() =>
                 { if (!_cleaned && !_animation.IsVisible) _animation.HideInstantly(); }));
             }
-            if (_smokeTest) { _icons.ScanDesktopIcons(); _monitor.Start(); _animation.HideInstantly(); ShowPanel(); }
+            if (_smokeTest)
+            {
+                _icons.ScanDesktopIcons(); _monitor.Start(); _animation.HideInstantly();
+                var clock = System.Diagnostics.Stopwatch.StartNew();
+                ShowPanel();
+                SmokeFirstRevealMs = clock.Elapsed.TotalMilliseconds;
+            }
             return;
         }
         try { _desktopUpdates = new(this, _icons); }
@@ -421,6 +428,28 @@ public partial class MainWindow : Window
 
         return true;
     }
+    internal double SmokeFirstRevealMs { get; private set; }
+    internal readonly record struct RevealTiming(double BlockedMs, double SlowestFrameMs, int Frames);
+    // UI-thread time before the slide starts, and the worst frame gap while it runs.
+    internal async Task<RevealTiming> MeasureRevealAsync()
+    {
+        _animation.HideInstantly();
+        await Task.Delay(300);
+        var clock = System.Diagnostics.Stopwatch.StartNew();
+        double last = 0, slowest = 0;
+        int frames = 0;
+        void Frame(object? sender, EventArgs e)
+        {
+            double now = clock.Elapsed.TotalMilliseconds;
+            slowest = Math.Max(slowest, now - last); last = now; frames++;
+        }
+        CompositionTarget.Rendering += Frame;
+        ShowPanel();
+        double blocked = clock.Elapsed.TotalMilliseconds;
+        while (_animation.IsAnimating) await Task.Delay(8);
+        CompositionTarget.Rendering -= Frame;
+        return new(blocked, slowest, frames);
+    }
     public void ShowPanel()
     {
         if (_cleaned) return; _edgeGate.Disarm(); _hideTimer.Stop(); _animation.Show(); ScheduleHide();
@@ -499,10 +528,12 @@ public partial class MainWindow : Window
             _screen.Left, _screen.Top, _screen.Right, _screen.Bottom, size);
         bool insideMonitor = point.X >= _screen.Left && point.X < _screen.Right &&
             point.Y >= _screen.Top && point.Y < _screen.Bottom;
-        if (_edgeGate.Update(context, insideMonitor, InZone(point, zone),
-            InZone(point, zone + (int)Math.Ceiling(12 * _screen.Scale)),
+        int releaseZone = zone + (int)Math.Ceiling(12 * _screen.Scale);
+        bool besideEdge = !insideMonitor && _screen.OnMonitor(point.X, point.Y) && EdgeHitTest.BesideEdge(_settings.EdgePosition,
+            point.X, point.Y, _screen.Left, _screen.Top, _screen.Right, _screen.Bottom, releaseZone);
+        if (_edgeGate.Update(context, insideMonitor, InZone(point, zone), InZone(point, releaseZone),
             _animation.IsVisible || _animation.IsAnimating || _suppress > 0,
-            Environment.TickCount64, _settings.TriggerDelayMs))
+            Environment.TickCount64, _settings.TriggerDelayMs, besideEdge))
         {
             var current = ReadPointerContext();
             if (PointerActivationGate.CanCommit(point, current, current is { } latest && InZone(latest, zone))) ShowPanel();

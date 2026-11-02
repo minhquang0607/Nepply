@@ -17,6 +17,19 @@ internal static class EdgeHitTest
             _ => false
         };
     }
+    // True past the end of the edge too, such as over the taskbar in a corner.
+    internal static bool BesideEdge(EdgePosition edge, int x, int y, int left, int top, int right, int bottom, int size)
+    {
+        int distance = edge switch
+        {
+            EdgePosition.Left => x - left,
+            EdgePosition.Right => right - 1 - x,
+            EdgePosition.Top => y - top,
+            EdgePosition.Bottom => bottom - 1 - y,
+            _ => -1
+        };
+        return distance >= 0 && distance < size;
+    }
     // Pixels from the pointer to the trigger edge; null outside the monitor.
     internal static int? DistanceToEdge(EdgePosition edge, int x, int y, int left, int top, int right, int bottom)
     {
@@ -35,11 +48,13 @@ internal static class EdgeHitTest
 /// <summary>Edge polling cadence: responsive near the trigger edge or while the panel is up, slow elsewhere to let the CPU idle.</summary>
 internal static class EdgePolling
 {
+    // Fine enough to end the trigger delay on time; the pointer stays this close only briefly.
+    internal static readonly TimeSpan NearEdge = TimeSpan.FromMilliseconds(40);
     internal static readonly TimeSpan Responsive = TimeSpan.FromMilliseconds(80);
-    internal static readonly TimeSpan Idle = TimeSpan.FromMilliseconds(250);
+    internal static readonly TimeSpan Idle = TimeSpan.FromMilliseconds(125);
     // Wide enough that even a fast approach is sampled several times before the zone.
     internal const double NearBandDip = 160;
 
     internal static TimeSpan Interval(bool panelActive, int? distanceToEdge, int nearBand)
-        => panelActive || distanceToEdge is { } distance && distance <= nearBand ? Responsive : Idle;
+        => panelActive ? Responsive : distanceToEdge is { } distance && distance <= nearBand ? NearEdge : Idle;
 }

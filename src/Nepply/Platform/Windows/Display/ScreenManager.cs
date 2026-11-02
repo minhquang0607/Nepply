@@ -6,6 +6,9 @@ public sealed record DisplayScreen(string Device, int Left, int Top, int Right, 
     public int Width => Right - Left;
     public int Height => Bottom - Top;
     public bool Contains(int x, int y) => x >= Left && x < Right && y >= Top && y < Bottom;
+    // Left, Top, Right and Bottom are the work area; this is the whole monitor, taskbar included.
+    public (int Left, int Top, int Right, int Bottom) Monitor { get; init; } = (Left, Top, Right, Bottom);
+    public bool OnMonitor(int x, int y) => x >= Monitor.Left && x < Monitor.Right && y >= Monitor.Top && y < Monitor.Bottom;
 }
 public static class ScreenManager
 {
@@ -37,7 +40,8 @@ public static class ScreenManager
             {
                 double scale = GetDpiForMonitor(monitor, 0, out uint dpi, out _) == 0 && dpi > 0 ? dpi / 96d : 1;
                 if (info.Work.Right > info.Work.Left && info.Work.Bottom > info.Work.Top)
-                    result.Add(new(info.Device, info.Work.Left, info.Work.Top, info.Work.Right, info.Work.Bottom, scale, (info.Flags & 1) != 0));
+                    result.Add(new(info.Device, info.Work.Left, info.Work.Top, info.Work.Right, info.Work.Bottom, scale, (info.Flags & 1) != 0)
+                    { Monitor = (info.Monitor.Left, info.Monitor.Top, info.Monitor.Right, info.Monitor.Bottom) });
             }
             return true;
         }, IntPtr.Zero);

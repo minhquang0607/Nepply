@@ -146,7 +146,7 @@ public partial class App : Application
             var process = System.Diagnostics.Process.GetCurrentProcess();
             var cpuBefore = process.TotalProcessorTime;
             var timeout = new System.Windows.Threading.DispatcherTimer { Interval = TimeSpan.FromSeconds(20) };
-            timeout.Tick += (_, _) =>
+            timeout.Tick += async (_, _) =>
             {
                 var desktopState = window.CurrentDesktopScanState;
                 bool desktopTerminal = !desktopState.IsScanning && (desktopState.HasSnapshot || desktopState.Error != null);
@@ -157,7 +157,9 @@ public partial class App : Application
                     timeout.Interval = TimeSpan.FromSeconds(1);
                     return;
                 }
-                timeout.Stop(); process.Refresh();
+                timeout.Stop();
+                var reveals = new[] { await window.MeasureRevealAsync(), await window.MeasureRevealAsync(), await window.MeasureRevealAsync() };
+                process.Refresh();
                 var snapshot = window.CurrentSnapshot;
                 bool passed = desktopTerminal && desktopState.HasSnapshot && desktopState.Error == null && snapshot.Sequence > 0;
                 var result = new
@@ -175,7 +177,11 @@ public partial class App : Application
                     WorkingSetMiB = process.WorkingSet64 / 1048576d,
                     PrivateMiB = process.PrivateMemorySize64 / 1048576d,
                     ProcessCpuSeconds = (process.TotalProcessorTime - cpuBefore).TotalSeconds,
-                    Note = "Startup included; Windows metrics only; no desktop visibility or autostart modifications; not a long-run benchmark."
+                    FirstRevealMs = window.SmokeFirstRevealMs,
+                    RevealBlockedMs = reveals.Select(reveal => reveal.BlockedMs).ToArray(),
+                    RevealSlowestFrameMs = reveals.Select(reveal => reveal.SlowestFrameMs).ToArray(),
+                    RevealFrames = reveals.Select(reveal => reveal.Frames).ToArray(),
+                    Note ="Startup included; Windows metrics only; no desktop visibility or autostart modifications; not a long-run benchmark."
                 };
                 var outputIndex = Array.IndexOf(e.Args, "--smoke-output");
                 if (outputIndex >= 0 && outputIndex + 1 < e.Args.Length)
