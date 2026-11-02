@@ -9,8 +9,9 @@ Cập nhật 02/11/2026. Đây là kế hoạch duy nhất từ hiện tại đ�
 | 0 | Nền tảng đã có | Xong |
 | 1 | Sửa các lỗi nhỏ từ đợt rà soát | Xong |
 | 2 | Đưa code lên GitHub | Đã merge vào `main`, CI xanh; còn các mục chưa đánh dấu bên dưới |
-| 3 | Chuẩn bị repo công khai | Repo đã Public ngày 02/11/2026; còn các mục cài đặt của bạn, phải xong trước khi tag |
-| 4 | Phát hành `2.0.0-rc.1` chưa ký | Ghi chú và chạy thử đã xong; chờ giai đoạn 3 và lượt cài thử của bạn |
+| 3 | Chuẩn bị repo công khai | Cài đặt đã kiểm chứng ngày 02/11/2026; chỉ còn tag rule của môi trường `release` |
+| 3A | Sửa lỗi từ lượt cài thử đầu tiên | Đang làm; phải xong trước khi tag |
+| 4 | Phát hành `2.0.0-rc.1` chưa ký | Ghi chú và chạy thử đã xong; chờ giai đoạn 3A |
 | 5 | Xin chữ ký số | Đã soạn đơn; chờ Release công khai |
 | 6 | Tích hợp ký và phát hành RC đã ký | Chưa làm |
 | 7 | Hoàn thiện chất lượng | Phần của AI đã xong; còn bài đo 24 giờ và các mục của bạn |
@@ -74,19 +75,19 @@ Rà nội dung trước khi chuyển Public, vì sau đó nội dung có thể �
 
 Repo `Nepply` tạo ngày 02/11/2026 không mang theo cài đặt của repo cũ. Các số PR, số lần chạy CI và *Release build* ghi trong kế hoạch trước ngày này thuộc `Nepply-archive`. Giá trị bên dưới được đối chiếu với repo cũ, nên làm đúng từng mục là đủ.
 
-- [ ] **[Bạn] Tên hiển thị**: GitHub → Settings → Public profile → Name: `Minh Quang`. Commit merge trên web đang lấy tên `MQuang07` từ hồ sơ, nên chưa đổi thì commit merge mới vẫn mang tên đó.
+- [x] **[Bạn] Tên hiển thị**: GitHub → Settings → Public profile → Name: `Minh Quang`. Đã đổi; API công khai trả về đúng tên này.
 - [x] **[Bạn] MFA tài khoản**: Settings (tài khoản) → Password and authentication → bật Two-factor authentication. Lưu recovery codes ngoài máy. Ngày 02/11/2026 trang này cho thấy Authenticator app và GitHub Mobile đã cấu hình, recovery codes đã được xem. Nơi lưu recovery codes do bạn tự kiểm tra.
-- [ ] **[Bạn] Bảo mật repo**: repo → Settings → *Advanced Security*: bật Dependency graph, Dependabot alerts, Dependabot security updates và Grouped security updates.
-- [ ] **[Bạn] Actions**: Settings → Actions → General:
-  - Bật *Require actions to be pinned to a full-length commit SHA*. Repo mới đang tắt mục này.
-  - Workflow permissions: *Read repository contents and packages permissions*. Repo mới đã đúng.
-  - Bỏ chọn *Allow GitHub Actions to create and approve pull requests*. Repo mới đã đúng.
-- [ ] **[Bạn] Bảo vệ nhánh `main`**: Settings → Rules → Rulesets → New ruleset → Import a ruleset, chọn [`rulesets/protect-main.json`](rulesets/protect-main.json): chặn force push và xóa nhánh, yêu cầu status check `build`, Repository admin được bỏ qua. Nếu import lỗi thì tạo tay theo đúng các giá trị đó.
-- [ ] **[Bạn] Bảo vệ tag**: import [`rulesets/protect-release-tags.json`](rulesets/protect-release-tags.json) cho tag `v*`: chặn sửa, xóa và force push, Repository admin được bỏ qua.
-- [ ] **[Bạn] Môi trường release**: Settings → Environments → New environment `release` → *Deployment branches and tags*: *Selected branches and tags*, thêm tag rule `v*`.
+- [x] **[Bạn] Bảo mật repo**: repo → Settings → *Advanced Security*: bật Dependency graph, Dependabot alerts, Dependabot security updates và Grouped security updates. Đã bật.
+- [x] **[Bạn] Actions**: Settings → Actions → General:
+  - Bật *Require actions to be pinned to a full-length commit SHA*. Đã bật.
+  - Workflow permissions: *Read repository contents and packages permissions*. Đúng.
+  - Bỏ chọn *Allow GitHub Actions to create and approve pull requests*. Đúng.
+- [x] **[Bạn] Bảo vệ nhánh `main`**: [`rulesets/protect-main.json`](rulesets/protect-main.json) đã import, đang Active: chặn force push và xóa nhánh, yêu cầu status check `build`, Repository admin được bỏ qua.
+- [x] **[Bạn] Bảo vệ tag**: [`rulesets/protect-release-tags.json`](rulesets/protect-release-tags.json) đã import, đang Active cho tag `v*`: chặn sửa, xóa và force push, Repository admin được bỏ qua.
+- [ ] **[Bạn] Môi trường release**: đã tạo `release` với Required reviewers là chính bạn. Còn thiếu tag rule: mở Settings → Environments → `release`; ở mục *Deployment branches and tags*, bấm nút đang ghi *No restriction* → chọn *Selected branches and tags* → *Add deployment branch or tag rule* → *Ref type* chọn **Tag** → nhập `v*` → *Add rule*.
 - [x] **[Bạn]** Duyệt hoặc đóng các PR Dependabot đang mở (CI phải xanh trước khi merge). Ngày 01/11/2026 không có PR nào đang mở.
 - [x] **[Cả hai] Chuyển Public**: Settings → General → Danger Zone → Change repository visibility → Public. Xong ngày 02/11/2026; truy cập ẩn danh thấy `Nepply` Public, `Nepply-archive` vẫn trả về 404, 11 link tới repo trong tài liệu đều mở được.
-- [ ] **[Bạn] Ngay sau khi Public**, làm các mục GitHub chỉ cho bật ở repo công khai:
+- [x] **[Bạn] Ngay sau khi Public**, làm các mục GitHub chỉ cho bật ở repo công khai (đã kiểm chứng cả ba):
   - Settings → *Advanced Security*: bật **Private vulnerability reporting**, Secret scanning và Push protection.
   - Settings → Actions → General → Fork pull request workflows: *Require approval for all external contributors*.
   - Settings → Environments → `release` → *Required reviewers*: chính bạn.
@@ -96,6 +97,43 @@ Repo `Nepply` tạo ngày 02/11/2026 không mang theo cài đặt của repo cũ
 - [ ] **[Bạn]** Thêm status check của CodeQL vào ruleset nếu muốn bắt buộc. Trang Code scanning chỉ người có quyền ghi xem được.
 
 **Xong khi:** repo Public, báo lỗ hổng riêng hoạt động, CI và CodeQL xanh.
+
+## Giai đoạn 3A. Sửa lỗi từ lượt cài thử đầu tiên
+
+Bạn cài Release build #1 ngày 02/11/2026 và thấy các vấn đề dưới đây, nên chưa tag. Làm theo thứ tự, mỗi nhóm một PR. Con số thời gian là mục tiêu, phải đo thật rồi mới đánh dấu.
+
+### Kích hoạt panel
+
+- [ ] **[AI]** Sửa lỗi di vào góc mà panel không trượt ra. Vùng làm việc không tính thanh tác vụ, nên chuột vào góc dưới trái bị coi là ra khỏi màn hình. `PointerActivationGate` khi đó đòi chuột rời cạnh hơn 16 DIP rồi mới cho mở lại, nên đi tiếp lên dọc cạnh không mở được. Giữ quy tắc chuột sang từ màn hình khác không được mở panel.
+- [ ] **[AI]** Giảm độ trễ khi lao nhanh tới cạnh: chuột ở xa được đọc 250 ms một lần, cộng thêm 80 ms và 120 ms chờ, nên chậm nhất khoảng 450 ms. Mục tiêu: panel bắt đầu trượt trong 200 ms mà không tăng CPU lúc rảnh.
+- [ ] **[AI]** Đo khung hình lúc trượt. Bản phát hành chưa bật ReadyToRun nên code của app được biên dịch lúc chạy, và cửa sổ trong suốt tốn hơn khi di chuyển. Bật ReadyToRun nếu đo thấy lợi, ghi lại Setup tăng bao nhiêu MB, và dời việc nặng ra sau khi animation bắt đầu.
+
+### Monitor khi mở panel
+
+Nguyên nhân: khi ẩn, app bỏ mốc đo CPU và mạng nên lần đọc đầu trống, xóa số cảm biến đã có, và tắt tiến trình cảm biến sau 60 giây nên lần mở sau phải khởi động lại.
+
+- [ ] **[AI]** Giữ tính năng ngủ khi ẩn, nhưng mở lên là có số ngay: giữ giá trị gần nhất cho tới khi có số mới, đo lại CPU và mạng sau 150 ms thay vì đợi hết chu kỳ.
+- [ ] **[AI]** Khởi động tiến trình cảm biến sớm khi chuột tiến gần cạnh, để nhiệt độ và GPU có số trước khi panel mở xong. Ẩn lâu vẫn tắt tiến trình này.
+- [ ] **[AI]** Đo trước và sau: thời gian tới khi đủ số, CPU và RAM lúc ẩn. Mục tiêu: CPU, RAM, mạng dưới 300 ms; cảm biến hiện ngay số cũ, có số mới dưới 1 giây khi tiến trình còn sống.
+
+### Bộ cài
+
+- [ ] **[AI]** Luôn hỏi ngôn ngữ khi mở Setup (`ShowLanguageDialog=yes`), và app dùng luôn ngôn ngữ đã chọn trong lần chạy đầu.
+- [ ] **[AI]** Làm bộ cài mang nhận diện Nepply: ảnh và màu riêng, lời chào, trang kết thúc, tùy chọn khởi động cùng Windows, trong phạm vi Inno Setup 7.1 hỗ trợ.
+- [ ] **[AI]** Khi gỡ, hỏi có xóa luôn cài đặt và nhật ký không; mặc định giữ lại để cài lại không mất dữ liệu. Dọn cả thư mục giải nén `%TEMP%\.net\Nepply`.
+
+### Thiết lập mặc định
+
+- [ ] **[AI]** Bật mặc định kiểm tra cập nhật mỗi ngày. Người đã chủ động tắt vẫn giữ nguyên. Cập nhật chính sách riêng tư, hướng dẫn và CHANGELOG, vì app sẽ tự kết nối GitHub.
+- [ ] **[AI]** Rà lại toàn bộ mặc định trong `AppSettings` và màn hình chào, sửa chỗ chưa hợp lý.
+- [ ] **[AI]** Báo rõ khi Windows đang chặn tự khởi động. Máy này có `StartupApproved` ở trạng thái tắt từ 15/10/2026, nên bật tự khởi động trong app thì Windows vẫn bỏ qua.
+
+### Nghiệm thu
+
+- [ ] **[AI]** Dựng Setup mới, chạy đủ test và gate, CI xanh.
+- [ ] **[Bạn]** Cài lại và thử: chọn ngôn ngữ, góc màn hình, độ nhanh của monitor, rồi gỡ và chọn xóa dữ liệu.
+
+**Xong khi:** các mục trên đạt và bạn đồng ý với bản cài mới.
 
 ## Giai đoạn 4. Phát hành `2.0.0-rc.1` chưa ký
 
