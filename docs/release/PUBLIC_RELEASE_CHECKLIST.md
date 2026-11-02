@@ -12,7 +12,7 @@ Cập nhật 02/11/2026. Đây là kế hoạch duy nhất từ hiện tại đ�
 | 3 | Chuẩn bị repo công khai | Cài đặt đã kiểm chứng ngày 02/11/2026; còn thử trang báo lỗ hổng và Issues |
 | 3A | Sửa lỗi từ các lượt cài thử | Xong; bạn báo đạt ngày 02/11/2026 |
 | 4 | Phát hành `2.0.0-rc.1` chưa ký | Đã công khai ngày 02/11/2026; còn cài thử từ trang Release và nhận phản hồi |
-| 5 | Xin chữ ký số | Đã đủ điều kiện nộp; chờ bạn nộp đơn |
+| 5 | Xin chữ ký số | Đã nộp đơn ngày 02/11/2026; chờ SignPath trả lời |
 | 6 | Tích hợp ký và phát hành RC đã ký | Chưa làm |
 | 7 | Hoàn thiện chất lượng | Phần của AI đã xong; còn bài đo 24 giờ và các mục của bạn |
 | 8 | Nghiệm thu trên máy thật | Chưa làm |
@@ -166,8 +166,9 @@ Bạn góp ý ngày 02/11/2026. Lần rà mặc định trước được làm l
 ## Giai đoạn 5. Xin chữ ký số
 
 - [x] **[AI]** Đối chiếu repo với điều kiện SignPath ngày 02/11/2026 và soạn sẵn câu trả lời: [SIGNPATH_APPLICATION.md](SIGNPATH_APPLICATION.md). Giấy phép dependency đều là giấy phép OSI; ghi chú rc.1 đã có link *Code signing policy*.
-- [ ] **[Bạn]** Kiểm tra trước khi nộp: repo Public, MFA đã bật, đã có Release công khai.
-- [ ] **[Bạn]** Tự nộp đơn tại <https://signpath.org/apply> theo [SIGNPATH_APPLICATION.md](SIGNPATH_APPLICATION.md). Form tạo tài khoản đứng tên bạn và yêu cầu bạn cam kết với Code of Conduct, nên AI không nộp thay được. Bật MFA cho tài khoản SignPath sau khi được cấp.
+- [x] **[Bạn]** Kiểm tra trước khi nộp: repo Public, MFA đã bật, đã có Release công khai.
+- [x] **[Bạn]** Tự nộp đơn tại <https://signpath.org/apply> theo [SIGNPATH_APPLICATION.md](SIGNPATH_APPLICATION.md). Bạn báo đã nộp ngày 02/11/2026; AI không có cách xác minh từ phía SignPath.
+- [ ] **[Bạn]** Bật MFA cho tài khoản SignPath sau khi được cấp.
 - [ ] **[Bạn]** Khi được duyệt, SignPath cung cấp organization ID, project/policy slug và API token. Lưu token vào Settings → Environments → `release` → *Environment secrets* (không để ở repository secret chung).
 - [ ] **[Bạn]** Nếu bị từ chối: dùng chứng thư OV cho người làm OSS (ví dụ Certum Open Source Code Signing). Azure Artifact Signing chỉ cấp cho cá nhân ở Mỹ/Canada.
 
@@ -196,7 +197,7 @@ Không chặn việc xin chữ ký, có thể làm song song từ giai đoạn 4
 - [ ] **[Bạn]** Nhờ người bản ngữ duyệt bản dịch Nhật, Đức, Trung, Nga, Pháp, Thái, cả app lẫn bộ cài.
 - [ ] **[Bạn]** Nhờ người đọc lại bản dịch tiếng Việt của bộ cài.
 - [x] **[AI]** Tùy chọn tự kiểm tra cập nhật mỗi ngày, chỉ báo ở khay hệ thống. Mặc định đổi thành bật ở giai đoạn 3A. Đã cập nhật chính sách quyền riêng tư và hướng dẫn. Bản dịch hai chuỗi mới thuộc mục duyệt bản dịch bên dưới.
-- [x] **[AI]** Chứng thực nguồn gốc build (`actions/attest-build-provenance`) trong bước `draft-release`, chỉ chạy khi repo Public. Chưa chạy thật lần nào; kiểm bằng `gh attestation verify` trên tệp của bản đầu tiên có tag.
+- [x] **[AI]** Chứng thực nguồn gốc build (`actions/attest-build-provenance`) trong bước `draft-release`, chỉ chạy khi repo Public. Đã chạy thật ở *Release build* #2; API công khai trả về attestation cho cả ba tệp của `2.0.0-rc.1`. Chưa chạy `gh attestation verify` vì máy chưa có `gh`.
 - [ ] **[Cả hai]** Xử lý các lỗi nhận được từ bản RC.
 
 **Xong khi:** không còn lỗi nặng đang mở; bài đo 24 giờ không có dấu hiệu rò rỉ.
