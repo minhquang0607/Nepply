@@ -10,7 +10,7 @@ Cập nhật 02/11/2026. Đây là kế hoạch duy nhất từ hiện tại đ�
 | 1 | Sửa các lỗi nhỏ từ đợt rà soát | Xong |
 | 2 | Đưa code lên GitHub | Đã merge vào `main`, CI xanh; còn các mục chưa đánh dấu bên dưới |
 | 3 | Chuẩn bị repo công khai | Cài đặt đã kiểm chứng ngày 02/11/2026; còn thử trang báo lỗ hổng và Issues |
-| 3A | Sửa lỗi từ lượt cài thử đầu tiên | Phần của AI đã lên `main`; chờ bạn cài lại và thử |
+| 3A | Sửa lỗi từ các lượt cài thử | Đã sửa cả góp ý lượt 2; chờ bạn cài lại và thử |
 | 4 | Phát hành `2.0.0-rc.1` chưa ký | Ghi chú và chạy thử đã xong; chờ giai đoạn 3A |
 | 5 | Xin chữ ký số | Đã soạn đơn; chờ Release công khai |
 | 6 | Tích hợp ký và phát hành RC đã ký | Chưa làm |
@@ -98,9 +98,9 @@ Repo `Nepply` tạo ngày 02/11/2026 không mang theo cài đặt của repo cũ
 
 **Xong khi:** repo Public, báo lỗ hổng riêng hoạt động, CI và CodeQL xanh.
 
-## Giai đoạn 3A. Sửa lỗi từ lượt cài thử đầu tiên
+## Giai đoạn 3A. Sửa lỗi từ các lượt cài thử
 
-Bạn cài Release build #1 ngày 02/11/2026 và thấy các vấn đề dưới đây, nên chưa tag. Mỗi nhóm một commit riêng. Con số thời gian là mục tiêu, phải đo thật rồi mới đánh dấu.
+Bạn cài Release build #1 ngày 02/11/2026 và thấy các vấn đề dưới đây, nên chưa tag. Mỗi nhóm một commit riêng. Con số thời gian là mục tiêu, phải đo thật rồi mới đánh dấu. Góp ý từ lượt cài thứ hai nằm ở mục riêng phía dưới.
 
 ### Kích hoạt panel
 
@@ -119,19 +119,31 @@ Nguyên nhân: khi ẩn, app bỏ mốc đo CPU và mạng nên lần đọc đ�
 ### Bộ cài
 
 - [x] **[AI]** Luôn hỏi ngôn ngữ khi mở Setup (`ShowLanguageDialog=yes`), chọn sẵn theo Windows. Setup ghi lựa chọn vào `HKCU\Software\Nepply\Setup`, app đọc một lần ở lần chạy sau; đã chọn ngôn ngữ trong app thì cài lại không đè.
-- [x] **[AI]** Làm bộ cài mang nhận diện Nepply: giao diện tối, ảnh từ biểu tượng app, trang chào, lời chào và trang kết thúc riêng ở 8 ngôn ngữ (AI tự dịch), tùy chọn khởi động cùng Windows không bị bản cập nhật kế thừa. Đã xem thật các trang tới bước tác vụ bằng tiếng Việt; Setup vẫn 78,2 MB.
-- [x] **[AI]** Khi gỡ, hỏi có xóa luôn cài đặt và nhật ký không; mặc định giữ lại, bản gỡ im lặng không xóa. Luôn dọn `%TEMP%\.net\Nepply`. Khi chọn xóa cũng bỏ mục `StartupApproved`. Dấu khôi phục Desktop trong `HoverBox` luôn được giữ. Chưa chạy thật toàn bộ luồng cài và gỡ, việc này nằm ở bước nghiệm thu.
+- [x] **[AI]** Làm bộ cài mang nhận diện Nepply: giao diện tối, ảnh từ biểu tượng app, trang chào, lời chào và trang kết thúc riêng ở 8 ngôn ngữ (AI tự dịch), tùy chọn khởi động cùng Windows. Đã xem thật các trang tới bước tác vụ bằng tiếng Việt; Setup vẫn 78,2 MB.
+- [x] **[AI]** Khi gỡ, hỏi có xóa luôn cài đặt và nhật ký không; mặc định giữ lại, bản gỡ im lặng không xóa. Luôn dọn `%TEMP%\.net\Nepply`. Dấu khôi phục Desktop trong `HoverBox` luôn được giữ. Chưa chạy thật toàn bộ luồng cài và gỡ, việc này nằm ở bước nghiệm thu.
 
 ### Thiết lập mặc định
 
 - [x] **[AI]** Bật mặc định kiểm tra cập nhật mỗi ngày, thêm lựa chọn này vào màn hình chào. Người đã chủ động tắt vẫn giữ nguyên. Đã cập nhật chính sách riêng tư, README, hướng dẫn và CHANGELOG, vì app sẽ tự kết nối GitHub.
-- [x] **[AI]** Rà lại toàn bộ mặc định trong `AppSettings` và màn hình chào. Không đổi thêm: tự khởi động và ẩn icon Desktop vẫn tắt vì người dùng tự chọn ở Setup và màn hình chào; độ trễ 120 ms, vùng cạnh 4 px, ẩn sau 600 ms, cập nhật số 1,5 giây vẫn hợp lý. Ghi nhận: *Tiết kiệm khi ẩn* không có tác dụng khi ngủ khi ẩn đang bật, là nợ nhỏ về giao diện cài đặt.
+- [x] **[AI]** Rà lại toàn bộ mặc định trong `AppSettings` và màn hình chào. Độ trễ 120 ms, vùng cạnh 4 px, ẩn sau 600 ms, cập nhật số 1,5 giây vẫn hợp lý. Ghi nhận: *Tiết kiệm khi ẩn* không có tác dụng khi ngủ khi ẩn đang bật, là nợ nhỏ về giao diện cài đặt.
 - [x] **[AI]** Báo rõ khi Windows đang chặn tự khởi động. Máy này có `StartupApproved` ở trạng thái tắt từ 15/10/2026, nên bật tự khởi động trong app thì Windows vẫn bỏ qua. App chỉ báo và chỉ chỗ bật lại, không tự đổi lựa chọn đó.
+
+### Góp ý từ lượt cài thứ hai
+
+Bạn góp ý ngày 02/11/2026. Lần rà mặc định trước được làm lại dưới góc nhìn người dùng.
+
+- [x] **[AI]** Trang Information chỉ hiện ngôn ngữ đã chọn: mỗi ngôn ngữ có file riêng trong `packaging/inno/Notices` (AI tự dịch). Đã mở Setup thật cả 8 ngôn ngữ và xem ảnh chụp. `RELEASE_NOTICE.txt` song ngữ vẫn đi kèm bản portable và thư mục cài.
+- [x] **[AI]** Tìm lý do tự khởi động bị tắt. Cờ tắt trong `StartupApproved\Run` được ghi lúc 13:04:34 ngày 15/10/2026, 18 ngày trước lượt cài này, và Windows lưu cờ theo tên mục `Nepply` chứ không theo đường dẫn, nên gỡ cài đặt không xóa cờ và mục mới bị tắt ngay. Windows không tự ghi cờ này: Task Manager, Cài đặt Windows hoặc một công cụ quản lý khởi động đã ghi. Máy có Advanced SystemCare đang chạy, nhưng nhật ký của nó không có dòng nào về Nepply lúc đó, nên chưa xác định được ai ghi. Trong repo chỉ có bộ gỡ cài đặt chạm vào khóa này, và chỉ để xóa.
+- [x] **[AI]** Sửa cảnh báo không tự mất: cảnh báo chỉ được tính một lần lúc app khởi động rồi nằm trên panel, không có gì kiểm tra lại sau khi bật ở Task Manager. Giờ mở panel là đọc lại và tự bỏ cảnh báo. Khi app khởi động thường, panel không còn nhắc, vì tắt trong Task Manager cũng là lựa chọn của người dùng; Cài đặt báo dưới ô chọn và đọc lại mỗi khi quay về cửa sổ.
+- [x] **[AI]** Khi tạo mục khởi động mới mà chưa có mục nào, app xóa cờ cũ còn sót, còn mục đang tồn tại thì vẫn tôn trọng công tắc trong Windows. Bộ gỡ luôn bỏ cờ khi không còn mục `Nepply`, không phụ thuộc lựa chọn xóa dữ liệu.
+- [x] **[AI]** Phát hiện thêm một lỗi: `dontinheritcheck` không có tác dụng với tác vụ cấp cao nhất, nên bản cập nhật im lặng vẫn có thể bật lại tự khởi động mà người dùng đã tắt. Giờ tác vụ này chỉ xuất hiện ở lần cài đầu. Bỏ chọn ở Setup cũng thắng cài đặt còn giữ từ lần cài trước.
+- [x] **[AI]** Đổi mặc định cho bản cài mới. Khởi động cùng Windows được chọn sẵn trong Setup, vì app này chỉ có ích khi luôn chạy và người dùng vẫn thấy ô để bỏ chọn; bản portable vẫn tắt. Giao diện theo Windows thay vì luôn tối. Phím mở panel đổi từ Ctrl + Space sang Ctrl + Alt + Space, vì phím toàn cục cũ chiếm gợi ý code của VS, VS Code và phím đổi bộ gõ tiếng Trung, Nhật. Người đã có cài đặt giữ nguyên.
+- [x] **[AI]** Giữ nguyên, có lý do: ẩn icon Desktop vẫn do người dùng tự chọn vì nó thay đổi Desktop; ngủ khi ẩn vẫn bật vì lần sửa trước đã làm monitor mở nhanh; không tạo lối tắt Desktop vì app dùng để dọn Desktop; một lần nhấp để mở giữ như menu Start.
 
 ### Nghiệm thu
 
-- [x] **[AI]** Dựng Setup mới từ `4df9608`, core 1034 và UI 2135 test đạt, các gate đạt, Verify #15 và CodeQL #16 xanh. Bản thử nằm ở `artifacts/dist-final-112127/installer`, chưa qua `Release build` trên GitHub.
-- [ ] **[Bạn]** Cài lại và thử: chọn ngôn ngữ, góc màn hình, độ nhanh của monitor, rồi gỡ và chọn xóa dữ liệu.
+- [x] **[AI]** Dựng Setup mới từ `219f83c`, core 1038 và UI 2146 test đạt, `Test-InstallerContract` 31 mục đạt, đã xem các trang tới bước tác vụ. Chưa chạy thật toàn bộ luồng cài và gỡ, chưa bấm thử công tắc thật trong Task Manager, và giao diện sáng mới được kiểm bằng test ở chế độ Light chọn tay. Bản thử nằm ở `artifacts/`, chưa qua `Release build` trên GitHub.
+- [ ] **[Bạn]** Cài lại và thử: chọn ngôn ngữ, trang Information, ô khởi động đã tick, góc màn hình, độ nhanh của monitor, Ctrl + Alt + Space, tắt rồi bật trong Task Manager để xem cảnh báo tự mất, rồi gỡ và chọn xóa dữ liệu.
 
 **Xong khi:** các mục trên đạt và bạn đồng ý với bản cài mới.
 
@@ -206,7 +218,7 @@ Làm bằng đúng file đã ký. Dùng VM Windows 11 cài mới (Hyper-V hoặc
 ## Giai đoạn 9. Phát hành `2.0.0`
 
 - [ ] **[AI]** Đổi `Version`/`InformationalVersion` thành `2.0.0` và `FileVersion` thành `2.0.0.100` trong `Nepply.csproj` và `Nepply.DesktopGuardian.csproj`.
-- [ ] **[AI]** Bỏ trang thông báo `RELEASE_NOTICE.txt` khỏi bộ cài (`InfoBeforeFile`, `[Files]`, hai script đóng gói) và banner RC trong README, hướng dẫn, ghi chú phát hành.
+- [ ] **[AI]** Bỏ trang thông báo khỏi bộ cài (`packaging/inno/Notices`, `InfoBeforeFile` trong `[Languages]`), bỏ `RELEASE_NOTICE.txt` khỏi `[Files]` và hai script đóng gói, bỏ banner RC trong README, hướng dẫn, ghi chú phát hành.
 - [ ] **[AI]** Tạo lại ảnh README theo `docs/images/README.md` (ảnh hiện tại lấy từ `482575f`, trước các thay đổi giao diện gần đây).
 - [ ] **[AI]** Hoàn thiện `RELEASE_2.0.0.md` và CHANGELOG; cập nhật mục giới hạn về tự cài cập nhật.
 - [ ] **[Cả hai]** Tạo tag `v2.0.0`, phát hành Release chính thức (không đánh dấu pre-release). Chạy `Verify-Release.ps1 -RequireSigned -RequireStable`.
