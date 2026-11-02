@@ -51,12 +51,12 @@ Kết quả rà 30/10/2026: build từ clone sạch đạt; cấy 20 lỗi thử
 
 ## Giai đoạn 2. Đưa code lên GitHub
 
-- [ ] **[Bạn]** Xem diff hai nhánh; bỏ qua commit format `f80d742` vì chỉ đổi khoảng trắng.
+- [x] **[Bạn]** Xem diff hai nhánh; bỏ qua commit format `f80d742` vì chỉ đổi khoảng trắng. Không còn cần: cả hai nhánh đã merge từ lâu.
 - [x] **[AI]** Push `fix/release-readiness` và `chore/pro-polish`, mở PR #8 và #9. Lần chạy đầu cho thấy CI đỏ vì hết dung lượng artifact, không phải vì lỗi code; đã sửa workflow để upload không chặn các gate. CI của cả hai PR xanh.
 - [x] **[Cả hai]** Merge #8 vào `main`, đổi base của #9 sang `main`, rồi merge #9. `main` ở `e1d92e8` chứa đủ commit của cả hai PR; Verify chạy tay trên commit này xanh. GitHub không xử lý sự kiện push của lần merge #9 nên #9 kẹt ở Open và đã được đóng tay ngày 31/10/2026. Dòng "Closed with unmerged commits" trên trang #9 là dữ liệu cũ.
 - [x] **[AI]** Xác nhận push lên `main` tự chạy Verify trở lại: merge #10 (`a0b0525`) tự chạy Verify #54, xanh.
 - [x] **[Cả hai]** Release nháp "Nepply 1.0.0" và các nhánh cũ không còn ở repo `Nepply`; chúng nằm lại trong kho lưu trữ Private `Nepply-archive` từ ngày 02/11/2026.
-- [ ] **[Bạn]** Chạy thử bộ cài trên máy của bạn: trang thông báo và chữ tiếng Việt hiển thị đúng, cài và gỡ được.
+- [x] **[Bạn]** Chạy thử bộ cài trên máy của bạn: trang thông báo và chữ tiếng Việt hiển thị đúng, cài và gỡ được. Đã làm trong giai đoạn 3A.
 
 **Xong khi:** `main` có đủ thay đổi và CI xanh.
 
@@ -91,7 +91,7 @@ Repo `Nepply` tạo ngày 02/11/2026 không mang theo cài đặt của repo cũ
   - Settings → *Advanced Security*: bật **Private vulnerability reporting**, Secret scanning và Push protection.
   - Settings → Actions → General → Fork pull request workflows: *Require approval for all external contributors*.
   - Settings → Environments → `release` → *Required reviewers*: chính bạn.
-- [ ] **[Bạn]** Sau khi bật Private vulnerability reporting, mở thử `…/security/advisories/new` và trang Issues. `.github/SECURITY.md` trỏ tới kênh này, nên trước lúc đó người báo lỗi chưa dùng được.
+- [x] **[AI]** Sau khi bật Private vulnerability reporting, mở thử `…/security/advisories/new` và trang Issues. Ngày 02/11/2026 API trả về `enabled: true`, tài khoản chủ repo mở được form nháp (không gửi gì), trang Issues mở ẩn danh được. Chưa thử bằng một tài khoản bên ngoài.
 - [x] **[AI]** Chạy CodeQL lần đầu sau khi Public: lần chạy #10 trên `a408a16` xanh ở cả hai job `csharp` và `actions`, 836 cảnh báo mở. Không có cảnh báo nào mang mức bảo mật critical, high, medium hay low, và không có cảnh báo nào về workflow. Tất cả là cảnh báo chất lượng code: 38 Error, 203 Warning, 595 Note, trong đó nhiều mục nằm ở test hoặc file `obj` sinh tự động.
 - [x] **[AI]** Rà nhóm có thể là lỗi thật, không đổi code. Cả 38 Error là cảnh báo nhầm: 26 *Invalid string formatting* do `LocalizationService.Get` trả về chính khóa khi thiếu chuỗi, còn số tham số của 8 ngôn ngữ đã được `Test-LanguageResources.ps1` kiểm; 12 *Possible loss of precision* là phép chia nguyên có chủ đích khi tính hàng và tâm lề, hoặc phép nhân số nhỏ. 20 *Path.Combine* trong `src` chỉ ghép hằng, GUID hoặc tên trong danh sách cho phép. 4 *Constant condition* ở `UpdateWindow` kiểm tra `_closed` sau `await`, nơi giá trị có thể đổi.
 - [ ] **[Bạn]** Thêm status check của CodeQL vào ruleset nếu muốn bắt buộc. Trang Code scanning chỉ người có quyền ghi xem được.
@@ -144,7 +144,7 @@ Bạn góp ý ngày 02/11/2026. Lần rà mặc định trước được làm l
 ### Nghiệm thu
 
 - [x] **[AI]** Dựng Setup mới sau khi bỏ phím đặt sẵn, core 1039 và UI 2151 test đạt, `Test-InstallerContract` 31 mục đạt, đã xem các trang tới bước tác vụ. Chưa chạy thật toàn bộ luồng cài và gỡ, chưa bấm thử công tắc thật trong Task Manager, và giao diện sáng mới được kiểm bằng test ở chế độ Light chọn tay. Bản thử nằm ở `artifacts/`, chưa qua `Release build` trên GitHub.
-- [x] **[Bạn]** Cài lại và thử. Bạn báo đạt ngày 02/11/2026 trên bản `2fa1e78`, cài đè lên bản trước. Máy cho thấy lượt cài mới đã bật tự khởi động đúng và không còn cờ tắt cũ. Chưa kiểm chứng gỡ bằng bộ gỡ của Windows rồi chọn xóa dữ liệu, vì bản này vẫn đang cài; việc đó nằm ở giai đoạn 8.
+- [x] **[Bạn]** Cài lại và thử. Bạn báo đạt ngày 02/11/2026 trên bản `2fa1e78`, cài đè lên bản trước. Máy cho thấy lượt cài mới đã bật tự khởi động đúng và không còn cờ tắt cũ. Sau đó bạn gỡ: máy không còn thư mục cài, cài đặt, nhật ký, mục khởi động, cờ cũ hay thư mục giải nén, kể cả log do test của AI tạo trước đó, nên bộ gỡ đã chạy phần xóa dữ liệu; lịch sử IObit Uninstaller không có lượt gỡ mới.
 
 **Xong khi:** các mục trên đạt và bạn đồng ý với bản cài mới.
 
@@ -158,7 +158,7 @@ Bạn góp ý ngày 02/11/2026. Lần rà mặc định trước được làm l
 - [x] **[AI]** Điền ghi chú song ngữ và chọn *Pre-release* trong Release nháp rồi lưu nháp; chưa công khai.
 - [x] **[Bạn]** Xem lại Release nháp rồi bấm Publish. Đã công khai ngày 02/11/2026 ở dạng pre-release: <https://github.com/minhquang0607/Nepply/releases/tag/v2.0.0-rc.1>.
 - [x] **[AI]** Đối chiếu ẩn danh sau khi công khai: `SHA256.json` khớp mã GitHub ghi cho Setup và portable, cả hai tệp tải được, cả ba tệp có attestation.
-- [ ] **[Bạn]** Tải file từ trang Release về một máy và cài thử.
+- [x] **[AI]** Tải file từ trang Release về máy và cài thử. Ngày 02/11/2026 cả ba tệp khớp mã GitHub và `SHA256.json`, `Verify-Release.ps1 -ExpectedVersion 2.0.0-rc.1` đạt trên bản portable và Setup. Chạy ẩn bằng Setup công khai: cài lần đầu ghi `AutoStart=1` và ngôn ngữ, cài đè không ghi lại `AutoStart`, gỡ xong sạch. Đây là chạy ẩn và không mở app; lượt cài qua trình duyệt có SmartScreen thuộc giai đoạn 8.
 - [ ] **[Cả hai]** Nhận phản hồi trong lúc chờ SignPath, nên từ 2 đến 4 tuần. Lỗi nặng được sửa ở `2.0.0-rc.2`, tăng `FileVersion` thành `2.0.0.2`.
 
 **Xong khi:** Release công khai tải được, cài được, không có lỗi chặn.
@@ -191,7 +191,7 @@ Bản chưa ký không thể tự cập nhật, nên phải có một RC đã k�
 Không chặn việc xin chữ ký, có thể làm song song từ giai đoạn 4.
 
 - [x] **[AI]** Mở mục Desktop không chặn luồng giao diện, để shortcut trỏ tới ổ mạng mất kết nối không làm panel đơ.
-- [ ] **[Cả hai]** Chạy bài đo dài 24 giờ (`pwsh scripts/Run-UiSoak.ps1`), máy phải bật suốt thời gian đo, rồi phân tích CPU, RAM, handle.
+- [ ] **[Cả hai]** Chạy bài đo dài 24 giờ (`pwsh scripts/Run-UiSoak.ps1`), máy phải bật suốt thời gian đo, rồi phân tích CPU, RAM, handle. AI đã khởi động ngày 02/11/2026 trên bản sao trong `artifacts/soak-bin-*`, chưa có kết quả. Máy đang đặt tự ngủ sau 3 giờ không dùng; nếu máy ngủ thì kết quả không dùng được.
 - [x] **[AI]** Rà trợ năng bằng test tự động trên cây giao diện thật: mọi nút, ô nhập, thanh trượt và danh sách trong Cài đặt, màn chào, panel và các hộp thoại đều có tên cho trình đọc màn hình và đi tới được bằng bàn phím. Đã sửa ô Hiệu ứng chuyển động thiếu tên. Giao diện High Contrast đã có test sẵn.
 - [ ] **[Bạn]** Thử thật với Narrator và chế độ tương phản cao của Windows, vì test tự động không thay được việc nghe thử.
 - [ ] **[Bạn]** Nhờ người bản ngữ duyệt bản dịch Nhật, Đức, Trung, Nga, Pháp, Thái, cả app lẫn bộ cài.
@@ -224,7 +224,7 @@ Làm bằng đúng file đã ký. Dùng VM Windows 11 cài mới (Hyper-V hoặc
 
 - [ ] **[AI]** Đổi `Version`/`InformationalVersion` thành `2.0.0` và `FileVersion` thành `2.0.0.100` trong `Nepply.csproj` và `Nepply.DesktopGuardian.csproj`.
 - [ ] **[AI]** Bỏ trang thông báo khỏi bộ cài (`packaging/inno/Notices`, `InfoBeforeFile` trong `[Languages]`), bỏ `RELEASE_NOTICE.txt` khỏi `[Files]` và hai script đóng gói, bỏ banner RC trong README, hướng dẫn, ghi chú phát hành.
-- [ ] **[AI]** Tạo lại ảnh README theo `docs/images/README.md` (ảnh hiện tại lấy từ `482575f`, trước các thay đổi giao diện gần đây).
+- [x] **[AI]** Tạo lại ảnh README theo `docs/images/README.md`. Đã làm ngày 02/11/2026 từ mã nguồn của `2fa1e78`; làm lại nếu giao diện đổi trước `2.0.0`.
 - [ ] **[AI]** Hoàn thiện `RELEASE_2.0.0.md` và CHANGELOG; cập nhật mục giới hạn về tự cài cập nhật.
 - [ ] **[Cả hai]** Tạo tag `v2.0.0`, phát hành Release chính thức (không đánh dấu pre-release). Chạy `Verify-Release.ps1 -RequireSigned -RequireStable`.
 - [ ] **[Bạn]** Kiểm tra người dùng RC đã ký nhận được bản 2.0.0 qua cửa sổ cập nhật.
