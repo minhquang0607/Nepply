@@ -10,8 +10,8 @@ Cập nhật 02/11/2026. Đây là kế hoạch duy nhất từ hiện tại đ�
 | 1 | Sửa các lỗi nhỏ từ đợt rà soát | Xong |
 | 2 | Đưa code lên GitHub | Đã merge vào `main`, CI xanh; còn các mục chưa đánh dấu bên dưới |
 | 3 | Chuẩn bị repo công khai | Cài đặt đã kiểm chứng ngày 02/11/2026; còn thử trang báo lỗ hổng và Issues |
-| 3A | Sửa lỗi từ các lượt cài thử | Đã sửa cả góp ý lượt 2; chờ bạn cài lại và thử |
-| 4 | Phát hành `2.0.0-rc.1` chưa ký | Ghi chú và chạy thử đã xong; chờ giai đoạn 3A |
+| 3A | Sửa lỗi từ các lượt cài thử | Xong; bạn báo đạt ngày 02/11/2026 |
+| 4 | Phát hành `2.0.0-rc.1` chưa ký | Đã tạo tag; chờ bạn duyệt `release` và Publish |
 | 5 | Xin chữ ký số | Đã soạn đơn; chờ Release công khai |
 | 6 | Tích hợp ký và phát hành RC đã ký | Chưa làm |
 | 7 | Hoàn thiện chất lượng | Phần của AI đã xong; còn bài đo 24 giờ và các mục của bạn |
@@ -144,7 +144,7 @@ Bạn góp ý ngày 02/11/2026. Lần rà mặc định trước được làm l
 ### Nghiệm thu
 
 - [x] **[AI]** Dựng Setup mới sau khi bỏ phím đặt sẵn, core 1039 và UI 2151 test đạt, `Test-InstallerContract` 31 mục đạt, đã xem các trang tới bước tác vụ. Chưa chạy thật toàn bộ luồng cài và gỡ, chưa bấm thử công tắc thật trong Task Manager, và giao diện sáng mới được kiểm bằng test ở chế độ Light chọn tay. Bản thử nằm ở `artifacts/`, chưa qua `Release build` trên GitHub.
-- [ ] **[Bạn]** Cài lại và thử: chọn ngôn ngữ, trang Information, ô khởi động đã tick, góc màn hình, độ nhanh của monitor, tự đặt phím mở panel rồi xóa nó, tắt rồi bật trong Task Manager để xem cảnh báo tự mất, rồi gỡ và chọn xóa dữ liệu.
+- [x] **[Bạn]** Cài lại và thử. Bạn báo đạt ngày 02/11/2026 trên bản `2fa1e78`, cài đè lên bản trước. Máy cho thấy lượt cài mới đã bật tự khởi động đúng và không còn cờ tắt cũ. Chưa kiểm chứng gỡ bằng bộ gỡ của Windows rồi chọn xóa dữ liệu, vì bản này vẫn đang cài; việc đó nằm ở giai đoạn 8.
 
 **Xong khi:** các mục trên đạt và bạn đồng ý với bản cài mới.
 
@@ -153,7 +153,8 @@ Bạn góp ý ngày 02/11/2026. Lần rà mặc định trước được làm l
 - [x] **[AI]** Viết ghi chú phát hành RC song ngữ, ghi rõ bản chưa ký và cách xử lý cảnh báo Windows: [RELEASE_2.0.0-rc.1.md](RELEASE_2.0.0-rc.1.md).
 - [x] **[Cả hai]** Kiểm tra dung lượng artifact: lần chạy thử ngày 01/11/2026 upload được 186 MB. `release.yml` cần upload bản build để tạo Release; nếu lần tag báo lỗi upload, xem Settings → Billing and licensing và xóa artifact cũ. Dung lượng được tính lại sau 6 đến 12 giờ.
 - [x] **[Cả hai]** Chạy thử: *Release build* #3 trên `f030380` (trước khi viết lại lịch sử là `2241652`) xanh, gồm biên dịch bộ cài và artifact `nepply-release-unsigned`. Bước `draft-release` chỉ chạy khi có tag. Repo mới: *Release build* #1 trên `245af2f` cũng xanh ngày 02/11/2026.
-- [ ] **[Cả hai]** Tạo tag `v2.0.0-rc.1` từ `main` và push. Bạn duyệt bước `release` khi GitHub hỏi. Chỉ tag khi môi trường `release` đã có Required reviewers và bạn đã cài thử bộ cài: `release.yml` dùng môi trường này, nếu chưa có thì GitHub tự tạo một môi trường không cần duyệt, rồi ghi attestation vào nhật ký công khai không xóa được.
+- [x] **[AI]** Tạo tag `v2.0.0-rc.1` từ `2fa1e78` và push ngày 02/11/2026, sau khi bạn báo đạt, Verify #23 và CodeQL #24 trên `main` xanh, và API xác nhận `release` có Required reviewers. *Release build* #2 tự chạy.
+- [ ] **[Bạn]** Duyệt bước `release` khi GitHub hỏi. Bước này ghi attestation vào nhật ký công khai không xóa được, rồi tạo Release nháp.
 - [ ] **[Bạn]** Mở Release nháp, đánh dấu *pre-release*, dán ghi chú, bấm Publish.
 - [ ] **[Bạn]** Tải file từ trang Release về một máy và cài thử.
 - [ ] **[Cả hai]** Nhận phản hồi trong lúc chờ SignPath, nên từ 2 đến 4 tuần. Lỗi nặng được sửa ở `2.0.0-rc.2`, tăng `FileVersion` thành `2.0.0.2`.
