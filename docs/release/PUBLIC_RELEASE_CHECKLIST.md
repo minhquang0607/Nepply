@@ -9,9 +9,9 @@ Cập nhật 02/11/2026. Đây là kế hoạch duy nhất từ hiện tại đ�
 | 0 | Nền tảng đã có | Xong |
 | 1 | Sửa các lỗi nhỏ từ đợt rà soát | Xong |
 | 2 | Đưa code lên GitHub | Đã merge vào `main`, CI xanh; còn các mục chưa đánh dấu bên dưới |
-| 3 | Chuẩn bị repo công khai | Đang làm; lịch sử đã sạch, repo mới đã tạo, còn các mục cài đặt của bạn |
-| 4 | Phát hành `2.0.0-rc.1` chưa ký | Ghi chú và chạy thử đã xong; chờ repo Public |
-| 5 | Xin chữ ký số | Chưa làm |
+| 3 | Chuẩn bị repo công khai | Repo đã Public ngày 02/11/2026; còn các mục cài đặt của bạn, phải xong trước khi tag |
+| 4 | Phát hành `2.0.0-rc.1` chưa ký | Ghi chú và chạy thử đã xong; chờ giai đoạn 3 và lượt cài thử của bạn |
+| 5 | Xin chữ ký số | Đã soạn đơn; chờ Release công khai |
 | 6 | Tích hợp ký và phát hành RC đã ký | Chưa làm |
 | 7 | Hoàn thiện chất lượng | Phần của AI đã xong; còn bài đo 24 giờ và các mục của bạn |
 | 8 | Nghiệm thu trên máy thật | Chưa làm |
@@ -61,7 +61,7 @@ Kết quả rà 30/10/2026: build từ clone sạch đạt; cấy 20 lỗi thử
 
 ## Giai đoạn 3. Chuẩn bị repo công khai
 
-Làm trước khi chuyển Public, vì sau đó nội dung có thể đã bị lưu lại ở nơi khác.
+Rà nội dung trước khi chuyển Public, vì sau đó nội dung có thể đã bị lưu lại ở nơi khác. Repo đã Public ngày 02/11/2026 sau lần quét 100 commit sạch, còn các mục cài đặt bên dưới chưa làm. Chúng vẫn làm được khi repo Public và phải xong trước khi tạo tag.
 
 ### Quyết định về lịch sử Git
 
@@ -75,7 +75,7 @@ Làm trước khi chuyển Public, vì sau đó nội dung có thể đã bị l
 Repo `Nepply` tạo ngày 02/11/2026 không mang theo cài đặt của repo cũ. Các số PR, số lần chạy CI và *Release build* ghi trong kế hoạch trước ngày này thuộc `Nepply-archive`. Giá trị bên dưới được đối chiếu với repo cũ, nên làm đúng từng mục là đủ.
 
 - [ ] **[Bạn] Tên hiển thị**: GitHub → Settings → Public profile → Name: `Minh Quang`. Commit merge trên web đang lấy tên `MQuang07` từ hồ sơ, nên chưa đổi thì commit merge mới vẫn mang tên đó.
-- [ ] **[Bạn] MFA tài khoản**: Settings (tài khoản) → Password and authentication → bật Two-factor authentication. Lưu recovery codes ngoài máy.
+- [x] **[Bạn] MFA tài khoản**: Settings (tài khoản) → Password and authentication → bật Two-factor authentication. Lưu recovery codes ngoài máy. Ngày 02/11/2026 trang này cho thấy Authenticator app và GitHub Mobile đã cấu hình, recovery codes đã được xem. Nơi lưu recovery codes do bạn tự kiểm tra.
 - [ ] **[Bạn] Bảo mật repo**: repo → Settings → *Advanced Security*: bật Dependency graph, Dependabot alerts, Dependabot security updates và Grouped security updates.
 - [ ] **[Bạn] Actions**: Settings → Actions → General:
   - Bật *Require actions to be pinned to a full-length commit SHA*. Repo mới đang tắt mục này.
@@ -85,13 +85,15 @@ Repo `Nepply` tạo ngày 02/11/2026 không mang theo cài đặt của repo cũ
 - [ ] **[Bạn] Bảo vệ tag**: import [`rulesets/protect-release-tags.json`](rulesets/protect-release-tags.json) cho tag `v*`: chặn sửa, xóa và force push, Repository admin được bỏ qua.
 - [ ] **[Bạn] Môi trường release**: Settings → Environments → New environment `release` → *Deployment branches and tags*: *Selected branches and tags*, thêm tag rule `v*`.
 - [x] **[Bạn]** Duyệt hoặc đóng các PR Dependabot đang mở (CI phải xanh trước khi merge). Ngày 01/11/2026 không có PR nào đang mở.
-- [ ] **[Bạn] Chuyển Public**: Settings → General → Danger Zone → Change repository visibility → Public.
+- [x] **[Cả hai] Chuyển Public**: Settings → General → Danger Zone → Change repository visibility → Public. Xong ngày 02/11/2026; truy cập ẩn danh thấy `Nepply` Public, `Nepply-archive` vẫn trả về 404, 11 link tới repo trong tài liệu đều mở được.
 - [ ] **[Bạn] Ngay sau khi Public**, làm các mục GitHub chỉ cho bật ở repo công khai:
   - Settings → *Advanced Security*: bật **Private vulnerability reporting**, Secret scanning và Push protection.
   - Settings → Actions → General → Fork pull request workflows: *Require approval for all external contributors*.
   - Settings → Environments → `release` → *Required reviewers*: chính bạn.
-- [ ] **[Bạn]** Sau khi Public, mở thử `…/security/advisories/new` và trang Issues. Xem workflow CodeQL đã chạy (trước đó nó tự bỏ qua).
-- [ ] **[Bạn]** Thêm status check của CodeQL vào ruleset nếu muốn bắt buộc.
+- [ ] **[Bạn]** Sau khi bật Private vulnerability reporting, mở thử `…/security/advisories/new` và trang Issues. `.github/SECURITY.md` trỏ tới kênh này, nên trước lúc đó người báo lỗi chưa dùng được.
+- [x] **[AI]** Chạy CodeQL lần đầu sau khi Public: lần chạy #10 trên `a408a16` xanh ở cả hai job `csharp` và `actions`, 836 cảnh báo mở. Không có cảnh báo nào mang mức bảo mật critical, high, medium hay low, và không có cảnh báo nào về workflow. Tất cả là cảnh báo chất lượng code: 38 Error, 203 Warning, 595 Note, trong đó nhiều mục nằm ở test hoặc file `obj` sinh tự động.
+- [x] **[AI]** Rà nhóm có thể là lỗi thật, không đổi code. Cả 38 Error là cảnh báo nhầm: 26 *Invalid string formatting* do `LocalizationService.Get` trả về chính khóa khi thiếu chuỗi, còn số tham số của 8 ngôn ngữ đã được `Test-LanguageResources.ps1` kiểm; 12 *Possible loss of precision* là phép chia nguyên có chủ đích khi tính hàng và tâm lề, hoặc phép nhân số nhỏ. 20 *Path.Combine* trong `src` chỉ ghép hằng, GUID hoặc tên trong danh sách cho phép. 4 *Constant condition* ở `UpdateWindow` kiểm tra `_closed` sau `await`, nơi giá trị có thể đổi.
+- [ ] **[Bạn]** Thêm status check của CodeQL vào ruleset nếu muốn bắt buộc. Trang Code scanning chỉ người có quyền ghi xem được.
 
 **Xong khi:** repo Public, báo lỗ hổng riêng hoạt động, CI và CodeQL xanh.
 
@@ -100,7 +102,7 @@ Repo `Nepply` tạo ngày 02/11/2026 không mang theo cài đặt của repo cũ
 - [x] **[AI]** Viết ghi chú phát hành RC song ngữ, ghi rõ bản chưa ký và cách xử lý cảnh báo Windows: [RELEASE_2.0.0-rc.1.md](RELEASE_2.0.0-rc.1.md).
 - [x] **[Cả hai]** Kiểm tra dung lượng artifact: lần chạy thử ngày 01/11/2026 upload được 186 MB. `release.yml` cần upload bản build để tạo Release; nếu lần tag báo lỗi upload, xem Settings → Billing and licensing và xóa artifact cũ. Dung lượng được tính lại sau 6 đến 12 giờ.
 - [x] **[Cả hai]** Chạy thử: *Release build* #3 trên `f030380` (trước khi viết lại lịch sử là `2241652`) xanh, gồm biên dịch bộ cài và artifact `nepply-release-unsigned`. Bước `draft-release` chỉ chạy khi có tag. Repo mới: *Release build* #1 trên `245af2f` cũng xanh ngày 02/11/2026.
-- [ ] **[Cả hai]** Tạo tag `v2.0.0-rc.1` từ `main` và push. Bạn duyệt bước `release` khi GitHub hỏi.
+- [ ] **[Cả hai]** Tạo tag `v2.0.0-rc.1` từ `main` và push. Bạn duyệt bước `release` khi GitHub hỏi. Chỉ tag khi môi trường `release` đã có Required reviewers và bạn đã cài thử bộ cài: `release.yml` dùng môi trường này, nếu chưa có thì GitHub tự tạo một môi trường không cần duyệt, rồi ghi attestation vào nhật ký công khai không xóa được.
 - [ ] **[Bạn]** Mở Release nháp, đánh dấu *pre-release*, dán ghi chú, bấm Publish.
 - [ ] **[Bạn]** Tải file từ trang Release về một máy và cài thử.
 - [ ] **[Cả hai]** Nhận phản hồi trong lúc chờ SignPath, nên từ 2 đến 4 tuần. Lỗi nặng được sửa ở `2.0.0-rc.2`, tăng `FileVersion` thành `2.0.0.2`.
@@ -193,6 +195,7 @@ Làm dần, mỗi mục một PR riêng. Không gộp với thay đổi tính n�
 - [ ] **[AI]** Bỏ các lời gọi ngược lên `MainWindow` từ `IconPanel`, `MonitorPanel`, `TrayMenu`, `WelcomeWindow`.
 - [ ] **[AI]** Bỏ các constructor chỉ dành cho test trong `DesktopIconService`, dùng một interface scanner.
 - [ ] **[AI]** Tách các dòng dồn nhiều lệnh và bỏ biến `_settings` cục bộ che field trong `MainWindow`.
+- [ ] **[AI]** Giảm nhiễu CodeQL: bỏ file sinh tự động trong `obj` khỏi kết quả, đóng cảnh báo nhầm kèm lý do, dọn vài mục nhỏ có thật (`insideMonitor` thừa ở `PointerActivationGate.cs:37`, ép kiểu thừa ở `DesktopEntryReader.cs:194` và `WidgetDrag.cs:99`).
 
 ### Đơn giản hóa và dung lượng
 
