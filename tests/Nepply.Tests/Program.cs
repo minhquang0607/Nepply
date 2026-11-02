@@ -137,6 +137,7 @@ internal static class Program
             int desktopExeIndex = Array.IndexOf(args, "--desktop-exe");
             return DesktopDiscoveryTests.Run(output, desktopExeIndex < 0 ? null : Path.GetFullPath(args[desktopExeIndex + 1]));
         }
+        if (args.Contains("--sensor-timing")) return SensorTiming.Run(output, args[Array.IndexOf(args, "--sensor-timing") + 1]);
         if (args.Contains("--interactive-ui")) return InteractiveUi.Run(output);
         if (args.Contains("--shell-notifications")) return DesktopShellNotificationTests.Run(output);
         if (args.Contains("--desktop-burst")) return DesktopBurstTests.Run(output);

@@ -9,6 +9,7 @@ namespace Nepply.Services.Telemetry;
 /// <summary>Owns exactly one child. Native driver calls never run in the panel process.</summary>
 public sealed class SensorProcessProvider : IHardwareProvider
 {
+    internal static readonly TimeSpan HostIdleLimit = TimeSpan.FromMinutes(11);
     private readonly string _executable;
     private Process? _child;
     internal Process? DiagnosticProcess => _child;
@@ -79,7 +80,7 @@ public sealed class SensorProcessProvider : IHardwareProvider
         using IHardwareProvider provider = new LibreHardwareProvider();
         while (true)
         {
-            using var idle = new CancellationTokenSource(TimeSpan.FromSeconds(90));
+            using var idle = new CancellationTokenSource(HostIdleLimit);
             var request = SensorWireProtocol.ReadAsync<Request>(pipe, SensorWireProtocol.RequestLimit, idle.Token).GetAwaiter().GetResult();
             if (request == null) return;
             if (request.Version != 1 || request.GpuIdentifier == null || request.GpuIdentifier.Length > AppSettings.MaximumIdentifierLength) throw new InvalidDataException("Unsupported sensor request.");

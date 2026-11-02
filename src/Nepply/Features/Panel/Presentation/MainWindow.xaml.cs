@@ -548,7 +548,9 @@ public partial class MainWindow : Window
             EdgeHitTest.DistanceToEdge(_settings.EdgePosition, point.X, point.Y, screen.Left, screen.Top, screen.Right, screen.Bottom),
             nearBand);
         // Assigning Interval restarts a DispatcherTimer; change it only on transitions.
-        if (_edgeTimer.Interval != interval) _edgeTimer.Interval = interval;
+        if (_edgeTimer.Interval == interval) return;
+        _edgeTimer.Interval = interval;
+        if (interval == EdgePolling.NearEdge) _monitor.PrepareReveal();
     }
     private bool PointerInsidePanel(int screenX, int screenY)
     {

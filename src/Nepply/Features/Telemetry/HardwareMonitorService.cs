@@ -26,15 +26,22 @@ public sealed class HardwareMonitorService : IHardwareMonitor
     public event Action<HardwareInfoSnapshot>? HardwareUpdated;
     private readonly Func<IHardwareProvider> _providerFactory;
     public HardwareMonitorService(int intervalMs = 1500) : this(() => new LibreHardwareProvider(), intervalMs) { }
-    // Showing the dock again soon after it hides is common. Keep an idle provider (and
-    // the sensor child behind it) briefly instead of restarting it on every reveal.
-    // Must stay below the sensor host's 90-second idle limit.
-    internal const int DefaultHiddenProviderGraceMs = 60000;
+    // Showing the dock again is common. An idle sensor child costs no CPU and about
+    // 22 MB, while restarting it takes 2 to 3 seconds, so keep it across most reveals.
+    // Must stay below SensorProcessProvider.HostIdleLimit.
+    internal const int DefaultHiddenProviderGraceMs = 600000;
+    // CPU and network rates are deltas: two reads this far apart fill the first sample.
+    private const int ResumeBaselineMs = 150;
+    // A retained reading stands in until the sensor lane answers or fails, which the
+    // provider's own read deadline bounds.
+    private const int RetainedReadingMs = 15000;
+    private long _retainedReadingUntil;
+    private int _prepareSensors;
     private readonly int _hiddenProviderGraceMs;
     public HardwareMonitorService(Func<IHardwareProvider> providerFactory, int intervalMs = 1500, int hiddenProviderGraceMs = DefaultHiddenProviderGraceMs)
     {
         _providerFactory = providerFactory; _settings = new() { MonitorUpdateIntervalMs = intervalMs };
-        _hiddenProviderGraceMs = Math.Clamp(hiddenProviderGraceMs, 0, 80000);
+        _hiddenProviderGraceMs = Math.Clamp(hiddenProviderGraceMs, 0, (int)SensorProcessProvider.HostIdleLimit.TotalMilliseconds - 10000);
     }
     public void Configure(AppSettings settings, bool visible)
     {
@@ -42,8 +49,18 @@ public sealed class HardwareMonitorService : IHardwareMonitor
         lock (_lifecycle)
         {
             if (_disposed) return;
+            if (visible && !_visible) Volatile.Write(ref _retainedReadingUntil, Environment.TickCount64 + RetainedReadingMs);
             Volatile.Write(ref _settings, configuration); _visible = visible;
             _fastWake.Signal(); _sensorWake.Signal();
+        }
+    }
+    public void PrepareReveal()
+    {
+        lock (_lifecycle)
+        {
+            if (_disposed || _visible) return;
+            Volatile.Write(ref _prepareSensors, 1);
+            _sensorWake.Signal();
         }
     }
     public HardwareInfoSnapshot GetSnapshot() => Volatile.Read(ref _snapshot);
@@ -76,7 +93,12 @@ public sealed class HardwareMonitorService : IHardwareMonitor
                 }
                 try
                 {
-                    if (system == null) { system = new(); installedMemory = SystemMetrics.ReadInstalledMemory(); }
+                    if (system == null)
+                    {
+                        system = new(); installedMemory = SystemMetrics.ReadInstalledMemory();
+                        system.ReadCpu(); system.ReadNetwork(settings.NetworkInterfaceId, settings.ShowNetwork);
+                        if (await _fastWake.WaitAsync(ResumeBaselineMs, token).ConfigureAwait(false)) continue;
+                    }
                     Interlocked.Increment(ref _windowsSamples);
                     float? cpu = system.ReadCpu();
                     var ram = SystemMetrics.ReadMemory();
@@ -85,7 +107,7 @@ public sealed class HardwareMonitorService : IHardwareMonitor
                     Interlocked.Add(ref _networkSamples, system.NetworkSampleCount - networkBefore);
                     var native = Volatile.Read(ref _hardware);
                     if (!settings.HardwareSensorsEnabled) native = HardwareReading.Empty with { Error = "SensorDisabled" };
-                    else native = TelemetryFreshness.ExpireIfNeeded(native, Period(settings));
+                    else if (Environment.TickCount64 >= Volatile.Read(ref _retainedReadingUntil)) native = TelemetryFreshness.ExpireIfNeeded(native, Period(settings));
                     var snapshot = new HardwareInfoSnapshot(Interlocked.Increment(ref _sequence), DateTimeOffset.UtcNow,
                         cpu, ram.Used, ram.Total, ram.Load, net.Upload, net.Download, net.Name,
                         native with { VisibleGpus = SelectGpus(native.Gpus, settings) }, [])
@@ -97,6 +119,7 @@ public sealed class HardwareMonitorService : IHardwareMonitor
                         catch (Exception ex) { AppLogger.Error(ex, "Monitor subscriber"); }
                     }
                 }
+                catch (OperationCanceledException) when (token.IsCancellationRequested) { throw; }
                 catch (Exception ex) { AppLogger.Error(ex, "Windows metrics"); }
                 await _fastWake.WaitAsync(Period(settings), token).ConfigureAwait(false);
             }
@@ -108,6 +131,7 @@ public sealed class HardwareMonitorService : IHardwareMonitor
         IHardwareProvider? provider = null;
         int failures = 0;
         bool policyBlocked = false;
+        bool lastReadFailed = false;
         long? hiddenSince = null;
         try
         {
@@ -117,11 +141,14 @@ public sealed class HardwareMonitorService : IHardwareMonitor
                 var settings = Volatile.Read(ref _settings);
                 int delay = Math.Max(1500, Period(settings));
                 bool disabled = !settings.ShowMonitor || !settings.HardwareSensorsEnabled;
-                if (disabled || (settings.SuspendMonitorWhenHidden && !_visible))
+                // Only a real reveal retries a failed helper, never a passing pointer.
+                bool prepare = Interlocked.Exchange(ref _prepareSensors, 0) != 0 && !lastReadFailed;
+                if (disabled || (settings.SuspendMonitorWhenHidden && !_visible && !prepare))
                 {
                     failures = 0;
                     policyBlocked = false;
-                    Volatile.Write(ref _hardware, HardwareReading.Empty);
+                    // Hidden only: the last values stay on screen when the panel next opens.
+                    if (disabled) Volatile.Write(ref _hardware, HardwareReading.Empty);
                     // Hidden only: no reads, but keep a healthy provider for the grace period.
                     // Disabling sensors or the monitor always releases it immediately.
                     int remaining = 0;
@@ -154,10 +181,12 @@ public sealed class HardwareMonitorService : IHardwareMonitor
                     if (current.ShowMonitor && current.HardwareSensorsEnabled && !token.IsCancellationRequested)
                         Volatile.Write(ref _hardware, reading);
                     failures = 0;
+                    lastReadFailed = false;
                 }
                 catch (OperationCanceledException) when (token.IsCancellationRequested) { throw; }
                 catch (Exception ex)
                 {
+                    lastReadFailed = true;
                     policyBlocked = HelperFailure.IsPolicyBlocked(ex);
                     var unavailable = TelemetryFreshness.Unavailable(Volatile.Read(ref _hardware), policyBlocked ? HelperFailure.PolicyMessageKey : "SensorReconnecting");
                     Volatile.Write(ref _hardware, policyBlocked ? unavailable with { MonotonicTimestamp = 0 } : unavailable);

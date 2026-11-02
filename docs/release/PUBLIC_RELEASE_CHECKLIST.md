@@ -112,9 +112,9 @@ Bạn cài Release build #1 ngày 02/11/2026 và thấy các vấn đề dưới
 
 Nguyên nhân: khi ẩn, app bỏ mốc đo CPU và mạng nên lần đọc đầu trống, xóa số cảm biến đã có, và tắt tiến trình cảm biến sau 60 giây nên lần mở sau phải khởi động lại.
 
-- [ ] **[AI]** Giữ tính năng ngủ khi ẩn, nhưng mở lên là có số ngay: giữ giá trị gần nhất cho tới khi có số mới, đo lại CPU và mạng sau 150 ms thay vì đợi hết chu kỳ.
-- [ ] **[AI]** Khởi động tiến trình cảm biến sớm khi chuột tiến gần cạnh, để nhiệt độ và GPU có số trước khi panel mở xong. Ẩn lâu vẫn tắt tiến trình này.
-- [ ] **[AI]** Đo trước và sau: thời gian tới khi đủ số, CPU và RAM lúc ẩn. Mục tiêu: CPU, RAM, mạng dưới 300 ms; cảm biến hiện ngay số cũ, có số mới dưới 1 giây khi tiến trình còn sống.
+- [x] **[AI]** Giữ tính năng ngủ khi ẩn, nhưng mở lên là có số ngay: giữ giá trị gần nhất cho tới khi có số mới, đo lại CPU và mạng sau 150 ms thay vì đợi hết chu kỳ. Số cảm biến cũ chỉ đứng tạm tối đa 15 giây, đúng hạn đọc của tiến trình cảm biến.
+- [x] **[AI]** Giữ tiến trình cảm biến 10 phút khi ẩn thay vì 60 giây, không đọc số liệu trong lúc đó, và khởi động sớm khi chuột tiến gần cạnh. Tiến trình lỗi chỉ được thử lại khi panel mở thật. Ẩn hơn 10 phút vẫn tắt nó.
+- [x] **[AI]** Đo trên cảm biến thật ngày 02/11/2026: khởi động lạnh 1,8 đến 3 giây, đọc khi đã chạy 7 đến 39 ms, lúc rảnh 0 CPU và 22 MB RAM riêng (71 MB working set, phần lớn dùng chung). Đây là lý do giữ tiến trình lâu hơn. Từ lúc mở panel tới khi có đủ CPU, RAM, mạng: 189 đến 215 ms qua 5 lần, đạt mục tiêu 300 ms. Lúc ẩn hơn 10 phút, số mới vẫn cần 2 đến 3 giây, số cũ hiện trong lúc chờ.
 
 ### Bộ cài
 
