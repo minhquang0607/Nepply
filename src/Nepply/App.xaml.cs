@@ -181,7 +181,7 @@ public partial class App : Application
                     RevealBlockedMs = reveals.Select(reveal => reveal.BlockedMs).ToArray(),
                     RevealSlowestFrameMs = reveals.Select(reveal => reveal.SlowestFrameMs).ToArray(),
                     RevealFrames = reveals.Select(reveal => reveal.Frames).ToArray(),
-                    Note ="Startup included; Windows metrics only; no desktop visibility or autostart modifications; not a long-run benchmark."
+                    Note = "Startup included; Windows metrics only; no desktop visibility or autostart modifications; not a long-run benchmark."
                 };
                 var outputIndex = Array.IndexOf(e.Args, "--smoke-output");
                 if (outputIndex >= 0 && outputIndex + 1 < e.Args.Length)
