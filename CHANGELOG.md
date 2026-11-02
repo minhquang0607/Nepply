@@ -8,14 +8,14 @@ Bản tổng hợp ngày **17/10/2026**, gom các thay đổi trong giai đoạn
 
 ### Desktop và thao tác
 
-- Mở panel từ cạnh màn hình hoặc phím tắt, ghim khi cần giữ mở. Phím mặc định là Alt + Shift + Space, để không chiếm Ctrl + Space của gợi ý code và bộ gõ. Phím đã lưu từ bản trước được giữ nguyên.
+- Mở panel từ cạnh màn hình hoặc phím tắt, ghim khi cần giữ mở. Không còn phím mở panel đặt sẵn vì các tổ hợp dễ bấm đều trùng ứng dụng khác; bạn tự đặt trong Cài đặt → Phím tắt và xóa được như mọi phím khác. Phím đã lưu từ bản trước được giữ nguyên.
 - Tìm kiếm và mở các mục trên Desktop, sử dụng menu chuột phải của Windows.
 - Mở shortcut trỏ tới ổ mạng mất kết nối không còn làm panel đơ.
 - Chỉnh lưới bằng số cột × hàng, với kích thước panel thích ứng theo màn hình.
 - Hạn chế tự mở panel khi trò chơi ẩn con trỏ để điều khiển nhân vật.
 - Panel đã ghim vẫn mở khi bạn gõ phím ở ứng dụng khác (lúc Windows tạm ẩn con trỏ).
 - Menu chuột phải của mục Desktop đóng lại khi bấm ra ngoài, giống menu ở khay hệ thống.
-- Phím tắt trong tệp cài đặt phải có Ctrl hoặc Alt; tổ hợp chỉ có Shift sẽ trở về mặc định để không chặn việc gõ chữ bình thường.
+- Phím tắt trong tệp cài đặt phải có Ctrl hoặc Alt; tổ hợp chỉ có Shift sẽ trở về chưa đặt để không chặn việc gõ chữ bình thường.
 
 ### Giao diện và cá nhân hóa
 

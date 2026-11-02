@@ -33,15 +33,12 @@ public static class ShortcutBindings
 
     public static bool IsGlobal(ShortcutAction action) => Array.IndexOf(Global, action) >= 0;
 
-    /// <summary>Only what people expect to work at once has a default; the rest starts unassigned.</summary>
+    /// <summary>Global shortcuts start unassigned: each one would be taken from every other app.</summary>
     public static ShortcutGesture Default(ShortcutAction action) => action switch
     {
-        ShortcutAction.TogglePanel => new(ShortcutGesture.Alt | ShortcutGesture.Shift, 0x20),
         ShortcutAction.FocusSearch => new(ShortcutGesture.Control, 0x46),
         _ => ShortcutGesture.None
     };
-
-    public static bool CanClear(ShortcutAction action) => action != ShortcutAction.TogglePanel;
 
     /// <summary>
     /// Global gestures need Ctrl or Alt so they cannot swallow normal typing in other apps.
@@ -51,7 +48,7 @@ public static class ShortcutBindings
     /// </summary>
     public static bool IsValid(ShortcutAction action, ShortcutGesture gesture)
     {
-        if (gesture.IsEmpty) return CanClear(action) && gesture.Modifiers == 0;
+        if (gesture.IsEmpty) return gesture.Modifiers == 0;
         if (gesture.Modifiers is < 0 or > 7 || gesture.Key == Escape) return false;
         bool commandModifier = (gesture.Modifiers & (ShortcutGesture.Alt | ShortcutGesture.Control)) != 0;
         bool standardKey = HotkeyGesture.IsSupportedKey(gesture.Key) || IsFunctionKey(gesture.Key);

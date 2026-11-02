@@ -704,7 +704,7 @@ public partial class SettingsWindow : Window
     {
         var action = ShortcutFor(sender);
         StopRecording();
-        if (ShortcutBindings.CanClear(action)) TryAssignShortcut(action, ShortcutGesture.None);
+        TryAssignShortcut(action, ShortcutGesture.None);
     }
     private void Guide_Click(object sender, RoutedEventArgs e)
     {

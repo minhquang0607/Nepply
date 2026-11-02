@@ -327,6 +327,7 @@ public partial class MainWindow : Window
     {
         if (_hotkeyRegistered is not { } registered) return;
         string label = HotkeyLabel(_settings);
+        HotkeyText.Visibility = label.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
         HotkeyText.Text = registered ? label : string.Format(LocalizationService.Get("HotkeyUnavailableLabel"), label);
         HotkeyText.ToolTip = LocalizationService.Get(registered ? "HotkeyToggleHint" : "HotkeyChangeHint");
         System.Windows.Automation.AutomationProperties.SetName(HotkeyText, HotkeyText.Text);
@@ -341,7 +342,7 @@ public partial class MainWindow : Window
         MonitorPanelView.RefreshLanguage();
     }
     public static string HotkeyLabel(AppSettings settings) =>
-        HotkeyGesture.Format(settings.HotkeyModifiers, settings.HotkeyKey);
+        ShortcutBindings.Get(settings, ShortcutAction.TogglePanel).ToString();
     public void ApplySettings()
     {
         var _settings = _settingsPreview ?? this._settings;

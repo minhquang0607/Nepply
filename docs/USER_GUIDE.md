@@ -8,7 +8,7 @@ Hướng dẫn cho **Nepply 2.0.0-rc.1**, bản phát hành thử (chưa ký) đ
 
 Lần chạy đầu, màn chào dùng ngôn ngữ của Windows; bạn có thể chọn ngôn ngữ khác ngay tại đó hoặc sau này trong **Cài đặt → Giao diện**.
 
-Đưa chuột tới cạnh màn hình đã chọn để mở panel, hoặc dùng **Alt + Shift + Space** nếu chưa đổi phím tắt trong Cài đặt.
+Đưa chuột tới cạnh màn hình đã chọn để mở panel, hoặc mở từ biểu tượng khay hệ thống. Nepply không đặt sẵn phím mở panel, vì các tổ hợp dễ bấm thường đã thuộc về ứng dụng khác; bạn tự chọn phím trong **Cài đặt → Phím tắt**.
 
 - Dùng nút ghim để giữ panel mở, kể cả khi bạn chuyển sang gõ phím ở ứng dụng khác.
 - **Ctrl + F** đưa con trỏ vào phần tìm kiếm.
@@ -27,7 +27,7 @@ Mọi phím tắt đổi được trong **Cài đặt → Phím tắt**. Bấm v
 
 | Chức năng | Mặc định | Dùng khi |
 | --- | --- | --- |
-| Mở / đóng panel | Alt + Shift + Space | Ở mọi nơi |
+| Mở / đóng panel | Chưa đặt | Ở mọi nơi |
 | Mở panel và tìm | Chưa đặt | Ở mọi nơi |
 | Ẩn / hiện icon Desktop | Chưa đặt | Ở mọi nơi |
 | Ghim / bỏ ghim panel | Chưa đặt | Ở mọi nơi |

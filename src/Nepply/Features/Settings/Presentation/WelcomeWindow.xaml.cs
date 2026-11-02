@@ -61,7 +61,8 @@ public partial class WelcomeWindow : Window
     {
         EdgeChoice.ItemsSource = Enum.GetNames<EdgePosition>().Select(LocalizationService.Get).ToArray();
         EdgeChoice.SelectedIndex = selected;
-        HotkeyHint.Text = string.Format(LocalizationService.Get("WelcomeHotkey"), MainWindow.HotkeyLabel(_settings));
+        string hotkey = MainWindow.HotkeyLabel(_settings);
+        HotkeyHint.Text = string.Format(LocalizationService.Get("WelcomeHotkey"), hotkey.Length > 0 ? hotkey : LocalizationService.Get("ShortcutNone"));
         ShortcutList.ItemsSource = ShortcutLines(_settings);
     }
     /// <summary>"Action · Key" for every assigned shortcut except show/hide, which has its own line.</summary>

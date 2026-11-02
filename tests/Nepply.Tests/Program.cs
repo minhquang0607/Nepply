@@ -427,6 +427,9 @@ internal static class Program
         Pump(250);
         Check("Blank panel click clears typed filter and collapses search", desktopSearchVm.SearchQuery == "" && desktopSearchEditor.Visibility == Visibility.Collapsed);
         var shellHotkey = (System.Windows.Controls.TextBlock)preview.FindName("HotkeyText");
+        preview.PresentHotkeyStatus(true);
+        Check("An unset hotkey leaves nothing in the footer", shellHotkey.Visibility == Visibility.Collapsed && MainWindow.HotkeyLabel(preview.Settings).Length == 0);
+        preview.Settings.HotkeyModifiers = 2; preview.Settings.HotkeyKey = 32;
         preview.PresentHotkeyStatus(false);
         Check("Unavailable hotkey has visible actionable feedback",
             shellHotkey.Text.Contains("chưa khả dụng") && ((FrameworkElement)shellIcons.FindName("LaunchNotice")).Visibility == Visibility.Visible
@@ -434,6 +437,9 @@ internal static class Program
         preview.PresentHotkeyStatus(true);
         Check("Recovered hotkey dismisses its stale error", !shellHotkey.Text.Contains("chưa khả dụng")
             && ((FrameworkElement)shellIcons.FindName("LaunchNotice")).Visibility == Visibility.Collapsed);
+        Check("A chosen hotkey appears in the footer", shellHotkey.Visibility == Visibility.Visible && shellHotkey.Text == "Ctrl + Space");
+        preview.Settings.HotkeyModifiers = 0; preview.Settings.HotkeyKey = 0;
+        preview.PresentHotkeyStatus(true);
         preview.PresentHotkeyStatus(false);
         shellIcons.ShowActionNotice("Unrelated operation failure");
         preview.PresentHotkeyStatus(true);

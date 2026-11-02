@@ -7,10 +7,12 @@ internal static class ShortcutBindingTests
     internal static void Run(Action<string, bool> check)
     {
         var settings = new AppSettings();
-        check("Shortcut defaults avoid keys other apps claim",
-            ShortcutBindings.Get(settings, ShortcutAction.TogglePanel) == new ShortcutGesture(5, Space)
-            && ShortcutBindings.Get(settings, ShortcutAction.TogglePanel) == ShortcutBindings.Default(ShortcutAction.TogglePanel)
+        check("No global shortcut is assigned until someone chooses it",
+            ShortcutBindings.Global.All(action => ShortcutBindings.Get(settings, action).IsEmpty)
+            && ShortcutBindings.Global.All(action => ShortcutBindings.Default(action).IsEmpty)
             && ShortcutBindings.Get(settings, ShortcutAction.FocusSearch) == new ShortcutGesture(2, F));
+        var unset = new AppSettings(); unset.Validate();
+        check("An unset open/close shortcut stays unset after validation", ShortcutBindings.Get(unset, ShortcutAction.TogglePanel).IsEmpty);
         check("A saved Ctrl + Space is kept", ShortcutBindings.Get(new AppSettings { HotkeyModifiers = 2, HotkeyKey = Space }, ShortcutAction.TogglePanel) == new ShortcutGesture(2, Space));
         check("New shortcut actions start unassigned",
             new[] { ShortcutAction.SearchDesktop, ShortcutAction.ToggleDesktopIcons, ShortcutAction.TogglePin, ShortcutAction.OpenSettings, ShortcutAction.RefreshDesktop }
@@ -29,9 +31,8 @@ internal static class ShortcutBindingTests
             ShortcutBindings.IsValid(ShortcutAction.RefreshDesktop, new(0, F5))
             && !ShortcutBindings.IsValid(ShortcutAction.FocusSearch, new(0, F)) && !ShortcutBindings.IsValid(ShortcutAction.FocusSearch, new(4, F))
             && ShortcutBindings.IsValid(ShortcutAction.FocusSearch, new(1, F)));
-        check("Only the open/close shortcut cannot be cleared",
-            !ShortcutBindings.IsValid(ShortcutAction.TogglePanel, ShortcutGesture.None)
-            && ShortcutBindings.All.Where(a => a != ShortcutAction.TogglePanel).All(a => ShortcutBindings.IsValid(a, ShortcutGesture.None)));
+        check("Every shortcut can be cleared, a modifier alone cannot be saved",
+            ShortcutBindings.All.All(a => ShortcutBindings.IsValid(a, ShortcutGesture.None) && !ShortcutBindings.IsValid(a, new(2, 0))));
 
         var edited = new AppSettings();
         ShortcutBindings.Set(edited, ShortcutAction.SearchDesktop, new(3, D));
@@ -59,6 +60,8 @@ internal static class ShortcutBindingTests
 
         var damaged = new AppSettings
         {
+            HotkeyModifiers = 5,
+            HotkeyKey = Space,
             Shortcuts = ["Unknown:2:68", "SearchDesktop:x:1", "3:2:68", "TogglePanel:1:65", "OpenSettings:4:68",
             "TogglePin:5:32", "SearchDesktop:2:82", "RefreshDesktop:2:82", null!, "FocusSearch:0:0", "HidePanel:9:27"]
         };

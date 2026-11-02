@@ -53,7 +53,7 @@ Only use the official release channel. If Windows blocks a file, check its sourc
 ## 🚀 Get started
 
 1. Open Nepply and choose a screen edge.
-2. Move to that edge, or press **Alt + Shift + Space** unless you changed it in Settings → Shortcuts.
+2. Move to that edge. If you prefer a key, set one in Settings → Shortcuts.
 3. Open a Desktop item or search by name.
 4. Try changes in Settings: **Apply** saves and stays open; **OK** saves and closes; **Cancel** discards changes since the last save.
 5. To quit completely, choose **Exit** from the tray icon.

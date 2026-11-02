@@ -44,7 +44,7 @@ internal static class SettingsShortcutTests
                 section.Visibility == Visibility.Visible && Inside(Row("HotkeyButton"), section)
                 && !Inside(Row("HotkeyButton"), (DependencyObject)settings.FindName("PanelSection")));
             check("Shortcut rows show default keys and unassigned actions",
-                Equals(Row("HotkeyButton").Content, "Alt + Shift + Space") && Equals(Row("ShortcutFocusSearch").Content, "Ctrl + F")
+                Equals(Row("HotkeyButton").Content, LocalizationService.Get("ShortcutNone")) && Equals(Row("ShortcutFocusSearch").Content, "Ctrl + F")
                 && Equals(Row("ShortcutSearchDesktop").Content, LocalizationService.Get("ShortcutNone")));
             check("Every shortcut row has an accessible action name",
                 ShortcutBindings.All.Where(a => a != ShortcutAction.TogglePanel)
@@ -61,9 +61,9 @@ internal static class SettingsShortcutTests
                 !recording() && Equals(Row("ShortcutSearchDesktop").Content, "Ctrl + Alt + D") && error.Text == "");
 
             Click("Hotkey_Click", Row("ShortcutOpenSettings"));
-            Press(Key.Space, new(5, Space));
+            Press(Key.D, new(3, D));
             check("A key used by another action is refused with that action's name",
-                recording() && error.Text == string.Format(LocalizationService.Get("ShortcutConflict"), "Alt + Shift + Space", LocalizationService.Get("ShortcutTogglePanel")));
+                recording() && error.Text == string.Format(LocalizationService.Get("ShortcutConflict"), "Ctrl + Alt + D", LocalizationService.Get("ShortcutSearchDesktop")));
             Press(Key.Escape, new(0, 0x1B));
             check("Esc cancels recording without changing the key",
                 !recording() && Equals(Row("ShortcutOpenSettings").Content, LocalizationService.Get("ShortcutNone")));
@@ -78,8 +78,13 @@ internal static class SettingsShortcutTests
             check("Clearing a shortcut leaves it unassigned", Equals(Row("ShortcutFocusSearch").Content, LocalizationService.Get("ShortcutNone")));
             Click("ShortcutDefault_Click", Row("ShortcutFocusSearch"));
             check("The default button restores a cleared key", Equals(Row("ShortcutFocusSearch").Content, "Ctrl + F"));
-            check("Open/close has no clear button",
-                ((Grid)VisualTreeHelper.GetParent(Row("HotkeyButton"))).Children.OfType<Button>().Count() == 2 && searchRow.Children.OfType<Button>().Count() == 3);
+            check("Open/close can be cleared like every other shortcut",
+                ((Grid)VisualTreeHelper.GetParent(Row("HotkeyButton"))).Children.OfType<Button>().Count() == 3 && searchRow.Children.OfType<Button>().Count() == 3);
+            Click("Hotkey_Click", Row("HotkeyButton"));
+            Press(Key.Space, new(2, Space));
+            check("A chosen open/close key is shown", Equals(Row("HotkeyButton").Content, "Ctrl + Space"));
+            Click("ShortcutClear_Click", Row("HotkeyButton"));
+            check("Clearing the open/close key leaves it unset", Equals(Row("HotkeyButton").Content, LocalizationService.Get("ShortcutNone")));
 
             ((Button)settings.FindName("ApplyButton")).RaiseEvent(new RoutedEventArgs(Button.ClickEvent)); pump(10);
             check("Apply saves the edited shortcuts",
@@ -89,7 +94,7 @@ internal static class SettingsShortcutTests
             Click("ResetShortcuts_Click", (Button)settings.FindName("ResetShortcuts"));
             check("Restore all brings back every default key",
                 Equals(Row("ShortcutSearchDesktop").Content, LocalizationService.Get("ShortcutNone"))
-                && Equals(Row("ShortcutRefreshDesktop").Content, LocalizationService.Get("ShortcutNone")) && Equals(Row("HotkeyButton").Content, "Alt + Shift + Space"));
+                && Equals(Row("ShortcutRefreshDesktop").Content, LocalizationService.Get("ShortcutNone")) && Equals(Row("HotkeyButton").Content, LocalizationService.Get("ShortcutNone")));
             check("Settings search finds shortcut rows in the Shortcuts section",
                 SettingsSearch.Find("phim tat").Any(e => e.Section == 5 && e.Control == "ShortcutTogglePin")
                 && SettingsSearch.Find("phim tat").Any(e => e.Section == 5 && e.Control == "HotkeyButton"));

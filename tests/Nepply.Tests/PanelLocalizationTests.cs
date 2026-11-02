@@ -21,6 +21,7 @@ internal static class PanelLocalizationTests
             var notice = (Border)icons.FindName("LaunchNotice");
             var noticeText = (TextBlock)icons.FindName("LaunchNoticeText");
             var hotkey = (TextBlock)main.FindName("HotkeyText");
+            main.Settings.HotkeyModifiers = 2; main.Settings.HotkeyKey = 32;
             main.PresentHotkeyStatus(false);
             typeof(MainWindow).GetMethod("EditLayout_Click", BindingFlags.Instance | BindingFlags.NonPublic)!.Invoke(main, [main, new RoutedEventArgs()]);
             main.TogglePin(); main.FocusDesktopSearch();

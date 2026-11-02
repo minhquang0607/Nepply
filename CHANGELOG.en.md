@@ -8,14 +8,14 @@ Consolidated **17 October 2026**. This is a summary of development changes, not 
 
 ### Desktop & interaction
 
-- Open from the screen edge or a hotkey, and pin when needed. The default hotkey is Alt + Shift + Space, leaving Ctrl + Space to code completion and input methods. A hotkey saved by an earlier build is kept.
+- Open from the screen edge or a hotkey, and pin when needed. No hotkey is preset for opening the panel, because easy combinations clash with other apps; set one in Settings → Shortcuts and clear it like any other. A hotkey saved by an earlier build is kept.
 - Search/open Desktop items with the Windows context menu.
 - Opening a shortcut to a disconnected network drive no longer freezes the panel.
 - Choose columns × rows and screen-relative panel dimensions.
 - Avoid automatic edge activation when a game hides the pointer for character control.
 - A pinned panel stays open while you type in another app (when Windows hides the pointer).
 - The Desktop item context menu closes when you click elsewhere, like the tray menu.
-- A hotkey saved in the settings file must include Ctrl or Alt; a Shift-only combination falls back to the default so it cannot block normal typing.
+- A hotkey saved in the settings file must include Ctrl or Alt; a Shift-only combination becomes unset so it cannot block normal typing.
 
 ### Appearance & personalization
 

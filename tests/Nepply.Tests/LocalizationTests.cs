@@ -87,7 +87,7 @@ internal static class LocalizationTests
             check($"Language {language} updates onboarding without resetting selection", welcome.Title == LocalizationService.Get("WelcomeTitle")
                 && ((Button)welcome.FindName("StartButton")).Content?.ToString() == LocalizationService.Get("WelcomeStart")
                 && ((ComboBox)welcome.FindName("EdgeChoice")).SelectedIndex == (int)EdgePosition.Bottom
-                && ((TextBlock)welcome.FindName("HotkeyHint")).Text == string.Format(LocalizationService.Get("WelcomeHotkey"), "Alt + Shift + Space"));
+                && ((TextBlock)welcome.FindName("HotkeyHint")).Text == string.Format(LocalizationService.Get("WelcomeHotkey"), LocalizationService.Get("ShortcutNone")));
             check($"Language {language} preserves RAM numeric format placeholders", string.Format(LocalizationService.Get("RamInstalled"), 16d, 1.5d).Contains("GiB"));
             render((FrameworkElement)layout.Content, 460, 300, Path.Combine(output, $"layout-language-{language}.png"));
             render((FrameworkElement)diagnostics.Content, 460, 540, Path.Combine(output, $"diagnostics-language-{language}.png"));

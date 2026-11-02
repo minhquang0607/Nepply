@@ -8,7 +8,7 @@ For **Nepply 2.0.0-rc.1**, a release candidate (unsigned) currently in preparati
 
 On first run the welcome screen uses your Windows language; pick another there or later in **Settings → Appearance**.
 
-Move to your selected screen edge, or press **Alt + Shift + Space** unless you changed the hotkey.
+Move to your selected screen edge, or open the panel from the tray icon. Nepply sets no hotkey for this, because easy combinations usually belong to another app; choose your own in **Settings → Shortcuts**.
 
 - Pin the panel to keep it open, including while you type in another app.
 - **Ctrl + F** focuses search.
@@ -27,7 +27,7 @@ Every shortcut can be changed in **Settings → Shortcuts**. Click a key box and
 
 | Action | Default | Works |
 | --- | --- | --- |
-| Show / hide panel | Alt + Shift + Space | Anywhere |
+| Show / hide panel | Not set | Anywhere |
 | Open panel and search | Not set | Anywhere |
 | Hide / show desktop icons | Not set | Anywhere |
 | Pin / unpin panel | Not set | Anywhere |
