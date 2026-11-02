@@ -2,26 +2,32 @@
 
 ## Trạng thái
 
-Đang chuẩn bị, **chưa sẵn sàng public**. Manifest và identity hiện tại chỉ dành cho QA (`Nepply.Internal.Preview`), không phải danh tính đã được cấp trên Partner Center. Không tự tạo/chấp nhận chứng thư, cài package, gửi Store hay bật chế độ Developer Mode.
+Đang chuẩn bị gửi Store, xem giai đoạn 6 của [kế hoạch phát hành](../../docs/release/PUBLIC_RELEASE_CHECKLIST.md). Chưa có identity thật từ Partner Center, chưa cài thử gói Store và chưa gửi duyệt.
 
 ```powershell
+# Gói QA nội bộ
 ./scripts/Build-Msix.ps1 -OutputDirectory artifacts/<checkpoint>/03-msix-store -InternalOnly
+# Gói Store: cần packaging/msix/identity.store.json (mẫu ở identity.store.example.json) và mã nguồn đã là bản ổn định
+./scripts/Build-Msix.ps1 -OutputDirectory artifacts/<checkpoint>/store -Store
 ```
 
-Script publish self-contained x64 dạng nhiều file (MSIX đã nén), tạo logo từ asset hiện có, chạy MakeAppx với validation mặc định, unpack rồi đối chiếu hash từng file payload. Nó không dùng `/nv`, không gọi Inno, không cài driver và không coi pack thành công là runtime QA thành công.
+Script publish self-contained x64 dạng nhiều file (MSIX đã nén), tạo logo từ asset hiện có, chạy MakeAppx với validation mặc định, unpack rồi đối chiếu hash từng file payload. Nó không dùng `/nv`, không gọi Inno, không cài driver và không coi pack thành công là đã nghiệm thu. `-AllowPrereleaseSource` chỉ để dựng thử.
 
-`msix-build.json` ghi `Signed`, `Installed`, `StoreReady` là false khi script chỉ đóng gói; không dùng các cờ đó để suy ra lịch sử QA của package khác. Windows SDK mặc định là 10.0.26100.0; có thể truyền `-MakeAppx` tới SDK chính thức đã cài. Không tải tool tùy ý để chạy.
+`msix-build.json` ghi `Signed`, `Installed`, `StoreReady` là false khi script chỉ đóng gói. Gói gửi Store không cần ký trước: Microsoft ký lại sau khi duyệt. Identity QA `Nepply.Internal.Preview` chỉ để thử nội bộ, không dùng cho Store.
 
-Nhánh Store đang tạm hoãn. Phiên bản nguồn là `2.0.0-rc.1`; identity QA trong `identity.internal.json` giữ `0.0.3.0`, không đổi thành chuỗi có hậu tố ngày. Version/identity phát hành Store phải chốt riêng khi tiếp tục Partner Center.
+## Khác biệt của bản Store
 
-## Những việc phải hoàn tất
+- Không có tính năng ẩn icon Desktop và không kèm tiến trình bảo vệ. Lệnh ẩn của Explorer không được tài liệu hóa, và gói MSIX không có bước khôi phục khi gỡ.
+- Không kiểm tra cập nhật qua GitHub; Store quản lý cập nhật.
+- Tự khởi động dùng StartupTask, tôn trọng DisabledByUser/Policy và không ghi HKCU Run.
+- Cấu hình nằm trong vùng dữ liệu riêng của gói, tách khỏi Setup và portable.
 
-1. Nhận Package/Identity/Name và Publisher thật từ Partner Center; chốt package version bốn phần có revision cuối bằng 0 cho Store. Không dùng version preview riêng làm version chính thức vô tình.
-2. Adapter startup dùng StartupTask, tôn trọng DisabledByUser/Policy và không ghi HKCU Run. Người dùng đã xác nhận package QA tự chạy sau đăng nhập trong lượt thử trước; vẫn phải nghiệm thu lại package cuối dưới identity Partner Center thật. Manifest khai báo task tắt, không tự bật lúc khởi tạo.
-3. Thiết kế và test khôi phục icon Desktop khi process bị kill, package update/remove. MSIX không chạy Inno `InitializeUninstall`; không giả định custom uninstall action của desktop game MSIXVC dùng được cho app này.
-4. Test AppData/config migration, log, lease, IPC/helper và cùng tồn tại với portable/EXE. Chưa tự đổi SID mutex hay vị trí journal vì có thể phá quyền sở hữu Desktop giữa hai kênh.
-5. Test chạy không admin, mất sensor/driver, không tự cài driver; package không được yêu cầu tắt cơ chế bảo vệ để dùng app.
-6. Chốt notices, publisher metadata, privacy URL/asset listing, kiểm tra package thực và N → N+1. Trước khi cài QA cần thỏa thuận riêng về identity/cert thử, không tự thêm cert vào trust store.
+## Những việc còn phải hoàn tất
+
+1. Nhận Package/Identity/Name và Publisher thật từ Partner Center, tạo `identity.store.json`.
+2. Đổi mã nguồn sang `2.0.0`, dựng gói `2.0.0.0`. Phần cuối của phiên bản gói phải là 0.
+3. Chạy Windows App Certification Kit nếu máy cho phép; công cụ cần quyền quản trị.
+4. Nghiệm thu gói thật: chạy không admin, cảm biến, StartupTask, cập nhật N → N+1, gỡ cài đặt.
 
 ## Kênh cập nhật
 

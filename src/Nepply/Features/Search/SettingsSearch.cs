@@ -51,11 +51,13 @@ internal static class SettingsSearch
         new("Ứng dụng · Bố cục",4,"ProfileStatus","profile nhập xuất bố cục chia sẻ"),
         new("Ứng dụng · Quyền riêng tư",4,"AboutVersion","privacy dữ liệu analytics hỗ trợ tác giả phiên bản")
     ];
-    internal static Entry[] Find(string query)
+    internal static Entry[] Find(string query) => Find(query, ProcessPackageIdentity.IsPackaged);
+    internal static Entry[] Find(string query, bool packaged)
     {
         var words = SearchText.Words(query);
         if (words.Length == 0) return [];
-        return Entries.Select(e => (Original: e, Local: Localized(e)))
+        return Entries.Where(e => !packaged || e.Control is not ("HideIcons" or "ShortcutToggleDesktopIcons" or "AutoCheckUpdates"))
+            .Select(e => (Original: e, Local: Localized(e)))
             .Where(e => SearchText.Matches(e.Original.Label + " " + e.Original.Keywords + " " + e.Local.Label, words))
             .Select(e => e.Local).ToArray();
     }

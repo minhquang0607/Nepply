@@ -22,5 +22,10 @@ internal static class SettingsSearchTests
         }
         check("Search distinguishes hidden files from hiding Desktop icons",
             SettingsSearch.Find("file an").All(e => e.Control != "HideIcons") && SettingsSearch.Find("an icon windows").Any(e => e.Control == "HideIcons"));
+        check("The Store edition does not offer options it does not have",
+            SettingsSearch.Find("an icon windows", packaged: true).All(e => e.Control != "HideIcons")
+            && SettingsSearch.Find("icon desktop", packaged: true).All(e => e.Control != "ShortcutToggleDesktopIcons")
+            && SettingsSearch.Find("cập nhật", packaged: true).All(e => e.Control != "AutoCheckUpdates")
+            && SettingsSearch.Find("khoi dong", packaged: true).Any(e => e.Control == "AutoStart"));
     }
 }

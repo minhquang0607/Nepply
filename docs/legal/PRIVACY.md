@@ -33,7 +33,7 @@ Monitor dùng số đo mới nhất, không ghi lịch sử cảm biến thành 
 
 ## Quyền truy cập và thay đổi hệ thống
 
-Nepply chạy dưới tài khoản người dùng thông thường. Ứng dụng có thể đọc Desktop, đăng ký hotkey, thêm mục tự khởi động khi người dùng bật hoặc giữ ô được chọn sẵn trong bộ cài, và yêu cầu Explorer ẩn/hiện icon Desktop. Dấu khôi phục được ghi trước thao tác ẩn để lần chạy sau có thể khôi phục. Nepply không tự cài driver, không tự nâng quyền và không yêu cầu tắt Vanguard, antivirus, Secure Boot hoặc Memory Integrity.
+Nepply chạy dưới tài khoản người dùng thông thường. Ứng dụng có thể đọc Desktop, đăng ký hotkey, thêm mục tự khởi động khi người dùng bật hoặc giữ ô được chọn sẵn trong bộ cài, và yêu cầu Explorer ẩn/hiện icon Desktop. Dấu khôi phục được ghi trước thao tác ẩn để lần chạy sau có thể khôi phục. Nepply không tự cài driver, không tự nâng quyền và không yêu cầu tắt Vanguard, antivirus, Secure Boot hoặc Memory Integrity. Bản Microsoft Store cập nhật qua Store, không kết nối GitHub để kiểm tra cập nhật và không ẩn icon Desktop.
 
 Mở file, shortcut, URL hoặc menu Shell là hành động do người dùng yêu cầu; chương trình/website được mở có chính sách riêng ngoài phạm vi Nepply.
 
@@ -81,7 +81,7 @@ Monitoring retains the latest readings, not a sensor-history database. Sensor di
 
 ### Access and system changes
 
-Nepply runs as the ordinary user. It can read the Desktop, register hotkeys, add startup when enabled, including by keeping the box ticked in Setup, and ask Explorer to hide/show Desktop icons. A recovery marker is written before hiding. Nepply does not automatically install drivers, elevate itself or require disabling Vanguard, antivirus, Secure Boot or Memory Integrity.
+Nepply runs as the ordinary user. It can read the Desktop, register hotkeys, add startup when enabled, including by keeping the box ticked in Setup, and ask Explorer to hide/show Desktop icons. A recovery marker is written before hiding. Nepply does not automatically install drivers, elevate itself or require disabling Vanguard, antivirus, Secure Boot or Memory Integrity. The Microsoft Store edition updates through the Store, does not contact GitHub for update checks and does not hide Desktop icons.
 
 Opening files, shortcuts, URLs or Shell menus is user-requested. Launched programs/websites have their own policies outside Nepply's scope.
 

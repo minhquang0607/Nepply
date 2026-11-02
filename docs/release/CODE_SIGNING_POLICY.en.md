@@ -7,6 +7,7 @@
 Nepply-owned code is MIT licensed; dependencies keep their own licenses.
 SignPath Foundation did not approve the application of 2 November 2026, because
 the project does not yet have enough public visibility; it may reapply later.
+Microsoft signs the Microsoft Store edition after certification.
 **No certificate has been issued and no production binary is signed.**
 QA certificates are never a substitute for release signatures, and users are
 never asked to disable Windows protection instead.

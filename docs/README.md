@@ -38,7 +38,7 @@ Các tài liệu triển khai chi tiết dưới đây hiện bằng tiếng Vi�
 
 - [Release 2.0.0-rc.1 — English / Tiếng Việt](release/RELEASE_2.0.0-rc.1.md)
 - [Release 2.0.0 draft — English / Tiếng Việt](release/RELEASE_2.0.0.md)
-- [SignPath application / Đơn SignPath](release/SIGNPATH_APPLICATION.md)
+- [SignPath application / Đơn SignPath](release/SIGNPATH_APPLICATION.md) · [Microsoft Store listing / Nội dung Store](release/STORE_LISTING.md)
 - [Packaging / Đóng gói](../packaging/README.md) · [MSIX / Store](../packaging/msix/README.md)
 - [Release plan / Kế hoạch phát hành](release/PUBLIC_RELEASE_CHECKLIST.md)
 - [Signing & acceptance / Ký và nghiệm thu](release/RELEASE_SIGNING.md) · Signing policy: [English](release/CODE_SIGNING_POLICY.en.md) · [Tiếng Việt](release/CODE_SIGNING_POLICY.md)

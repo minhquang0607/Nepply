@@ -9,6 +9,9 @@ internal static class ProcessPackageIdentity
     // must remain a failure, never permission to write unpackaged startup entries.
     private static readonly Lazy<bool> Packaged = new(Read);
     internal static bool IsPackaged => Packaged.Value;
+    // Explorer's toggle is undocumented, which Store policy 10.2.8 rules out, and a
+    // package has no uninstall step to bring hidden icons back.
+    internal static bool CanHideDesktopIcons => !IsPackaged;
 
     private static bool Read()
     {

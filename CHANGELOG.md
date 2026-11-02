@@ -2,6 +2,12 @@
 
 [English](CHANGELOG.en.md) · **Tiếng Việt** · [Trang chính](README.vi.md)
 
+## Chưa phát hành
+
+### Bản Microsoft Store
+
+- Chuẩn bị bản Microsoft Store: Microsoft ký gói sau khi duyệt, cập nhật qua Store. Bản này không có tính năng ẩn icon Desktop và không kiểm tra cập nhật qua GitHub; Setup và portable giữ nguyên.
+
 ## 2.0.0-rc.1 — 02/11/2026
 
 Bản phát hành thử công khai đầu tiên, phát hành ngày **02/11/2026**, chưa ký số. Danh sách dưới đây gom các thay đổi trong giai đoạn phát triển.

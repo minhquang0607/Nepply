@@ -2,6 +2,12 @@
 
 **English** · [Tiếng Việt](CHANGELOG.md) · [Home](README.md)
 
+## Unreleased
+
+### Microsoft Store edition
+
+- Preparing a Microsoft Store edition: Microsoft signs the package after certification and the Store updates it. This edition cannot hide Desktop icons and does not check GitHub for updates; Setup and portable are unchanged.
+
 ## 2.0.0-rc.1 — 2 November 2026
 
 First public release candidate, published **2 November 2026**, not code-signed. The list below summarizes the changes made during development.

@@ -837,6 +837,7 @@ internal static class Program
         icons.DataContext = null; icons.DataContext = iconVm;
         ((System.Windows.Controls.TextBlock)preview.FindName("FooterState")).Text = "Bản xem trước · số liệu minh họa";
         Render((FrameworkElement)preview.Content, 380, 880, Path.Combine(output, "nepply-graphite.png"));
+        Render((FrameworkElement)preview.Content, 380, 880, Path.Combine(output, "store-panel-dark.png"), 2);
         var scroller = (System.Windows.Controls.ScrollViewer)preview.FindName("MonitorScroller");
         var summaryGrid = (System.Windows.Controls.Primitives.UniformGrid)monitorPanel.FindName("SummaryGrid");
         Check("Monitor details removed", monitorPanel.FindName("DetailsExpander") == null && monitorPanel.FindName("DetailsNavigation") == null);
@@ -1132,6 +1133,7 @@ internal static class Program
         Render((FrameworkElement)settingsWindow.Content, 620, 700, Path.Combine(output, "nepply-settings.png"));
         var navigation = (System.Windows.Controls.ListBox)settingsWindow.FindName("SettingsNavigation");
         Render((FrameworkElement)settingsWindow.Content, 820, 740, Path.Combine(output, "settings-wide-rail.png"));
+        Render((FrameworkElement)settingsWindow.Content, 820, 740, Path.Combine(output, "store-settings.png"), 2);
         Check("Wide settings use a navigation rail", System.Windows.Controls.Grid.GetColumn(navigation) == 0 && System.Windows.Controls.Grid.GetRowSpan(navigation) == 2);
         (FrameworkElement Bar, FrameworkElement Underline) SelectedIndicators()
         {
@@ -1249,6 +1251,7 @@ internal static class Program
         ThemeService.Apply(new AppSettings { Theme = ThemeOption.Light });
         preview.Settings.ShowMonitor = true; preview.Settings.EdgePosition = EdgePosition.Left; preview.Settings.Theme = ThemeOption.Light; preview.ApplySettings();
         Render((FrameworkElement)preview.Content, 380, 880, Path.Combine(output, "nepply-ivory.png"));
+        Render((FrameworkElement)preview.Content, 380, 880, Path.Combine(output, "store-panel-light.png"), 2);
         preview.Settings.Theme = ThemeOption.Dark; preview.Settings.Accent = "Neon Cyan"; preview.ApplySettings();
         Render((FrameworkElement)preview.Content, 380, 880, Path.Combine(output, "nepply-neon.png"));
         ThemeService.ApplyAccessibility(preview.Settings, true, true);
@@ -1490,11 +1493,12 @@ internal static class Program
         while (!condition() && elapsed.ElapsedMilliseconds < timeoutMs) Pump(10);
         return condition();
     }
-    private static void Render(FrameworkElement element, int width, int height, string destination)
+    private static void Render(FrameworkElement element, int width, int height, string destination) => Render(element, width, height, destination, 1);
+    private static void Render(FrameworkElement element, int width, int height, string destination, int scale)
     {
         element.Width = width; element.Height = height;
         element.Measure(new Size(width, height)); element.Arrange(new Rect(0, 0, width, height)); element.UpdateLayout();
-        var bitmap = new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Pbgra32); bitmap.Render(element);
+        var bitmap = new RenderTargetBitmap(width * scale, height * scale, 96 * scale, 96 * scale, PixelFormats.Pbgra32); bitmap.Render(element);
         var encoder = new PngBitmapEncoder(); encoder.Frames.Add(BitmapFrame.Create(bitmap));
         using var file = File.Create(destination); encoder.Save(file);
     }

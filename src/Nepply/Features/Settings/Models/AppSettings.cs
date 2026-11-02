@@ -90,6 +90,7 @@ public sealed class AppSettings
         if (!Enum.IsDefined(EdgePosition)) EdgePosition = EdgePosition.Left;
         if (!Enum.IsDefined(IconSize)) IconSize = IconSizeOption.Medium;
         if (!Enum.IsDefined(Theme)) Theme = ThemeOption.System;
+        if (!Nepply.Services.ProcessPackageIdentity.CanHideDesktopIcons) HideDesktopIcons = false;
         PanelWidth = Math.Clamp(PanelWidth, 320, 600);
         if (!Nepply.Services.LocalizationService.IsSupported(Language)) Language = Nepply.Services.LocalizationService.SystemDefault;
         PanelWidthPercent = ValidPercent(PanelWidthPercent);

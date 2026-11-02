@@ -297,6 +297,7 @@ public partial class MainWindow : Window
     }
     private void ToggleDesktopIcons()
     {
+        if (!ProcessPackageIdentity.CanHideDesktopIcons) return;
         _settings.HideDesktopIcons = !_settings.HideDesktopIcons;
         try { if (!_preview) _settings.Save(); }
         catch (Exception ex)
@@ -778,7 +779,7 @@ public partial class MainWindow : Window
     {
         if (_preview) return;
         if (autoStart) _ = ApplyStartupAsync(_settings.AutoStart, userInitiated);
-        if (desktopVisibility) _ = ApplyDesktopVisibilityAsync(_settings.HideDesktopIcons);
+        if (desktopVisibility && ProcessPackageIdentity.CanHideDesktopIcons) _ = ApplyDesktopVisibilityAsync(_settings.HideDesktopIcons);
     }
     private async Task ApplyDesktopVisibilityAsync(bool hide)
     {

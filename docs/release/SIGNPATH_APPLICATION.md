@@ -2,7 +2,7 @@
 
 Bản nháp câu trả lời cho form <https://signpath.org/apply>, đối chiếu với form và điều kiện tại <https://signpath.org/terms> ngày 02/11/2026.
 
-Minh Quang phải tự nộp, vì form tạo tài khoản SignPath đứng tên người nộp và yêu cầu cam kết tuân thủ Code of Conduct. Trạng thái: nộp ngày 02/11/2026, **bị từ chối cùng ngày**. Lý do SignPath nêu là dự án chưa đủ tín hiệu công khai, không phải chất lượng code. Họ xem sao, fork, người đóng góp, bài viết hoặc thảo luận độc lập (Reddit, Stack Overflow, YouTube), sự bảo trợ của tổ chức và hoạt động bền bỉ. Họ mời nộp lại khi dự án được biết đến rộng hơn, hoặc dùng gói trả phí. Chỉ nộp lại khi đã có số liệu thật.
+Minh Quang phải tự nộp, vì form tạo tài khoản SignPath đứng tên người nộp và yêu cầu cam kết tuân thủ Code of Conduct. Trạng thái: nộp ngày 02/11/2026, **bị từ chối cùng ngày**. Lý do SignPath nêu là dự án chưa đủ tín hiệu công khai, không phải chất lượng code. Họ xem sao, fork, người đóng góp, bài viết hoặc thảo luận độc lập (Reddit, Stack Overflow, YouTube), sự bảo trợ của tổ chức và hoạt động bền bỉ. Họ mời nộp lại khi dự án được biết đến rộng hơn, hoặc dùng gói trả phí. Chỉ nộp lại khi đã có số liệu thật. Hiện dự án đi theo [Microsoft Store](PUBLIC_RELEASE_CHECKLIST.md).
 
 ## Điều kiện trước khi nộp
 

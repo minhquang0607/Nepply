@@ -1,0 +1,8 @@
+{
+  "Name": "<Package/Identity/Name from Partner Center>",
+  "Publisher": "<Package/Identity/Publisher from Partner Center>",
+  "PublisherDisplayName": "<Package/Properties/PublisherDisplayName from Partner Center>",
+  "DisplayName": "Nepply",
+  "Version": "2.0.0.0",
+  "InternalOnly": false
+}

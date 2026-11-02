@@ -12,17 +12,18 @@ Cập nhật 02/11/2026. Đây là kế hoạch duy nhất từ hiện tại đ�
 | 3 | Chuẩn bị repo công khai | Xong; còn tùy chọn thêm CodeQL vào ruleset |
 | 3A | Sửa lỗi từ các lượt cài thử | Xong; bạn báo đạt ngày 02/11/2026 |
 | 4 | Phát hành `2.0.0-rc.1` chưa ký | Đã công khai và đối chiếu ngày 02/11/2026; đang nhận phản hồi |
-| 5 | Xin chữ ký số | SignPath từ chối ngày 02/11/2026; chờ bạn chọn hướng khác |
-| 6 | Tích hợp ký và phát hành RC đã ký | Chưa làm; các bước bên dưới viết cho SignPath, phải sửa theo hướng được chọn |
+| 5 | Xin chữ ký số | Xong: SignPath từ chối, đã chọn Microsoft Store |
+| 6 | Đưa Nepply lên Microsoft Store | Phần chuẩn bị của AI đã xong; chờ bạn tạo tài khoản |
 | 7 | Hoàn thiện chất lượng | Bài đo 24 giờ đang chạy; còn các mục của bạn |
 | 8 | Nghiệm thu trên máy thật | Chưa làm |
-| 9 | Phát hành `2.0.0` | Đã tạo lại ảnh README; phần còn lại chờ RC đã ký |
+| 9 | Phát hành `2.0.0` | Đã tạo lại ảnh README; phần còn lại chờ bản Store |
 | 10 | Trả nợ kỹ thuật sau 2.0.0 | Chưa làm |
 
 ## Quyết định đã chốt
 
 - Bản chính là `2.0.0`. Trước đó phát hành `2.0.0-rc.1` chưa ký để đủ điều kiện SignPath, vì dự án phải **đã phát hành** ở dạng sẽ được ký. Bản ổn định luôn phải có chữ ký.
 - Phương án không chọn: phát hành `2.0.0` chưa ký rồi ký từ `2.0.1`, vì bản ổn định chưa ký sẽ bị Smart App Control chặn.
+- Ngày 02/11/2026, sau khi SignPath từ chối, bạn chọn Microsoft Store làm kênh có chữ ký. Bản `2.0.0` có chữ ký phát hành qua Store. Setup và portable trên GitHub vẫn chưa ký; cách ghi nhãn chúng ở `2.0.0` chốt tại giai đoạn 9.
 - Tag cũ `v1.0.0-beta.1` đã xóa ngày 30/10/2026. Chỉ tạo tag mới lúc phát hành.
 - `FileVersion`: RC thứ N dùng `2.0.0.N`, bản ổn định dùng `2.0.0.100`. Luôn đổi đồng thời trong `Nepply.csproj` và `Nepply.DesktopGuardian.csproj`.
 - Bản dịch tiếng Việt của bộ cài do repo tự giữ, dịch từ `Default.isl` của Inno Setup 7.1.0.
@@ -169,11 +170,11 @@ Bạn góp ý ngày 02/11/2026. Lần rà mặc định trước được làm l
 - [x] **[Bạn]** Kiểm tra trước khi nộp: repo Public, MFA đã bật, đã có Release công khai.
 - [x] **[Bạn]** Tự nộp đơn tại <https://signpath.org/apply> theo [SIGNPATH_APPLICATION.md](SIGNPATH_APPLICATION.md). Bạn báo đã nộp ngày 02/11/2026; AI không có cách xác minh từ phía SignPath.
 - [x] **[AI]** SignPath Foundation từ chối ngày 02/11/2026 vì dự án chưa đủ độ nhận biết công khai, mời nộp lại sau. Đã đối chiếu lại các hướng khác cùng ngày, xem bảng dưới.
-- [ ] **[Bạn]** Chọn hướng ký. Azure Artifact Signing không dùng được vì cá nhân chỉ ở Mỹ/Canada.
+- [x] **[Bạn]** Chọn hướng ký: Microsoft Store, ngày 02/11/2026. Azure Artifact Signing không dùng được vì cá nhân chỉ ở Mỹ/Canada.
 
 | Hướng | Chi phí | Điều kiện đã biết | Chưa rõ |
 | --- | --- | --- | --- |
-| Microsoft Store (MSIX) | Tài khoản cá nhân miễn phí; Microsoft ký gói sau khi duyệt | Giấy tờ tùy thân và selfie; phải xong các mục trong `packaging/msix/README.md`, nhất là khôi phục Desktop khi gói bị gỡ | Store có chấp nhận app ẩn icon Desktop không. Setup trên GitHub vẫn chưa ký |
+| Microsoft Store (MSIX) | Tài khoản cá nhân miễn phí; Microsoft ký gói sau khi duyệt | Giấy tờ tùy thân và selfie; xem giai đoạn 6 | Việt Nam có được xác minh không, Store có duyệt không. Setup trên GitHub vẫn chưa ký |
 | Certum Open Source | Từ $58 bản cloud, từ €69 bộ thẻ | Chỉ cho cá nhân; xác minh giấy tờ, hóa đơn tiện ích, dự án công khai; bị thu hồi nếu ký phần mềm thương mại | Có bán cho Việt Nam không, thời hạn, còn hàng không, có ký tự động trong CI không. SmartScreen vẫn cảnh báo tới khi đủ uy tín |
 | Chứng thư OV thường | Khoảng $150–300/năm | Khóa trên HSM hoặc token | SmartScreen vẫn cảnh báo tới khi đủ uy tín |
 | SignPath trả phí | Không công bố giá | Liên hệ SignPath | Có kèm chứng thư không |
@@ -181,17 +182,23 @@ Bạn góp ý ngày 02/11/2026. Lần rà mặc định trước được làm l
 
 **Xong khi:** có chứng thư, dịch vụ ký hoặc kênh phát hành đã ký dùng được.
 
-## Giai đoạn 6. Tích hợp ký và phát hành RC đã ký
+## Giai đoạn 6. Đưa Nepply lên Microsoft Store
 
-Bản chưa ký không thể tự cập nhật, nên phải có một RC đã ký để kiểm thật đường cập nhật lên `2.0.0`.
+Microsoft ký gói MSIX sau khi duyệt, nên bản Store không cần chứng thư riêng. Tài khoản cá nhân miễn phí, xác minh bằng giấy tờ tùy thân và selfie. Trang của Microsoft không nêu giới hạn quốc gia, nhưng cũng không nhắc Việt Nam, nên phải thử mới biết.
 
-- [ ] **[AI]** Thêm bước gửi ký vào `release.yml` (action SignPath pin theo SHA): ký `Nepply.exe` + `Nepply.DesktopGuardian.exe`, dựng lại Setup với `-SignedUninstallerDirectory`, ký Setup, tạo checksum sau ký.
-- [ ] **[AI]** Ký một bản thử rồi chạy `pwsh scripts/Get-SignerPolicy.ps1 -File <Setup-đã-ký>`, đưa kết quả vào `UpdatePolicy.Signers` để bật tự cập nhật.
-- [ ] **[AI]** Mở public mode trong `scripts/Build-Distribution.ps1` (hiện từ chối khi thiếu `-InternalOnly`).
-- [ ] **[AI]** Bổ sung attribution SignPath đúng yêu cầu vào README và chính sách ký.
-- [ ] **[Cả hai]** Phát hành `2.0.0-rc.2` (hoặc RC kế tiếp) đã ký. Chạy `Verify-Release.ps1 -RequireSigned -AllowedSignerThumbprints <thumbprint> -Uninstaller <unins000.exe từ lượt cài thật>`.
+- [x] **[AI]** Bản Store không có tính năng ẩn icon Desktop, vì lệnh của Explorer không được tài liệu hóa (chính sách 10.2.8) và gói MSIX không có bước khôi phục khi gỡ (10.2.7). Setup và portable vẫn giữ tính năng này. Gói Store không có tiến trình bảo vệ nên nhẹ hơn khoảng 70 MB.
+- [x] **[AI]** Thêm `scripts/Build-Msix.ps1 -Store`: đọc `packaging/msix/identity.store.json`, từ chối identity sai, phiên bản lệch với mã nguồn, và mã nguồn còn prerelease. Dựng thử với identity giả: gói 80,8 MB, tên tệp hợp lệ, MakeAppx đạt.
+- [x] **[AI]** Soạn nội dung 8 ngôn ngữ, giải trình `runFullTrust`, ghi chú cho người duyệt: [STORE_LISTING.md](STORE_LISTING.md). Tạo 3 ảnh trong `packaging/msix/store/screenshots` bằng `scripts/Build-StoreScreenshots.ps1`.
+- [ ] **[Bạn]** Tạo tài khoản tại <https://storedeveloper.microsoft.com> (Individual developer), xác minh danh tính, giữ tên `Nepply` trong Partner Center.
+- [ ] **[Bạn]** Mở *View app identity details*, gửi AI ba giá trị Package/Identity/Name, Package/Identity/Publisher và Package/Properties/PublisherDisplayName.
+- [ ] **[AI]** Tạo `identity.store.json`, đổi mã nguồn sang `2.0.0` và `FileVersion` `2.0.0.100`, dựng gói `2.0.0.0`.
+- [ ] **[Cả hai]** Chạy Windows App Certification Kit nếu máy cho phép. Công cụ cần quyền quản trị nên AI không tự chạy được.
+- [ ] **[Bạn]** Tạo submission, chọn **Private audience**, dán nội dung từ `STORE_LISTING.md`, tải gói lên, gửi duyệt.
+- [ ] **[Bạn]** Cài bản Store thật, thử theo giai đoạn 8, rồi chuyển sang công khai.
 
-**Xong khi:** một bản RC đã ký được phát hành và qua `Verify-Release`.
+**Xong khi:** Nepply cài được từ Microsoft Store, gói do Microsoft ký.
+
+Nếu sau này có chứng thư cho bản Setup: thêm bước ký vào `release.yml`, dựng lại Setup với `-SignedUninstallerDirectory`, đưa `Get-SignerPolicy.ps1` vào `UpdatePolicy.Signers`, mở public mode trong `Build-Distribution.ps1`, rồi chạy `Verify-Release.ps1 -RequireSigned`.
 
 ## Giai đoạn 7. Hoàn thiện chất lượng
 
@@ -211,7 +218,7 @@ Không chặn việc xin chữ ký, có thể làm song song từ giai đoạn 4
 
 ## Giai đoạn 8. Nghiệm thu trên máy thật
 
-Làm bằng đúng file đã ký. Dùng VM Windows 11 cài mới (Hyper-V hoặc VirtualBox), **bật Smart App Control** ngay khi cài Windows (chỉ bật được trên máy mới cài). Ghi hash Setup, ảnh chụp và kết quả từng mục:
+Với bản Store: cài từ Store, thử mở panel, monitor, tự khởi động, đổi ngôn ngữ, gỡ cài đặt. Các mục dưới về ẩn icon, Setup và cập nhật trong app áp dụng cho bản Setup; làm khi có Setup đã ký. Dùng VM Windows 11 cài mới (Hyper-V hoặc VirtualBox), **bật Smart App Control** ngay khi cài Windows (chỉ bật được trên máy mới cài). Ghi hash Setup, ảnh chụp và kết quả từng mục:
 
 - [ ] **[Bạn]** Tải từ GitHub Release qua trình duyệt (để có Mark of the Web), chạy Setup: SmartScreen/SAC hiện gì?
 - [ ] **[Bạn]** Lần đầu chạy: chọn ẩn icon Desktop → thoát qua khay → icon trở lại.
@@ -233,10 +240,9 @@ Làm bằng đúng file đã ký. Dùng VM Windows 11 cài mới (Hyper-V hoặc
 - [ ] **[AI]** Bỏ trang thông báo khỏi bộ cài (`packaging/inno/Notices`, `InfoBeforeFile` trong `[Languages]`), bỏ `RELEASE_NOTICE.txt` khỏi `[Files]` và hai script đóng gói, bỏ banner RC trong README, hướng dẫn, ghi chú phát hành.
 - [x] **[AI]** Tạo lại ảnh README theo `docs/images/README.md`. Đã làm ngày 02/11/2026 từ mã nguồn của `2fa1e78`; làm lại nếu giao diện đổi trước `2.0.0`.
 - [ ] **[AI]** Hoàn thiện `RELEASE_2.0.0.md` và CHANGELOG; cập nhật mục giới hạn về tự cài cập nhật.
-- [ ] **[Cả hai]** Tạo tag `v2.0.0`, phát hành Release chính thức (không đánh dấu pre-release). Chạy `Verify-Release.ps1 -RequireSigned -RequireStable`.
-- [ ] **[Bạn]** Kiểm tra người dùng RC đã ký nhận được bản 2.0.0 qua cửa sổ cập nhật.
+- [ ] **[Cả hai]** Chốt cách phát hành Setup và portable chưa ký cho `2.0.0` trên GitHub, tạo tag `v2.0.0`. README đưa người dùng tới bản Store trước.
 
-**Xong khi:** `2.0.0` đã ký có trên trang Releases và cập nhật từ RC hoạt động.
+**Xong khi:** `2.0.0` có trên Microsoft Store và trang Releases ghi rõ bản nào đã ký.
 
 ## Giai đoạn 10. Trả nợ kỹ thuật sau 2.0.0
 
@@ -263,7 +269,6 @@ Làm dần, mỗi mục một PR riêng. Không gộp với thay đổi tính n�
 
 - [ ] **[Cả hai]** Xem lại Guardian: exe 70 MB và khoảng 770 dòng cho việc khôi phục icon. Thử bản biên dịch native để giảm dung lượng.
 - [ ] **[Cả hai]** Giảm dung lượng app: `Nepply.exe` 194 MB, Setup 78 MB. Thử nén single-file, đo ảnh hưởng tới thời gian khởi động.
-- [ ] **[Bạn]** Quyết định về Microsoft Store: làm tiếp hoặc bỏ code và script MSIX.
 - [ ] **[AI]** Gom bớt script kiểm tra trùng lặp, thêm số phiên bản lấy tự động từ tag.
 
 ### Phân phối và vận hành
