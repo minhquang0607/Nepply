@@ -4,6 +4,39 @@ using Nepply.Services;
 
 internal static class ReleaseHardeningTests
 {
+    private static void SetupChoices(Action<string, bool> check)
+    {
+        string path = @"Software\Nepply-Tests\" + Guid.NewGuid().ToString("N");
+        try
+        {
+            AppSettings Run(bool onboarded, string language, int autoStart, out int saves)
+            {
+                using (var key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(path))
+                {
+                    key.SetValue("Language", language);
+                    key.SetValue("AutoStart", autoStart, Microsoft.Win32.RegistryValueKind.DWord);
+                }
+                var settings = new AppSettings { Language = "en", HasCompletedOnboarding = onboarded };
+                int count = 0;
+                InstallerChoices.Apply(settings, () => count++, path);
+                saves = count;
+                return settings;
+            }
+            var first = Run(false, "ja", 1, out int firstSaves);
+            check("Setup language reaches the first run", first.Language == "ja" && firstSaves == 1);
+            check("Setup startup choice reaches settings", first.AutoStart);
+            using (var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(path)!)
+                check("Setup choices are read once", key.GetValue("Language") == null && key.GetValue("AutoStart") == null);
+            check("Reinstalling keeps the language chosen in Nepply", Run(true, "ja", 0, out _).Language == "en");
+            check("Unknown Setup language is ignored", Run(false, "xx", 0, out int unknownSaves).Language == "en" && unknownSaves == 0);
+            check("Setup without the startup task leaves startup off", !Run(false, "de", 0, out _).AutoStart);
+            var untouched = new AppSettings { Language = "en" };
+            InstallerChoices.Apply(untouched, () => throw new InvalidOperationException(), path + "-missing");
+            check("A run without Setup choices changes nothing", untouched.Language == "en");
+        }
+        finally { Microsoft.Win32.Registry.CurrentUser.DeleteSubKeyTree(@"Software\Nepply-Tests", false); }
+    }
+
     public static void Run(string output, Action<string, bool> check)
     {
         BrandMigrationTests.Run(output, check);
@@ -91,6 +124,7 @@ internal static class ReleaseHardeningTests
         var welcomeChoice = new AppSettings();
         OnboardingService.Complete(welcomeChoice, EdgePosition.Left, false, false, _ => { }, "de");
         check("Welcome can turn the daily update check off", !welcomeChoice.AutoCheckUpdates);
+        SetupChoices(check);
         check("Windows startup off state is recognised", AutoStartService.IsStartupStateOff(new byte[] { 3, 0, 0, 0 }));
         check("Windows startup on state is recognised", !AutoStartService.IsStartupStateOff(new byte[] { 2, 0, 0, 0 }));
         check("Missing Windows startup state is not off", !AutoStartService.IsStartupStateOff(null) && !AutoStartService.IsStartupStateOff(Array.Empty<byte>()));

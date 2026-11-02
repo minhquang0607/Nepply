@@ -138,6 +138,11 @@ public partial class MainWindow : Window
         try
         {
             _settings = preview ? new() { HideDesktopIcons = false, HardwareSensorsEnabled = false } : AppSettings.Load();
+            if (!preview)
+            {
+                try { InstallerChoices.Apply(_settings, _settings.Save); }
+                catch (Exception ex) { AppLogger.Error(ex, "Read Setup choices"); }
+            }
             ThemeService.Apply(_settings);
             InitializeComponent();
             _animation = new(PanelTranslate, this, _settings, MainPanel);

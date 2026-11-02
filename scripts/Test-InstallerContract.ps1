@@ -22,7 +22,9 @@ foreach($file in Get-ChildItem -LiteralPath (Join-Path $repo 'packaging/inno/Mes
     foreach($line in [IO.File]::ReadAllLines($file.FullName)) { if($line -match '^([A-Za-z]+)=(.+)$') { $messages[$code][$Matches[1]]=$Matches[2] } }
 }
 $languageFiles=@([regex]::Matches($source,'(?m)^Name: "[a-z]+"; MessagesFile: "[^,"]+\.isl,Messages\\Nepply\.([a-z]+)\.isl"\s*$') | ForEach-Object { $_.Groups[1].Value })
-$usedMessages=@([regex]::Matches($source,"CustomMessage\('([A-Za-z]+)'\)") | ForEach-Object { $_.Groups[1].Value } | Sort-Object -Unique)
+# {cm:Name} also reaches Inno Setup's own messages, so only Nepply's keys count.
+$usedMessages=@(@([regex]::Matches($source,"CustomMessage\('([A-Za-z]+)'\)") | ForEach-Object { $_.Groups[1].Value }) +
+    @([regex]::Matches($source,'\{cm:([A-Za-z]+)') | ForEach-Object { $_.Groups[1].Value } | Where-Object { $messages['en'].ContainsKey($_) }) | Sort-Object -Unique)
 $checks=[ordered]@{
     'Every Setup language has its own complete Nepply messages'=$messages.ContainsKey('en') -and $languageFiles.Count -eq $messages.Count -and
         @($languageFiles | Where-Object { -not $messages.ContainsKey($_) }).Count -eq 0 -and
@@ -48,6 +50,11 @@ $checks=[ordered]@{
     'Update waits for normal exit without killing app'=$source.Contains("CheckForMutexes('Local\HoverBox-SetupGuard')") -and $source.Contains('Attempts < 600') -and $source.Contains('CloseApplications=no')
     'Upgrade recovery runs before copying'=$prepare.Contains('RunAppRecovery(RecoveryExitCode)') -and $prepare.Contains('RecoverDesktopWithoutApp()')
     'Running app still blocks upgrade'=$prepare.Contains('if RecoveryExitCode = RecoveryAppRunning then') -and $prepare.Contains("CustomMessage('UpgradeAppRunning')") -and $messages['en']['UpgradeAppRunning'].Contains('No update was installed.')
+    'Setup always offers the language choice'=$source -match '(?m)^ShowLanguageDialog=yes\s*$'
+    'Every Setup language hands its own code to the app'=@($messages.Keys | Where-Object { $messages[$_]['LanguageId'] -cne $_ }).Count -eq 0
+    'Removing user data is opt-in, defaults to No and skips silent runs'=$source.Contains("(not UninstallSilent()) and (MsgBox(CustomMessage('UninstallRemoveData'), mbConfirmation, MB_YESNO or MB_DEFBUTTON2) = IDYES)")
+    'Legacy Desktop lease survives data removal'=$source.Contains("DelTree(ExpandConstant('{localappdata}\HoverBox\Logs')") -and -not $source.Contains("DelTree(ExpandConstant('{localappdata}\HoverBox')")
+    'Startup task is never inherited by updates'=$source -match '(?m)^Name: "startup";.*dontinheritcheck\s*$'
     'Automatic relaunch is update-only'=$source.Contains('Flags: nowait skipifnotsilent; Check: IsNepplyUpdate')
 }
 foreach($entry in $checks.GetEnumerator()) { if(-not $entry.Value) { throw "FAIL $($entry.Key)" }; Write-Output "PASS $($entry.Key)" }

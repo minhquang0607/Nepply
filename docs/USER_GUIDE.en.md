@@ -90,4 +90,4 @@ Open **Settings → Application → Check for updates**. A suitable release show
 - **Setup:** exit Nepply, confirm Desktop icons have returned if the app hid them, then uninstall through Windows Installed apps.
 - **Portable:** disable startup and save, exit, check the Desktop, then remove only the extracted application folder.
 
-Settings may remain for reinstallation. See [Troubleshooting](TROUBLESHOOTING.en.md) to reset them. Do not delete recovery markers while Desktop icons are still hidden.
+When you uninstall the Setup edition, Nepply asks whether to remove its settings and logs too. Choose **No** if you plan to reinstall and want to keep your settings. For the portable edition, or to reset data yourself, see [Troubleshooting](TROUBLESHOOTING.en.md). Do not delete recovery markers while Desktop icons are still hidden.

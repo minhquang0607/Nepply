@@ -90,4 +90,4 @@ Mở **Cài đặt → Ứng dụng → Kiểm tra cập nhật** để chủ đ
 - **Bản Setup:** thoát Nepply, kiểm tra icon Desktop đã trở lại nếu từng cho app ẩn chúng, rồi gỡ trong danh sách ứng dụng đã cài của Windows.
 - **Bản portable:** tắt tự khởi động và lưu, thoát Nepply, kiểm tra Desktop rồi xóa riêng thư mục đã giải nén.
 
-Cấu hình có thể được giữ lại để dùng khi cài lại. Nếu muốn đặt lại dữ liệu, xem [xử lý sự cố](TROUBLESHOOTING.md). Đừng xóa dấu khôi phục khi icon Desktop vẫn bị ẩn.
+Khi gỡ bản Setup, Nepply hỏi có xóa luôn cài đặt và nhật ký không. Chọn **Không** nếu định cài lại và muốn giữ cài đặt. Với bản portable hoặc nếu muốn tự đặt lại dữ liệu, xem [xử lý sự cố](TROUBLESHOOTING.md). Đừng xóa dấu khôi phục khi icon Desktop vẫn bị ẩn.

@@ -39,7 +39,7 @@ Mở file, shortcut, URL hoặc menu Shell là hành động do người dùng y
 
 ## Xóa và chia sẻ
 
-Khi Nepply đã đóng và icon Desktop đã được khôi phục, người dùng có thể xóa thư mục cấu hình và Logs để đặt lại dữ liệu cục bộ. Việc gỡ cài đặt hiện giữ cấu hình để hỗ trợ cài lại. Không xóa `desktop-visibility.lease` nếu icon Desktop đang bị ẩn; hãy mở lại Nepply hoặc bật lại icon trong Windows trước.
+Khi Nepply đã đóng và icon Desktop đã được khôi phục, người dùng có thể xóa thư mục cấu hình và Logs để đặt lại dữ liệu cục bộ. Khi gỡ bản Setup, Nepply hỏi có xóa luôn cấu hình và Logs không; mặc định giữ lại để hỗ trợ cài lại. Không xóa `desktop-visibility.lease` nếu icon Desktop đang bị ẩn; hãy mở lại Nepply hoặc bật lại icon trong Windows trước.
 
 Nút **Báo lỗi** trong Cài đặt chép báo cáo chẩn đoán vào clipboard và mở form GitHub trong trình duyệt; địa chỉ form chỉ chứa phiên bản Nepply và Windows. Nepply không tự gửi báo cáo; chỉ những gì bạn dán và đăng mới được chia sẻ.
 
@@ -87,7 +87,7 @@ Opening files, shortcuts, URLs or Shell menus is user-requested. Launched progra
 
 ### Removal and sharing
 
-After Nepply exits and Desktop icons are restored, configuration and log folders can be removed to reset local data. Uninstall currently retains settings for reinstallation. Do not delete the recovery marker while icons are hidden; reopen Nepply or show icons through Windows first.
+After Nepply exits and Desktop icons are restored, configuration and log folders can be removed to reset local data. Uninstalling the Setup edition asks whether to remove configuration and logs too; by default they stay for reinstallation. Do not delete the recovery marker while icons are hidden; reopen Nepply or show icons through Windows first.
 
 **Report a problem** in Settings copies the diagnostic report to the clipboard and opens the GitHub form in your browser; the form address contains only the Nepply and Windows versions. Nepply never sends the report itself; only what you paste and post is shared.
 

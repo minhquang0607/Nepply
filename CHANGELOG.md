@@ -45,7 +45,9 @@ Bản tổng hợp ngày **17/10/2026**, gom các thay đổi trong giai đoạn
 - Bật tự khởi động trong khi Windows đang tắt mục này giờ có thông báo chỉ chỗ bật lại.
 - Khi bản đang dùng chưa tự cài được cập nhật (portable hoặc chưa ký số), cửa sổ cập nhật có nút **Mở trang tải** tới trang phát hành chính thức trên GitHub.
 - Ghi chú phát hành trong cửa sổ cập nhật hiển thị dạng văn bản gọn thay vì ký hiệu Markdown thô.
-- Bộ cài theo ngôn ngữ của Windows: Việt, Anh, Nhật, Đức, Trung giản thể, Nga, Pháp và Thái.
+- Bộ cài hỏi ngôn ngữ khi mở, chọn sẵn theo Windows: Việt, Anh, Nhật, Đức, Trung giản thể, Nga, Pháp và Thái. App dùng luôn ngôn ngữ đã chọn trong lần chạy đầu.
+- Bộ cài có giao diện tối và hình ảnh Nepply, cùng tùy chọn khởi động cùng Windows.
+- Khi gỡ, bộ cài hỏi có xóa luôn cài đặt và nhật ký không (mặc định giữ lại), và dọn thư mục giải nén trong Temp.
 - Nút **Báo lỗi** (Cài đặt → Ứng dụng) chép chẩn đoán vào clipboard và mở form báo lỗi GitHub đã điền sẵn phiên bản Nepply và Windows.
 - Hỗ trợ khôi phục icon Desktop khi ứng dụng kết thúc bất thường; vẫn có giới hạn nếu tiến trình hỗ trợ cũng bị dừng hoặc Explorer không hoạt động.
 

@@ -35,11 +35,11 @@ internal static class PreviewCommitTests
             try
             {
                 var autoCheck = (CheckBox)updateWindow.FindName("AutoCheckUpdates");
-                check("Daily update check starts unticked and visible", autoCheck.IsChecked == false && autoCheck.Visibility == Visibility.Visible);
-                autoCheck.IsChecked = true;
+                check("Daily update check starts ticked and visible", autoCheck.IsChecked == true && autoCheck.Visibility == Visibility.Visible);
+                autoCheck.IsChecked = false;
                 typeof(SettingsWindow).GetMethod("Apply_Click", BindingFlags.Instance | BindingFlags.NonPublic)!
                     .Invoke(updateWindow, new object[] { updateWindow, new RoutedEventArgs() });
-                check("Apply saves the daily update check", updateTarget.AutoCheckUpdates && updateWrites == 1);
+                check("Apply saves turning off the daily update check", !updateTarget.AutoCheckUpdates && updateWrites == 1);
                 check("Settings search finds the daily update check", Nepply.Services.SettingsSearch.Find("cập nhật").Any(entry => entry.Control == "AutoCheckUpdates"));
             }
             catch (Exception ex) { check("Daily update fixture: " + ex, false); }

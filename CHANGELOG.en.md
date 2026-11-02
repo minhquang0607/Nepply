@@ -45,7 +45,9 @@ Consolidated **17 October 2026**. This is a summary of development changes, not 
 - Turning on startup while Windows has it turned off now shows where to turn it back on.
 - When this build cannot install an update itself (portable or not yet signed), the update window offers **Open download page**, linking to the official GitHub release.
 - Release notes in the update window appear as clean text instead of raw Markdown.
-- Setup follows your Windows language: Vietnamese, English, Japanese, German, Simplified Chinese, Russian, French and Thai.
+- Setup asks for a language when it opens, preselecting your Windows language: Vietnamese, English, Japanese, German, Simplified Chinese, Russian, French and Thai. The app uses that language on its first run.
+- Setup has a dark look with Nepply artwork, plus an option to start with Windows.
+- Uninstalling asks whether to remove settings and logs too (kept by default) and clears the extraction folder in Temp.
 - **Report a problem** (Settings → App) copies diagnostics and opens the GitHub bug form with the Nepply and Windows versions filled in.
 - Desktop icon recovery after abnormal termination, subject to helper/Explorer availability.
 

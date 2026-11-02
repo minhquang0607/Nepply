@@ -100,7 +100,7 @@ Repo `Nepply` tạo ngày 02/11/2026 không mang theo cài đặt của repo cũ
 
 ## Giai đoạn 3A. Sửa lỗi từ lượt cài thử đầu tiên
 
-Bạn cài Release build #1 ngày 02/11/2026 và thấy các vấn đề dưới đây, nên chưa tag. Làm theo thứ tự, mỗi nhóm một PR. Con số thời gian là mục tiêu, phải đo thật rồi mới đánh dấu.
+Bạn cài Release build #1 ngày 02/11/2026 và thấy các vấn đề dưới đây, nên chưa tag. Mỗi nhóm một commit riêng. Con số thời gian là mục tiêu, phải đo thật rồi mới đánh dấu.
 
 ### Kích hoạt panel
 
@@ -118,9 +118,9 @@ Nguyên nhân: khi ẩn, app bỏ mốc đo CPU và mạng nên lần đọc đ�
 
 ### Bộ cài
 
-- [ ] **[AI]** Luôn hỏi ngôn ngữ khi mở Setup (`ShowLanguageDialog=yes`), và app dùng luôn ngôn ngữ đã chọn trong lần chạy đầu.
-- [ ] **[AI]** Làm bộ cài mang nhận diện Nepply: ảnh và màu riêng, lời chào, trang kết thúc, tùy chọn khởi động cùng Windows, trong phạm vi Inno Setup 7.1 hỗ trợ.
-- [ ] **[AI]** Khi gỡ, hỏi có xóa luôn cài đặt và nhật ký không; mặc định giữ lại để cài lại không mất dữ liệu. Dọn cả thư mục giải nén `%TEMP%\.net\Nepply`.
+- [x] **[AI]** Luôn hỏi ngôn ngữ khi mở Setup (`ShowLanguageDialog=yes`), chọn sẵn theo Windows. Setup ghi lựa chọn vào `HKCU\Software\Nepply\Setup`, app đọc một lần ở lần chạy sau; đã chọn ngôn ngữ trong app thì cài lại không đè.
+- [x] **[AI]** Làm bộ cài mang nhận diện Nepply: giao diện tối, ảnh từ biểu tượng app, trang chào, lời chào và trang kết thúc riêng ở 8 ngôn ngữ (AI tự dịch), tùy chọn khởi động cùng Windows không bị bản cập nhật kế thừa. Đã xem thật các trang tới bước tác vụ bằng tiếng Việt; Setup vẫn 78,2 MB.
+- [x] **[AI]** Khi gỡ, hỏi có xóa luôn cài đặt và nhật ký không; mặc định giữ lại, bản gỡ im lặng không xóa. Luôn dọn `%TEMP%\.net\Nepply`. Khi chọn xóa cũng bỏ mục `StartupApproved`. Dấu khôi phục Desktop trong `HoverBox` luôn được giữ. Chưa chạy thật toàn bộ luồng cài và gỡ, việc này nằm ở bước nghiệm thu.
 
 ### Thiết lập mặc định
 

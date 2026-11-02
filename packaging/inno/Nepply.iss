@@ -35,6 +35,8 @@ ArchitecturesAllowed=x64compatible
 OutputDir={#ReleaseOutputDir}
 InfoBeforeFile=..\..\src\Nepply\Resources\RELEASE_NOTICE.txt
 SetupIconFile=..\..\src\Nepply\Resources\icon.ico
+WizardImageFile=Images\WizardImage.bmp,Images\WizardImage@2x.bmp
+WizardSmallImageFile=Images\WizardSmall.bmp,Images\WizardSmall@2x.bmp
 #ifdef SignedUninstallerDir
 ; Two-pass external signing (remote signers such as SignPath): the first compile
 ; writes an unsigned uninst-*.e32 here and aborts; sign it, then compile again.
@@ -46,9 +48,10 @@ SignedUninstaller=no
 UninstallDisplayIcon={app}\Nepply.exe
 Compression=lzma2
 SolidCompression=yes
-WizardStyle=modern
-; Follow the Windows display language; ask only when it is not one of [Languages].
-ShowLanguageDialog=auto
+WizardStyle=modern dark
+DisableWelcomePage=no
+; Windows language is the preselected answer; the choice also reaches the app.
+ShowLanguageDialog=yes
 ; Let the user finish editing and restore Desktop through a normal app exit.
 ; Stable across rename: also block installation while a legacy build owns Desktop.
 AppMutex=Local\HoverBox-SetupGuard
@@ -69,6 +72,8 @@ Name: "thai"; MessagesFile: "compiler:Languages\Thai.isl,Messages\Nepply.th.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
+; Never inherited: a silent update must not undo turning startup off in Nepply.
+Name: "startup"; Description: "{cm:TaskStartup}"; GroupDescription: "{cm:TaskGroupStartup}"; Flags: unchecked dontinheritcheck
 
 [Files]
 Source: "{#PayloadRoot}\Nepply.exe"; DestDir: "{app}"; Flags: ignoreversion
@@ -97,6 +102,12 @@ Type: files; Name: "{app}\HoverBox.runtimeconfig.json"
 Name: "{autoprograms}\Nepply"; Filename: "{app}\Nepply.exe"
 Name: "{autodesktop}\Nepply"; Filename: "{app}\Nepply.exe"; Tasks: desktopicon
 
+[Registry]
+; Read and cleared by InstallerChoices at the next start.
+Root: HKCU; Subkey: "Software\Nepply"; Flags: uninsdeletekeyifempty
+Root: HKCU; Subkey: "Software\Nepply\Setup"; ValueType: string; ValueName: "Language"; ValueData: "{cm:LanguageId}"; Flags: uninsdeletekey
+Root: HKCU; Subkey: "Software\Nepply\Setup"; ValueType: dword; ValueName: "AutoStart"; ValueData: 1; Tasks: startup
+
 [Run]
 Filename: "{app}\Nepply.exe"; Parameters: "--show"; Description: "{cm:LaunchProgram,Nepply}"; Flags: nowait postinstall skipifsilent
 Filename: "{app}\Nepply.exe"; Parameters: "--show"; Flags: nowait skipifnotsilent; Check: IsNepplyUpdate
@@ -107,6 +118,7 @@ const
   DesktopLease = '{localappdata}\HoverBox\desktop-visibility.lease';
   DesktopLeaseMarker = 'restore-visible-v1';
   ExplorerAdvancedKey = 'Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced';
+  StartupApprovedKey = 'Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run';
   RecoveryAppRunning = 2;
 
 { HWND-typed WindowName keeps the NULL title pointer-sized on every Setup architecture. }
@@ -118,6 +130,16 @@ function IsWindowVisible(Wnd: HWND): Boolean;
 function IsNepplyUpdate(): Boolean;
 begin
   Result := ExpandConstant('{param:NEPPLYUPDATE|0}') = '1';
+end;
+
+procedure InitializeWizard();
+begin
+  WizardForm.WelcomeLabel2.Caption := CustomMessage('WelcomeText');
+end;
+
+procedure CurPageChanged(CurPageID: Integer);
+begin
+  if CurPageID = wpFinished then WizardForm.FinishedLabel.Caption := CustomMessage('FinishedText');
 end;
 
 function InitializeSetup(): Boolean;
@@ -323,6 +345,25 @@ begin
   Result := SuppressibleMsgBox(CustomMessage('UninstallRecoveryFailed'), mbConfirmation, MB_YESNO, IDYES) = IDYES;
 end;
 
+{ Rebuilt on the next start and holds nothing personal, so it never needs asking. }
+procedure RemoveExtractionCache();
+var
+  Temp: String;
+begin
+  Temp := GetEnv('TEMP');
+  if Temp <> '' then DelTree(AddBackslash(Temp) + '.net\Nepply', True, True, True);
+end;
+
+{ The legacy folder may still hold a Desktop lease, so only its logs go. }
+procedure RemoveUserData();
+begin
+  DelTree(ExpandConstant('{userappdata}\Nepply'), True, True, True);
+  DelTree(ExpandConstant('{localappdata}\Nepply'), True, True, True);
+  DelTree(ExpandConstant('{localappdata}\HoverBox\Logs'), True, True, True);
+  RemoveDir(ExpandConstant('{localappdata}\HoverBox'));
+  RegDeleteValue(HKCU, StartupApprovedKey, 'Nepply');
+end;
+
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 var
   CurrentCommand: String;
@@ -332,6 +373,13 @@ begin
   { Internal packaging tests must not modify production startup registration. }
   Exit;
 #endif
+  if CurUninstallStep = usPostUninstall then
+  begin
+    RemoveExtractionCache();
+    if (not UninstallSilent()) and (MsgBox(CustomMessage('UninstallRemoveData'), mbConfirmation, MB_YESNO or MB_DEFBUTTON2) = IDYES) then
+      RemoveUserData();
+    Exit;
+  end;
   if CurUninstallStep <> usUninstall then
     Exit;
   OwnedCommand := '"' + ExpandConstant('{app}\Nepply.exe') + '"';
