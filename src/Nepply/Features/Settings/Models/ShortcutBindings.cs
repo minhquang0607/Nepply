@@ -36,7 +36,7 @@ public static class ShortcutBindings
     /// <summary>Only what people expect to work at once has a default; the rest starts unassigned.</summary>
     public static ShortcutGesture Default(ShortcutAction action) => action switch
     {
-        ShortcutAction.TogglePanel => new(ShortcutGesture.Control | ShortcutGesture.Alt, 0x20),
+        ShortcutAction.TogglePanel => new(ShortcutGesture.Alt | ShortcutGesture.Shift, 0x20),
         ShortcutAction.FocusSearch => new(ShortcutGesture.Control, 0x46),
         _ => ShortcutGesture.None
     };

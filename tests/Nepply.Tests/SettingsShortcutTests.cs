@@ -44,7 +44,7 @@ internal static class SettingsShortcutTests
                 section.Visibility == Visibility.Visible && Inside(Row("HotkeyButton"), section)
                 && !Inside(Row("HotkeyButton"), (DependencyObject)settings.FindName("PanelSection")));
             check("Shortcut rows show default keys and unassigned actions",
-                Equals(Row("HotkeyButton").Content, "Ctrl + Alt + Space") && Equals(Row("ShortcutFocusSearch").Content, "Ctrl + F")
+                Equals(Row("HotkeyButton").Content, "Alt + Shift + Space") && Equals(Row("ShortcutFocusSearch").Content, "Ctrl + F")
                 && Equals(Row("ShortcutSearchDesktop").Content, LocalizationService.Get("ShortcutNone")));
             check("Every shortcut row has an accessible action name",
                 ShortcutBindings.All.Where(a => a != ShortcutAction.TogglePanel)
@@ -61,9 +61,9 @@ internal static class SettingsShortcutTests
                 !recording() && Equals(Row("ShortcutSearchDesktop").Content, "Ctrl + Alt + D") && error.Text == "");
 
             Click("Hotkey_Click", Row("ShortcutOpenSettings"));
-            Press(Key.Space, new(3, Space));
+            Press(Key.Space, new(5, Space));
             check("A key used by another action is refused with that action's name",
-                recording() && error.Text == string.Format(LocalizationService.Get("ShortcutConflict"), "Ctrl + Alt + Space", LocalizationService.Get("ShortcutTogglePanel")));
+                recording() && error.Text == string.Format(LocalizationService.Get("ShortcutConflict"), "Alt + Shift + Space", LocalizationService.Get("ShortcutTogglePanel")));
             Press(Key.Escape, new(0, 0x1B));
             check("Esc cancels recording without changing the key",
                 !recording() && Equals(Row("ShortcutOpenSettings").Content, LocalizationService.Get("ShortcutNone")));
@@ -89,7 +89,7 @@ internal static class SettingsShortcutTests
             Click("ResetShortcuts_Click", (Button)settings.FindName("ResetShortcuts"));
             check("Restore all brings back every default key",
                 Equals(Row("ShortcutSearchDesktop").Content, LocalizationService.Get("ShortcutNone"))
-                && Equals(Row("ShortcutRefreshDesktop").Content, LocalizationService.Get("ShortcutNone")) && Equals(Row("HotkeyButton").Content, "Ctrl + Alt + Space"));
+                && Equals(Row("ShortcutRefreshDesktop").Content, LocalizationService.Get("ShortcutNone")) && Equals(Row("HotkeyButton").Content, "Alt + Shift + Space"));
             check("Settings search finds shortcut rows in the Shortcuts section",
                 SettingsSearch.Find("phim tat").Any(e => e.Section == 5 && e.Control == "ShortcutTogglePin")
                 && SettingsSearch.Find("phim tat").Any(e => e.Section == 5 && e.Control == "HotkeyButton"));

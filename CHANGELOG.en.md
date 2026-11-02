@@ -8,7 +8,7 @@ Consolidated **17 October 2026**. This is a summary of development changes, not 
 
 ### Desktop & interaction
 
-- Open from the screen edge or a hotkey, and pin when needed. The default hotkey is Ctrl + Alt + Space, leaving Ctrl + Space to code completion and input methods. A hotkey saved by an earlier build is kept.
+- Open from the screen edge or a hotkey, and pin when needed. The default hotkey is Alt + Shift + Space, leaving Ctrl + Space to code completion and input methods. A hotkey saved by an earlier build is kept.
 - Search/open Desktop items with the Windows context menu.
 - Opening a shortcut to a disconnected network drive no longer freezes the panel.
 - Choose columns × rows and screen-relative panel dimensions.

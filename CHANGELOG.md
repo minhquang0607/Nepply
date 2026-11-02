@@ -8,7 +8,7 @@ Bản tổng hợp ngày **17/10/2026**, gom các thay đổi trong giai đoạn
 
 ### Desktop và thao tác
 
-- Mở panel từ cạnh màn hình hoặc phím tắt, ghim khi cần giữ mở. Phím mặc định là Ctrl + Alt + Space, để không chiếm Ctrl + Space của gợi ý code và bộ gõ. Phím đã lưu từ bản trước được giữ nguyên.
+- Mở panel từ cạnh màn hình hoặc phím tắt, ghim khi cần giữ mở. Phím mặc định là Alt + Shift + Space, để không chiếm Ctrl + Space của gợi ý code và bộ gõ. Phím đã lưu từ bản trước được giữ nguyên.
 - Tìm kiếm và mở các mục trên Desktop, sử dụng menu chuột phải của Windows.
 - Mở shortcut trỏ tới ổ mạng mất kết nối không còn làm panel đơ.
 - Chỉnh lưới bằng số cột × hàng, với kích thước panel thích ứng theo màn hình.

@@ -30,7 +30,7 @@ internal static class CoreLogicTests
         check("Settings bounds and invalid enums", settings.PanelWidth == 320 && settings.Theme == ThemeOption.System && settings.PanelOpacity == 0.98 && settings.MonitorUpdateIntervalMs == 1000);
         var shiftOnly = new AppSettings { HotkeyModifiers = 4, HotkeyKey = 32 }; shiftOnly.Validate();
         var altShift = new AppSettings { HotkeyModifiers = 5, HotkeyKey = 32 }; altShift.Validate();
-        check("Saved hotkey without Ctrl or Alt falls back to the default", shiftOnly.HotkeyModifiers == 3 && altShift.HotkeyModifiers == 5);
+        check("Saved hotkey without Ctrl or Alt falls back to the default", shiftOnly.HotkeyModifiers == 5 && altShift.HotkeyModifiers == 5);
         check("Every allowed hotkey modifier set includes Ctrl or Alt", new[] { 1, 2, 3, 5, 6, 7 }.All(value =>
             { var s = new AppSettings { HotkeyModifiers = value }; s.Validate(); return s.HotkeyModifiers == value; }));
         var oversized = new AppSettings

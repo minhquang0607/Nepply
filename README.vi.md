@@ -53,7 +53,7 @@ Chỉ tải từ kênh phát hành chính thức. Nếu Windows chặn file, ki�
 ## 🚀 Bắt đầu
 
 1. Mở Nepply và chọn cạnh màn hình.
-2. Đưa chuột tới cạnh đó hoặc nhấn **Ctrl + Alt + Space** nếu chưa đổi trong Cài đặt → Phím tắt.
+2. Đưa chuột tới cạnh đó hoặc nhấn **Alt + Shift + Space** nếu chưa đổi trong Cài đặt → Phím tắt.
 3. Mở một mục Desktop hoặc tìm theo tên.
 4. Thử thay đổi trong Cài đặt: **Áp dụng** lưu và giữ mở; **OK** lưu rồi đóng; **Hủy** bỏ phần thay đổi kể từ lần lưu gần nhất.
 5. Muốn thoát hẳn, chọn **Thoát** ở biểu tượng khay hệ thống.
