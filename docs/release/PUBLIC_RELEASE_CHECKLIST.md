@@ -9,8 +9,8 @@ Cập nhật 02/11/2026. Đây là kế hoạch duy nhất từ hiện tại đ�
 | 0 | Nền tảng đã có | Xong |
 | 1 | Sửa các lỗi nhỏ từ đợt rà soát | Xong |
 | 2 | Đưa code lên GitHub | Đã merge vào `main`, CI xanh; còn các mục chưa đánh dấu bên dưới |
-| 3 | Chuẩn bị repo công khai | Cài đặt đã kiểm chứng ngày 02/11/2026; chỉ còn tag rule của môi trường `release` |
-| 3A | Sửa lỗi từ lượt cài thử đầu tiên | Đang làm; phải xong trước khi tag |
+| 3 | Chuẩn bị repo công khai | Cài đặt đã kiểm chứng ngày 02/11/2026; còn thử trang báo lỗ hổng và Issues |
+| 3A | Sửa lỗi từ lượt cài thử đầu tiên | Phần của AI đã lên `main`; chờ bạn cài lại và thử |
 | 4 | Phát hành `2.0.0-rc.1` chưa ký | Ghi chú và chạy thử đã xong; chờ giai đoạn 3A |
 | 5 | Xin chữ ký số | Đã soạn đơn; chờ Release công khai |
 | 6 | Tích hợp ký và phát hành RC đã ký | Chưa làm |
@@ -84,7 +84,7 @@ Repo `Nepply` tạo ngày 02/11/2026 không mang theo cài đặt của repo cũ
   - Bỏ chọn *Allow GitHub Actions to create and approve pull requests*. Đúng.
 - [x] **[Bạn] Bảo vệ nhánh `main`**: [`rulesets/protect-main.json`](rulesets/protect-main.json) đã import, đang Active: chặn force push và xóa nhánh, yêu cầu status check `build`, Repository admin được bỏ qua.
 - [x] **[Bạn] Bảo vệ tag**: [`rulesets/protect-release-tags.json`](rulesets/protect-release-tags.json) đã import, đang Active cho tag `v*`: chặn sửa, xóa và force push, Repository admin được bỏ qua.
-- [ ] **[Bạn] Môi trường release**: đã tạo `release` với Required reviewers là chính bạn. Còn thiếu tag rule: mở Settings → Environments → `release`; ở mục *Deployment branches and tags*, bấm nút đang ghi *No restriction* → chọn *Selected branches and tags* → *Add deployment branch or tag rule* → *Ref type* chọn **Tag** → nhập `v*` → *Add rule*.
+- [x] **[Bạn] Môi trường release**: `release` có Required reviewers là chính bạn và tag rule `v*`, đã kiểm chứng ngày 02/11/2026.
 - [x] **[Bạn]** Duyệt hoặc đóng các PR Dependabot đang mở (CI phải xanh trước khi merge). Ngày 01/11/2026 không có PR nào đang mở.
 - [x] **[Cả hai] Chuyển Public**: Settings → General → Danger Zone → Change repository visibility → Public. Xong ngày 02/11/2026; truy cập ẩn danh thấy `Nepply` Public, `Nepply-archive` vẫn trả về 404, 11 link tới repo trong tài liệu đều mở được.
 - [x] **[Bạn] Ngay sau khi Public**, làm các mục GitHub chỉ cho bật ở repo công khai (đã kiểm chứng cả ba):
