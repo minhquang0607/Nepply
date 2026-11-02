@@ -81,7 +81,7 @@ Bật tùy chọn tự khởi động trong Cài đặt rồi bấm **Áp dụng
 
 ## Cập nhật
 
-Mở **Cài đặt → Ứng dụng → Kiểm tra cập nhật** để chủ động kiểm tra. Khi có bản phù hợp, cửa sổ cập nhật hiển thị phiên bản và ghi chú để bạn quyết định cập nhật hay để sau. Bật **Tự kiểm tra cập nhật mỗi ngày** nếu muốn Nepply báo ở khay hệ thống khi có bản mới; tùy chọn này mặc định tắt và không tự tải bản cập nhật.
+Mở **Cài đặt → Ứng dụng → Kiểm tra cập nhật** để chủ động kiểm tra. Khi có bản phù hợp, cửa sổ cập nhật hiển thị phiên bản và ghi chú để bạn quyết định cập nhật hay để sau. Với **Tự kiểm tra cập nhật mỗi ngày**, Nepply báo ở khay hệ thống khi có bản mới; tùy chọn này mặc định bật, tắt được ở cùng trang và không tự tải bản cập nhật.
 
 **Giới hạn hiện tại:** tự cài cập nhật EXE chưa được bật cho phát hành vì chưa hoàn tất cấu hình ký số và nghiệm thu. Portable chưa tự thay thế file ứng dụng. Khi đó cửa sổ cập nhật có nút **Mở trang tải** dẫn tới trang phát hành chính thức để bạn tự tải bộ cài mới. Không coi bản build thử là kênh cập nhật chính thức; xem [Releases](https://github.com/minhquang0607/Nepply/releases) khi bản tải được công bố.
 

@@ -17,7 +17,7 @@ internal static class BackgroundUpdateCheckTests
         Func<CancellationToken, Task<UpdateRelease?>> respond = _ => Task.FromResult<UpdateRelease?>(release);
         using var job = new BackgroundUpdateCheck(() => enabled, token => { requests++; return respond(token); }, r => notified.Add(r.Tag), () => now);
 
-        check("New settings keep the daily update check off", !new AppSettings().AutoCheckUpdates);
+        check("New settings turn the daily update check on", new AppSettings().AutoCheckUpdates);
         check("Turning the update check on needs no panel rebuild", SettingsChangeSet.Between(new AppSettings(), new AppSettings { AutoCheckUpdates = true }).CanPreviewWithoutRebuild);
         await job.TickAsync(default);
         check("Update check off sends no request", requests == 0 && notified.Count == 0);

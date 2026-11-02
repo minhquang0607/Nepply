@@ -201,7 +201,7 @@ internal static class ErrorLocalizationTests
             LocalizationService.Apply(language);
             check($"Language {language} dismissed combined notice stays dismissed", notice.Visibility == Visibility.Collapsed);
             check($"Language {language} empty message group is empty", LocalizationService.Render(UserMessage.Join([])) == "");
-            foreach (string key in new[] { "AutoStartDifferentEntry", "AutoStartLegacyEntry", "AutoStartSeparateShortcut" })
+            foreach (string key in new[] { "AutoStartDifferentEntry", "AutoStartLegacyEntry", "AutoStartSeparateShortcut", "AutoStartOffInWindows" })
                 check($"Language {language} startup notice {key} has a translated resource",
                     LocalizationService.Render(UserMessage.FromKey(key)) == LocalizationService.Get(key)
                     && LocalizationService.Get(key) != key);

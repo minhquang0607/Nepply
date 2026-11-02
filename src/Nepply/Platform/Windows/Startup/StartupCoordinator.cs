@@ -40,6 +40,8 @@ internal sealed class RegistryStartupBackend : IStartupBackend
     {
         if (!isCurrent()) return Task.FromResult(new StartupOutcome(null, null));
         var notice = AutoStartService.Apply(enabled);
+        if (notice == null && enabled && AutoStartService.IsTurnedOffInWindows())
+            return Task.FromResult(new StartupOutcome(true, UserMessage.FromKey("AutoStartOffInWindows")));
         return Task.FromResult(new StartupOutcome(notice == null ? enabled : null, notice));
     }
 }

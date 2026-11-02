@@ -37,7 +37,7 @@ public sealed class AppSettings
     public double GridCellHeight { get; set; } = 90;
     public double PanelOpacity { get; set; } = 0.98;
     public bool AutoStart { get; set; }
-    public bool AutoCheckUpdates { get; set; }
+    public bool AutoCheckUpdates { get; set; } = true;
     public bool HideDesktopIcons { get; set; }
     public int HideDelayMs { get; set; } = 600;
     public int MonitorUpdateIntervalMs { get; set; } = 1500;

@@ -23,6 +23,9 @@ public partial class WelcomeWindow : Window
         Loaded += (_, _) => Helpers.DialogPlacement.FitInitial(this);
         EdgeChoice.SelectedIndex = (int)settings.EdgePosition;
         HideIcons.IsChecked = false;
+        CheckUpdates.IsChecked = _settings.AutoCheckUpdates;
+        // The Store edition updates through Microsoft Store and has no such option.
+        if (ProcessPackageIdentity.IsPackaged) CheckUpdates.Visibility = Visibility.Collapsed;
         LanguageChoice.ItemsSource = LocalizationService.Languages;
         LanguageChoice.SelectedValue = settings.Language;
         _languageReady = true;
@@ -74,7 +77,7 @@ public partial class WelcomeWindow : Window
         try
         {
             OnboardingService.Complete(_settings, (EdgePosition)EdgeChoice.SelectedIndex,
-                HideIcons.IsChecked == true, draft => draft.Save(), SelectedLanguage);
+                HideIcons.IsChecked == true, CheckUpdates.IsChecked == true, draft => draft.Save(), SelectedLanguage);
             DialogResult = true;
         }
         catch (Exception ex)

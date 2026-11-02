@@ -42,6 +42,16 @@ internal static class AutoStartService
         return null;
     }
 
+    // Task Manager and Windows Settings keep their own switch here. It is the user's
+    // choice, so report it instead of changing it.
+    internal static bool IsTurnedOffInWindows()
+    {
+        using var approved = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run");
+        return IsStartupStateOff(approved?.GetValue("Nepply"));
+    }
+
+    internal static bool IsStartupStateOff(object? state) => state is byte[] { Length: > 0 } bytes && (bytes[0] & 1) != 0;
+
     internal static void EnsureUnpackaged(bool isPackaged)
     {
         if (isPackaged)

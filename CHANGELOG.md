@@ -41,7 +41,8 @@ Bản tổng hợp ngày **17/10/2026**, gom các thay đổi trong giai đoạn
 ### Cập nhật và khôi phục
 
 - Cửa sổ kiểm tra cập nhật hiển thị phiên bản, nội dung mới, tiến độ và lựa chọn thử lại khi gặp lỗi.
-- Tùy chọn **Tự kiểm tra cập nhật mỗi ngày**, mặc định tắt, chỉ báo ở khay hệ thống khi có bản mới.
+- Tùy chọn **Tự kiểm tra cập nhật mỗi ngày**, mặc định bật, chọn được ngay ở màn hình chào, chỉ báo ở khay hệ thống khi có bản mới.
+- Bật tự khởi động trong khi Windows đang tắt mục này giờ có thông báo chỉ chỗ bật lại.
 - Khi bản đang dùng chưa tự cài được cập nhật (portable hoặc chưa ký số), cửa sổ cập nhật có nút **Mở trang tải** tới trang phát hành chính thức trên GitHub.
 - Ghi chú phát hành trong cửa sổ cập nhật hiển thị dạng văn bản gọn thay vì ký hiệu Markdown thô.
 - Bộ cài theo ngôn ngữ của Windows: Việt, Anh, Nhật, Đức, Trung giản thể, Nga, Pháp và Thái.

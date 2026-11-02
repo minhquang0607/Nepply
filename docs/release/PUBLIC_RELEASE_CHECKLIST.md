@@ -124,9 +124,9 @@ Nguyên nhân: khi ẩn, app bỏ mốc đo CPU và mạng nên lần đọc đ�
 
 ### Thiết lập mặc định
 
-- [ ] **[AI]** Bật mặc định kiểm tra cập nhật mỗi ngày. Người đã chủ động tắt vẫn giữ nguyên. Cập nhật chính sách riêng tư, hướng dẫn và CHANGELOG, vì app sẽ tự kết nối GitHub.
-- [ ] **[AI]** Rà lại toàn bộ mặc định trong `AppSettings` và màn hình chào, sửa chỗ chưa hợp lý.
-- [ ] **[AI]** Báo rõ khi Windows đang chặn tự khởi động. Máy này có `StartupApproved` ở trạng thái tắt từ 15/10/2026, nên bật tự khởi động trong app thì Windows vẫn bỏ qua.
+- [x] **[AI]** Bật mặc định kiểm tra cập nhật mỗi ngày, thêm lựa chọn này vào màn hình chào. Người đã chủ động tắt vẫn giữ nguyên. Đã cập nhật chính sách riêng tư, README, hướng dẫn và CHANGELOG, vì app sẽ tự kết nối GitHub.
+- [x] **[AI]** Rà lại toàn bộ mặc định trong `AppSettings` và màn hình chào. Không đổi thêm: tự khởi động và ẩn icon Desktop vẫn tắt vì người dùng tự chọn ở Setup và màn hình chào; độ trễ 120 ms, vùng cạnh 4 px, ẩn sau 600 ms, cập nhật số 1,5 giây vẫn hợp lý. Ghi nhận: *Tiết kiệm khi ẩn* không có tác dụng khi ngủ khi ẩn đang bật, là nợ nhỏ về giao diện cài đặt.
+- [x] **[AI]** Báo rõ khi Windows đang chặn tự khởi động. Máy này có `StartupApproved` ở trạng thái tắt từ 15/10/2026, nên bật tự khởi động trong app thì Windows vẫn bỏ qua. App chỉ báo và chỉ chỗ bật lại, không tự đổi lựa chọn đó.
 
 ### Nghiệm thu
 
@@ -179,7 +179,7 @@ Không chặn việc xin chữ ký, có thể làm song song từ giai đoạn 4
 - [ ] **[Bạn]** Thử thật với Narrator và chế độ tương phản cao của Windows, vì test tự động không thay được việc nghe thử.
 - [ ] **[Bạn]** Nhờ người bản ngữ duyệt bản dịch Nhật, Đức, Trung, Nga, Pháp, Thái, cả app lẫn bộ cài.
 - [ ] **[Bạn]** Nhờ người đọc lại bản dịch tiếng Việt của bộ cài.
-- [x] **[AI]** Tùy chọn tự kiểm tra cập nhật mỗi ngày, mặc định tắt, chỉ báo ở khay hệ thống. Đã cập nhật chính sách quyền riêng tư và hướng dẫn. Bản dịch hai chuỗi mới thuộc mục duyệt bản dịch bên dưới.
+- [x] **[AI]** Tùy chọn tự kiểm tra cập nhật mỗi ngày, chỉ báo ở khay hệ thống. Mặc định đổi thành bật ở giai đoạn 3A. Đã cập nhật chính sách quyền riêng tư và hướng dẫn. Bản dịch hai chuỗi mới thuộc mục duyệt bản dịch bên dưới.
 - [x] **[AI]** Chứng thực nguồn gốc build (`actions/attest-build-provenance`) trong bước `draft-release`, chỉ chạy khi repo Public. Chưa chạy thật lần nào; kiểm bằng `gh attestation verify` trên tệp của bản đầu tiên có tag.
 - [ ] **[Cả hai]** Xử lý các lỗi nhận được từ bản RC.
 

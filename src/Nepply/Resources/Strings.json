@@ -84,6 +84,16 @@
     "L’entrée de démarrage de Nepply pointe vers une autre copie ou contient des options personnalisées. Vérifiez-la dans Windows avant de la modifier.",
     "รายการเริ่มต้นของ Nepply ชี้ไปยังสำเนาอื่นหรือมีตัวเลือกที่กำหนดเอง โปรดตรวจสอบใน Windows ก่อนเปลี่ยนแปลง"
   ],
+  "AutoStartOffInWindows": [
+    "Windows đang tắt tự khởi động của Nepply. Bật lại ở Task Manager → Startup apps hoặc Cài đặt Windows → Apps → Startup.",
+    "Windows has startup turned off for Nepply. Turn it back on in Task Manager → Startup apps or Windows Settings → Apps → Startup.",
+    "Windows で Nepply の自動起動がオフになっています。タスク マネージャーの [スタートアップ アプリ] または Windows の設定 → アプリ → スタートアップ でオンにしてください。",
+    "Windows hat den Autostart von Nepply deaktiviert. Aktivieren Sie ihn im Task-Manager unter Autostart-Apps oder in den Windows-Einstellungen unter Apps → Autostart.",
+    "Windows 已关闭 Nepply 的开机启动。请在任务管理器的“启动应用”或 Windows 设置 → 应用 → 启动中重新打开。",
+    "Windows отключила автозапуск Nepply. Включите его в диспетчере задач на вкладке «Автозагрузка» или в параметрах Windows: Приложения → Автозагрузка.",
+    "Windows a désactivé le démarrage automatique de Nepply. Réactivez-le dans le Gestionnaire des tâches, onglet Applications de démarrage, ou dans Paramètres Windows → Applications → Démarrage.",
+    "Windows ปิดการเริ่มอัตโนมัติของ Nepply อยู่ เปิดได้ที่ตัวจัดการงาน > แอปเริ่มต้น หรือการตั้งค่า Windows > แอป > เริ่มต้น"
+  ],
   "AutoStartLegacyEntry": [
     "Đã áp dụng khởi động Nepply. Mục HoverBox cũ trỏ tới bản khác hoặc có tùy chỉnh; hãy kiểm tra trong Ứng dụng khởi động của Windows.",
     "Nepply startup settings were applied. The old HoverBox entry points to another copy or has custom options; check Windows Startup apps.",

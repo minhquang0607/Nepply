@@ -3,7 +3,7 @@ using Nepply.Services;
 namespace Nepply.Modules.Updates;
 
 /// <summary>
-/// The optional daily check, off by default. It only reports that a version
+/// The daily check, on by default and off in Settings. It only reports that a version
 /// exists: downloading and installing stay in the update window, behind explicit
 /// consent. A failed check is logged and waits for the next interval, so an
 /// offline machine neither retries in a loop nor bothers the user.

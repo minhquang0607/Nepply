@@ -28,6 +28,7 @@
      <ComboBox x:Name="EdgeChoice" AutomationProperties.Name="{DynamicResource Loc.WelcomePosition}"/>
      <CheckBox x:Name="HideIcons" Margin="0,18,0,6"><TextBlock Text="{DynamicResource Loc.WelcomeHideIcons}" TextWrapping="Wrap"/></CheckBox>
      <TextBlock Text="{DynamicResource Loc.WelcomeRecovery}" Style="{StaticResource Caption}" TextWrapping="Wrap"/>
+     <CheckBox x:Name="CheckUpdates" Margin="0,14,0,0"><TextBlock Text="{DynamicResource Loc.UpdateAutoCheck}" TextWrapping="Wrap"/></CheckBox>
     </StackPanel>
     <!-- All usage guidance lives here: settings and panel show only feature names. -->
     <Border Background="{DynamicResource HoverBrush}" CornerRadius="14" Padding="16" Margin="0,0,0,12">

@@ -89,7 +89,11 @@ internal static class ReleaseHardeningTests
         var resetLanguage = new AppSettings { Language = "fr", PanelWidth = 500 }; resetLanguage.ResetToDefaults();
         check("Reset preferences keeps the chosen language", resetLanguage.Language == "fr" && resetLanguage.PanelWidth == new AppSettings().PanelWidth);
         var welcomeChoice = new AppSettings();
-        OnboardingService.Complete(welcomeChoice, EdgePosition.Left, false, _ => { }, "de");
+        OnboardingService.Complete(welcomeChoice, EdgePosition.Left, false, false, _ => { }, "de");
+        check("Welcome can turn the daily update check off", !welcomeChoice.AutoCheckUpdates);
+        check("Windows startup off state is recognised", AutoStartService.IsStartupStateOff(new byte[] { 3, 0, 0, 0 }));
+        check("Windows startup on state is recognised", !AutoStartService.IsStartupStateOff(new byte[] { 2, 0, 0, 0 }));
+        check("Missing Windows startup state is not off", !AutoStartService.IsStartupStateOff(null) && !AutoStartService.IsStartupStateOff(Array.Empty<byte>()));
         check("Onboarding saves the language picked on the welcome screen", welcomeChoice.Language == "de" && welcomeChoice.HasCompletedOnboarding);
         File.WriteAllText(path, "{\"HideDesktopIcons\":true,\"EdgePosition\":1}");
         var legacy = store.Load();
@@ -99,10 +103,10 @@ internal static class ReleaseHardeningTests
         var retired = new SettingsStore(retiredPath).Load();
         check("Retired detail settings load without reviving removed widget", !retired.WidgetOrder.Contains("details"));
         bool failedSave = false;
-        try { OnboardingService.Complete(fresh, EdgePosition.Top, true, _ => throw new IOException("Simulated failure")); }
+        try { OnboardingService.Complete(fresh, EdgePosition.Top, true, true, _ => throw new IOException("Simulated failure")); }
         catch (IOException) { failedSave = true; }
         check("Onboarding failed save leaves live settings unchanged", failedSave && !fresh.HasCompletedOnboarding && !fresh.HideDesktopIcons && fresh.EdgePosition == EdgePosition.Left);
-        OnboardingService.Complete(fresh, EdgePosition.Top, true, store.Save);
+        OnboardingService.Complete(fresh, EdgePosition.Top, true, true, store.Save);
         var onboarded = store.Load();
         var resetDraft = onboarded.Clone(); resetDraft.ResetToDefaults();
         check("Reset preferences keeps completed onboarding", resetDraft.HasCompletedOnboarding && !resetDraft.HideDesktopIcons && resetDraft.EdgePosition == EdgePosition.Left);
