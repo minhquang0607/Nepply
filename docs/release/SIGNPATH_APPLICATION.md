@@ -37,9 +37,9 @@ Minh Quang phải tự nộp, vì form tạo tài khoản SignPath đứng tên 
 
 ## Trường Reputation
 
-Viết đúng thực tế, không phóng đại. Thay số liệu trong ngoặc bằng số thật vào ngày nộp:
+Viết đúng thực tế, không phóng đại. Ngày 02/11/2026 repo có 0 sao và 0 lượt tải, nên câu trong ngoặc vuông chỉ giữ lại khi đã có số thật; nếu chưa có thì bỏ cả câu:
 
-> Nepply is a new open source project released under the MIT license. The first public release is 2.0.0-rc.1: <link to the release>. It has [N] downloads and [N] GitHub stars so far. The repository shows its full development history, automated tests on GitHub Actions, security policy and code signing policy. Code signing would let users install it without SmartScreen and Smart App Control warnings.
+> Nepply is a new open source project released under the MIT license. The first public release is 2.0.0-rc.1: https://github.com/minhquang0607/Nepply/releases/tag/v2.0.0-rc.1. [It has N downloads and N GitHub stars so far.] The repository shows its full development history, automated tests on GitHub Actions, security policy and code signing policy. Code signing would let users install it without SmartScreen and Smart App Control warnings.
 
 Dự án mới nên phần này có thể yếu. Nếu bị từ chối, xem phương án dự phòng ở giai đoạn 5 của [kế hoạch phát hành](PUBLIC_RELEASE_CHECKLIST.md).
 

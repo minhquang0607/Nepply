@@ -11,8 +11,8 @@ Cập nhật 02/11/2026. Đây là kế hoạch duy nhất từ hiện tại đ�
 | 2 | Đưa code lên GitHub | Đã merge vào `main`, CI xanh; còn các mục chưa đánh dấu bên dưới |
 | 3 | Chuẩn bị repo công khai | Cài đặt đã kiểm chứng ngày 02/11/2026; còn thử trang báo lỗ hổng và Issues |
 | 3A | Sửa lỗi từ các lượt cài thử | Xong; bạn báo đạt ngày 02/11/2026 |
-| 4 | Phát hành `2.0.0-rc.1` chưa ký | Đã tạo tag; chờ bạn duyệt `release` và Publish |
-| 5 | Xin chữ ký số | Đã soạn đơn; chờ Release công khai |
+| 4 | Phát hành `2.0.0-rc.1` chưa ký | Đã công khai ngày 02/11/2026; còn cài thử từ trang Release và nhận phản hồi |
+| 5 | Xin chữ ký số | Đã đủ điều kiện nộp; chờ bạn nộp đơn |
 | 6 | Tích hợp ký và phát hành RC đã ký | Chưa làm |
 | 7 | Hoàn thiện chất lượng | Phần của AI đã xong; còn bài đo 24 giờ và các mục của bạn |
 | 8 | Nghiệm thu trên máy thật | Chưa làm |
@@ -156,7 +156,8 @@ Bạn góp ý ngày 02/11/2026. Lần rà mặc định trước được làm l
 - [x] **[AI]** Tạo tag `v2.0.0-rc.1` từ `2fa1e78` và push ngày 02/11/2026, sau khi bạn báo đạt, Verify #23 và CodeQL #24 trên `main` xanh, và API xác nhận `release` có Required reviewers. *Release build* #2 tự chạy.
 - [x] **[Bạn]** Duyệt bước `release`. Đã duyệt ngày 02/11/2026; *Release build* #2 xanh, tạo Release nháp với Setup, portable và `SHA256.json`, cả ba đều có attestation công khai.
 - [x] **[AI]** Điền ghi chú song ngữ và chọn *Pre-release* trong Release nháp rồi lưu nháp; chưa công khai.
-- [ ] **[Bạn]** Xem lại Release nháp rồi bấm Publish.
+- [x] **[Bạn]** Xem lại Release nháp rồi bấm Publish. Đã công khai ngày 02/11/2026 ở dạng pre-release: <https://github.com/minhquang0607/Nepply/releases/tag/v2.0.0-rc.1>.
+- [x] **[AI]** Đối chiếu ẩn danh sau khi công khai: `SHA256.json` khớp mã GitHub ghi cho Setup và portable, cả hai tệp tải được, cả ba tệp có attestation.
 - [ ] **[Bạn]** Tải file từ trang Release về một máy và cài thử.
 - [ ] **[Cả hai]** Nhận phản hồi trong lúc chờ SignPath, nên từ 2 đến 4 tuần. Lỗi nặng được sửa ở `2.0.0-rc.2`, tăng `FileVersion` thành `2.0.0.2`.
 
