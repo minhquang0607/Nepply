@@ -6,7 +6,7 @@
 
 ### Bản Microsoft Store
 
-- Chuẩn bị bản Microsoft Store: Microsoft ký gói sau khi duyệt, cập nhật qua Store. Bản này không có tính năng ẩn icon Desktop và không kiểm tra cập nhật qua GitHub; Setup và portable giữ nguyên.
+- Chuẩn bị bản Microsoft Store: Microsoft ký gói sau khi duyệt, cập nhật qua Store. Bản này vẫn ẩn được icon Desktop, nhưng ẩn trực tiếp cửa sổ icon thay vì đổi cài đặt Windows, nên gỡ app không để lại gì. Bản Store không kiểm tra cập nhật qua GitHub. Setup và portable giữ nguyên.
 
 ## 2.0.0-rc.1 — 02/11/2026
 

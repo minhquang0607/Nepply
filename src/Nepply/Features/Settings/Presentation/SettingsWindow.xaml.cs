@@ -88,7 +88,6 @@ public partial class SettingsWindow : Window
         RefreshLanguageChoices();
         Closed += (_, _) => { Services.LocalizationService.Changed -= RefreshLanguageChoices; Services.LocalizationService.Apply(settings.Language); };
         LoadDraft();
-        ShowDesktopHiding(Services.ProcessPackageIdentity.CanHideDesktopIcons);
         AutoStart.Checked += (_, _) => { if (!_loadingDraft) AutoStartRevision++; RefreshAutoStartState(); };
         AutoStart.Unchecked += (_, _) => { if (!_loadingDraft) AutoStartRevision++; RefreshAutoStartState(); };
         // Re-read on return, because the switch that clears this lives in Task Manager.
@@ -374,11 +373,6 @@ public partial class SettingsWindow : Window
     private void Apply_Click(object sender, RoutedEventArgs e) => SaveSettings(close: false);
     internal event Action? SettingsCommitted;
     internal int AutoStartRevision { get; private set; }
-    internal void ShowDesktopHiding(bool available)
-    {
-        var visibility = available ? Visibility.Visible : Visibility.Collapsed;
-        HideIcons.Visibility = HideIconsNote.Visibility = ((FrameworkElement)ShortcutToggleDesktopIcons.Parent).Visibility = visibility;
-    }
     private void RefreshAutoStartState() => ShowAutoStartState(!Services.ProcessPackageIdentity.IsPackaged && Services.AutoStartService.IsTurnedOffInWindows());
     internal void ShowAutoStartState(bool turnedOffInWindows) =>
         AutoStartWindowsNotice.Visibility = turnedOffInWindows && AutoStart.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;

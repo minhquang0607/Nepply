@@ -56,7 +56,7 @@ internal static class SettingsSearch
     {
         var words = SearchText.Words(query);
         if (words.Length == 0) return [];
-        return Entries.Where(e => !packaged || e.Control is not ("HideIcons" or "ShortcutToggleDesktopIcons" or "AutoCheckUpdates"))
+        return Entries.Where(e => !packaged || e.Control != "AutoCheckUpdates")
             .Select(e => (Original: e, Local: Localized(e)))
             .Where(e => SearchText.Matches(e.Original.Label + " " + e.Original.Keywords + " " + e.Local.Label, words))
             .Select(e => e.Local).ToArray();

@@ -6,7 +6,7 @@
 
 ### Microsoft Store edition
 
-- Preparing a Microsoft Store edition: Microsoft signs the package after certification and the Store updates it. This edition cannot hide Desktop icons and does not check GitHub for updates; Setup and portable are unchanged.
+- Preparing a Microsoft Store edition: Microsoft signs the package after certification and the Store updates it. This edition still hides Desktop icons, but it hides the icon window instead of changing a Windows setting, so removing the app leaves nothing behind. It does not check GitHub for updates. Setup and portable are unchanged.
 
 ## 2.0.0-rc.1 — 2 November 2026
 

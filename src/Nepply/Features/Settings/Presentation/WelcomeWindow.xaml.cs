@@ -23,7 +23,6 @@ public partial class WelcomeWindow : Window
         Loaded += (_, _) => Helpers.DialogPlacement.FitInitial(this);
         EdgeChoice.SelectedIndex = (int)settings.EdgePosition;
         HideIcons.IsChecked = false;
-        ShowDesktopHiding(ProcessPackageIdentity.CanHideDesktopIcons);
         CheckUpdates.IsChecked = _settings.AutoCheckUpdates;
         // The Store edition updates through Microsoft Store and has no such option.
         if (ProcessPackageIdentity.IsPackaged) CheckUpdates.Visibility = Visibility.Collapsed;
@@ -39,8 +38,6 @@ public partial class WelcomeWindow : Window
             if (_previewedLanguage) LocalizationService.Apply(_settings.Language);
         };
     }
-    internal void ShowDesktopHiding(bool available) =>
-        HideIcons.Visibility = HideIconsNote.Visibility = available ? Visibility.Visible : Visibility.Collapsed;
     private bool _languageReady, _previewedLanguage;
     internal string SelectedLanguage => LanguageChoice.SelectedValue as string ?? _settings.Language;
     // The first choice is shown live so the rest of the screen is readable before starting.

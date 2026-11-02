@@ -212,9 +212,29 @@ public partial class MainWindow : Window
         _animation.HideInstantly();
         _edgeTimer.Start();
         RegisterHotkey();
+        if (ProcessPackageIdentity.IsPackaged) HwndSource.FromHwnd(new WindowInteropHelper(this).Handle)?.AddHook(WatchExplorerRestart);
         ApplyShellSettings(true, true, userInitiated: false);
         if (!_settings.HasCompletedOnboarding && AppSettings.RecoveryNotice == null)
             Dispatcher.BeginInvoke(ShowWelcome);
+    }
+    [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Unicode)]
+    private static extern uint RegisterWindowMessage(string message);
+    private static readonly uint TaskbarCreated = RegisterWindowMessage("TaskbarCreated");
+    // A restarted Explorer shows its icon window again, and the Desktop can arrive after the taskbar.
+    private IntPtr WatchExplorerRestart(IntPtr hwnd, int message, IntPtr wParam, IntPtr lParam, ref bool handled)
+    {
+        if ((uint)message == TaskbarCreated && _settings.HideDesktopIcons) _ = HideAgainAfterExplorerRestartAsync();
+        return IntPtr.Zero;
+    }
+    private async Task HideAgainAfterExplorerRestartAsync()
+    {
+        for (int attempt = 0; attempt < 20 && !_cleaned && _settings.HideDesktopIcons; attempt++)
+        {
+            await Task.Delay(500);
+            if (!_icons.IsDesktopCurrentlyVisible) continue;
+            await ApplyDesktopVisibilityAsync(true);
+            return;
+        }
     }
     /// <summary>Reopens the welcome window as the usage guide (tray "Guide").</summary>
     public void ShowGuide()
@@ -297,7 +317,6 @@ public partial class MainWindow : Window
     }
     private void ToggleDesktopIcons()
     {
-        if (!ProcessPackageIdentity.CanHideDesktopIcons) return;
         _settings.HideDesktopIcons = !_settings.HideDesktopIcons;
         try { if (!_preview) _settings.Save(); }
         catch (Exception ex)
@@ -779,7 +798,7 @@ public partial class MainWindow : Window
     {
         if (_preview) return;
         if (autoStart) _ = ApplyStartupAsync(_settings.AutoStart, userInitiated);
-        if (desktopVisibility && ProcessPackageIdentity.CanHideDesktopIcons) _ = ApplyDesktopVisibilityAsync(_settings.HideDesktopIcons);
+        if (desktopVisibility) _ = ApplyDesktopVisibilityAsync(_settings.HideDesktopIcons);
     }
     private async Task ApplyDesktopVisibilityAsync(bool hide)
     {

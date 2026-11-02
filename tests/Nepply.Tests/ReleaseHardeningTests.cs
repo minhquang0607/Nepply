@@ -133,6 +133,14 @@ internal static class ReleaseHardeningTests
         check("Windows startup off state is recognised", AutoStartService.IsStartupStateOff(new byte[] { 3, 0, 0, 0 }));
         check("Windows startup on state is recognised", !AutoStartService.IsStartupStateOff(new byte[] { 2, 0, 0, 0 }));
         check("Missing Windows startup state is not off", !AutoStartService.IsStartupStateOff(null) && !AutoStartService.IsStartupStateOff(Array.Empty<byte>()));
+        bool shown = true; var commands = new List<int>();
+        var iconWindow = new WindowDesktopVisibility(() => (IntPtr)7, _ => shown, (_, command) => { commands.Add(command); shown = command != 0; return true; });
+        check("The Store edition hides the icon window itself", iconWindow.SetVisible(false) && !shown && commands.SequenceEqual([0]));
+        check("The Store edition shows icons without taking focus", iconWindow.SetVisible(true) && shown && commands.SequenceEqual([0, 8]));
+        var noDesktop = new WindowDesktopVisibility(() => IntPtr.Zero, _ => true, (_, _) => throw new InvalidOperationException());
+        check("A missing Desktop is reported, never touched", noDesktop.IsVisible() == null && !noDesktop.SetVisible(false));
+        var stubborn = new WindowDesktopVisibility(() => (IntPtr)7, _ => true, (_, _) => true);
+        check("A hide that did not happen is reported as failed", !stubborn.SetVisible(false));
         string approvedPath = @"Software\Nepply-Tests\" + Guid.NewGuid().ToString("N");
         try
         {

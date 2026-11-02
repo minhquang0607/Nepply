@@ -26,7 +26,10 @@ public class DesktopIconService : IDisposable, IDesktopCatalog, IDesktopActions
     public DesktopIconService(string? scanExecutable = null)
     {
         _scanExecutable = scanExecutable;
-        _guardedVisibility = new GuardedDesktopVisibility(new ExplorerDesktopVisibility(), _desktopVisibility, DesktopGuardianDeployment.StartAsync);
+        // A guardian inside the package cannot outlive package removal, and the Store
+        // edition changes no saved setting that would need recovering.
+        if (!ProcessPackageIdentity.IsPackaged)
+            _guardedVisibility = new GuardedDesktopVisibility(new ExplorerDesktopVisibility(), _desktopVisibility, DesktopGuardianDeployment.StartAsync);
     }
     internal DesktopIconService(Func<CancellationToken, Task<List<DesktopIconModel>>> scanner) => _scanner = (_, token) => scanner(token);
     internal DesktopIconService(Func<DesktopScanOptions, CancellationToken, Task<List<DesktopIconModel>>> scanner) => _scanner = scanner;
@@ -264,6 +267,7 @@ public class DesktopIconService : IDisposable, IDesktopCatalog, IDesktopActions
     }
 
     public bool AreDesktopIconsHidden => _ownsDesktopVisibility;
+    internal bool IsDesktopCurrentlyVisible => _desktopVisibility.IsCurrentlyVisible;
 
     public void Dispose()
     {

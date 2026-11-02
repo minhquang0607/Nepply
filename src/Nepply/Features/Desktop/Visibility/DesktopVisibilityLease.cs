@@ -10,7 +10,8 @@ public sealed class DesktopVisibilityLease(IDesktopVisibility desktop, string jo
     public static string JournalPath => ProcessPackageIdentity.IsPackaged
         ? Path.Combine(Windows.Storage.ApplicationData.Current.LocalCacheFolder.Path, ProductIdentity.LegacyName, "desktop-visibility.lease")
         : LegacyJournalPath;
-    public static DesktopVisibilityLease Create() => new(new ExplorerDesktopVisibility(), JournalPath);
+    public static DesktopVisibilityLease Create() =>
+        new(ProcessPackageIdentity.IsPackaged ? new WindowDesktopVisibility() : new ExplorerDesktopVisibility(), JournalPath);
     internal static bool RestorePreviousSession()
     {
         using var fence = DesktopGuardianFence.Acquire(TimeSpan.FromSeconds(15));
@@ -20,6 +21,7 @@ public sealed class DesktopVisibilityLease(IDesktopVisibility desktop, string jo
     }
     public bool OwnsChange => File.Exists(journal);
     internal bool IsCurrentlyHidden => desktop.IsVisible() == false;
+    internal bool IsCurrentlyVisible => desktop.IsVisible() == true;
     public bool Hide()
     {
         if (desktop.IsVisible() is not true) return false;

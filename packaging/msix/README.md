@@ -17,7 +17,8 @@ Script publish self-contained x64 dạng nhiều file (MSIX đã nén), tạo lo
 
 ## Khác biệt của bản Store
 
-- Không có tính năng ẩn icon Desktop và không kèm tiến trình bảo vệ. Lệnh ẩn của Explorer không được tài liệu hóa, và gói MSIX không có bước khôi phục khi gỡ.
+- Ẩn icon Desktop bằng `ShowWindow` trên cửa sổ icon thay vì lệnh nội bộ của Explorer, nên không đổi cài đặt Windows nào. Explorer khởi động lại thì icon hiện lại và app ẩn lại khi nhận `TaskbarCreated`.
+- Không kèm tiến trình bảo vệ: tiến trình trong gói không sống qua việc gỡ gói, và không có cài đặt nào cần khôi phục. App chết thì icon về khi đăng nhập lại, hoặc bấm *Xem > Hiển thị biểu tượng màn hình nền* hai lần.
 - Không kiểm tra cập nhật qua GitHub; Store quản lý cập nhật.
 - Tự khởi động dùng StartupTask, tôn trọng DisabledByUser/Policy và không ghi HKCU Run.
 - Cấu hình nằm trong vùng dữ liệu riêng của gói, tách khỏi Setup và portable.

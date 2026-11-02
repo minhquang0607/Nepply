@@ -21,7 +21,7 @@ internal sealed class ExplorerDesktopVisibility : IDesktopVisibility
     [DllImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool IsWindowVisible(IntPtr hwnd);
-    private static (IntPtr View, IntPtr List) Locate()
+    internal static (IntPtr View, IntPtr List) Locate()
     {
         var view = FindWindowEx(FindWindow("Progman", null), IntPtr.Zero, "SHELLDLL_DefView", null);
         for (IntPtr worker = IntPtr.Zero; view == IntPtr.Zero;)
@@ -56,5 +56,31 @@ internal sealed class ExplorerDesktopVisibility : IDesktopVisibility
         if (IsWindowVisible(list) == visible) return true;
         if (SendMessageTimeout(view, 0x0111, (IntPtr)0x7402, IntPtr.Zero, 0x0002 | 0x0020, 500, out _) == IntPtr.Zero) return false;
         return IsVisible() == visible;
+    }
+}
+
+// Store edition: hides the icon window itself instead of switching Explorer's saved
+// option. Windows settings stay untouched, so a removed package leaves nothing behind
+// and icons return with the next Explorer start.
+internal sealed class WindowDesktopVisibility(Func<IntPtr> list, Func<IntPtr, bool> isVisible, Func<IntPtr, int, bool> show) : IDesktopVisibility
+{
+    private const int Hide = 0, ShowWithoutActivating = 8;
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool IsWindowVisible(IntPtr hwnd);
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool ShowWindow(IntPtr hwnd, int command);
+
+    internal WindowDesktopVisibility() : this(() => ExplorerDesktopVisibility.Locate().List, IsWindowVisible, ShowWindow) { }
+
+    public bool? IsVisible() { var window = list(); return window == IntPtr.Zero ? null : isVisible(window); }
+    public bool SetVisible(bool visible)
+    {
+        var window = list();
+        if (window == IntPtr.Zero) return false;
+        // ShowWindow reports the previous state, so only the result below is meaningful.
+        show(window, visible ? ShowWithoutActivating : Hide);
+        return isVisible(window) == visible;
     }
 }

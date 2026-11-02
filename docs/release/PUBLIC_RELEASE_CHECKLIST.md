@@ -186,7 +186,7 @@ Bạn góp ý ngày 02/11/2026. Lần rà mặc định trước được làm l
 
 Microsoft ký gói MSIX sau khi duyệt, nên bản Store không cần chứng thư riêng. Tài khoản cá nhân miễn phí, xác minh bằng giấy tờ tùy thân và selfie. Trang của Microsoft không nêu giới hạn quốc gia, nhưng cũng không nhắc Việt Nam, nên phải thử mới biết.
 
-- [x] **[AI]** Bản Store không có tính năng ẩn icon Desktop, vì lệnh của Explorer không được tài liệu hóa (chính sách 10.2.8) và gói MSIX không có bước khôi phục khi gỡ (10.2.7). Setup và portable vẫn giữ tính năng này. Gói Store không có tiến trình bảo vệ nên nhẹ hơn khoảng 70 MB.
+- [x] **[AI]** Giữ tính năng ẩn icon Desktop trong bản Store, vì đây là mục đích chính của app. Lệnh `0x7402` của Explorer không được tài liệu hóa (chính sách 10.2.8) và đổi cài đặt lưu lâu dài, còn gói MSIX không có bước khôi phục khi gỡ (10.2.7). API công khai `SHGetSetSettings` đổi được cờ nhưng thử thật cho thấy Explorer không cập nhật ngay, nên không dùng. Bản Store dùng `ShowWindow` trên cửa sổ icon: thử thật ngày 02/11/2026, icon ẩn ngay, registry không đổi, refresh Desktop không làm hiện lại, bấm menu *Xem* hai lần là icon về. Setup và portable giữ cách cũ. Gói Store không có tiến trình bảo vệ nên nhẹ hơn khoảng 70 MB. Chưa thử trong gói thật.
 - [x] **[AI]** Thêm `scripts/Build-Msix.ps1 -Store`: đọc `packaging/msix/identity.store.json`, từ chối identity sai, phiên bản lệch với mã nguồn, và mã nguồn còn prerelease. Dựng thử với identity giả: gói 80,8 MB, tên tệp hợp lệ, MakeAppx đạt.
 - [x] **[AI]** Soạn nội dung 8 ngôn ngữ, giải trình `runFullTrust`, ghi chú cho người duyệt: [STORE_LISTING.md](STORE_LISTING.md). Tạo 3 ảnh trong `packaging/msix/store/screenshots` bằng `scripts/Build-StoreScreenshots.ps1`.
 - [ ] **[Bạn]** Tạo tài khoản tại <https://storedeveloper.microsoft.com> (Individual developer), xác minh danh tính, giữ tên `Nepply` trong Partner Center.
@@ -194,7 +194,7 @@ Microsoft ký gói MSIX sau khi duyệt, nên bản Store không cần chứng t
 - [ ] **[AI]** Tạo `identity.store.json`, đổi mã nguồn sang `2.0.0` và `FileVersion` `2.0.0.100`, dựng gói `2.0.0.0`.
 - [ ] **[Cả hai]** Chạy Windows App Certification Kit nếu máy cho phép. Công cụ cần quyền quản trị nên AI không tự chạy được.
 - [ ] **[Bạn]** Tạo submission, chọn **Private audience**, dán nội dung từ `STORE_LISTING.md`, tải gói lên, gửi duyệt.
-- [ ] **[Bạn]** Cài bản Store thật, thử theo giai đoạn 8, rồi chuyển sang công khai.
+- [ ] **[Bạn]** Cài bản Store thật, thử theo giai đoạn 8, nhất là ẩn icon, khởi động lại Explorer và gỡ app khi icon đang ẩn, rồi chuyển sang công khai.
 
 **Xong khi:** Nepply cài được từ Microsoft Store, gói do Microsoft ký.
 
@@ -218,7 +218,7 @@ Không chặn việc xin chữ ký, có thể làm song song từ giai đoạn 4
 
 ## Giai đoạn 8. Nghiệm thu trên máy thật
 
-Với bản Store: cài từ Store, thử mở panel, monitor, tự khởi động, đổi ngôn ngữ, gỡ cài đặt. Các mục dưới về ẩn icon, Setup và cập nhật trong app áp dụng cho bản Setup; làm khi có Setup đã ký. Dùng VM Windows 11 cài mới (Hyper-V hoặc VirtualBox), **bật Smart App Control** ngay khi cài Windows (chỉ bật được trên máy mới cài). Ghi hash Setup, ảnh chụp và kết quả từng mục:
+Với bản Store: cài từ Store, thử mở panel, monitor, ẩn icon, tự khởi động, đổi ngôn ngữ, gỡ cài đặt. Các mục dưới về Setup, tiến trình bảo vệ và cập nhật trong app áp dụng cho bản Setup; làm khi có Setup đã ký. Dùng VM Windows 11 cài mới (Hyper-V hoặc VirtualBox), **bật Smart App Control** ngay khi cài Windows (chỉ bật được trên máy mới cài). Ghi hash Setup, ảnh chụp và kết quả từng mục:
 
 - [ ] **[Bạn]** Tải từ GitHub Release qua trình duyệt (để có Mark of the Web), chạy Setup: SmartScreen/SAC hiện gì?
 - [ ] **[Bạn]** Lần đầu chạy: chọn ẩn icon Desktop → thoát qua khay → icon trở lại.
