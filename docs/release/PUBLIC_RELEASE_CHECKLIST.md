@@ -12,8 +12,8 @@ Cập nhật 02/11/2026. Đây là kế hoạch duy nhất từ hiện tại đ�
 | 3 | Chuẩn bị repo công khai | Xong; còn tùy chọn thêm CodeQL vào ruleset |
 | 3A | Sửa lỗi từ các lượt cài thử | Xong; bạn báo đạt ngày 02/11/2026 |
 | 4 | Phát hành `2.0.0-rc.1` chưa ký | Đã công khai và đối chiếu ngày 02/11/2026; đang nhận phản hồi |
-| 5 | Xin chữ ký số | Đã nộp đơn ngày 02/11/2026; chờ SignPath trả lời |
-| 6 | Tích hợp ký và phát hành RC đã ký | Chưa làm |
+| 5 | Xin chữ ký số | SignPath từ chối ngày 02/11/2026; chờ bạn chọn hướng khác |
+| 6 | Tích hợp ký và phát hành RC đã ký | Chưa làm; các bước bên dưới viết cho SignPath, phải sửa theo hướng được chọn |
 | 7 | Hoàn thiện chất lượng | Bài đo 24 giờ đang chạy; còn các mục của bạn |
 | 8 | Nghiệm thu trên máy thật | Chưa làm |
 | 9 | Phát hành `2.0.0` | Đã tạo lại ảnh README; phần còn lại chờ RC đã ký |
@@ -168,11 +168,18 @@ Bạn góp ý ngày 02/11/2026. Lần rà mặc định trước được làm l
 - [x] **[AI]** Đối chiếu repo với điều kiện SignPath ngày 02/11/2026 và soạn sẵn câu trả lời: [SIGNPATH_APPLICATION.md](SIGNPATH_APPLICATION.md). Giấy phép dependency đều là giấy phép OSI; ghi chú rc.1 đã có link *Code signing policy*.
 - [x] **[Bạn]** Kiểm tra trước khi nộp: repo Public, MFA đã bật, đã có Release công khai.
 - [x] **[Bạn]** Tự nộp đơn tại <https://signpath.org/apply> theo [SIGNPATH_APPLICATION.md](SIGNPATH_APPLICATION.md). Bạn báo đã nộp ngày 02/11/2026; AI không có cách xác minh từ phía SignPath.
-- [ ] **[Bạn]** Bật MFA cho tài khoản SignPath sau khi được cấp.
-- [ ] **[Bạn]** Khi được duyệt, SignPath cung cấp organization ID, project/policy slug và API token. Lưu token vào Settings → Environments → `release` → *Environment secrets* (không để ở repository secret chung).
-- [ ] **[Bạn]** Nếu bị từ chối: dùng chứng thư OV cho người làm OSS (ví dụ Certum Open Source Code Signing). Azure Artifact Signing chỉ cấp cho cá nhân ở Mỹ/Canada.
+- [x] **[AI]** SignPath Foundation từ chối ngày 02/11/2026 vì dự án chưa đủ độ nhận biết công khai, mời nộp lại sau. Đã đối chiếu lại các hướng khác cùng ngày, xem bảng dưới.
+- [ ] **[Bạn]** Chọn hướng ký. Azure Artifact Signing không dùng được vì cá nhân chỉ ở Mỹ/Canada.
 
-**Xong khi:** có chứng thư hoặc dịch vụ ký dùng được từ workflow.
+| Hướng | Chi phí | Điều kiện đã biết | Chưa rõ |
+| --- | --- | --- | --- |
+| Microsoft Store (MSIX) | Tài khoản cá nhân miễn phí; Microsoft ký gói sau khi duyệt | Giấy tờ tùy thân và selfie; phải xong các mục trong `packaging/msix/README.md`, nhất là khôi phục Desktop khi gói bị gỡ | Store có chấp nhận app ẩn icon Desktop không. Setup trên GitHub vẫn chưa ký |
+| Certum Open Source | Từ $58 bản cloud, từ €69 bộ thẻ | Chỉ cho cá nhân; xác minh giấy tờ, hóa đơn tiện ích, dự án công khai; bị thu hồi nếu ký phần mềm thương mại | Có bán cho Việt Nam không, thời hạn, còn hàng không, có ký tự động trong CI không. SmartScreen vẫn cảnh báo tới khi đủ uy tín |
+| Chứng thư OV thường | Khoảng $150–300/năm | Khóa trên HSM hoặc token | SmartScreen vẫn cảnh báo tới khi đủ uy tín |
+| SignPath trả phí | Không công bố giá | Liên hệ SignPath | Có kèm chứng thư không |
+| Nộp lại SignPath Foundation | Miễn phí | Cần sao, fork, người đóng góp, bài viết hoặc thảo luận độc lập | Mức bao nhiêu là đủ |
+
+**Xong khi:** có chứng thư, dịch vụ ký hoặc kênh phát hành đã ký dùng được.
 
 ## Giai đoạn 6. Tích hợp ký và phát hành RC đã ký
 
