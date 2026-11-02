@@ -154,8 +154,9 @@ Bạn góp ý ngày 02/11/2026. Lần rà mặc định trước được làm l
 - [x] **[Cả hai]** Kiểm tra dung lượng artifact: lần chạy thử ngày 01/11/2026 upload được 186 MB. `release.yml` cần upload bản build để tạo Release; nếu lần tag báo lỗi upload, xem Settings → Billing and licensing và xóa artifact cũ. Dung lượng được tính lại sau 6 đến 12 giờ.
 - [x] **[Cả hai]** Chạy thử: *Release build* #3 trên `f030380` (trước khi viết lại lịch sử là `2241652`) xanh, gồm biên dịch bộ cài và artifact `nepply-release-unsigned`. Bước `draft-release` chỉ chạy khi có tag. Repo mới: *Release build* #1 trên `245af2f` cũng xanh ngày 02/11/2026.
 - [x] **[AI]** Tạo tag `v2.0.0-rc.1` từ `2fa1e78` và push ngày 02/11/2026, sau khi bạn báo đạt, Verify #23 và CodeQL #24 trên `main` xanh, và API xác nhận `release` có Required reviewers. *Release build* #2 tự chạy.
-- [ ] **[Bạn]** Duyệt bước `release` khi GitHub hỏi. Bước này ghi attestation vào nhật ký công khai không xóa được, rồi tạo Release nháp.
-- [ ] **[Bạn]** Mở Release nháp, đánh dấu *pre-release*, dán ghi chú, bấm Publish.
+- [x] **[Bạn]** Duyệt bước `release`. Đã duyệt ngày 02/11/2026; *Release build* #2 xanh, tạo Release nháp với Setup, portable và `SHA256.json`, cả ba đều có attestation công khai.
+- [x] **[AI]** Điền ghi chú song ngữ và chọn *Pre-release* trong Release nháp rồi lưu nháp; chưa công khai.
+- [ ] **[Bạn]** Xem lại Release nháp rồi bấm Publish.
 - [ ] **[Bạn]** Tải file từ trang Release về một máy và cài thử.
 - [ ] **[Cả hai]** Nhận phản hồi trong lúc chờ SignPath, nên từ 2 đến 4 tuần. Lỗi nặng được sửa ở `2.0.0-rc.2`, tăng `FileVersion` thành `2.0.0.2`.
 
