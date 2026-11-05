@@ -128,6 +128,7 @@ public static class DesktopScanProcess
         pipe.Connect(10000);
         Helpers.HelperPipeIdentity.RequireServer(pipe, parent);
         byte[] bytes;
+        var issues = new DesktopScanIssues();
         try
         {
             string[]? paths = null;
@@ -138,10 +139,12 @@ public static class DesktopScanProcess
                 var request = new byte[length]; pipe.ReadExactly(request); paths = DecodeRequest(request);
             }
             if (!raw && paths != null) throw new InvalidDataException("Grouped request cannot be partial.");
-            var entries = DesktopEntryReader.ReadNativeAsync(new(hidden, system, merge), paths).GetAwaiter().GetResult();
+            var entries = DesktopEntryReader.ReadNativeAsync(new(hidden, system, merge), paths, issues).GetAwaiter().GetResult();
             bytes = EncodeReply(raw ? entries : Modules.Desktop.DesktopRawCatalog.Group(entries, merge));
         }
         catch (Exception ex) { bytes = EncodeFailure(ex.ToString()); }
+        // The parent may stop this process as soon as it has the reply; skipped entries are only in this log.
+        if (issues.Count > 0) AppLogger.FlushAndShutdown();
         Span<byte> header = stackalloc byte[4]; System.Buffers.Binary.BinaryPrimitives.WriteInt32LittleEndian(header, bytes.Length);
         pipe.Write(header); pipe.Write(bytes); pipe.Flush();
     }

@@ -10,14 +10,21 @@ using static Nepply.Helpers.NativeInterop;
 
 namespace Nepply.Services;
 
+/// <summary>What a Desktop read asks the system for; tests replace these to fail one entry on purpose.</summary>
+internal sealed record DesktopReadSource(string[] Roots,
+    Func<bool, DesktopScanIssues, IReadOnlyList<NativeDesktopNamespace.Entry>> Namespace,
+    Func<string, FileAttributes> Attributes);
+
 /// <summary>One STA operation owns native discovery and all temporary icon/COM resources.</summary>
 internal static class DesktopEntryReader
 {
     internal static string[] GetDesktopRoots() => [Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
         Environment.GetFolderPath(Environment.SpecialFolder.CommonDesktopDirectory)];
-    internal static Task<List<DesktopIconModel>> ReadNativeAsync(DesktopScanOptions options, string[]? paths) => ShellDesktopReader.RunSta(() =>
+    internal static Task<List<DesktopIconModel>> ReadNativeAsync(DesktopScanOptions options, string[]? paths, DesktopScanIssues? issues = null) => ShellDesktopReader.RunSta(() =>
+        ReadNative(options, paths, new(GetDesktopRoots(), NativeDesktopNamespace.Read, File.GetAttributes), issues ?? new()));
+    internal static List<DesktopIconModel> ReadNative(DesktopScanOptions options, string[]? paths, DesktopReadSource source, DesktopScanIssues issues)
     {
-        var roots = GetDesktopRoots();
+        var roots = source.Roots;
         var list = new List<DesktopIconModel>();
         var cache = new Dictionary<int, BitmapSource>();
         long remainingPixels = DesktopImageBudget.MaximumDecodedBytes;
@@ -28,22 +35,26 @@ internal static class DesktopEntryReader
             SHGetImageList(SHIL_EXTRALARGE, ref iid, out imageList);
             if (paths == null)
             {
-                foreach (var root in roots.Distinct(StringComparer.OrdinalIgnoreCase)) ScanFolder(root, list, cache, imageList, options, ref remainingPixels);
+                foreach (var root in roots.Distinct(StringComparer.OrdinalIgnoreCase)) ScanFolder(root, list, cache, imageList, options, ref remainingPixels, source.Attributes, issues);
                 var known = list.Select(i => i.Path).ToHashSet(StringComparer.OrdinalIgnoreCase);
-                foreach (var item in ShellDesktopReader.Read(options.ShowHiddenFiles, options.ShowSystemIcons, roots))
+                foreach (var item in ShellDesktopReader.ReadFrom(source, options.ShowHiddenFiles, options.ShowSystemIcons, issues))
                 {
                     if (!known.Add(item.Path)) continue;
                     RequireItemCapacity(list.Count);
                     if (remainingPixels > 0) item.Icon = RetainImage(GetShellIcon(item.Path) ?? GetFileIcon(item.Path, cache, imageList), cache, ref remainingPixels);
                     list.Add(item);
                 }
+                // Nothing readable while something failed is not an empty Desktop.
+                if (list.Count == 0 && issues.Count > 0) throw new IOException("No Desktop entry could be read.");
             }
             else
             {
                 if (paths.Length > DesktopChangeBatch.MaximumPaths || paths.Any(p => !DesktopChangeBatch.IsDirectChild(p, roots)))
                     throw new InvalidDataException("Partial Desktop request escapes its roots.");
                 foreach (var root in roots) _ = File.GetAttributes(root);
-                foreach (var path in paths) ReadFileEntry(path, Path.GetDirectoryName(path)!, list, cache, imageList, options, ref remainingPixels);
+                int alreadySkipped = issues.Count;
+                foreach (var path in paths) ReadEntryIsolated(path, Path.GetDirectoryName(path)!, list, cache, imageList, options, ref remainingPixels, source.Attributes, issues);
+                DesktopScanIssues.RequireSomeRead(paths.Length, issues.Count - alreadySkipped, "the changed Desktop entries");
                 foreach (var root in roots) _ = File.GetAttributes(root);
             }
             foreach (var item in list)
@@ -52,9 +63,10 @@ internal static class DesktopEntryReader
             return list;
         }
         finally { if (imageList != null) Marshal.ReleaseComObject(imageList); }
-    });
+    }
 
-    private static void ScanFolder(string folderPath, List<DesktopIconModel> list, Dictionary<int, BitmapSource> cache, IImageList? imageList, DesktopScanOptions options, ref long remainingPixels)
+    internal static void ScanFolder(string folderPath, List<DesktopIconModel> list, Dictionary<int, BitmapSource> cache, IImageList? imageList, DesktopScanOptions options, ref long remainingPixels,
+        Func<string, FileAttributes> attributes, DesktopScanIssues issues)
     {
         // An unavailable source is not an empty Desktop. Abort publication so
         // the last complete snapshot survives access errors and redirection gaps.
@@ -63,24 +75,34 @@ internal static class DesktopEntryReader
         try
         {
             var entries = ReadFolderEntries(folderPath);
+            int alreadySkipped = issues.Count;
 
             foreach (var entry in entries)
-            {
-                try
-                {
-                    ReadFileEntry(entry, folderPath, list, cache, imageList, options, ref remainingPixels);
-                }
-                catch (Exception ex) { throw new IOException("Desktop entry could not be read: " + entry, ex); }
-            }
+                ReadEntryIsolated(entry, folderPath, list, cache, imageList, options, ref remainingPixels, attributes, issues);
+            DesktopScanIssues.RequireSomeRead(entries.Length, issues.Count - alreadySkipped, folderPath);
             // Losing the source is not equivalent to an empty, successful scan.
             _ = File.GetAttributes(folderPath);
         }
         catch (Exception ex) { throw new IOException("Desktop source could not be read completely: " + folderPath, ex); }
     }
 
-    private static void ReadFileEntry(string entry, string root, List<DesktopIconModel> list, Dictionary<int, BitmapSource> cache, IImageList? imageList, DesktopScanOptions options, ref long remainingPixels)
+    private static void ReadEntryIsolated(string entry, string root, List<DesktopIconModel> list, Dictionary<int, BitmapSource> cache, IImageList? imageList, DesktopScanOptions options, ref long remainingPixels,
+        Func<string, FileAttributes> attributes, DesktopScanIssues issues)
     {
-        var attributes = ReadEntryAttributes(entry, root);
+        try { ReadFileEntry(entry, root, list, cache, imageList, options, ref remainingPixels, attributes); }
+        catch (InvalidDataException) { throw; } // The item budget limits the whole read, not this entry.
+        catch (Exception ex)
+        {
+            // This throws when the root went too: then the source is lost, not one entry.
+            _ = File.GetAttributes(root);
+            issues.Skip(entry, ex);
+        }
+    }
+
+    private static void ReadFileEntry(string entry, string root, List<DesktopIconModel> list, Dictionary<int, BitmapSource> cache, IImageList? imageList, DesktopScanOptions options, ref long remainingPixels,
+        Func<string, FileAttributes> readAttributes)
+    {
+        var attributes = ReadEntryAttributes(entry, root, readAttributes);
         if (attributes == null || (!options.ShowHiddenFiles && (attributes.Value & FileAttributes.Hidden) != 0)) return;
         string name = Path.GetFileName(entry);
         if (name.Equals("desktop.ini", StringComparison.OrdinalIgnoreCase)) return;
@@ -118,9 +140,9 @@ internal static class DesktopEntryReader
     {
         if (count >= DesktopImageBudget.MaximumEntries) throw new InvalidDataException("Desktop enumeration exceeds the item budget.");
     }
-    internal static FileAttributes? ReadEntryAttributes(string entry, string root)
+    internal static FileAttributes? ReadEntryAttributes(string entry, string root, Func<string, FileAttributes>? read = null)
     {
-        try { return File.GetAttributes(entry); }
+        try { return read != null ? read(entry) : File.GetAttributes(entry); }
         catch (Exception ex) when (ex is FileNotFoundException or DirectoryNotFoundException)
         {
             _ = File.GetAttributes(root); // Preserve root access/unavailability failures.

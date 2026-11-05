@@ -14,28 +14,29 @@ public static class ShellDesktopReader
         var thread = new Thread(() => { try { result.SetResult(action()); } catch (Exception ex) { result.SetException(ex); } }) { IsBackground = true, Name = "Desktop Shell" };
         thread.SetApartmentState(ApartmentState.STA); thread.Start(); return result.Task;
     }
-    public static IReadOnlyList<DesktopIcon> Read(bool hidden, bool system, params string[] roots)
+    public static IReadOnlyList<DesktopIcon> Read(bool hidden, bool system, params string[] roots) =>
+        ReadFrom(new(roots, Modules.Desktop.NativeDesktopNamespace.Read, File.GetAttributes), hidden, system, new());
+    internal static IReadOnlyList<DesktopIcon> ReadFrom(DesktopReadSource source, bool hidden, bool system, DesktopScanIssues issues)
     {
-        var result = new List<DesktopIcon>();
-        try
-        {
-            foreach (var item in Modules.Desktop.NativeDesktopNamespace.Read(hidden))
-            {
-                try
-                {
-                    string path = item.Path, name = item.Name;
-                    if (string.IsNullOrWhiteSpace(path)) continue;
-                    bool physical = File.Exists(path) || Directory.Exists(path);
-                    bool desktopFile = physical && roots.Any(r => string.Equals(Path.GetDirectoryName(path), r, StringComparison.OrdinalIgnoreCase));
-                    if (!desktopFile && !(system && IsDesktopSystemIcon(path))) continue;
-                    if (physical && !hidden && (File.GetAttributes(path) & FileAttributes.Hidden) != 0) continue;
-                    if (Path.GetFileName(path).Equals("desktop.ini", StringComparison.OrdinalIgnoreCase)) continue;
-                    result.Add(new() { Name = name, Path = path, IsSystemIcon = !desktopFile });
-                }
-                catch (Exception ex) { throw new IOException("Shell Desktop item could not be read completely.", ex); }
-            }
-        }
+        IReadOnlyList<Modules.Desktop.NativeDesktopNamespace.Entry> entries;
+        try { entries = source.Namespace(hidden, issues); }
         catch (Exception ex) { throw new IOException("Shell Desktop namespace is unavailable or incomplete.", ex); }
+        var result = new List<DesktopIcon>();
+        foreach (var item in entries)
+        {
+            try
+            {
+                string path = item.Path, name = item.Name;
+                if (string.IsNullOrWhiteSpace(path)) continue;
+                bool physical = File.Exists(path) || Directory.Exists(path);
+                bool desktopFile = physical && source.Roots.Any(r => string.Equals(Path.GetDirectoryName(path), r, StringComparison.OrdinalIgnoreCase));
+                if (!desktopFile && !(system && IsDesktopSystemIcon(path))) continue;
+                if (physical && !hidden && (source.Attributes(path) & FileAttributes.Hidden) != 0) continue;
+                if (Path.GetFileName(path).Equals("desktop.ini", StringComparison.OrdinalIgnoreCase)) continue;
+                result.Add(new() { Name = name, Path = path, IsSystemIcon = !desktopFile });
+            }
+            catch (Exception ex) { issues.Skip(item.Path, ex); }
+        }
         return result;
     }
     public static string ShortcutIdentity(string name, string target, string arguments, string directory) =>
