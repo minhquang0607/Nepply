@@ -207,8 +207,8 @@ Không chặn việc xin chữ ký, có thể làm song song từ giai đoạn 4
 - [x] **[AI]** Mở mục Desktop không chặn luồng giao diện, để shortcut trỏ tới ổ mạng mất kết nối không làm panel đơ.
 - [x] **[Cả hai]** Chạy bài đo dài 24 giờ (`pwsh scripts/Run-UiSoak.ps1`), máy phải bật suốt thời gian đo, rồi phân tích CPU, RAM, handle. Hoàn tất ngày 03/11/2026 (`86406,9` giây, `2867` mẫu, `28836` lượt đọc chỉ số Windows, `ExitCode=0`, `LoopsStopped=true`, máy không ngủ): không có dấu hiệu rò rỉ trong phạm vi bài đo — RAM riêng giữ trong dải `79,8–96,0` MB (trung bình giờ 1–6: `86,5` MB, giờ 18–24: `89,2` MB; working set giảm từ `74,5` xuống `55,8` MB), managed heap `4,1–10,2` MB, handle dao động `729–931` và vẫn lùi về đáy `775–778` ở giờ 20–23, GDI cố định `26`, USER `27–32`, số luồng `17–25` sau khởi động. CPU khi ẩn `0,054%` một nhân logic; khi mở khoảng `17%` một nhân logic lúc màn hình bật (chủ yếu ở luồng render hiệu ứng sweep/glow) và dưới `1%` lúc màn hình tắt. Phạm vi: panel WPF ở chế độ `preview` với 500 mục giả, có đọc chỉ số Windows thật, nhưng không có sensor phần cứng, watcher, tiến trình quét, guardian hay polling con trỏ. Đây không phải nghiệm thu toàn app.
 - [ ] **[Cả hai]** Chạy bài đo 24 giờ trên app thật, có sensor, watcher và guardian, icon Desktop đang ẩn: handle, GDI và số tiến trình con không tăng dần. Cần viết script đo trước.
-- [x] **[AI]** Gắn các test trên Explorer thật vào quy trình bằng `scripts/Test-DesktopRuntime.ps1`, thêm test tương đương cho `WindowDesktopVisibility` của bản Store. CI chỉ chạy `scripts/Test-DesktopRuntimeContract.ps1`, không đụng Desktop. Đã qua kiểm tra quy tắc và chạy khô, chưa chạy thật lần nào.
-- [ ] **[Bạn]** Chạy thật lần đầu: đóng Nepply, build Release, rồi chạy `pwsh scripts/Test-DesktopRuntime.ps1 -Live` trong một cửa sổ terminal. Script ẩn icon nhiều lần và khởi động lại Explorer hai lần. Đây là lần đầu các test này chạy qua script, nên có thể lộ lỗi.
+- [x] **[AI]** Gắn các test trên Explorer thật vào quy trình bằng `scripts/Test-DesktopRuntime.ps1`, thêm test tương đương cho `WindowDesktopVisibility` của bản Store. CI chỉ chạy `scripts/Test-DesktopRuntimeContract.ps1`, không đụng Desktop. Đã qua kiểm tra quy tắc và chạy khô. Lần chạy thật đầu tiên ghi ở mục dưới.
+- [x] **[Bạn]** Chạy thật lần đầu: chủ dự án đã chạy `pwsh scripts/Test-DesktopRuntime.ps1 -Live` ngày 05/11/2026 trên `b48a465`, Windows build 26300.9818. Đạt cả sáu chặng, không chặng nào phải cứu icon. Kết quả này không tính cho `a42b850` hay commit sau: nó chạy trước khi rebase, nên chưa gồm thay đổi guardian của PR #14 và thay đổi quét Desktop của PR #15. Đường khôi phục của script (`ShowThrough*`, mã thoát 3) chưa được thử thật, vì chưa chặng nào cần tới. Vẫn phải chạy lại trên commit sẽ gắn tag, theo mục ở Giai đoạn 9.
 - [x] **[AI]** Rà trợ năng bằng test tự động trên cây giao diện thật: mọi nút, ô nhập, thanh trượt và danh sách trong Cài đặt, màn chào, panel và các hộp thoại đều có tên cho trình đọc màn hình và đi tới được bằng bàn phím. Đã sửa ô Hiệu ứng chuyển động thiếu tên. Giao diện High Contrast đã có test sẵn.
 - [ ] **[Bạn]** Thử thật với Narrator và chế độ tương phản cao của Windows, vì test tự động không thay được việc nghe thử.
 - [ ] **[Bạn]** Nhờ người bản ngữ duyệt bản dịch Nhật, Đức, Trung, Nga, Pháp, Thái, cả app lẫn bộ cài.
@@ -251,10 +251,11 @@ Với bản Store: cài từ Store, thử mở panel, monitor, ẩn icon, tự k
 
 ### Nhật ký test trên Explorer thật
 
-Mỗi lần chạy cho một tag, chép vào đây dòng `scripts/Test-DesktopRuntime.ps1` in ra, trong commit sau tag. Giữ thư mục `artifacts/desktop-runtime/<tag>/`, vì `artifacts` không được commit. Chưa chạy thật lần nào.
+Mỗi lần chạy cho một tag, chép vào đây dòng `scripts/Test-DesktopRuntime.ps1` in ra, trong commit sau tag. Giữ thư mục `artifacts/desktop-runtime/<tag>/`, vì `artifacts` không được commit. Dòng không có tag là lần chạy thử, không thay cho lần chạy trước tag.
 
 | Tag | Ngày | Commit | Windows | Kết quả | SHA-256 của `summary.json` |
 |---|---|---|---|---|---|
+| - | 2026-11-05 | `b48a465` | 26300.9818 | PASS | `5C2EAA4D451567722A5B66AC45F04C9CDEFA8AF2CD34146B5E97BFF6ABD29EA7` |
 
 ## Giai đoạn 10. Trả nợ kỹ thuật sau 2.0.0
 
