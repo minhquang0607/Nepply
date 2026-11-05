@@ -1,0 +1,24 @@
+# CodeQL configuration for Nepply. It runs the full security-and-quality suite
+# minus the rules below, which report what the project does by design rather than
+# defects. Every excluded rule is a quality rule: none has a security-severity or
+# a security tag. Never add a security query here; dismiss a false positive on the
+# alert instead, so the reason stays on record.
+name: Nepply CodeQL
+queries:
+  - uses: security-and-quality
+query-filters:
+  # Nepply is a Win32 desktop tool. These report every P/Invoke declaration and
+  # every call to one, correct or not; there is no managed replacement to move to.
+  - exclude:
+      id: cs/unmanaged-code
+  - exclude:
+      id: cs/call-to-unmanaged-code
+  # Reports every Path.Combine call. Later arguments here are constants, GUIDs or
+  # allow-listed names, and test fixtures. Untrusted paths stay covered by the
+  # security queries such as cs/path-injection and cs/zipslip.
+  - exclude:
+      id: cs/path-combine
+  # Reports every == or != on a float. Those in src compare exact copies, clamped
+  # results or sentinels; those in tests assert deterministic values.
+  - exclude:
+      id: cs/equality-on-floats
