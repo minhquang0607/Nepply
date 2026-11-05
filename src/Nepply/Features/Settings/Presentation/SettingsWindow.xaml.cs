@@ -461,7 +461,7 @@ public partial class SettingsWindow : Window
     }
     private void ImportLayout_Click(object sender, RoutedEventArgs e)
     {
-        var dialog = new Microsoft.Win32.OpenFileDialog { Filter = Services.LocalizationService.Get("LayoutFileType") + "|*.nepply-layout;*.hoverbox-layout", Title = Services.LocalizationService.Get("ImportLayoutTitle") };
+        var dialog = new Microsoft.Win32.OpenFileDialog { Filter = Services.LocalizationService.Get("LayoutFileType") + "|*.nepply-layout", Title = Services.LocalizationService.Get("ImportLayoutTitle") };
         if (dialog.ShowDialog(this) != true) return;
         try
         {

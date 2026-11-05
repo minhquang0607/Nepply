@@ -4,6 +4,11 @@
 
 ## Unreleased
 
+### Upgrading from 2.0.0-rc.1
+
+- **Uninstall `2.0.0-rc.1` before installing this version.** The session locks and the Desktop icon recovery marker now use the Nepply name, so this version cannot see a running rc.1 or icons that rc.1 hid. Settings in `%APPDATA%\Nepply` carry over unless you choose to remove data during uninstall.
+- Removed migration from the previous product name: its settings, startup entries, shortcuts and layout files are no longer imported.
+
 ### Microsoft Store edition
 
 - Preparing a Microsoft Store edition: Microsoft signs the package after certification and the Store updates it. This edition still hides Desktop icons, but it hides the icon window instead of changing a Windows setting, so removing the app leaves nothing behind. It does not check GitHub for updates. Setup and portable are unchanged.

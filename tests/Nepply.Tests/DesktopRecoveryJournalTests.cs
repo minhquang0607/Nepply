@@ -6,14 +6,14 @@ internal static class DesktopRecoveryJournalTests
     internal static void Run(string output, Action<string, bool> check)
     {
         string root = Path.Combine(output, "recovery-journal-" + Guid.NewGuid().ToString("N"));
-        string folder = Path.Combine(root, "HoverBox"); Directory.CreateDirectory(folder);
+        string folder = Path.Combine(root, "Nepply"); Directory.CreateDirectory(folder);
         string path = Path.Combine(folder, "desktop-visibility.lease");
         check("Journal accepts fixed recovery name below allowed root", DesktopRecoveryJournal.IsAllowedPath(path, root));
-        check("Journal rejects sibling prefix path", !DesktopRecoveryJournal.IsAllowedPath(Path.Combine(root + "-other", "HoverBox", "desktop-visibility.lease"), root));
-        check("Journal rejects traversal outside root", !DesktopRecoveryJournal.IsAllowedPath(Path.Combine(root, "..", "other", "HoverBox", "desktop-visibility.lease"), root));
+        check("Journal rejects sibling prefix path", !DesktopRecoveryJournal.IsAllowedPath(Path.Combine(root + "-other", "Nepply", "desktop-visibility.lease"), root));
+        check("Journal rejects traversal outside root", !DesktopRecoveryJournal.IsAllowedPath(Path.Combine(root, "..", "other", "Nepply", "desktop-visibility.lease"), root));
         check("Journal rejects arbitrary filename", !DesktopRecoveryJournal.IsAllowedPath(Path.Combine(folder, "settings.json"), root));
         check("Journal rejects the fixed name in another folder", !DesktopRecoveryJournal.IsAllowedPath(Path.Combine(root, "Other", "desktop-visibility.lease"), root));
-        check("Journal rejects relative path", !DesktopRecoveryJournal.IsAllowedPath("HoverBox/desktop-visibility.lease", root));
+        check("Journal rejects relative path", !DesktopRecoveryJournal.IsAllowedPath("Nepply/desktop-visibility.lease", root));
         File.WriteAllText(path, "restore-visible-v1");
         bool visible = true; Guid generation = Guid.NewGuid();
         var session = new DesktopRecoverySession(generation, () => visible, () => { visible = true; return true; });

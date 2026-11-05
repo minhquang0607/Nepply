@@ -49,17 +49,17 @@ $checks=[ordered]@{
     'Fallback only toggles a lease Nepply wrote'=$fallback.Contains('(Marker <> DesktopLeaseMarker)') -and $source.Contains("DesktopLeaseMarker = 'restore-visible-v1';")
     'Fallback toggles only while hidden and verifies'=$native.Contains('if not IsWindowVisible(List) then') -and $native.Contains('PostMessage(View, $0111, $7402, 0)') -and $native.Contains('Result := IsWindowVisible(List);')
     'Failed recovery resets persisted HideIcons'=$source.Contains("RegWriteDWordValue(HKCU, ExplorerAdvancedKey, 'HideIcons', 0)") -and $uninstall.Contains('ClearPersistedHiddenDesktop();') -and $prepare.Contains('ClearPersistedHiddenDesktop();')
-    'Recovery only applies to owned journal'=$source.Contains("DesktopLease = '{localappdata}\HoverBox\desktop-visibility.lease';")
+    'Recovery only applies to owned journal'=$source.Contains("DesktopLease = '{localappdata}\Nepply\desktop-visibility.lease';")
     'Manifest and optional symbols are both packaged'=$source.Contains('release-manifest.json') -and $source.Contains('*.pdb')
     'Guardian executable is required in its own directory'=$source.Contains('Source: "{#PayloadRoot}\guardian\Nepply.DesktopGuardian.exe"; DestDir: "{app}\guardian"; Flags: ignoreversion')
     'Startup cleanup checks ownership'=$source.Contains('CompareText(CurrentCommand, OwnedCommand) = 0')
-    'Update waits for normal exit without killing app'=$source.Contains("CheckForMutexes('Local\HoverBox-SetupGuard')") -and $source.Contains('Attempts < 600') -and $source.Contains('CloseApplications=no')
+    'Update waits for normal exit without killing app'=$source.Contains("CheckForMutexes('Local\Nepply-SetupGuard')") -and $source.Contains('Attempts < 600') -and $source.Contains('CloseApplications=no')
     'Upgrade recovery runs before copying'=$prepare.Contains('RunAppRecovery(RecoveryExitCode)') -and $prepare.Contains('RecoverDesktopWithoutApp()')
     'Running app still blocks upgrade'=$prepare.Contains('if RecoveryExitCode = RecoveryAppRunning then') -and $prepare.Contains("CustomMessage('UpgradeAppRunning')") -and $messages['en']['UpgradeAppRunning'].Contains('No update was installed.')
     'Setup always offers the language choice'=$source -match '(?m)^ShowLanguageDialog=yes\s*$'
     'Every Setup language hands its own code to the app'=@($messages.Keys | Where-Object { $messages[$_]['LanguageId'] -cne $_ }).Count -eq 0
     'Removing user data is opt-in, defaults to No and skips silent runs'=$source.Contains("(not UninstallSilent()) and (MsgBox(CustomMessage('UninstallRemoveData'), mbConfirmation, MB_YESNO or MB_DEFBUTTON2) = IDYES)")
-    'Legacy Desktop lease survives data removal'=$source.Contains("DelTree(ExpandConstant('{localappdata}\HoverBox\Logs')") -and -not $source.Contains("DelTree(ExpandConstant('{localappdata}\HoverBox')")
+    'Desktop lease survives data removal'=$source.Contains("if FileExists(ExpandConstant(DesktopLease)) then") -and $source.Contains("DelTree(ExpandConstant('{localappdata}\Nepply\Logs')") -and $source.Contains("DelTree(ExpandConstant('{localappdata}\Nepply\Updates')")
     'Every Setup language shows only its own notice'=$noticeFiles.Count -eq $languageFiles.Count -and $notices.Count -eq $languageFiles.Count -and
         -not ($source -match '(?m)^InfoBeforeFile=') -and
         @($notices.Values | Where-Object { -not $_.Contains('https://github.com/minhquang0607/Nepply/releases') -or -not $_.Contains('LICENSE') }).Count -eq 0 -and

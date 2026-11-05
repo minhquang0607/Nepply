@@ -25,9 +25,9 @@ Helper Desktop và cảm biến trao đổi với giao diện qua named pipe c�
 
 ## Dữ liệu được lưu
 
-Cấu hình ở `%APPDATA%/Nepply` có thể chứa lựa chọn giao diện, hotkey, ID màn hình/network/GPU, thứ tự widget và đường dẫn các icon đã sắp xếp. File xuất `.nepply-layout` chỉ chứa phần trình bày; không xuất đường dẫn icon, ID thiết bị, tự khởi động hoặc trạng thái ẩn Desktop. Lần chạy đầu có thể nhập cấu hình từ `%APPDATA%/HoverBox`; bản gốc không bị xóa hoặc ghi đè. File bố cục `.hoverbox-layout` vẫn nhập được.
+Cấu hình ở `%APPDATA%/Nepply` có thể chứa lựa chọn giao diện, hotkey, ID màn hình/network/GPU, thứ tự widget và đường dẫn các icon đã sắp xếp. File xuất `.nepply-layout` chỉ chứa phần trình bày; không xuất đường dẫn icon, ID thiết bị, tự khởi động hoặc trạng thái ẩn Desktop.
 
-Nhật ký ở `%LOCALAPPDATA%/Nepply/Logs`. Dấu khôi phục Desktop giữ đường dẫn `%LOCALAPPDATA%/HoverBox/desktop-visibility.lease` để tương thích bản cũ. Nhật ký lỗi có thể chứa tên thiết bị, đường dẫn, tên tài khoản xuất hiện trong đường dẫn và nội dung exception. Mỗi vai trò tiến trình giữ một file tối đa khoảng 5 MiB cùng tối đa ba bản xoay vòng, khoảng 20 MiB mỗi vai trò. Queue log trong bộ nhớ có giới hạn và bỏ bản ghi cũ khi đầy.
+Nhật ký ở `%LOCALAPPDATA%/Nepply/Logs`. Dấu khôi phục Desktop ở `%LOCALAPPDATA%/Nepply/desktop-visibility.lease`. Nhật ký lỗi có thể chứa tên thiết bị, đường dẫn, tên tài khoản xuất hiện trong đường dẫn và nội dung exception. Mỗi vai trò tiến trình giữ một file tối đa khoảng 5 MiB cùng tối đa ba bản xoay vòng, khoảng 20 MiB mỗi vai trò. Queue log trong bộ nhớ có giới hạn và bỏ bản ghi cũ khi đầy.
 
 Monitor dùng số đo mới nhất, không ghi lịch sử cảm biến thành cơ sở dữ liệu. Báo cáo chẩn đoán cảm biến chỉ được tạo khi người dùng mở cửa sổ; thao tác Sao chép mới đặt nội dung cho phép vào clipboard. Báo cáo loại trừ đường dẫn Desktop, tên mạng, nhãn ổ, ID thiết bị và log thô nhưng vẫn có tên phần cứng để hỗ trợ chẩn đoán.
 
@@ -73,9 +73,9 @@ Desktop and sensor helpers communicate through local named pipes restricted to t
 
 ### Stored data
 
-`%APPDATA%/Nepply` settings may include appearance preferences, hotkeys, display/network/GPU IDs, widget order and paths of arranged icons. Exported `.nepply-layout` files contain presentation settings only, not icon paths, device IDs, startup or Desktop-hiding state. First launch may import `%APPDATA%/HoverBox` settings without deleting or overwriting the original. Legacy `.hoverbox-layout` files remain importable.
+`%APPDATA%/Nepply` settings may include appearance preferences, hotkeys, display/network/GPU IDs, widget order and paths of arranged icons. Exported `.nepply-layout` files contain presentation settings only, not icon paths, device IDs, startup or Desktop-hiding state.
 
-Logs are in `%LOCALAPPDATA%/Nepply/Logs`. The Desktop recovery marker retains `%LOCALAPPDATA%/HoverBox/desktop-visibility.lease` for compatibility. Error logs may include device names, paths, account names within paths and exception text. Each process role keeps one file of about 5 MiB and up to three rotated copies, about 20 MiB per role. The in-memory queue is bounded and drops older entries when full.
+Logs are in `%LOCALAPPDATA%/Nepply/Logs`. The Desktop recovery marker is `%LOCALAPPDATA%/Nepply/desktop-visibility.lease`. Error logs may include device names, paths, account names within paths and exception text. Each process role keeps one file of about 5 MiB and up to three rotated copies, about 20 MiB per role. The in-memory queue is bounded and drops older entries when full.
 
 Monitoring retains the latest readings, not a sensor-history database. Sensor diagnostic reports are generated when their window is opened; only Copy places the allowed content on the clipboard. Reports exclude Desktop paths, network names, drive labels, device IDs and raw logs, but retain hardware names for troubleshooting.
 

@@ -18,7 +18,6 @@ internal static class BrandUiTests
             try
             {
                 check("Brand icon resolves for " + window.GetType().Name, window.Icon != null);
-                check("No stale title for " + window.GetType().Name, !window.Title.Contains("HoverBox", StringComparison.OrdinalIgnoreCase));
                 if (window is SettingsWindow settings)
                 {
                     var diagnostics = (FrameworkElement)settings.FindName("DeveloperDiagnostics");

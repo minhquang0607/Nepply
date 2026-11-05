@@ -18,7 +18,7 @@ Snapshot membership ổn định không có nghĩa model chứa ImageSource là 
 
 ## Desktop visibility và shutdown
 
-`Visibility` quản lý lease/journal và kết nối Guardian. `Nepply.DesktopGuardian` là helper riêng cho phục hồi, không phải dịch vụ tự đăng ký chạy thường trực. Định danh HoverBox còn giữ ở mutex/journal để các bản không cùng chiếm Desktop.
+`Visibility` quản lý lease/journal và kết nối Guardian. `Nepply.DesktopGuardian` là helper riêng cho phục hồi, không phải dịch vụ tự đăng ký chạy thường trực.
 
 `WindowServices` sở hữu dịch vụ Desktop/monitor, được chuyển quyền sở hữu cho MainWindow. Host tháo subscriptions/view trước khi dispose scope. `CleanupSequence` tiếp tục cleanup khi một bước lỗi. Không khẳng định phục hồi được nếu cả app/helper bị dừng hoặc Explorer không hoạt động.
 

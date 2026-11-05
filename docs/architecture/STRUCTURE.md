@@ -30,7 +30,7 @@ Nepply là modular monolith WPF: một assembly ứng dụng, nhóm mã theo tí
 
 Phiên bản hiện hành là `2.0.0-rc.1`. Việc nhóm file theo feature không đồng nghĩa mọi lớp đã tách trách nhiệm hoàn chỉnh; xem các boundary và giới hạn trong [MODULES.md](MODULES.md).
 
-Namespace gốc/assembly, solution, project và source dùng tên Nepply. Các namespace `Services`, `Views`, `Modules` chưa phải boundary assembly riêng. Khóa phiên chạy và journal Desktop giữ định danh HoverBox để tương thích; không đổi chúng chỉ để đồng bộ thương hiệu hoặc số phiên bản.
+Namespace gốc/assembly, solution, project và source dùng tên Nepply. Các namespace `Services`, `Views`, `Modules` chưa phải boundary assembly riêng. Khóa phiên chạy và journal Desktop cũng mang tên Nepply; không đổi chúng chỉ để đồng bộ số phiên bản.
 
 ## Quy tắc phát triển
 

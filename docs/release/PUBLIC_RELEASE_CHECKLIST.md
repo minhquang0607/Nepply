@@ -1,6 +1,6 @@
 # Kế hoạch phát hành Nepply 2.0.0
 
-Cập nhật 03/11/2026. Đây là kế hoạch duy nhất từ hiện tại đến sau bản chính thức. Làm từng giai đoạn theo thứ tự; giai đoạn sau chỉ bắt đầu khi giai đoạn trước đạt điều kiện **Xong khi**.
+Cập nhật 05/11/2026. Đây là kế hoạch duy nhất từ hiện tại đến sau bản chính thức. Làm từng giai đoạn theo thứ tự; giai đoạn sau chỉ bắt đầu khi giai đoạn trước đạt điều kiện **Xong khi**.
 
 Đánh dấu một mục khi đã hoàn tất và kiểm chứng thật, không đánh dấu theo dự đoán. **[Bạn]** là việc chỉ Minh Quang làm được (tài khoản, duyệt, máy thật); **[AI]** là việc code hoặc tài liệu trong repo do đội ngũ AI (Codex, Claude) làm; **[Cả hai]** cần phối hợp.
 
@@ -43,7 +43,7 @@ Kết quả rà 30/10/2026: build từ clone sạch đạt; cấy 20 lỗi thử
 - [x] **[AI]** Màn chào: giữ ngôn ngữ đang xem trước khi Windows đổi cài đặt giao diện. Trước đây `PreferenceChanged` áp lại ngôn ngữ đã lưu.
 - [x] **[AI]** Thêm timeout cho từng nhóm test, báo đúng vị trí bị treo. Trước đây CI chờ hết 20 phút mà không biết test nào hỏng.
 - [x] **[AI]** Sửa test giới hạn kích thước file cài đặt: dùng JSON hợp lệ quá 2 MiB, vì test cũ đạt nhờ lỗi parse.
-- [x] **[AI]** Thêm test `IsAllowedPath` từ chối thư mục khác `HoverBox`.
+- [x] **[AI]** Thêm test `IsAllowedPath` từ chối thư mục khác `Nepply`.
 - [x] **[AI]** Tách phần tải bản cập nhật để test tự động được checksum, kích thước và redirect mà không cần chữ ký thật.
 - [x] **[AI]** Bật `ContinuousIntegrationBuild` trên CI để build tái lập được ở mọi thư mục.
 - [x] **[AI]** Chuyển các test logic thuần về bộ core. Một số test trước đây CI không chạy ở bộ nào.
@@ -121,7 +121,7 @@ Nguyên nhân: khi ẩn, app bỏ mốc đo CPU và mạng nên lần đọc đ�
 
 - [x] **[AI]** Luôn hỏi ngôn ngữ khi mở Setup (`ShowLanguageDialog=yes`), chọn sẵn theo Windows. Setup ghi lựa chọn vào `HKCU\Software\Nepply\Setup`, app đọc một lần ở lần chạy sau; đã chọn ngôn ngữ trong app thì cài lại không đè.
 - [x] **[AI]** Làm bộ cài mang nhận diện Nepply: giao diện tối, ảnh từ biểu tượng app, trang chào, lời chào và trang kết thúc riêng ở 8 ngôn ngữ (AI tự dịch), tùy chọn khởi động cùng Windows. Đã xem thật các trang tới bước tác vụ bằng tiếng Việt; Setup vẫn 78,2 MB.
-- [x] **[AI]** Khi gỡ, hỏi có xóa luôn cài đặt và nhật ký không; mặc định giữ lại, bản gỡ im lặng không xóa. Luôn dọn `%TEMP%\.net\Nepply`. Dấu khôi phục Desktop trong `HoverBox` luôn được giữ. Chưa chạy thật toàn bộ luồng cài và gỡ, việc này nằm ở bước nghiệm thu.
+- [x] **[AI]** Khi gỡ, hỏi có xóa luôn cài đặt và nhật ký không; mặc định giữ lại, bản gỡ im lặng không xóa. Luôn dọn `%TEMP%\.net\Nepply`. Dấu khôi phục Desktop luôn được giữ. Chưa chạy thật toàn bộ luồng cài và gỡ, việc này nằm ở bước nghiệm thu.
 
 ### Thiết lập mặc định
 
@@ -275,6 +275,6 @@ Làm dần, mỗi mục một PR riêng. Không gộp với thay đổi tính n�
 
 - [ ] **[Cả hai]** Đưa Nepply lên winget sau khi có bản ký.
 - [ ] **[AI]** Khi Inno Setup trong `release.yml` đổi phiên bản, đối chiếu `packaging/inno/Languages/Vietnamese.isl` với `Default.isl` mới.
-- [ ] **[AI]** Bỏ dần tên legacy `HoverBox` (mutex `Local\HoverBox-SetupGuard`, thư mục `%LOCALAPPDATA%\HoverBox`) sau khi không còn người dùng bản cũ; giữ ít nhất một bản phát hành có migration.
+- [x] **[AI]** Bỏ hẳn tên sản phẩm cũ khỏi mutex, thư mục dữ liệu, bộ cài và tài liệu, theo quyết định của chủ dự án ngày 05/11/2026. Không giữ migration: ai đang dùng `2.0.0-rc.1` phải gỡ bản đó trước khi cài bản mới; ghi rõ điều này trong ghi chú phát hành `2.0.0`.
 - [ ] **[Bạn]** Ký mọi bản bằng cùng chứng thư: uy tín SmartScreen tăng dần theo lượt tải của cùng chứng thư.
 - [ ] **[Bạn]** Nếu nhận donate: kiểm lại điều kiện giấy phép thương mại của Inno Setup.

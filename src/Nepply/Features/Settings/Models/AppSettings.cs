@@ -146,8 +146,7 @@ public sealed class AppSettings
     private static double ValidPercent(double value) => double.IsFinite(value) ? Math.Clamp(value, 0, 100) : 0;
     // Language is the user's reading choice, not a look-and-feel preference: keep it.
     public void ResetToDefaults() => CopyFrom(new AppSettings { HasCompletedOnboarding = HasCompletedOnboarding, Language = Language });
-    private static Services.SettingsStore Store = new(SettingsPath,
-        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ProductIdentity.LegacyName, "settings.json"));
+    private static Services.SettingsStore Store = new(SettingsPath);
     internal static void UseTestSettingsStore(string path) => Store = new(path);
     [JsonIgnore] public static UserMessage? RecoveryNotice => Store.RecoveryNotice;
     public void Save() => Store.Save(this);

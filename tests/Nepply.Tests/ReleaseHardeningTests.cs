@@ -44,7 +44,7 @@ internal static class ReleaseHardeningTests
 
     public static void Run(string output, Action<string, bool> check)
     {
-        BrandMigrationTests.Run(output, check);
+        BrandIdentityTests.Run(output, check);
         SearchSessionTests.Run(check);
         PanelGeometryTests.Run(check);
         LayoutEditSessionTests.Run(check);
@@ -74,7 +74,6 @@ internal static class ReleaseHardeningTests
         check("Unquoted Startup Run command is not claimed", !AutoStartService.MatchesRunCommand(@"C:\Apps\Nepply.exe", @"C:\Apps\Nepply.exe"));
         Func<string, bool> missing = _ => false, present = _ => true, fixedDrive = _ => true, offlineDrive = _ => false;
         check("Dead Startup Run entry of moved copy can be retired", AutoStartService.IsDeadRunCommand("\"D:\\Old\\Nepply.exe\"", "Nepply.exe", missing, fixedDrive));
-        check("Dead legacy Startup Run entry can be retired", AutoStartService.IsDeadRunCommand("\"D:\\Old\\HoverBox.exe\"", "HoverBox.exe", missing, fixedDrive));
         check("Live Startup Run entry of another copy is preserved", !AutoStartService.IsDeadRunCommand("\"D:\\Other\\Nepply.exe\"", "Nepply.exe", present, fixedDrive));
         check("Startup Run entry on offline or removable drive is preserved", !AutoStartService.IsDeadRunCommand("\"E:\\Usb\\Nepply.exe\"", "Nepply.exe", missing, offlineDrive));
         check("Startup Run entry on network share is preserved", !AutoStartService.IsDeadRunCommand("\"\\\\server\\apps\\Nepply.exe\"", "Nepply.exe", missing, fixedDrive));

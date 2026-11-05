@@ -8,7 +8,7 @@ internal static class ProductionGuardianCrashTests
     internal static int Owner(string root, string executable) => OwnerAsync(root, executable).GetAwaiter().GetResult();
     private static async Task<int> OwnerAsync(string root, string executable)
     {
-        string journal = Path.Combine(root, "HoverBox", "desktop-visibility.lease");
+        string journal = Path.Combine(root, "Nepply", "desktop-visibility.lease");
         var desktop = new ExplorerDesktopVisibility();
         var lease = new DesktopVisibilityLease(desktop, journal);
         DesktopGuardianConnection? connection = null;
@@ -37,7 +37,7 @@ internal static class ProductionGuardianCrashTests
     {
         string root = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "Nepply-Guardian-QA", Guid.NewGuid().ToString("N"));
-        string journal = Path.Combine(root, "HoverBox", "desktop-visibility.lease");
+        string journal = Path.Combine(root, "Nepply", "desktop-visibility.lease");
         var desktop = new ExplorerDesktopVisibility();
         bool? initial = desktop.IsVisible();
         bool hidden = false, killed = false, recovered = false, rescue = false;
@@ -46,7 +46,7 @@ internal static class ProductionGuardianCrashTests
         try
         {
             if (initial != true || File.Exists(DesktopVisibilityLease.JournalPath)) throw new IOException("Desktop not available for isolated QA.");
-            foreach (string name in new[] { "Nepply", "HoverBox", "Nepply.DesktopGuardian" })
+            foreach (string name in new[] { "Nepply", "Nepply.DesktopGuardian" })
             {
                 var processes = Process.GetProcessesByName(name);
                 try { if (processes.Length > 0) throw new IOException("Close existing application before QA."); }

@@ -59,9 +59,9 @@ Nếu kiểm tra cập nhật báo lỗi, kiểm tra kết nối Internet rồi 
 
 Trong Cài đặt, chọn **Mặc định**, kiểm tra các tùy chọn rồi bấm **Áp dụng** hoặc **OK** để lưu. Nếu chưa muốn lưu, chọn **Hủy**.
 
-Nếu cần sao lưu trước, thoát app rồi sao chép `%APPDATA%\Nepply\settings.json` sang nơi riêng. Không chỉ xóa file này để đặt lại: app có thể phục hồi từ bản `.bak` hoặc nhập cấu hình HoverBox cũ. Nếu Cài đặt không mở được, hãy báo lỗi trước khi tự xóa các file khôi phục.
+Nếu cần sao lưu trước, thoát app rồi sao chép `%APPDATA%\Nepply\settings.json` sang nơi riêng. Không chỉ xóa file này để đặt lại: app có thể phục hồi từ bản `.bak`. Nếu Cài đặt không mở được, hãy báo lỗi trước khi tự xóa các file khôi phục.
 
-Nhật ký ở `%LOCALAPPDATA%\Nepply\Logs`. Không cần xóa log để đặt lại giao diện. Dấu khôi phục Desktop cũ ở `%LOCALAPPDATA%\HoverBox\desktop-visibility.lease`; không xóa file này khi icon chưa được phục hồi. Xem [quyền riêng tư](legal/PRIVACY.md) để biết dữ liệu nào được lưu và việc nhập cấu hình HoverBox cũ.
+Nhật ký ở `%LOCALAPPDATA%\Nepply\Logs`. Không cần xóa log để đặt lại giao diện. Dấu khôi phục Desktop ở `%LOCALAPPDATA%\Nepply\desktop-visibility.lease`; không xóa file này khi icon chưa được phục hồi. Xem [quyền riêng tư](legal/PRIVACY.md) để biết dữ liệu nào được lưu.
 
 ## Báo lỗi hữu ích và an toàn
 

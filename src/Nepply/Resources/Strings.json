@@ -60,10 +60,6 @@
   "RecoveryRestored": ["Đã phục hồi cấu hình từ bản dự phòng","Settings restored from backup","バックアップから設定を復元しました","Einstellungen aus Sicherung wiederhergestellt","已从备份恢复配置","Настройки восстановлены из резервной копии","Paramètres restaurés depuis la sauvegarde","กู้คืนการตั้งค่าจากข้อมูลสำรองแล้ว"],
   "RecoveryBackupNewer": ["Bản dự phòng thuộc phiên bản mới hơn · giữ nguyên để tránh mất cấu hình","Backup belongs to a newer version · preserved to prevent settings loss","バックアップは新しいバージョンのものです · 設定の消失を防ぐため保持します","Sicherung einer neueren Version · bleibt erhalten, um Datenverlust zu vermeiden","备份来自较新版本 · 保留备份以防配置丢失","Резервная копия от более новой версии · сохранена во избежание потери настроек","Sauvegarde d’une version plus récente · conservée pour éviter toute perte de paramètres","ข้อมูลสำรองมาจากเวอร์ชันใหม่กว่า · เก็บไว้เพื่อป้องกันการสูญเสียการตั้งค่า"],
   "RecoveryUnreadable": ["Không đọc được cấu hình · dùng mặc định, giữ file lỗi để kiểm tra","Could not read settings · using defaults, damaged file kept for inspection","設定を読み取れませんでした · 既定値を使用し、問題のファイルを確認用に保持します","Einstellungen nicht lesbar · Standardwerte werden verwendet, fehlerhafte Datei bleibt zur Prüfung erhalten","无法读取配置 · 使用默认值并保留问题文件以供检查","Не удалось прочитать настройки · используются значения по умолчанию, проблемный файл сохранён для проверки","Impossible de lire les paramètres · valeurs par défaut utilisées, fichier défectueux conservé pour inspection","อ่านการตั้งค่าไม่ได้ · ใช้ค่าเริ่มต้นและเก็บไฟล์ที่มีปัญหาไว้ตรวจสอบ"],
-  "RecoveryLegacyNewer": ["Cấu hình HoverBox thuộc phiên bản mới hơn · giữ nguyên dữ liệu, chưa nhập vào Nepply","HoverBox settings belong to a newer version · data preserved, not imported into Nepply","HoverBox の設定は新しいバージョンのものです · データを保持し、Nepply にはまだ取り込んでいません","HoverBox-Einstellungen einer neueren Version · Daten bleiben erhalten, kein Import in Nepply","HoverBox 配置来自较新版本 · 保留数据，未导入 Nepply","Настройки HoverBox от более новой версии · данные сохранены, импорт в Nepply не выполнен","Paramètres HoverBox d’une version plus récente · données conservées, non importées dans Nepply","การตั้งค่า HoverBox มาจากเวอร์ชันใหม่กว่า · เก็บข้อมูลไว้และยังไม่นำเข้า Nepply"],
-  "RecoveryLegacyUnreadable": ["Không đọc được cấu hình HoverBox · giữ nguyên file cũ để kiểm tra","Could not read HoverBox settings · old file preserved for inspection","HoverBox の設定を読み取れませんでした · 古いファイルを確認用に保持します","HoverBox-Einstellungen nicht lesbar · alte Datei bleibt zur Prüfung erhalten","无法读取 HoverBox 配置 · 保留旧文件以供检查","Не удалось прочитать настройки HoverBox · старый файл сохранён для проверки","Impossible de lire les paramètres HoverBox · ancien fichier conservé pour inspection","อ่านการตั้งค่า HoverBox ไม่ได้ · เก็บไฟล์เดิมไว้ตรวจสอบ"],
-  "RecoveryLegacyImported": ["Đã chuyển cấu hình HoverBox sang Nepply · bản gốc được giữ nguyên","HoverBox settings imported into Nepply · original preserved","HoverBox の設定を Nepply に取り込みました · 元のファイルは保持されています","HoverBox-Einstellungen in Nepply importiert · Original bleibt erhalten","已将 HoverBox 配置导入 Nepply · 保留原文件","Настройки HoverBox импортированы в Nepply · оригинал сохранён","Paramètres HoverBox importés dans Nepply · original conservé","นำเข้าการตั้งค่า HoverBox ไปยัง Nepply แล้ว · เก็บต้นฉบับไว้"],
-  "RecoveryLegacyUnsaved": ["Đang dùng cấu hình HoverBox · chưa ghi được bản Nepply, dữ liệu gốc vẫn được giữ nguyên","Using HoverBox settings · could not save the Nepply copy, original data preserved","HoverBox の設定を使用中です · Nepply 用のコピーを保存できませんでしたが、元のデータは保持されています","HoverBox-Einstellungen werden verwendet · Nepply-Kopie konnte nicht gespeichert werden, Originaldaten bleiben erhalten","正在使用 HoverBox 配置 · 未能保存 Nepply 副本，原数据仍保留","Используются настройки HoverBox · не удалось сохранить копию Nepply, исходные данные сохранены","Paramètres HoverBox utilisés · impossible d’enregistrer la copie Nepply, données originales conservées","กำลังใช้การตั้งค่า HoverBox · บันทึกสำเนา Nepply ไม่ได้ แต่ยังเก็บข้อมูลต้นฉบับไว้"],
   "AutoStartUpdateError": [
     "Không thể cập nhật khởi động cùng Windows",
     "Could not update startup with Windows",
@@ -94,25 +90,15 @@
     "Windows a désactivé le démarrage automatique de Nepply. Réactivez-le dans le Gestionnaire des tâches, onglet Applications de démarrage, ou dans Paramètres Windows → Applications → Démarrage.",
     "Windows ปิดการเริ่มอัตโนมัติของ Nepply อยู่ เปิดได้ที่ตัวจัดการงาน > แอปเริ่มต้น หรือการตั้งค่า Windows > แอป > เริ่มต้น"
   ],
-  "AutoStartLegacyEntry": [
-    "Đã áp dụng khởi động Nepply. Mục HoverBox cũ trỏ tới bản khác hoặc có tùy chỉnh; hãy kiểm tra trong Ứng dụng khởi động của Windows.",
-    "Nepply startup settings were applied. The old HoverBox entry points to another copy or has custom options; check Windows Startup apps.",
-    "Nepply の起動設定を適用しました。以前の HoverBox 項目は別のコピーを参照しているか、独自の設定があります。Windows のスタートアップ アプリで確認してください。",
-    "Die Nepply-Autostarteinstellungen wurden angewendet. Der alte HoverBox-Eintrag verweist auf eine andere Kopie oder enthält eigene Optionen; prüfen Sie die Autostart-Apps in Windows.",
-    "已应用 Nepply 启动设置。旧 HoverBox 启动项指向另一个副本或具有自定义选项；请在 Windows 启动应用中检查。",
-    "Настройки автозапуска Nepply применены. Старая запись HoverBox указывает на другую копию или содержит особые параметры; проверьте автозагрузку приложений в Windows.",
-    "Les paramètres de démarrage de Nepply ont été appliqués. L’ancienne entrée HoverBox pointe vers une autre copie ou contient des options personnalisées ; vérifiez les applications de démarrage de Windows.",
-    "ใช้การตั้งค่าเริ่มต้นของ Nepply แล้ว รายการ HoverBox เดิมชี้ไปยังสำเนาอื่นหรือมีตัวเลือกที่กำหนดเอง โปรดตรวจสอบแอปเริ่มต้นใน Windows"
-  ],
   "AutoStartSeparateShortcut": [
-    "Có shortcut Nepply hoặc HoverBox riêng trong Startup · hãy kiểm tra mục chạy nền đó trong Windows.",
-    "A separate Nepply or HoverBox shortcut exists in Startup · check that startup entry in Windows.",
-    "スタートアップに別の Nepply または HoverBox ショートカットがあります · Windows でその起動項目を確認してください。",
-    "Im Autostart liegt eine separate Nepply- oder HoverBox-Verknüpfung · prüfen Sie diesen Eintrag in Windows.",
-    "启动文件夹中有独立的 Nepply 或 HoverBox 快捷方式 · 请在 Windows 中检查该启动项。",
-    "В автозагрузке есть отдельный ярлык Nepply или HoverBox · проверьте эту запись в Windows.",
-    "Un raccourci Nepply ou HoverBox distinct existe dans le dossier de démarrage · vérifiez cette entrée dans Windows.",
-    "มีทางลัด Nepply หรือ HoverBox แยกอยู่ใน Startup · โปรดตรวจสอบรายการเริ่มต้นนั้นใน Windows"
+    "Có shortcut Nepply riêng trong Startup · hãy kiểm tra mục chạy nền đó trong Windows.",
+    "A separate Nepply shortcut exists in Startup · check that startup entry in Windows.",
+    "スタートアップに別の Nepply ショートカットがあります · Windows でその起動項目を確認してください。",
+    "Im Autostart liegt eine separate Nepply-Verknüpfung · prüfen Sie diesen Eintrag in Windows.",
+    "启动文件夹中有独立的 Nepply 快捷方式 · 请在 Windows 中检查该启动项。",
+    "В автозагрузке есть отдельный ярлык Nepply · проверьте эту запись в Windows.",
+    "Un raccourci Nepply distinct existe dans le dossier de démarrage · vérifiez cette entrée dans Windows.",
+    "มีทางลัด Nepply แยกอยู่ใน Startup · โปรดตรวจสอบรายการเริ่มต้นนั้นใน Windows"
   ],
   "PanelPreview": [
     "Bản xem trước · không thay đổi Desktop",
@@ -517,14 +503,14 @@
     "เปิด “{0}” ไม่ได้ {1}"
   ],
   "LayoutFileType": [
-    "Bố cục Nepply / HoverBox",
-    "Nepply / HoverBox layout",
-    "Nepply / HoverBox レイアウト",
-    "Nepply-/HoverBox-Layout",
-    "Nepply / HoverBox 布局",
-    "Макет Nepply / HoverBox",
-    "Disposition Nepply / HoverBox",
-    "เค้าโครง Nepply / HoverBox"
+    "Bố cục Nepply",
+    "Nepply layout",
+    "Nepply レイアウト",
+    "Nepply-Layout",
+    "Nepply 布局",
+    "Макет Nepply",
+    "Disposition Nepply",
+    "เค้าโครง Nepply"
   ],
   "ImportLayoutTitle": [
     "Nhập bố cục",

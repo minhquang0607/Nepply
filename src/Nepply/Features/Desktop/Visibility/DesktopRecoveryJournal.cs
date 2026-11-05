@@ -10,7 +10,7 @@ internal static class DesktopRecoveryJournal
         string full = Path.GetFullPath(path), root = Path.GetFullPath(localRoot).TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar;
         return full.StartsWith(root, StringComparison.OrdinalIgnoreCase)
             && string.Equals(Path.GetFileName(full), "desktop-visibility.lease", StringComparison.OrdinalIgnoreCase)
-            && string.Equals(Path.GetFileName(Path.GetDirectoryName(full)), "HoverBox", StringComparison.OrdinalIgnoreCase);
+            && string.Equals(Path.GetFileName(Path.GetDirectoryName(full)), "Nepply", StringComparison.OrdinalIgnoreCase);
     }
 
     internal static bool HasRestoreMarker(string path)

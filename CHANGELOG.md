@@ -4,6 +4,11 @@
 
 ## Chưa phát hành
 
+### Nâng cấp từ 2.0.0-rc.1
+
+- **Hãy gỡ `2.0.0-rc.1` trước khi cài bản này.** Khóa phiên chạy và dấu khôi phục icon Desktop đã đổi sang tên Nepply, nên bản mới không nhận ra rc.1 đang chạy hoặc icon do rc.1 ẩn. Cấu hình ở `%APPDATA%\Nepply` vẫn dùng được nếu bạn không chọn xóa dữ liệu khi gỡ.
+- Bỏ phần chuyển đổi từ tên sản phẩm cũ: cấu hình, mục khởi động, shortcut và file bố cục của đời trước không còn được nhập.
+
 ### Bản Microsoft Store
 
 - Chuẩn bị bản Microsoft Store: Microsoft ký gói sau khi duyệt, cập nhật qua Store. Bản này vẫn ẩn được icon Desktop, nhưng ẩn trực tiếp cửa sổ icon thay vì đổi cài đặt Windows, nên gỡ app không để lại gì. Bản Store không kiểm tra cập nhật qua GitHub. Setup và portable giữ nguyên.
