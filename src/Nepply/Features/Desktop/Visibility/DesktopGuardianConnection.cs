@@ -13,15 +13,23 @@ internal sealed class DesktopGuardianConnection : IDesktopGuardianSession
     private readonly Process _process;
     private readonly SemaphoreSlim _commands = new(1, 1);
     private bool _mayBeArmed, _broken, _disposed;
-    private readonly Task _exit;
+    private readonly Task<int> _exit;
     public Task Exited => _exit;
+    public int? ExitCode => _exit.IsCompletedSuccessfully ? _exit.Result : null;
     internal int ProcessId => _process.Id;
 
     private DesktopGuardianConnection(NamedPipeServerStream pipe, Process process)
     {
         _pipe = pipe;
         _process = process;
-        _exit = process.WaitForExitAsync();
+        _exit = WaitForExitCodeAsync(process);
+    }
+
+    // Read before anyone can dispose the process: disposal waits for this task.
+    private static async Task<int> WaitForExitCodeAsync(Process process)
+    {
+        await process.WaitForExitAsync().ConfigureAwait(false);
+        return process.ExitCode;
     }
 
     internal static async Task<DesktopGuardianConnection> StartAsync(string verifiedExecutable, CancellationToken cancellation = default, string? journal = null)

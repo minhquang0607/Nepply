@@ -8,6 +8,10 @@
 
 - Preparing a Microsoft Store edition: Microsoft signs the package after certification and the Store updates it. This edition still hides Desktop icons, but it hides the icon window instead of changing a Windows setting, so removing the app leaves nothing behind. It does not check GitHub for updates. Setup and portable are unchanged.
 
+### Reliability
+
+- If the process that protects hidden Desktop icons stops unexpectedly, the panel now says so and the log records it with the exit code. Failed attempts to hide or restore icons are logged as well.
+
 ## 2.0.0-rc.1 — 2 November 2026
 
 First public release candidate, published **2 November 2026**, not code-signed. The list below summarizes the changes made during development.

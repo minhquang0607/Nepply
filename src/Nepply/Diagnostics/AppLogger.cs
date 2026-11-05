@@ -27,6 +27,7 @@ public static class AppLogger
     private static readonly Task _processTask;
     private static long _currentFileSize = 0;
     private static readonly string _mainLogFile;
+    internal static string LogFile => _mainLogFile;
 
     static AppLogger()
     {
@@ -62,7 +63,7 @@ public static class AppLogger
 
     public static void Info(string message) => Enqueue("INFO", message, null);
     public static void Warn(string message) => Enqueue("WARN", message, null);
-    public static void Error(Exception exception, string message) => Enqueue("ERROR", message, exception);
+    public static void Error(Exception? exception, string message) => Enqueue("ERROR", message, exception);
 
     private static void Enqueue(string level, string message, Exception? exception)
     {

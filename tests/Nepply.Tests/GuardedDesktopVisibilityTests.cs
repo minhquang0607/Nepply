@@ -3,7 +3,7 @@ using Nepply.Services;
 
 internal static class GuardedDesktopVisibilityTests
 {
-    private sealed class Desktop : IDesktopVisibility
+    internal sealed class Desktop : IDesktopVisibility
     {
         internal bool? Visible = true;
         internal bool ThrowAfterHide, FailShow;
@@ -17,11 +17,12 @@ internal static class GuardedDesktopVisibilityTests
             return true;
         }
     }
-    private sealed class Guardian(Desktop desktop) : IDesktopGuardianSession
+    internal sealed class Guardian(Desktop desktop) : IDesktopGuardianSession
     {
         internal readonly TaskCompletionSource Exit = new(TaskCreationOptions.RunContinuationsAsynchronously);
-        internal bool CanArm = true, RestoreThrows, Armed, Closed;
+        internal bool CanArm = true, RestoreThrows, CloseThrows, Armed, Closed;
         public Task Exited => Exit.Task;
+        public int? ExitCode { get; set; }
         public Task<bool> ArmAsync(CancellationToken cancellation = default) { Armed = CanArm; return Task.FromResult(CanArm); }
         public Task<bool> RestoreAsync(CancellationToken cancellation = default)
         {
@@ -32,6 +33,7 @@ internal static class GuardedDesktopVisibilityTests
         }
         public Task<bool> CloseAfterLocalRestoreAsync(Func<bool> restore)
         {
+            if (CloseThrows) throw new IOException("Injected close failure");
             if (!restore()) return Task.FromResult(false);
             Closed = true; Armed = false; Exit.TrySetResult(); return Task.FromResult(true);
         }
@@ -46,7 +48,7 @@ internal static class GuardedDesktopVisibilityTests
             var desktop = new Desktop(); var guardian = new Guardian(desktop); int starts = 0;
             string journal = Path.Combine(root, scenario + ".lease");
             var lease = new DesktopVisibilityLease(desktop, journal);
-            var flow = new GuardedDesktopVisibility(desktop, lease, () => { starts++; return Task.FromResult<IDesktopGuardianSession>(guardian); });
+            var flow = new GuardedDesktopVisibility(desktop, lease, () => { starts++; return Task.FromResult<IDesktopGuardianSession>(guardian); }, Quiet);
             if (scenario == "prehidden") desktop.Visible = false;
             if (scenario == "no-arm") guardian.CanArm = false;
             if (scenario == "hide-throws") desktop.ThrowAfterHide = true;
@@ -88,10 +90,131 @@ internal static class GuardedDesktopVisibilityTests
         var failedDesktop = new Desktop();
         var failedLease = new DesktopVisibilityLease(failedDesktop, Path.Combine(root, "startup-failed.lease"));
         var failedFlow = new GuardedDesktopVisibility(failedDesktop, failedLease,
-            () => Task.FromException<IDesktopGuardianSession>(new IOException("Injected startup failure")));
+            () => Task.FromException<IDesktopGuardianSession>(new IOException("Injected startup failure")), Quiet);
         check("Guarded startup failure never hides or claims Desktop",
             !await failedFlow.HideAsync() && failedDesktop.Hides == 0 && !failedLease.OwnsChange);
         check("Guarded startup failure still allows shutdown", await failedFlow.RestoreAsync(true));
+        await CheckReporting(root, check);
+    }
+
+    private static readonly Action<Exception?, string> Quiet = static (_, _) => { };
+
+    private sealed class Reported
+    {
+        internal readonly Desktop Desktop = new();
+        internal readonly Guardian Guardian;
+        internal readonly DesktopVisibilityLease Lease;
+        internal readonly GuardedDesktopVisibility Flow;
+        internal readonly List<(Exception? Error, string Message)> Log = [];
+        internal readonly List<bool> Exits = [];
+        internal string Text { get { lock (Log) return string.Join("\n", Log.Select(entry => entry.Message + " " + entry.Error?.Message)); } }
+        internal Reported(string root, string name, Func<Task<IDesktopGuardianSession>>? start = null)
+        {
+            Guardian = new(Desktop);
+            Lease = new(Desktop, Path.Combine(root, "reported-" + name + ".lease"));
+            Flow = new(Desktop, Lease, start ?? (() => Task.FromResult<IDesktopGuardianSession>(Guardian)),
+                (error, message) => { lock (Log) Log.Add((error, message)); });
+            Flow.GuardianExited += Exits.Add;
+        }
+        internal Task Kill(int code)
+        {
+            Guardian.ExitCode = code;
+            Guardian.Exit.TrySetResult();
+            return Flow.RecoveryObservation.WaitAsync(TimeSpan.FromSeconds(5));
+        }
+    }
+
+    // F-06: every guardian failure reaches the log, and only a guardian death reaches the panel.
+    private static async Task CheckReporting(string root, Action<string, bool> check)
+    {
+        var quiet = new Reported(root, "normal");
+        await quiet.Flow.HideAsync();
+        await quiet.Flow.RestoreAsync();
+        await quiet.Flow.RecoveryObservation;
+        check("Guarded normal hide and restore log nothing and raise nothing", quiet.Log.Count == 0 && quiet.Exits.Count == 0);
+
+        var stopped = new Reported(root, "stopped");
+        await stopped.Flow.HideAsync();
+        await stopped.Flow.RestoreAsync(true);
+        await stopped.Flow.RecoveryObservation;
+        check("Guarded app shutdown is not reported as a guardian death", stopped.Log.Count == 0 && stopped.Exits.Count == 0);
+
+        var killed = new Reported(root, "killed");
+        await killed.Flow.HideAsync();
+        await killed.Kill(-1);
+        check("Guardian death logs its exit code", killed.Text.Contains("exit code 0xFFFFFFFF"));
+        check("Guardian death logs the restored outcome", killed.Text.Contains("Guardian exited; Desktop restored."));
+        check("Guardian death raises one restored event", killed.Exits.SequenceEqual([true]) && killed.Desktop.Visible == true && !killed.Lease.OwnsChange);
+        await killed.Flow.RestoreAsync(true);
+        check("Guardian death is not raised again on shutdown", killed.Exits.Count == 1);
+
+        var unknown = new Reported(root, "unknown");
+        await unknown.Flow.HideAsync();
+        unknown.Guardian.Exit.TrySetResult();
+        await unknown.Flow.RecoveryObservation.WaitAsync(TimeSpan.FromSeconds(5));
+        check("Guardian death without an exit code still logs", unknown.Text.Contains("exit code unknown"));
+
+        var stuck = new Reported(root, "stuck");
+        await stuck.Flow.HideAsync();
+        stuck.Desktop.FailShow = true;
+        await stuck.Kill(3);
+        check("Guardian death with failed restore raises a failed event", stuck.Exits.SequenceEqual([false]) && stuck.Lease.OwnsChange && !stuck.Guardian.Closed);
+        check("Guardian death with failed restore logs the failure", stuck.Text.Contains("exit code 0x00000003") && stuck.Text.Contains("Guardian exited; Desktop restoration failed."));
+        stuck.Desktop.FailShow = false;
+        check("Guardian death with failed restore can still recover on shutdown", await stuck.Flow.RestoreAsync(true) && stuck.Desktop.Visible == true && !stuck.Lease.OwnsChange);
+
+        var broken = new Reported(root, "broken");
+        await broken.Flow.HideAsync();
+        broken.Guardian.CloseThrows = true;
+        await broken.Kill(-1);
+        check("Guardian exit recovery exception keeps its detail in the log",
+            broken.Exits.SequenceEqual([false]) && broken.Log.Any(entry => entry.Error?.Message == "Injected close failure"));
+        broken.Guardian.CloseThrows = false;
+        await broken.Flow.RestoreAsync(true);
+
+        var raced = new Reported(root, "raced");
+        await raced.Flow.HideAsync();
+        raced.Guardian.ExitCode = -1;
+        raced.Guardian.Exit.TrySetResult();
+        bool racedRestore = await raced.Flow.RestoreAsync(); // Either side may win the gate; neither may lose the report.
+        await raced.Flow.RecoveryObservation.WaitAsync(TimeSpan.FromSeconds(5));
+        check("Guardian death is logged once even when a request beats its observer",
+            racedRestore && raced.Log.Count(entry => entry.Message.Contains("exit code 0xFFFFFFFF")) == 1);
+
+        var noArm = new Reported(root, "no-arm");
+        noArm.Guardian.CanArm = false;
+        check("Guardian refusing to arm is logged", !await noArm.Flow.HideAsync() && noArm.Text.Contains("Guardian did not arm."));
+
+        var dead = new Reported(root, "dead-before-arm");
+        dead.Guardian.ExitCode = 3;
+        dead.Guardian.Exit.TrySetResult();
+        check("Guardian dying before arm logs its exit code", !await dead.Flow.HideAsync() && dead.Text.Contains("Guardian did not arm (exit code 0x00000003)."));
+        await dead.Flow.RecoveryObservation.WaitAsync(TimeSpan.FromSeconds(5));
+        check("Guardian dying before arm is a hide failure, not a guardian death", dead.Exits.Count == 0);
+
+        var throwing = new Reported(root, "hide-throws");
+        throwing.Desktop.ThrowAfterHide = true;
+        check("Native hide exception reaches the log", !await throwing.Flow.HideAsync() && throwing.Log.Any(entry => entry.Error?.Message == "Injected hide failure"));
+
+        var missing = new Reported(root, "startup", () => Task.FromException<IDesktopGuardianSession>(new IOException("Injected startup failure")));
+        check("Guardian startup exception reaches the log", !await missing.Flow.HideAsync() && missing.Log.Any(entry => entry.Error?.Message == "Injected startup failure"));
+
+        var unavailable = new Reported(root, "unavailable");
+        unavailable.Desktop.Visible = null;
+        check("Unavailable Desktop reaches the log", !await unavailable.Flow.HideAsync() && unavailable.Text.Contains("Desktop unavailable."));
+
+        var refused = new Reported(root, "restore-fails");
+        await refused.Flow.HideAsync();
+        refused.Desktop.FailShow = true;
+        check("Failed restore reaches the log", !await refused.Flow.RestoreAsync() && refused.Text.Contains("refused to restore") && refused.Text.Contains("not verified"));
+        check("Failed shutdown restore reaches the log", !await refused.Flow.RestoreAsync(true) && refused.Log.Count(entry => entry.Message.Contains("not verified")) == 2);
+        refused.Desktop.FailShow = false;
+        await refused.Flow.RestoreAsync(true);
+
+        var lost = new Reported(root, "pipe-lost");
+        await lost.Flow.HideAsync();
+        lost.Guardian.RestoreThrows = true;
+        check("Lost guardian pipe is logged although the local restore succeeds", await lost.Flow.RestoreAsync(true) && lost.Log.Any(entry => entry.Error?.Message == "Injected lost pipe"));
     }
 
     private static async Task CheckPendingStartup(string root, Action<string, bool> check, bool stopping)
@@ -102,7 +225,8 @@ internal static class GuardedDesktopVisibilityTests
         var ready = new TaskCompletionSource<IDesktopGuardianSession>(TaskCreationOptions.RunContinuationsAsynchronously);
         int starts = 0;
         var lease = new DesktopVisibilityLease(desktop, Path.Combine(root, stopping ? "pending-stop.lease" : "pending-hides.lease"));
-        var flow = new GuardedDesktopVisibility(desktop, lease, () => { starts++; started.TrySetResult(); return ready.Task; });
+        var logged = new List<string>();
+        var flow = new GuardedDesktopVisibility(desktop, lease, () => { starts++; started.TrySetResult(); return ready.Task; }, (_, message) => logged.Add(message));
         Task<bool> first = flow.HideAsync();
         await started.Task.WaitAsync(TimeSpan.FromSeconds(5));
         Task<bool>[] queued = stopping ? [flow.RestoreAsync(true)] : Enumerable.Range(0, 12).Select(_ => flow.HideAsync()).ToArray();
@@ -128,5 +252,6 @@ internal static class GuardedDesktopVisibilityTests
             check("Guarded concurrent-hide cleanup succeeds", await flow.RestoreAsync(true));
         }
         await flow.RecoveryObservation.WaitAsync(TimeSpan.FromSeconds(5));
+        check("Guarded shutdown during startup logs no failure: " + stopping, logged.Count == 0);
     }
 }
