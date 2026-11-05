@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Windows;
@@ -44,13 +43,11 @@ internal static class NativeIconGridTests
         }
         var clock = Stopwatch.StartNew();
         // Exercise the production folder reader without relaxing Desktop path guards.
-        // Reflection deliberately fails if that private boundary changes.
-        var scan = typeof(DesktopEntryReader).GetMethod("ScanFolder", BindingFlags.NonPublic | BindingFlags.Static)
-            ?? throw new MissingMethodException("DesktopEntryReader.ScanFolder");
         var items = ShellDesktopReader.RunSta(() =>
         {
             var result = new List<DesktopIcon>();
-            scan.Invoke(null, [root, result, new Dictionary<int, BitmapSource>(), null, new DesktopScanOptions()]);
+            long budget = DesktopImageBudget.MaximumDecodedBytes;
+            DesktopEntryReader.ScanFolder(root, result, [], null, new DesktopScanOptions(), ref budget, File.GetAttributes, new DesktopScanIssues());
             foreach (var item in result) item.GroupIdentity = ShellDesktopReader.DestinationIdentity(item);
             return result;
         }).WaitAsync(TimeSpan.FromSeconds(60)).GetAwaiter().GetResult();

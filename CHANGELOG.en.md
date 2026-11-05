@@ -17,6 +17,10 @@
 
 - If the process that protects hidden Desktop icons stops unexpectedly, the panel now says so and the log records it with the exit code. Failed attempts to hide or restore icons are logged as well.
 
+### Desktop & interaction
+
+- One Desktop item that cannot be read no longer blocks the whole list: Nepply skips it, shows the others and writes the error to the log. If a whole Desktop location is lost, the last list stays on screen as before.
+
 ## 2.0.0-rc.1 — 2 November 2026
 
 First public release candidate, published **2 November 2026**, not code-signed. The list below summarizes the changes made during development.

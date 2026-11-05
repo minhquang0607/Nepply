@@ -100,6 +100,7 @@ internal static class ReleaseHardeningTests
         var root = Path.Combine(output, "isolated-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(root);
         DesktopReliabilityTests.Run(root, check);
+        DesktopPartialFailureTests.Run(root, check);
         DesktopWatcherTests.Run(root, check);
         LayoutProfileTests.Run(check);
         TelemetryFreshnessTests.Run(check);

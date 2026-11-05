@@ -17,6 +17,10 @@
 
 - Nếu tiến trình bảo vệ icon Desktop đang ẩn dừng đột ngột, panel giờ có thông báo và log ghi lại kèm mã thoát. Các lần ẩn hoặc khôi phục icon thất bại cũng được ghi log.
 
+### Desktop và thao tác
+
+- Một mục Desktop không đọc được không còn chặn cả danh sách: Nepply bỏ qua mục đó, vẫn hiện các mục khác và ghi lỗi vào log. Nếu mất cả một vị trí Desktop, danh sách cũ vẫn giữ trên màn hình như trước.
+
 ## 2.0.0-rc.1 — 02/11/2026
 
 Bản phát hành thử công khai đầu tiên, phát hành ngày **02/11/2026**, chưa ký số. Danh sách dưới đây gom các thay đổi trong giai đoạn phát triển.
