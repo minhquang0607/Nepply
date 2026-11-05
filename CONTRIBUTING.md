@@ -50,6 +50,24 @@ CI chạy thêm appearance, tray, DPI, crash, kiểm tra dependency/notice và h
 
 `Directory.Build.props` và `Directory.Build.targets` khóa runtime và ILLink theo dependency lock. Giữ hai file này khi build; không bỏ `--locked-mode` để che lỗi lệch dependency. Khi nâng phiên bản, cập nhật pin và lock có chủ đích rồi kiểm tra trên máy sạch/CI.
 
+## Kiểm chứng trên Explorer thật
+
+CI chỉ thử việc ẩn icon trên file fixture, nên một bản cập nhật Windows có thể làm hỏng tính năng chính trong khi CI vẫn xanh. `scripts/Test-DesktopRuntime.ps1` chạy các test dùng Explorer thật. Chạy trước mọi tag, kể cả bản RC, từ bản build Release của đúng commit sẽ gắn tag:
+
+```powershell
+pwsh scripts/Test-DesktopRuntime.ps1
+pwsh scripts/Test-DesktopRuntime.ps1 -Live -ReleaseTag v2.0.0-rc.2
+```
+
+Lệnh đầu là chạy khô: chỉ đọc trạng thái, in kế hoạch và không đổi gì. Lệnh sau là chạy thật.
+
+- **Script đổi Desktop của bạn.** Khi chạy thật, script ẩn icon nhiều lần và khởi động lại Explorer hai lần, nên các cửa sổ File Explorer sẽ đóng. Mỗi lần chạy, script yêu cầu gõ một cụm từ trong cửa sổ console và không có tùy chọn nào để bỏ qua. Không chạy từ tự động hóa. CI chỉ chạy `scripts/Test-DesktopRuntimeContract.ps1`, bản kiểm tra quy tắc dùng tiến trình giả.
+- **Script từ chối chạy** khi Nepply, guardian hoặc binary test đang mở, khi icon đã ẩn hoặc không tìm thấy cửa sổ icon, khi còn journal khôi phục của Nepply, hoặc khi binary không build từ commit hiện tại.
+- **Có sáu chặng:** guardian dùng bình thường và khi tiến trình chủ crash; tùy chọn lưu của Explorer khi tiến trình chủ crash và khi khởi động lại Explorer; hai trường hợp đó với `ShowWindow`, cách bản Store dùng. Script dừng ở lỗi đầu tiên và khôi phục icon.
+- **Kết quả** nằm ở `artifacts/desktop-runtime/<tag>/<thời-gian>-<commit>/`: `summary.json`, cùng file kết quả và log console của từng chặng. Chỉ `ACCEPTED` khi mọi chặng đạt trên cây sạch và binary không đổi. Giữ thư mục đó và chép dòng script in ra vào bảng trong [kế hoạch phát hành](docs/release/PUBLIC_RELEASE_CHECKLIST.md).
+- **Mã thoát:** 0 là đạt, hoặc chạy khô không có gì để từ chối. 1 là không đạt. 2 là từ chối, chưa đổi gì. 3 là icon vẫn ẩn: nhấp phải Desktop, chọn View > Show desktop icons; nếu mục đó đã được chọn thì khởi động lại Windows Explorer từ Task Manager.
+- **Giới hạn:** kết quả chỉ có giá trị với commit và bản Windows đó, nên chạy thêm trên bản Insider khi có thể. Test chạy từ tiến trình chưa đóng gói, nên không thay thế nghiệm thu bộ cài, gỡ cài đặt, MSIX hay Store.
+
 ## Ảnh minh họa và bằng chứng kiểm thử
 
 - Cập nhật đồng thời bản Anh–Việt khi hành vi, phiên bản, tải xuống hoặc giới hạn thay đổi; giữ liên kết chuyển ngôn ngữ. Không sửa văn bản giấy phép gốc hoặc ngày bằng chứng lịch sử chỉ để đồng bộ hình thức.
