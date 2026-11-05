@@ -6,18 +6,21 @@ internal sealed class GuardedDesktopVisibility
     private readonly IDesktopVisibility _desktop;
     private readonly DesktopVisibilityLease _lease;
     private readonly Func<CancellationToken, Task<IDesktopGuardianSession>> _start;
+    private readonly Action<Exception?, string> _log;
     private readonly CancellationTokenSource _shutdown = new();
     private readonly SemaphoreSlim _gate = new(1, 1);
     private IDesktopGuardianSession? _guardian;
     private bool _hideAttempted, _stopping;
     internal Task RecoveryObservation { get; private set; } = Task.CompletedTask;
     internal string? LastError { get; private set; }
+    /// <summary>A guardian died while Desktop was hidden. True when Desktop came back. Raised off the UI thread.</summary>
+    internal event Action<bool>? GuardianExited;
 
-    internal GuardedDesktopVisibility(IDesktopVisibility desktop, DesktopVisibilityLease lease, Func<Task<IDesktopGuardianSession>> start)
-        : this(desktop, lease, _ => start()) { }
+    internal GuardedDesktopVisibility(IDesktopVisibility desktop, DesktopVisibilityLease lease, Func<Task<IDesktopGuardianSession>> start, Action<Exception?, string>? log = null)
+        : this(desktop, lease, _ => start(), log) { }
 
-    internal GuardedDesktopVisibility(IDesktopVisibility desktop, DesktopVisibilityLease lease, Func<CancellationToken, Task<IDesktopGuardianSession>> start)
-    { _desktop = desktop; _lease = lease; _start = start; }
+    internal GuardedDesktopVisibility(IDesktopVisibility desktop, DesktopVisibilityLease lease, Func<CancellationToken, Task<IDesktopGuardianSession>> start, Action<Exception?, string>? log = null)
+    { _desktop = desktop; _lease = lease; _start = start; _log = log ?? AppLogger.Error; }
 
     internal async Task<bool> HideAsync()
     {
@@ -40,8 +43,9 @@ internal sealed class GuardedDesktopVisibility
             _shutdown.Token.ThrowIfCancellationRequested();
             if (guardian.Exited.IsCompleted || !await guardian.ArmAsync(_shutdown.Token).ConfigureAwait(false))
             {
+                string reason = "Guardian did not arm" + (guardian.Exited.IsCompleted ? $" ({ExitDetail(guardian)})." : ".");
                 await RestoreCoreAsync().ConfigureAwait(false);
-                return Fail("Guardian did not arm.");
+                return Fail(reason);
             }
             _hideAttempted = true; // Native hide may change Explorer and then throw.
             if (!_lease.Hide() || guardian.Exited.IsCompleted)
@@ -54,8 +58,14 @@ internal sealed class GuardedDesktopVisibility
         catch (Exception ex)
         {
             LastError = ex.Message;
+            // Stopping cancels a pending startup on purpose; that is not a failure.
+            if (ex is not OperationCanceledException || !_shutdown.IsCancellationRequested) _log(ex, "Hide Desktop icons");
             try { await RestoreCoreAsync().ConfigureAwait(false); }
-            catch (Exception recovery) { LastError += "; " + recovery.Message; }
+            catch (Exception recovery)
+            {
+                LastError += "; " + recovery.Message;
+                _log(recovery, "Restore Desktop after a failed hide");
+            }
             return false;
         }
         finally { _gate.Release(); }
@@ -70,7 +80,7 @@ internal sealed class GuardedDesktopVisibility
             _stopping |= stopping;
             return await RestoreCoreAsync().ConfigureAwait(false);
         }
-        catch (Exception ex) { return Fail(ex.Message); }
+        catch (Exception ex) { return Fail(ex.Message, ex); }
         finally { _gate.Release(); }
     }
 
@@ -86,8 +96,10 @@ internal sealed class GuardedDesktopVisibility
 
     private async Task<bool> RestoreCoreAsync()
     {
-        if (_guardian is null) return !_hideAttempted || RestoreLocal();
+        if (_guardian is null) return !_hideAttempted || RestoreLocal() || Fail("Desktop restoration not verified.");
         var guardian = _guardian;
+        // Whoever reaches a dead guardian first reports it, including a request that beats ObserveExitAsync.
+        if (_hideAttempted && guardian.Exited.IsCompleted) _log(null, $"Desktop guardian exited while Desktop was hidden ({ExitDetail(guardian)}).");
         if (_hideAttempted && !guardian.Exited.IsCompleted)
         {
             try
@@ -96,8 +108,13 @@ internal sealed class GuardedDesktopVisibility
                     // Success ACK precedes the helper's journal cleanup. Do not
                     // race its file handle or terminate it during that cleanup.
                     await guardian.Exited.WaitAsync(TimeSpan.FromSeconds(15)).ConfigureAwait(false);
+                else _log(null, "Desktop guardian refused to restore; restoring locally.");
             }
-            catch (Exception ex) { LastError = ex.Message; } // Native fallback still required.
+            catch (Exception ex) // Native fallback still required.
+            {
+                LastError = ex.Message;
+                _log(ex, "Desktop guardian restore did not finish; restoring locally");
+            }
         }
         if (!await guardian.CloseAfterLocalRestoreAsync(RestoreLocal).ConfigureAwait(false))
             return Fail("Desktop restoration not verified; keep recovery ownership.");
@@ -108,6 +125,7 @@ internal sealed class GuardedDesktopVisibility
 
     private async Task ObserveExitAsync(IDesktopGuardianSession guardian)
     {
+        bool recovered = false;
         try
         {
             await guardian.Exited.ConfigureAwait(false);
@@ -116,13 +134,28 @@ internal sealed class GuardedDesktopVisibility
             {
                 if (!ReferenceEquals(_guardian, guardian)) return;
                 // Event-driven, no periodic health polling. Never hide again automatically.
-                bool recovered = await RestoreCoreAsync().ConfigureAwait(false);
+                recovered = await RestoreCoreAsync().ConfigureAwait(false);
                 LastError = recovered ? "Guardian exited; Desktop restored." : "Guardian exited; Desktop restoration failed.";
+                _log(null, LastError);
             }
             finally { _gate.Release(); }
         }
-        catch (Exception ex) { LastError = "Guardian exit recovery: " + ex.Message; }
+        catch (Exception ex)
+        {
+            LastError = "Guardian exit recovery: " + ex.Message;
+            _log(ex, "Guardian exit recovery");
+        }
+        GuardianExited?.Invoke(recovered);
     }
 
-    private bool Fail(string message) { LastError = message; return false; }
+    private bool Fail(string message, Exception? error = null)
+    {
+        LastError = message;
+        _log(error, message);
+        return false;
+    }
+
+    // Hex, because that is how Windows crash codes such as 0xC0000005 are looked up.
+    private static string ExitDetail(IDesktopGuardianSession guardian)
+        => guardian.ExitCode is { } code ? $"exit code 0x{code:X8}" : "exit code unknown";
 }

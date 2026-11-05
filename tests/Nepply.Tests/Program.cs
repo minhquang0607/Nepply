@@ -598,6 +598,7 @@ internal static class Program
             ThemeService.Contrast((Color)ColorConverter.ConvertFromString("#A52F29"), (Color)ColorConverter.ConvertFromString("#F5F3EF")) >= 4.5
             && ThemeService.Contrast((Color)ColorConverter.ConvertFromString("#ED8D80"), (Color)ColorConverter.ConvertFromString("#141619")) >= 4.5);
         GlobalShortcutTests.Run(Check, Pump);
+        GuardianNoticeTests.Run(output, Check, Pump);
         PanelShortcutTests.Run(Check, Pump);
         SettingsShortcutTests.Run(Check, Pump);
         GuidanceTests.Run(Check, Pump, output, Render);

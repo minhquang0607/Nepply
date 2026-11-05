@@ -182,6 +182,7 @@ public partial class MainWindow : Window
     {
         if (_started) return; _started = true;
         IconPanelView.Initialize(_icons, _icons, _settings);
+        _icons.DesktopVisibilityFailed += PresentDesktopVisibilityFailure;
         MonitorPanelView.Initialize(_monitor);
         ApplySettings(); PositionWindow();
         if (_preview)
@@ -800,12 +801,26 @@ public partial class MainWindow : Window
         if (autoStart) _ = ApplyStartupAsync(_settings.AutoStart, userInitiated);
         if (desktopVisibility) _ = ApplyDesktopVisibilityAsync(_settings.HideDesktopIcons);
     }
-    private async Task ApplyDesktopVisibilityAsync(bool hide)
+    private UserMessage? _desktopVisibilityFailure;
+    // Usually arrives while the panel is closed; the notice waits for the next reveal.
+    private void PresentDesktopVisibilityFailure(UserMessage notice) => Dispatcher.BeginInvoke(() =>
+    {
+        if (_cleaned) return;
+        _desktopVisibilityFailure = notice;
+        IconPanelView.ShowActionFailure(notice);
+    });
+    internal async Task ApplyDesktopVisibilityAsync(bool hide)
     {
         try
         {
             var notice = await _icons.SetDesktopIconsHiddenAsync(hide);
-            if (!_cleaned && notice is not null) IconPanelView.ShowActionFailure(notice);
+            if (_cleaned) return;
+            if (notice is not null) IconPanelView.ShowActionFailure(notice);
+            else if (_desktopVisibilityFailure is { } settled)
+            {
+                IconPanelView.DismissActionFailure(settled);
+                _desktopVisibilityFailure = null;
+            }
         }
         catch (Exception ex)
         {
@@ -885,6 +900,7 @@ public partial class MainWindow : Window
         Microsoft.Win32.SystemEvents.DisplaySettingsChanged -= DisplayChanged;
         Microsoft.Win32.SystemEvents.UserPreferenceChanged -= PreferenceChanged;
         LocalizationService.Changed -= RefreshLanguage;
+        _icons.DesktopVisibilityFailed -= PresentDesktopVisibilityFailure;
         CleanupSequence.Run(
             ("Layout draft", () => _layoutEdit.Complete(false, _ => { })),
             ("Desktop updates", () => _desktopUpdates?.Dispose()),

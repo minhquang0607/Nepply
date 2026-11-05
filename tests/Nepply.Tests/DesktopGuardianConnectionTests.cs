@@ -1,3 +1,4 @@
+using System.IO;
 using Nepply.Services;
 
 internal static class DesktopGuardianConnectionTests
@@ -66,5 +67,68 @@ internal static class DesktopGuardianConnectionTests
             check("Guardian fallback cleanup observes helper exit", broken.Exited.IsCompletedSuccessfully);
         }
         finally { await broken.CloseAfterLocalRestoreAsync(() => true); } // Fixture never armed real Desktop.
+        await KilledGuardianIsReported(executable, check);
+    }
+
+    // F-06 end to end: a real helper really killed, with the real log. Arm never reaches the
+    // helper and Desktop is a fixture, so Explorer is not touched.
+    private static async Task KilledGuardianIsReported(string executable, Action<string, bool> check)
+    {
+        string root = Path.Combine(Path.GetTempPath(), "nepply-guardian-kill-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(root);
+        try
+        {
+            var desktop = new GuardedDesktopVisibilityTests.Desktop();
+            var lease = new DesktopVisibilityLease(desktop, Path.Combine(root, "fixture.lease"));
+            UnarmedGuardian? guardian = null;
+            var flow = new GuardedDesktopVisibility(desktop, lease, async cancellation =>
+                guardian = new UnarmedGuardian(await DesktopGuardianConnection.StartAsync(executable, cancellation)));
+            using var icons = new DesktopIconService(flow, lease, _ => Task.FromResult(new List<Nepply.Models.DesktopIcon>()));
+            var notices = new List<Nepply.UserMessage>();
+            icons.DesktopVisibilityFailed += notices.Add;
+            long logStart = File.Exists(AppLogger.LogFile) ? new FileInfo(AppLogger.LogFile).Length : 0;
+
+            check("Killed guardian fixture hides with a live helper", await icons.SetDesktopIconsHiddenAsync(true) == null && guardian != null && desktop.Visible == false);
+            using (var child = System.Diagnostics.Process.GetProcessById(guardian!.Connection.ProcessId))
+            {
+                if (!string.Equals(child.MainModule?.FileName, executable, StringComparison.OrdinalIgnoreCase))
+                    throw new InvalidOperationException("Unexpected QA child executable.");
+                child.Kill();
+            }
+            await flow.RecoveryObservation.WaitAsync(TimeSpan.FromSeconds(15));
+
+            check("Killed guardian restores the fixture Desktop", desktop.Visible == true && !lease.OwnsChange && !icons.AreDesktopIconsHidden);
+            check("Killed guardian raises one panel notice", notices.Count == 1 && notices[0].Key == "DesktopGuardianExitedNotice");
+            string log = await ReadLogUntil(logStart, "Guardian exited; Desktop restored.");
+            check("Killed guardian writes its exit code to the real log", log.Contains("ERROR: Desktop guardian exited while Desktop was hidden (exit code 0xFFFFFFFF)."));
+            check("Killed guardian writes the outcome to the real log", log.Contains("ERROR: Guardian exited; Desktop restored."));
+        }
+        finally { Directory.Delete(root, recursive: true); }
+    }
+
+    private static async Task<string> ReadLogUntil(long start, string text)
+    {
+        string log = "";
+        for (int attempt = 0; attempt < 100 && !log.Contains(text); attempt++)
+        {
+            await Task.Delay(50);
+            if (!File.Exists(AppLogger.LogFile)) continue;
+            using var stream = new FileStream(AppLogger.LogFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+            stream.Seek(Math.Min(start, stream.Length), SeekOrigin.Begin);
+            using var reader = new StreamReader(stream);
+            log = await reader.ReadToEndAsync();
+        }
+        return log;
+    }
+
+    private sealed class UnarmedGuardian(DesktopGuardianConnection connection) : IDesktopGuardianSession
+    {
+        internal DesktopGuardianConnection Connection => connection;
+        public Task Exited => connection.Exited;
+        public int? ExitCode => connection.ExitCode;
+        public Task<bool> ArmAsync(CancellationToken cancellation = default) => Task.FromResult(true);
+        public Task<bool> RestoreAsync(CancellationToken cancellation = default) => connection.RestoreAsync(cancellation);
+        public Task<bool> CloseAfterLocalRestoreAsync(Func<bool> restoreAndVerify) => connection.CloseAfterLocalRestoreAsync(restoreAndVerify);
+        public ValueTask DisposeAsync() => connection.DisposeAsync();
     }
 }

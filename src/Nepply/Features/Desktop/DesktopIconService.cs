@@ -29,11 +29,20 @@ public class DesktopIconService : IDisposable, IDesktopCatalog, IDesktopActions
         // A guardian inside the package cannot outlive package removal, and the Store
         // edition changes no saved setting that would need recovering.
         if (!ProcessPackageIdentity.IsPackaged)
+        {
             _guardedVisibility = new GuardedDesktopVisibility(new ExplorerDesktopVisibility(), _desktopVisibility, DesktopGuardianDeployment.StartAsync);
+            _guardedVisibility.GuardianExited += OnGuardianExited;
+        }
     }
     internal DesktopIconService(Func<CancellationToken, Task<List<DesktopIconModel>>> scanner) => _scanner = (_, token) => scanner(token);
     internal DesktopIconService(Func<DesktopScanOptions, CancellationToken, Task<List<DesktopIconModel>>> scanner) => _scanner = scanner;
     internal DesktopIconService(DesktopVisibilityLease visibility) => _desktopVisibility = visibility;
+    internal DesktopIconService(GuardedDesktopVisibility guarded, DesktopVisibilityLease visibility, Func<CancellationToken, Task<List<DesktopIconModel>>> scanner) : this(scanner)
+    {
+        _desktopVisibility = visibility;
+        _guardedVisibility = guarded;
+        _guardedVisibility.GuardianExited += OnGuardianExited;
+    }
     internal DesktopIconService(Func<DesktopScanOptions, string[]?, CancellationToken, Task<List<DesktopIconModel>>> scanner, Func<string[]> roots)
     { _rawScanner = scanner; _desktopRoots = roots; }
 
@@ -235,6 +244,15 @@ public class DesktopIconService : IDisposable, IDesktopCatalog, IDesktopActions
     internal UserMessage? HideDesktopIcons() => ToggleDesktopIcons(hide: true);
     internal UserMessage? ShowDesktopIcons() => ToggleDesktopIcons(hide: false);
 
+    /// <summary>A failure nobody asked for, so no caller receives it as a result. Raised off the UI thread.</summary>
+    internal event Action<UserMessage>? DesktopVisibilityFailed;
+
+    private void OnGuardianExited(bool recovered)
+    {
+        _ownsDesktopVisibility = _desktopVisibility.OwnsChange;
+        DesktopVisibilityFailed?.Invoke(UserMessage.FromKey(recovered ? "DesktopGuardianExitedNotice" : "DesktopGuardianRecoveryFailedNotice"));
+    }
+
     public async Task<UserMessage?> SetDesktopIconsHiddenAsync(bool hide)
     {
         if (_disposed) return UserMessage.FromKey("DesktopClosingNotice");
@@ -286,12 +304,13 @@ public class DesktopIconService : IDisposable, IDesktopCatalog, IDesktopActions
             Interlocked.Increment(ref _scanGeneration);
             IconsChanged = null;
             ScanStateChanged = null;
+            DesktopVisibilityFailed = null;
             if (_guardedVisibility is not null)
             {
                 // Every continuation in the coordinator is independent of the WPF Dispatcher.
                 // Stop/cancel pending hides before synchronous final application teardown.
-                if (!_guardedVisibility.RestoreAsync(stopping: true).GetAwaiter().GetResult())
-                    AppLogger.Error(new IOException(_guardedVisibility.LastError ?? "Desktop recovery failed."), "Restore Desktop on shutdown");
+                // The coordinator logs a failed restore itself.
+                _guardedVisibility.RestoreAsync(stopping: true).GetAwaiter().GetResult();
             }
             else if (_ownsDesktopVisibility) ShowDesktopIcons();
         }

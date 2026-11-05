@@ -12,6 +12,7 @@ internal static class LocalizationKeyTests
         string[] produced = [
             "SensorDisabled","SensorReconnecting","SensorExpired",HelperFailure.PolicyMessageKey,
             "NoNetwork","NetworkReadError","DesktopRefreshError","DesktopReadError",
+            "DesktopGuardianExitedNotice","DesktopGuardianRecoveryFailedNotice",
             "PrivilegeUnknown","PrivilegeAdmin","PrivilegeUser","DriverUnknown","DriverAbsent","DriverRegistered",
             .. LayoutPresets.All.SelectMany(p => new[] { p.NameKey, p.DescriptionKey })];
         foreach (string key in produced)

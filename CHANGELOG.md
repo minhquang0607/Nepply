@@ -13,6 +13,10 @@
 
 - Chuẩn bị bản Microsoft Store: Microsoft ký gói sau khi duyệt, cập nhật qua Store. Bản này vẫn ẩn được icon Desktop, nhưng ẩn trực tiếp cửa sổ icon thay vì đổi cài đặt Windows, nên gỡ app không để lại gì. Bản Store không kiểm tra cập nhật qua GitHub. Setup và portable giữ nguyên.
 
+### Độ tin cậy
+
+- Nếu tiến trình bảo vệ icon Desktop đang ẩn dừng đột ngột, panel giờ có thông báo và log ghi lại kèm mã thoát. Các lần ẩn hoặc khôi phục icon thất bại cũng được ghi log.
+
 ## 2.0.0-rc.1 — 02/11/2026
 
 Bản phát hành thử công khai đầu tiên, phát hành ngày **02/11/2026**, chưa ký số. Danh sách dưới đây gom các thay đổi trong giai đoạn phát triển.
