@@ -13,7 +13,7 @@ internal static class AutoStartService
 
     internal static UserMessage? Apply(bool enabled)
     {
-        // HKCU Run/Startup shortcut migration belongs only to unpackaged installs.
+        // HKCU Run and the Startup shortcut belong only to unpackaged installs.
         // The MSIX adapter must use StartupTask; never persist a versioned WindowsApps path.
         EnsureUnpackaged(ProcessPackageIdentity.IsPackaged);
         string executable = Environment.ProcessPath ?? throw new InvalidOperationException("Application path is unavailable.");
@@ -24,26 +24,10 @@ internal static class AutoStartService
             if (!IsDeadRunCommand(existing, ProductIdentity.Name + ".exe")) return UserMessage.FromKey("AutoStartDifferentEntry");
             AppLogger.Info("Replacing startup entry of a moved or deleted Nepply copy.");
         }
-        string previousExecutable = Path.Combine(Path.GetDirectoryName(executable)!, ProductIdentity.LegacyName + ".exe");
-        var previous = key.GetValue(ProductIdentity.LegacyName, null, RegistryValueOptions.DoNotExpandEnvironmentNames);
         if (enabled && existing == null) ForgetOrphanedState();
         if (enabled) key.SetValue("Nepply", "\"" + executable + "\"", RegistryValueKind.String);
         else key.DeleteValue("Nepply", false);
-        // Only migrate an exact, argument-free entry in this installation directory, or
-        // retire one whose executable is gone. Live portable installations and
-        // customized commands belong to the user.
-        if (MatchesRunCommand(previous, previousExecutable) || IsDeadRunCommand(previous, ProductIdentity.LegacyName + ".exe"))
-            key.DeleteValue(ProductIdentity.LegacyName, false);
-        else if (previous != null)
-            return UserMessage.FromKey("AutoStartLegacyEntry");
-
-        foreach (var name in new[] { ProductIdentity.Name, ProductIdentity.LegacyName })
-        {
-            string shortcut = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), name + ".lnk");
-            var notice = RetireShortcut(shortcut, executable, name == ProductIdentity.LegacyName ? previousExecutable : executable);
-            if (notice != null) return notice;
-        }
-        return null;
+        return RetireShortcut(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), ProductIdentity.Name + ".lnk"), executable);
     }
 
     // Task Manager and Windows Settings keep their own switch here. It is the user's
@@ -78,31 +62,30 @@ internal static class AutoStartService
             throw new InvalidOperationException("Packaged startup requires StartupTask, not HKCU Run.");
     }
 
-    private static UserMessage? RetireShortcut(string legacy, string executable, string previousExecutable)
+    private static UserMessage? RetireShortcut(string shortcut, string executable)
     {
-        if (!File.Exists(legacy)) return null;
+        if (!File.Exists(shortcut)) return null;
         object? instance = null;
         try
         {
             instance = new ShellLink();
             var link = (IShellLinkW)instance;
-            ((System.Runtime.InteropServices.ComTypes.IPersistFile)link).Load(legacy, 0);
+            ((System.Runtime.InteropServices.ComTypes.IPersistFile)link).Load(shortcut, 0);
             var target = new StringBuilder(32768);
             var arguments = new StringBuilder(32768);
             link.GetPath(target, target.Capacity, IntPtr.Zero, 0);
             link.GetArguments(arguments, arguments.Capacity);
             // A matching filename does not establish ownership of a Startup shortcut.
-            if (!MatchesCurrentApplication(target.ToString(), arguments.ToString(), executable)
-                && !MatchesCurrentApplication(target.ToString(), arguments.ToString(), previousExecutable))
+            if (!MatchesCurrentApplication(target.ToString(), arguments.ToString(), executable))
                 return UserMessage.FromKey("AutoStartSeparateShortcut");
         }
         finally
         {
             if (instance != null && Marshal.IsComObject(instance)) Marshal.ReleaseComObject(instance);
         }
-        string backup = legacy + ".disabled";
-        if (File.Exists(backup)) backup = legacy + ".disabled-" + Guid.NewGuid().ToString("N");
-        File.Move(legacy, backup); // Recoverable; never overwrite an earlier backup.
+        string backup = shortcut + ".disabled";
+        if (File.Exists(backup)) backup = shortcut + ".disabled-" + Guid.NewGuid().ToString("N");
+        File.Move(shortcut, backup); // Recoverable; never overwrite an earlier backup.
         return null;
     }
 

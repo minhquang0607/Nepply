@@ -59,9 +59,9 @@ For update-check errors, check connectivity and retry. Production automatic inst
 
 In Settings choose Defaults, review the options, then Apply or OK. Choose Cancel if you do not want to save.
 
-To back up first, exit and copy `%APPDATA%\Nepply\settings.json` elsewhere. Deleting only this file may restore a `.bak` or import legacy HoverBox settings instead of resetting. If Settings cannot open, report the problem before deleting recovery files.
+To back up first, exit and copy `%APPDATA%\Nepply\settings.json` elsewhere. Deleting only this file may restore a `.bak` instead of resetting. If Settings cannot open, report the problem before deleting recovery files.
 
-Logs are in `%LOCALAPPDATA%\Nepply\Logs`; deleting them is not necessary for a visual reset. The legacy recovery marker is `%LOCALAPPDATA%\HoverBox\desktop-visibility.lease`; do not remove it before icons are restored. See the [privacy policy](legal/PRIVACY.md).
+Logs are in `%LOCALAPPDATA%\Nepply\Logs`; deleting them is not necessary for a visual reset. The Desktop recovery marker is `%LOCALAPPDATA%\Nepply\desktop-visibility.lease`; do not remove it before icons are restored. See the [privacy policy](legal/PRIVACY.md).
 
 ## Report an issue safely
 

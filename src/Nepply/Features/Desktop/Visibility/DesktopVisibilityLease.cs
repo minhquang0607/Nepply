@@ -5,18 +5,18 @@ namespace Nepply.Services;
 /// <summary>Journal only changes made by Nepply; a pre-hidden Desktop is never claimed.</summary>
 public sealed class DesktopVisibilityLease(IDesktopVisibility desktop, string journal)
 {
-    // Share the recovery journal with pre-rename builds; never duplicate an ownership lease.
-    private static string LegacyJournalPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), ProductIdentity.LegacyName, "desktop-visibility.lease");
+    // A packaged build still restores what an installed build hid; never duplicate an ownership lease.
+    private static string UnpackagedJournalPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), ProductIdentity.Name, "desktop-visibility.lease");
     public static string JournalPath => ProcessPackageIdentity.IsPackaged
-        ? Path.Combine(Windows.Storage.ApplicationData.Current.LocalCacheFolder.Path, ProductIdentity.LegacyName, "desktop-visibility.lease")
-        : LegacyJournalPath;
+        ? Path.Combine(Windows.Storage.ApplicationData.Current.LocalCacheFolder.Path, ProductIdentity.Name, "desktop-visibility.lease")
+        : UnpackagedJournalPath;
     public static DesktopVisibilityLease Create() =>
         new(ProcessPackageIdentity.IsPackaged ? new WindowDesktopVisibility() : new ExplorerDesktopVisibility(), JournalPath);
     internal static bool RestorePreviousSession()
     {
         using var fence = DesktopGuardianFence.Acquire(TimeSpan.FromSeconds(15));
-        if (!string.Equals(LegacyJournalPath, JournalPath, StringComparison.OrdinalIgnoreCase)
-            && !new DesktopVisibilityLease(new ExplorerDesktopVisibility(), LegacyJournalPath).Restore()) return false;
+        if (!string.Equals(UnpackagedJournalPath, JournalPath, StringComparison.OrdinalIgnoreCase)
+            && !new DesktopVisibilityLease(new ExplorerDesktopVisibility(), UnpackagedJournalPath).Restore()) return false;
         return Create().Restore();
     }
     public bool OwnsChange => File.Exists(journal);

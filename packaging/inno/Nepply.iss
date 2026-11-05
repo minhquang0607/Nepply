@@ -52,8 +52,7 @@ DisableWelcomePage=no
 ; Windows language is the preselected answer; the choice also reaches the app.
 ShowLanguageDialog=yes
 ; Let the user finish editing and restore Desktop through a normal app exit.
-; Stable across rename: also block installation while a legacy build owns Desktop.
-AppMutex=Local\HoverBox-SetupGuard
+AppMutex=Local\Nepply-SetupGuard
 CloseApplications=no
 RestartApplications=no
 
@@ -89,14 +88,6 @@ Source: "{#PayloadRoot}\licenses\*"; DestDir: "{app}\licenses"; Flags: ignorever
 Source: "..\..\src\Nepply\Resources\RELEASE_NOTICE.txt"; DestDir: "{app}"; Flags: ignoreversion
 
 #ifndef InstallerQA
-[InstallDelete]
-; Exact legacy payload names only; never delete user settings or whole directories.
-Type: files; Name: "{app}\HoverBox.exe"
-Type: files; Name: "{app}\HoverBox.dll"
-Type: files; Name: "{app}\HoverBox.pdb"
-Type: files; Name: "{app}\HoverBox.deps.json"
-Type: files; Name: "{app}\HoverBox.runtimeconfig.json"
-
 [Icons]
 Name: "{autoprograms}\Nepply"; Filename: "{app}\Nepply.exe"
 Name: "{autodesktop}\Nepply"; Filename: "{app}\Nepply.exe"; Tasks: desktopicon
@@ -120,7 +111,7 @@ const
 #else
   UninstallEntry = '{5E9F4A2B-1A8D-4C9C-8A5E-F7C4E8A1D3B2}_is1';
 #endif
-  DesktopLease = '{localappdata}\HoverBox\desktop-visibility.lease';
+  DesktopLease = '{localappdata}\Nepply\desktop-visibility.lease';
   DesktopLeaseMarker = 'restore-visible-v1';
   ExplorerAdvancedKey = 'Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced';
   StartupApprovedKey = 'Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run';
@@ -165,12 +156,12 @@ begin
   if not IsNepplyUpdate() then Exit;
   { Parent starts the verified Setup before a normal shutdown. Never kill it. }
   Attempts := 0;
-  while CheckForMutexes('Local\HoverBox-SetupGuard') and (Attempts < 600) do
+  while CheckForMutexes('Local\Nepply-SetupGuard') and (Attempts < 600) do
   begin
     Sleep(100);
     Attempts := Attempts + 1;
   end;
-  Result := not CheckForMutexes('Local\HoverBox-SetupGuard');
+  Result := not CheckForMutexes('Local\Nepply-SetupGuard');
   if not Result then
     MsgBox(CustomMessage('UpdateNotExited'), mbError, MB_OK);
 end;
@@ -296,46 +287,6 @@ begin
   SuppressibleMsgBox(CustomMessage('UpgradeRecoveryDeferred'), mbInformation, MB_OK, IDOK);
 end;
 
-procedure RetireLegacyShortcut(const ShortcutPath: String);
-var
-  Shell: Variant;
-  Link: Variant;
-begin
-  if not FileExists(ShortcutPath) then Exit;
-  try
-    Shell := CreateOleObject('WScript.Shell');
-    Link := Shell.CreateShortcut(ShortcutPath);
-    if (CompareText(Link.TargetPath, ExpandConstant('{app}\HoverBox.exe')) = 0) and
-       (Trim(Link.Arguments) = '') then
-      if not DeleteFile(ShortcutPath) then Log('Could not retire legacy shortcut: ' + ShortcutPath);
-  except
-    Log('Preserved legacy shortcut because ownership could not be verified: ' + ShortcutPath);
-  end;
-end;
-
-procedure CurStepChanged(CurStep: TSetupStep);
-var
-  CurrentCommand: String;
-  NewCommand: String;
-begin
-#ifdef InstallerQA
-  Exit;
-#endif
-  if CurStep <> ssPostInstall then Exit;
-  NewCommand := '"' + ExpandConstant('{app}\Nepply.exe') + '"';
-  if RegQueryStringValue(HKCU, 'Software\Microsoft\Windows\CurrentVersion\Run', 'HoverBox', CurrentCommand) then
-    if CompareText(CurrentCommand, '"' + ExpandConstant('{app}\HoverBox.exe') + '"') = 0 then
-    begin
-      if not RegValueExists(HKCU, 'Software\Microsoft\Windows\CurrentVersion\Run', 'Nepply') then
-        RegWriteStringValue(HKCU, 'Software\Microsoft\Windows\CurrentVersion\Run', 'Nepply', NewCommand);
-      if RegQueryStringValue(HKCU, 'Software\Microsoft\Windows\CurrentVersion\Run', 'Nepply', CurrentCommand) then
-        if CompareText(CurrentCommand, NewCommand) = 0 then
-          RegDeleteValue(HKCU, 'Software\Microsoft\Windows\CurrentVersion\Run', 'HoverBox');
-    end;
-  RetireLegacyShortcut(ExpandConstant('{autoprograms}\HoverBox.lnk'));
-  RetireLegacyShortcut(ExpandConstant('{autodesktop}\HoverBox.lnk'));
-end;
-
 function InitializeUninstall(): Boolean;
 var
   RecoveryExitCode: Integer;
@@ -369,13 +320,17 @@ begin
   if Temp <> '' then DelTree(AddBackslash(Temp) + '.net\Nepply', True, True, True);
 end;
 
-{ The legacy folder may still hold a Desktop lease, so only its logs go. }
+{ A lease left by a failed recovery must survive for the next start to restore icons. }
 procedure RemoveUserData();
 begin
   DelTree(ExpandConstant('{userappdata}\Nepply'), True, True, True);
-  DelTree(ExpandConstant('{localappdata}\Nepply'), True, True, True);
-  DelTree(ExpandConstant('{localappdata}\HoverBox\Logs'), True, True, True);
-  RemoveDir(ExpandConstant('{localappdata}\HoverBox'));
+  if FileExists(ExpandConstant(DesktopLease)) then
+  begin
+    DelTree(ExpandConstant('{localappdata}\Nepply\Logs'), True, True, True);
+    DelTree(ExpandConstant('{localappdata}\Nepply\Updates'), True, True, True);
+  end
+  else
+    DelTree(ExpandConstant('{localappdata}\Nepply'), True, True, True);
 end;
 
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);

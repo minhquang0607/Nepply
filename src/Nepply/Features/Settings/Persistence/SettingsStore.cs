@@ -5,7 +5,7 @@ using Nepply.Models;
 
 namespace Nepply.Services;
 
-public sealed class SettingsStore(string path, string? legacyPath = null)
+public sealed class SettingsStore(string path)
 {
     public const int CurrentSchema = 1;
     internal const int MaximumBytes = 2 * 1024 * 1024;
@@ -41,9 +41,6 @@ public sealed class SettingsStore(string path, string? legacyPath = null)
         lock (_gate)
         {
             RecoveryNotice = null;
-            // Import only on first use. An existing Nepply file or backup always wins,
-            // including a damaged or future-schema file; never resurrect stale settings.
-            bool mayImport = !File.Exists(path) && !File.Exists(path + ".bak");
             try { if (File.Exists(path)) return Read(path); }
             catch (NotSupportedException)
             {
@@ -75,44 +72,8 @@ public sealed class SettingsStore(string path, string? legacyPath = null)
             }
             catch (Exception ex) when (ex is IOException or InvalidDataException or UnauthorizedAccessException or JsonException or ArgumentException)
             { AppLogger.Error(ex, "Read backup settings"); RecoveryNotice = UserMessage.FromKey("RecoveryUnreadable"); }
-            if (mayImport && !_readOnly && legacyPath != null)
-                return ImportLegacy(legacyPath);
             return new();
         }
-    }
-    private AppSettings ImportLegacy(string source)
-    {
-        foreach (var candidate in new[] { source, source + ".bak" })
-        {
-            if (!File.Exists(candidate)) continue;
-            AppSettings imported;
-            try { imported = Read(candidate); }
-            catch (NotSupportedException)
-            {
-                _readOnly = true;
-                RecoveryNotice = UserMessage.FromKey("RecoveryLegacyNewer");
-                return new();
-            }
-            catch (Exception ex) when (ex is IOException or InvalidDataException or UnauthorizedAccessException or JsonException or ArgumentException)
-            {
-                AppLogger.Error(ex, "Read settings before product rename");
-                RecoveryNotice = UserMessage.FromKey("RecoveryLegacyUnreadable");
-                continue;
-            }
-            try
-            {
-                Save(imported);
-                RecoveryNotice = UserMessage.FromKey("RecoveryLegacyImported");
-            }
-            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-            {
-                AppLogger.Error(ex, "Import settings after product rename");
-                _readOnly = true;
-                RecoveryNotice = UserMessage.FromKey("RecoveryLegacyUnsaved");
-            }
-            return imported;
-        }
-        return new();
     }
     public void Save(AppSettings value)
     {

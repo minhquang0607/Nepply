@@ -11,7 +11,7 @@ internal static class ProductionGuardianRuntimeTests
     {
         var desktop = new ExplorerDesktopVisibility();
         string root = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "Nepply-Guardian-QA", Guid.NewGuid().ToString("N"), "HoverBox");
+            "Nepply-Guardian-QA", Guid.NewGuid().ToString("N"), "Nepply");
         string journal = Path.Combine(root, "desktop-visibility.lease");
         var lease = new DesktopVisibilityLease(desktop, journal);
         DesktopGuardianConnection? connection = null;
@@ -28,7 +28,7 @@ internal static class ProductionGuardianRuntimeTests
         {
             if (initial != true || File.Exists(DesktopVisibilityLease.JournalPath))
                 throw new InvalidOperationException("Desktop hidden/unavailable or production journal exists; no test performed.");
-            foreach (string name in new[] { "Nepply", "HoverBox", "Nepply.DesktopGuardian" })
+            foreach (string name in new[] { "Nepply", "Nepply.DesktopGuardian" })
             {
                 var processes = Process.GetProcessesByName(name);
                 try { if (processes.Length != 0) throw new InvalidOperationException("Existing application/guardian must be closed before QA."); }
