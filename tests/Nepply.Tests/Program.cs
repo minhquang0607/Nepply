@@ -163,6 +163,9 @@ internal static class Program
         if (args.Contains("--desktop-visibility-runtime")) return DesktopVisibilityRuntimeTests.Run(output);
         if (args.Contains("--desktop-crash-child")) return DesktopCrashRuntimeTests.Child(output);
         if (args.Contains("--desktop-crash-runtime")) return DesktopCrashRuntimeTests.Run(output);
+        if (args.Contains("--window-visibility-runtime")) return DesktopVisibilityRuntimeTests.RunWindow(output);
+        if (args.Contains("--window-crash-child")) return DesktopCrashRuntimeTests.WindowChild(output);
+        if (args.Contains("--window-crash-runtime")) return DesktopCrashRuntimeTests.RunWindow(output);
         if (args.Contains("--tray-registration")) return TrayRegistrationTests.Run(output, args.Contains("--explorer-recovery"));
         if (args.Contains("--dpi-layout")) return DpiLayoutTests.Run(output);
         if (args.Contains("--crash-lease-child")) return CrashRecoveryTests.Child(output);

@@ -6,9 +6,12 @@ using Nepply.Services;
 // Explicit opt-in only. The parent is a QA rescue process, not a shipping watchdog.
 internal static class DesktopCrashRuntimeTests
 {
-    internal static int Child(string root)
+    internal static int Child(string root) => Child(root, new ExplorerDesktopVisibility());
+    internal static int WindowChild(string root) => Child(root, new WindowDesktopVisibility());
+
+    private static int Child(string root, IDesktopVisibility desktop)
     {
-        var lease = new DesktopVisibilityLease(new ExplorerDesktopVisibility(), Path.Combine(root, "lease"));
+        var lease = new DesktopVisibilityLease(desktop, Path.Combine(root, "lease"));
         if (!lease.Hide()) return 2;
         File.WriteAllText(Path.Combine(root, "ready"), Environment.ProcessId.ToString());
         Thread.Sleep(TimeSpan.FromSeconds(45));
@@ -16,9 +19,14 @@ internal static class DesktopCrashRuntimeTests
         return 3;
     }
 
-    internal static int Run(string output)
+    internal static int Run(string output) => Run(output, new ExplorerDesktopVisibility(), "--desktop-crash-child", "desktop-crash-result.json",
+        "Real Explorer hide and abrupt owned-child termination; production lease restores via QA parent. NOT automatic production/MSIX uninstall recovery.");
+
+    internal static int RunWindow(string output) => Run(output, new WindowDesktopVisibility(), "--window-crash-child", "window-crash-result.json",
+        "Real Explorer icon window hidden with ShowWindow and abrupt owned-child termination; production lease restores via QA parent, from an unpackaged process. NOT MSIX/Store acceptance.");
+
+    private static int Run(string output, IDesktopVisibility desktop, string childFlag, string resultFile, string scope)
     {
-        var desktop = new ExplorerDesktopVisibility();
         bool? initial = desktop.IsVisible();
         string root = Path.Combine(output, "desktop-crash-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(root);
@@ -33,7 +41,7 @@ internal static class DesktopCrashRuntimeTests
             if (File.Exists(DesktopVisibilityLease.JournalPath)) throw new InvalidOperationException("Production owns a Desktop lease; stop.");
             var start = new ProcessStartInfo(Environment.ProcessPath!) { UseShellExecute = false, CreateNoWindow = true };
             start.ArgumentList.Add(root);
-            start.ArgumentList.Add("--desktop-crash-child");
+            start.ArgumentList.Add(childFlag);
             child = Process.Start(start) ?? throw new IOException("Cannot start owned QA child.");
             var deadline = Stopwatch.StartNew();
             while (!File.Exists(Path.Combine(root, "ready")) && !child.HasExited && deadline.Elapsed < TimeSpan.FromSeconds(15)) Thread.Sleep(100);
@@ -68,7 +76,7 @@ internal static class DesktopCrashRuntimeTests
         }
         bool? final = desktop.IsVisible();
         bool passed = ready && terminated && afterCrash == false && restored && final == initial && !lease.OwnsChange && error == null;
-        File.WriteAllText(Path.Combine(output, "desktop-crash-result.json"), JsonSerializer.Serialize(new
+        File.WriteAllText(Path.Combine(output, resultFile), JsonSerializer.Serialize(new
         {
             Passed = passed,
             Initial = initial,
@@ -80,7 +88,7 @@ internal static class DesktopCrashRuntimeTests
             JournalRemains = lease.OwnsChange,
             Journal = Path.Combine(root, "lease"),
             Error = error,
-            Scope = "Real Explorer hide and abrupt owned-child termination; production lease restores via QA parent. NOT automatic production/MSIX uninstall recovery."
+            Scope = scope
         }, new JsonSerializerOptions { WriteIndented = true }));
         return passed ? 0 : 1;
     }

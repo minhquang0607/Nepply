@@ -1,13 +1,29 @@
 using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
+using Microsoft.Win32;
 using Nepply.Services;
 
 internal static class DesktopVisibilityRuntimeTests
 {
-    internal static int Run(string output)
+    internal static int Run(string output) => Run(output, new ExplorerDesktopVisibility(), "desktop-visibility-runtime.json",
+        expectedAfterRestart: false, requireSettingUntouched: false,
+        "Real Explorer Desktop visibility using production visibility lease with isolated recovery journal. No file changes. Pre-hidden/unavailable Desktop is skipped, not counted as pass.");
+
+    // Store path: nothing is saved in Explorer, so its restart must bring the icons back.
+    internal static int RunWindow(string output) => Run(output, new WindowDesktopVisibility(), "window-visibility-runtime.json",
+        expectedAfterRestart: true, requireSettingUntouched: true,
+        "Real Explorer icon window hidden with ShowWindow, using production visibility lease with isolated recovery journal, from an unpackaged process. Not MSIX/Store acceptance. Pre-hidden/unavailable Desktop is skipped, not counted as pass.");
+
+    private static int? HideIconsSetting()
     {
-        var desktop = new ExplorerDesktopVisibility();
+        using var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced");
+        return key?.GetValue("HideIcons") as int?;
+    }
+
+    private static int Run(string output, IDesktopVisibility desktop, string resultFile, bool expectedAfterRestart, bool requireSettingUntouched, string scope)
+    {
+        int? settingBefore = HideIconsSetting(), settingAfterHide = null, settingFinal = null;
         bool? initial = desktop.IsVisible(), afterHide = null, afterRestart = null, restored = null;
         var lease = new DesktopVisibilityLease(desktop, Path.Combine(output, "visibility.lease"));
         if (lease.OwnsChange) throw new InvalidOperationException("Existing test recovery journal must be handled first.");
@@ -20,6 +36,7 @@ internal static class DesktopVisibilityRuntimeTests
                 if (!lease.Hide()) throw new IOException("Could not hide Desktop icons.");
                 afterHide = desktop.IsVisible();
                 if (afterHide != false) throw new IOException("Hidden state not confirmed.");
+                settingAfterHide = HideIconsSetting();
                 File.WriteAllText(Path.Combine(output, "ready-for-explorer-restart"), Environment.ProcessId.ToString());
                 var wait = Stopwatch.StartNew();
                 while (!File.Exists(Path.Combine(output, "explorer-restarted")) && wait.Elapsed < TimeSpan.FromMinutes(3)) Thread.Sleep(100);
@@ -46,21 +63,28 @@ internal static class DesktopVisibilityRuntimeTests
                 } while (wait.Elapsed < TimeSpan.FromSeconds(15));
             }
             restored = desktop.IsVisible();
+            settingFinal = HideIconsSetting();
         }
-        bool passed = initial == true && afterHide == false && restartAcknowledged && afterRestart == false
-            && restoreSucceeded && restored == true && !lease.OwnsChange && error == null;
-        File.WriteAllText(Path.Combine(output, "desktop-visibility-runtime.json"), JsonSerializer.Serialize(new
+        bool settingUntouched = settingAfterHide == settingBefore && settingFinal == settingBefore;
+        bool passed = initial == true && afterHide == false && restartAcknowledged && afterRestart == expectedAfterRestart
+            && restoreSucceeded && restored == true && !lease.OwnsChange && error == null
+            && (!requireSettingUntouched || settingUntouched);
+        File.WriteAllText(Path.Combine(output, resultFile), JsonSerializer.Serialize(new
         {
             Passed = passed,
             Initial = initial,
             AfterHide = afterHide,
             RestartAcknowledged = restartAcknowledged,
             AfterRestart = afterRestart,
+            ExpectedAfterRestart = expectedAfterRestart,
+            HideIconsBefore = settingBefore,
+            HideIconsAfterHide = settingAfterHide,
+            HideIconsFinal = settingFinal,
             RestoreSucceeded = restoreSucceeded,
             Final = restored,
             JournalRemains = lease.OwnsChange,
             Error = error,
-            Scope = "Real Explorer Desktop visibility using production visibility lease with isolated recovery journal. No file changes. Pre-hidden/unavailable Desktop is skipped, not counted as pass."
+            Scope = scope
         }, new JsonSerializerOptions { WriteIndented = true }));
         Console.WriteLine($"Visibility initial={initial}; hidden={afterHide}; restart={afterRestart}; final={restored}; journal={lease.OwnsChange}");
         return passed ? 0 : 1;

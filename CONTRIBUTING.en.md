@@ -44,6 +44,24 @@ CI additionally checks appearance, tray, DPI, crash behavior, dependencies, noti
 
 Keep Directory.Build.props/targets and locked restore: they pin runtime and ILLink consistently. Update pins and lock files deliberately, then verify on a clean machine/CI.
 
+## Real Explorer gate
+
+CI tests Desktop hiding against file fixtures, so a Windows update can break the main feature while CI stays green. `scripts/Test-DesktopRuntime.ps1` runs the tests that use the real Explorer. Run it before every tag, including release candidates, from a Release build of the commit you will tag:
+
+```powershell
+pwsh scripts/Test-DesktopRuntime.ps1
+pwsh scripts/Test-DesktopRuntime.ps1 -Live -ReleaseTag v2.0.0-rc.2
+```
+
+The first command is a dry run: it reads the current state, prints the plan and changes nothing. The second is the real run.
+
+- **It changes your Desktop.** A real run hides your icons several times and restarts Explorer twice, which closes File Explorer windows. It asks you to type a phrase at a console each time and has no switch to skip that. Never run it from automation. CI runs only `scripts/Test-DesktopRuntimeContract.ps1`, which checks the rules and uses a fake process.
+- **It refuses to start** when Nepply, its guardian or the test binary is running, when icons are already hidden or the icon window cannot be found, when a Nepply recovery journal exists, or when the binaries were not built from the current commit.
+- **It covers six stages:** guardian normal use and owner crash; Explorer's saved option with owner crash and Explorer restart; and the same two for `ShowWindow`, which the Store edition uses. It stops at the first failure and restores the icons.
+- **Results** are in `artifacts/desktop-runtime/<tag>/<time>-<commit>/`: `summary.json`, plus each stage's result file and console log. The run is `ACCEPTED` only if every stage passes on a clean tree with unchanged binaries. Keep that folder and copy the printed row into the record in the [release plan](docs/release/PUBLIC_RELEASE_CHECKLIST.md).
+- **Exit codes:** 0 accepted, or dry run with nothing to refuse. 1 not accepted. 2 refused, with nothing changed. 3 icons are still hidden: right-click the Desktop and choose View > Show desktop icons; if that is already ticked, restart Windows Explorer from Task Manager.
+- **Limits:** a result applies only to that commit and Windows build, so also run it on an Insider build when you can. Tests run from an unpackaged process, so this does not replace installer, uninstall, MSIX or Store acceptance.
+
 ## Current documentation and images
 
 - Update English and Vietnamese user-facing counterparts in the same change when behavior, version, downloads or known limits change. Keep relative language links intact.
