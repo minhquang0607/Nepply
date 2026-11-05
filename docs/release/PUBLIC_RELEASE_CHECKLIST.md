@@ -224,7 +224,8 @@ Với bản Store: cài từ Store, thử mở panel, monitor, ẩn icon, tự k
 - [ ] **[Bạn]** Lần đầu chạy: chọn ẩn icon Desktop → thoát qua khay → icon trở lại.
 - [ ] **[Bạn]** Kill tiến trình `Nepply.exe` trong Task Manager khi icon đang ẩn → guardian khôi phục icon.
 - [ ] **[Bạn]** Gỡ cài đặt khi icon đang ẩn → icon trở lại, không còn file trong `%LOCALAPPDATA%\Programs\Nepply`.
-- [ ] **[Bạn]** Cài bản cũ → cài bản mới đè lên (nâng cấp) → giữ Settings, tự khởi động.
+- [ ] **[Bạn]** Cài bản cũ → cài bản mới đè lên (nâng cấp) → giữ Settings, tự khởi động. Bản cũ phải mới hơn `2.0.0-rc.1`.
+- [ ] **[Bạn]** Có `2.0.0-rc.1`: thoát app, gỡ và chọn không xóa dữ liệu, cài bản mới → giữ Settings, ẩn và hiện icon bình thường.
 - [ ] **[Bạn]** Cập nhật trong app từ bản A lên bản B (cả hai đã ký): tải đúng, từ chối sai chữ ký, tự mở lại.
 - [ ] **[Bạn]** AppLocker với rule mặc định (Windows Pro/Enterprise) và tài khoản người dùng thường.
 - [ ] **[Bạn]** Windows tiếng Anh và tiếng Việt: ngôn ngữ đầu tiên và bộ cài đúng.
@@ -275,6 +276,6 @@ Làm dần, mỗi mục một PR riêng. Không gộp với thay đổi tính n�
 
 - [ ] **[Cả hai]** Đưa Nepply lên winget sau khi có bản ký.
 - [ ] **[AI]** Khi Inno Setup trong `release.yml` đổi phiên bản, đối chiếu `packaging/inno/Languages/Vietnamese.isl` với `Default.isl` mới.
-- [x] **[AI]** Bỏ hẳn tên sản phẩm cũ khỏi mutex, thư mục dữ liệu, bộ cài và tài liệu, theo quyết định của chủ dự án ngày 05/11/2026. Không giữ migration: ai đang dùng `2.0.0-rc.1` phải gỡ bản đó trước khi cài bản mới; ghi rõ điều này trong ghi chú phát hành `2.0.0`.
+- [x] **[AI]** Bỏ hẳn tên sản phẩm cũ khỏi mutex, thư mục dữ liệu, bộ cài và tài liệu, theo quyết định của chủ dự án ngày 05/11/2026. Không giữ migration: ai đang dùng `2.0.0-rc.1` phải gỡ bản đó trước khi cài bản mới; CHANGELOG và `RELEASE_2.0.0.md` đã ghi rõ.
 - [ ] **[Bạn]** Ký mọi bản bằng cùng chứng thư: uy tín SmartScreen tăng dần theo lượt tải của cùng chứng thư.
 - [ ] **[Bạn]** Nếu nhận donate: kiểm lại điều kiện giấy phép thương mại của Inno Setup.
