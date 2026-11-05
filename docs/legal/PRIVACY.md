@@ -4,7 +4,7 @@
 
 ## Tiếng Việt
 
-Cập nhật: 02/11/2026 · Nepply 2.0.0
+Cập nhật: 05/11/2026 · Nepply 2.0.0
 
 Nhà phát triển: Minh Quang  
 Hỗ trợ: https://github.com/minhquang0607/Nepply/issues
@@ -55,7 +55,7 @@ Tùy chọn **Tự kiểm tra cập nhật mỗi ngày** mặc định bật. B�
 
 ## English
 
-Updated: 2 November 2026 · Nepply 2.0.0. Developer: Minh Quang. Support: https://github.com/minhquang0607/Nepply/issues
+Updated: 5 November 2026 · Nepply 2.0.0. Developer: Minh Quang. Support: https://github.com/minhquang0607/Nepply/issues
 
 ### Summary
 

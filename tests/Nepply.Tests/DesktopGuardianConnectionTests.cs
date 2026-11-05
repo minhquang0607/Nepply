@@ -28,6 +28,16 @@ internal static class DesktopGuardianConnectionTests
         catch (OperationCanceledException) { canceledStart = true; }
         check("Guardian canceled startup cleans its unarmed child", canceledStart);
 
+        // Never armed: only the helper's path check runs, so naming the real journal is safe.
+        string journal = DesktopVisibilityLease.JournalPath;
+        await using (var accepted = await DesktopGuardianConnection.StartAsync(executable, default, journal))
+            check("Guardian accepts the production journal path", !accepted.Exited.IsCompleted);
+        string outside = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Path.GetDirectoryName(journal))!, "Other", "desktop-visibility.lease");
+        bool refusedPath = false;
+        try { await using var unused = await DesktopGuardianConnection.StartAsync(executable, default, outside); }
+        catch (Exception ex) when (ex is System.IO.IOException or System.ComponentModel.Win32Exception) { refusedPath = true; }
+        check("Guardian refuses a journal outside the Nepply folder", refusedPath);
+
         var broken = await DesktopGuardianConnection.StartAsync(executable);
         try
         {

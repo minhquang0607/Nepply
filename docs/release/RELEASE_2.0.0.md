@@ -36,6 +36,7 @@ Extract the complete portable archive and run `Nepply.exe`; keep `guardian` and 
 
 - Sensor readings depend on hardware; motherboard temperature/RPM are not supported. Do not disable antivirus or anti-cheat to obtain data.
 - Automatic EXE installation is not enabled for release; portable does not replace its own files. Check Releases and the next version's instructions.
+- **On `2.0.0-rc.1`? Uninstall it before installing `2.0.0`.** Exit it first so your Desktop icons come back. Choose **No** when asked about removing data to keep your settings.
 - Internal `2.5.0-*` builds do not see `2.0.0` as an upgrade. Exit the old build, back up settings and switch manually.
 - Nepply restores Desktop icons it hid when exiting. If abnormal termination leaves icons hidden, follow troubleshooting instructions.
 - A valid signature does not guarantee acceptance by every Windows or enterprise policy. Do not disable Windows protection to bypass warnings.
@@ -80,6 +81,7 @@ Với portable, giải nén **toàn bộ** và chạy `Nepply.exe`; không tách
 
 - Số đo cảm biến phụ thuộc phần cứng; không có nhiệt độ bo mạch chủ/RPM. Không tắt antivirus hay anti-cheat để lấy thêm số đo.
 - Tự cài cập nhật EXE chưa được mở cho phát hành; portable chưa tự thay file. Hãy kiểm tra trang Releases và đọc hướng dẫn của bản mới.
+- **Đang dùng `2.0.0-rc.1`? Hãy gỡ bản đó trước khi cài `2.0.0`.** Thoát app trước để icon Desktop trở lại. Khi được hỏi có xóa dữ liệu không, chọn **Không** để giữ cài đặt.
 - Nếu đang dùng bản thử `2.5.0-*`, updater không coi `2.0.0` là bản nâng cấp. Thoát bản cũ và chuyển thủ công; sao lưu cấu hình trước khi chuyển.
 - Khi thoát, Nepply khôi phục icon Desktop do app đã ẩn. Nếu app đóng bất thường và icon chưa trở lại, xem hướng dẫn xử lý sự cố.
 - Chữ ký hợp lệ không bảo đảm mọi chính sách Windows hoặc doanh nghiệp đều cho chạy. Không tắt bảo vệ Windows để vượt cảnh báo.
