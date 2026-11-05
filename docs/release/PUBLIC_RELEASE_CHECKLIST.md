@@ -1,6 +1,6 @@
 # Kế hoạch phát hành Nepply 2.0.0
 
-Cập nhật 02/11/2026. Đây là kế hoạch duy nhất từ hiện tại đến sau bản chính thức. Làm từng giai đoạn theo thứ tự; giai đoạn sau chỉ bắt đầu khi giai đoạn trước đạt điều kiện **Xong khi**.
+Cập nhật 03/11/2026. Đây là kế hoạch duy nhất từ hiện tại đến sau bản chính thức. Làm từng giai đoạn theo thứ tự; giai đoạn sau chỉ bắt đầu khi giai đoạn trước đạt điều kiện **Xong khi**.
 
 Đánh dấu một mục khi đã hoàn tất và kiểm chứng thật, không đánh dấu theo dự đoán. **[Bạn]** là việc chỉ Minh Quang làm được (tài khoản, duyệt, máy thật); **[AI]** là việc code hoặc tài liệu trong repo do đội ngũ AI (Codex, Claude) làm; **[Cả hai]** cần phối hợp.
 
@@ -14,7 +14,7 @@ Cập nhật 02/11/2026. Đây là kế hoạch duy nhất từ hiện tại đ�
 | 4 | Phát hành `2.0.0-rc.1` chưa ký | Đã công khai và đối chiếu ngày 02/11/2026; đang nhận phản hồi |
 | 5 | Xin chữ ký số | Xong: SignPath từ chối, đã chọn Microsoft Store |
 | 6 | Đưa Nepply lên Microsoft Store | Phần chuẩn bị của AI đã xong; chờ bạn tạo tài khoản |
-| 7 | Hoàn thiện chất lượng | Bài đo 24 giờ đang chạy; còn các mục của bạn |
+| 7 | Hoàn thiện chất lượng | Bài đo 24 giờ đạt (không rò rỉ); còn các mục của bạn |
 | 8 | Nghiệm thu trên máy thật | Chưa làm |
 | 9 | Phát hành `2.0.0` | Đã tạo lại ảnh README; phần còn lại chờ bản Store |
 | 10 | Trả nợ kỹ thuật sau 2.0.0 | Chưa làm |
@@ -205,7 +205,7 @@ Nếu sau này có chứng thư cho bản Setup: thêm bước ký vào `release
 Không chặn việc xin chữ ký, có thể làm song song từ giai đoạn 4.
 
 - [x] **[AI]** Mở mục Desktop không chặn luồng giao diện, để shortcut trỏ tới ổ mạng mất kết nối không làm panel đơ.
-- [ ] **[Cả hai]** Chạy bài đo dài 24 giờ (`pwsh scripts/Run-UiSoak.ps1`), máy phải bật suốt thời gian đo, rồi phân tích CPU, RAM, handle. AI đã khởi động ngày 02/11/2026 trên bản sao trong `artifacts/soak-bin-*`, chưa có kết quả. Máy đang đặt tự ngủ sau 3 giờ không dùng; nếu máy ngủ thì kết quả không dùng được.
+- [x] **[Cả hai]** Chạy bài đo dài 24 giờ (`pwsh scripts/Run-UiSoak.ps1`), máy phải bật suốt thời gian đo, rồi phân tích CPU, RAM, handle. Hoàn tất ngày 03/11/2026 (`86406,9` giây, `2867` mẫu, `28836` lượt đọc chỉ số Windows, `ExitCode=0`, `LoopsStopped=true`, máy không ngủ): không có dấu hiệu rò rỉ — RAM riêng giữ trong dải `79,8–96,0` MB (trung bình giờ 1–6: `86,5` MB, giờ 18–24: `89,2` MB; working set giảm từ `74,5` xuống `55,8` MB), managed heap `4,1–10,2` MB, handle dao động `729–931` và vẫn lùi về đáy `775–778` ở giờ 20–23, GDI cố định `26`, USER `27–32`, số luồng `17–25` sau khởi động. CPU khi ẩn `0,054%` một nhân logic; khi mở khoảng `17%` một nhân logic lúc màn hình bật (chủ yếu ở luồng render hiệu ứng sweep/glow) và dưới `1%` lúc màn hình tắt.
 - [x] **[AI]** Rà trợ năng bằng test tự động trên cây giao diện thật: mọi nút, ô nhập, thanh trượt và danh sách trong Cài đặt, màn chào, panel và các hộp thoại đều có tên cho trình đọc màn hình và đi tới được bằng bàn phím. Đã sửa ô Hiệu ứng chuyển động thiếu tên. Giao diện High Contrast đã có test sẵn.
 - [ ] **[Bạn]** Thử thật với Narrator và chế độ tương phản cao của Windows, vì test tự động không thay được việc nghe thử.
 - [ ] **[Bạn]** Nhờ người bản ngữ duyệt bản dịch Nhật, Đức, Trung, Nga, Pháp, Thái, cả app lẫn bộ cài.
