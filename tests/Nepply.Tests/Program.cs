@@ -207,6 +207,7 @@ internal static class Program
             return _failures == 0 ? 0 : 1;
         }
         StartHangWatchdog(output);
+        LogIsolationTests.Run(Check);
         UpdateTests.Run(Check);
         UpdateDownloadTests.Run(output, Check);
         SignerRuleTests.Run(Check);

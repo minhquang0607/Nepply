@@ -17,10 +17,25 @@ public static class AppLogger
     internal static string LimitText(string value) => value.Length <= MaximumEntryCharacters
         ? value : value[..(MaximumEntryCharacters - 24)] + "\n[diagnostic truncated]";
 
-    public static string LogDirectory { get; } = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "Nepply",
-        "Logs");
+    public static string LogDirectory { get; } = ResolveLogDirectory(
+        AppContext.GetData(LogDirectorySwitch) as string, Environment.GetCommandLineArgs());
+
+    /// <summary>
+    /// Set only by the test project's runtimeconfig, so tests never write into the user's
+    /// logs. Nepply's own runtimeconfig never sets it.
+    /// </summary>
+    internal const string LogDirectorySwitch = "Nepply.LogDirectory";
+    internal static readonly string[] PreviewArguments = ["--preview", "--preview-island", "--smoke-test"];
+
+    internal static string ResolveLogDirectory(string? configured, IReadOnlyList<string> args)
+    {
+        if (!string.IsNullOrWhiteSpace(configured))
+            return Path.GetFullPath(configured, AppContext.BaseDirectory);
+        // Preview and smoke runs show fixture data; keep their logs apart from real use.
+        if (args.Any(arg => PreviewArguments.Contains(arg, StringComparer.Ordinal)))
+            return Path.Combine(Path.GetTempPath(), "Nepply-preview", "Logs");
+        return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Nepply", "Logs");
+    }
 
     private sealed record LogEntry(DateTimeOffset Timestamp, string Level, string Message, Exception? Error);
     private static readonly Channel<LogEntry> _channel;
