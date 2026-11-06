@@ -62,7 +62,7 @@ Only use the official release channel. If Windows blocks a file, check its sourc
 
 ## 🛡️ Privacy & support
 
-No ads, analytics or automatic crash uploads. Update checks contact GitHub once a day and when requested; you can turn the daily check off. [Privacy policy — EN / VI](docs/legal/PRIVACY.md)
+No ads, analytics or automatic crash uploads. Update checks contact GitHub once a day (again after 12 hours if a check fails) and when requested; you can turn the daily check off. [Privacy policy — EN / VI](docs/legal/PRIVACY.md)
 
 - [Report a bug or suggest a feature](https://github.com/minhquang0607/Nepply/issues). Include your version and steps; redact personal data from screenshots/logs.
 - Security concerns: use the [private reporting channel — EN / VI](docs/legal/SECURITY.md), not a public exploit report.

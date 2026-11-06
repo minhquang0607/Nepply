@@ -3,8 +3,9 @@
 ## Phạm vi hiện tại
 
 Settings → Ứng dụng → Kiểm tra cập nhật. Tùy chọn **Tự kiểm tra cập nhật mỗi
-ngày** mặc định bật, tối đa một yêu cầu mỗi ngày và chỉ báo ở khay hệ thống,
-không tải hay cài. Bản cài EXE có
+ngày** mặc định bật: mỗi ngày một yêu cầu, không gửi khi Windows báo không có
+mạng, thất bại thì thử lại sau 12 giờ và báo một lần ở khay sau hai lần thất bại
+liên tiếp. Chỉ báo ở khay hệ thống, không tải hay cài. Bản cài EXE có
 luồng tải/xác minh/bàn giao Setup; portable chỉ xem thông tin, chưa thay file;
 MSIX dùng Store và không gọi feed EXE.
 

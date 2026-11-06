@@ -14,7 +14,7 @@ Cập nhật 06/11/2026. Đây là kế hoạch duy nhất từ hiện tại đ�
 | 4 | Phát hành `2.0.0-rc.1` chưa ký | Đã công khai và đối chiếu ngày 02/11/2026; đang nhận phản hồi |
 | 5 | Xin chữ ký số | Xong: SignPath từ chối, đã chọn Microsoft Store |
 | 6 | Đưa Nepply lên Microsoft Store | Phần chuẩn bị của AI đã xong; chờ bạn tạo tài khoản |
-| 7 | Hoàn thiện chất lượng | Bài đo giao diện 24 giờ đạt; script đo app thật đã có, chờ chạy 24 giờ; F-08 chờ số đo, F-18 chờ bạn quyết; còn các mục của bạn |
+| 7 | Hoàn thiện chất lượng | Bài đo giao diện 24 giờ đạt; script đo app thật đã có, chờ chạy 24 giờ; F-08 chờ số đo; các mục audit nhỏ khác đã xong; còn các mục của bạn |
 | 8 | Nghiệm thu trên máy thật | Chưa làm |
 | 9 | Phát hành `2.0.0` | Đã tạo lại ảnh README; phần còn lại chờ bản Store |
 | 10 | Trả nợ kỹ thuật sau 2.0.0 | Chưa làm |
@@ -224,7 +224,12 @@ Audit trên `aa6cd17` chấm 6,9/10, không có lỗi P0, đánh mã F-01 đến
 
 - [x] **[AI]** F-15: sửa tài liệu lệch code. `STRUCTURE.md` từng ghi Updates "không polling nền" trong khi kiểm tra mỗi ngày bật mặc định; chú thích đầu `release.yml` còn nói chờ SignPath; số dòng `MainWindow` và `SettingsWindow` ở giai đoạn 10 đã cũ.
 - [ ] **[AI]** F-08: script đo toàn app đếm thêm số lần quét đầy đủ và số tiến trình helper. Watcher hiện quét lại toàn bộ mỗi 5 phút (`repairIntervalMs = 300000`), mỗi lần sinh một tiến trình, dù đã có hai kênh báo thay đổi. Có số đo rồi mới quyết định nới chu kỳ hay so danh sách thư mục trước khi sinh helper. Phần đếm đã có từ PR #18: app ghi mỗi giờ một dòng log với số lần quét, `Read-AppSoak.ps1` cộng lại. Còn chờ số đo từ bài đo 24 giờ.
-- [ ] **[AI]** F-18: kiểm tra cập nhật nền thất bại thì thử lại một lần sau 1 giờ, thay vì chờ 24 giờ. Hiện máy chưa có mạng trong phút đầu sau khi mở app sẽ bỏ lỡ cả ngày. Chờ chủ dự án quyết: chính sách quyền riêng tư, README và hướng dẫn cập nhật đều hứa liên hệ GitHub "tối đa một lần mỗi ngày", nên thử lại phải sửa cả lời hứa đó.
+- [x] **[AI]** F-18: trước đây kiểm tra cập nhật nền thất bại thì chờ 24 giờ, nên máy chưa có mạng trong phút đầu sau khi mở app bỏ lỡ cả ngày. Chủ dự án chốt ngày 06/11/2026:
+  - Windows báo không có mạng: không gửi, không tính là thất bại, mỗi giờ xem lại.
+  - Có mạng mà thất bại: thử lại sau 12 giờ.
+  - Hai lần thất bại liên tiếp: báo một lần ở khay hệ thống, bấm vào mở Cài đặt cập nhật. Chỉ báo lại sau khi đã có một lần kiểm tra thành công.
+  - Chính sách quyền riêng tư, README, hướng dẫn và `EXE_UPDATES.md` đã đổi lời hứa "tối đa một lần mỗi ngày" cho khớp.
+  - Có 12 test cho lịch kiểm tra; chưa thử thật thông báo trên khay hệ thống.
 - [x] **[AI]** F-20: test và chế độ preview không ghi vào thư mục log thật `%LOCALAPPDATA%\Nepply\Logs`. Test ghi vào `test-logs` cạnh `Nepply.Tests.exe`, nhờ một cấu hình chỉ dự án test đặt; preview và smoke test ghi vào `%TEMP%\Nepply-preview\Logs`, cùng chỗ với cài đặt tạm của chúng. Đã kiểm: chạy hết core test, file log thật không đổi một byte.
 - [x] **[AI]** F-14: đã xác minh ngày 06/11/2026. Kết quả lớn hơn audit ghi, nên chuyển sang giai đoạn 10, làm cùng F-05; xem mục ở đó.
 - [x] **[AI]** F-21: `LibreHardwareProvider` dùng `ToDictionary` ở dòng 27 và 38, sẽ ném lỗi nếu trùng ID, trong khi dòng 45 lại dùng `DistinctBy`. Đã thống nhất: cả ba chỗ giữ mục đầu tiên, mỗi ID chỉ đọc một lần, có test. Chưa xác minh thư viện cảm biến có bao giờ trả ID trùng không; nếu không thì hành vi không đổi.
