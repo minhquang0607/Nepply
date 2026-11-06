@@ -130,10 +130,17 @@ public class DesktopIconService : IDisposable, IDesktopCatalog, IDesktopActions
             await ScanOnceAsync(paths).ConfigureAwait(false);
         }
     }
+    private readonly DesktopScanStatistics _scanStatistics = new();
+    private void RecordScan(bool full, bool succeeded, Stopwatch reading)
+    {
+        if (_scanStatistics.Record(full, succeeded, reading.Elapsed) is { } line) AppLogger.Info(line);
+    }
     private async Task ScanOnceAsync(string[]? paths)
     {
         int generation = Interlocked.Increment(ref _scanGeneration);
         await _scanGate.WaitAsync();
+        bool? full = null;
+        var reading = new Stopwatch();
         try
         {
             if (_disposed || generation != Volatile.Read(ref _scanGeneration)) return;
@@ -151,11 +158,15 @@ public class DesktopIconService : IDisposable, IDesktopCatalog, IDesktopActions
                 paths = null;
             Volatile.Write(ref _scanFailureDiagnostic, null);
             SetScanState(new(true, HasScanned));
+            full = paths == null;
+            reading.Start();
             var incoming = _rawScanner != null ? await _rawScanner(options, paths, _scanShutdown.Token)
                 : _scanner != null ? await _scanner(options, _scanShutdown.Token)
                 : _scanExecutable != null
                     ? await DesktopScanProcess.ReadAsync(_scanExecutable, options.ShowHiddenFiles, options.ShowSystemIcons, _scanShutdown.Token, options.MergeEquivalentShortcuts, paths, raw: true)
                     : await DesktopEntryReader.ReadNativeAsync(options, paths);
+            reading.Stop();
+            RecordScan(full.Value, true, reading);
             var raw = DesktopRawCatalog.BoundImages(paths == null ? incoming : DesktopRawCatalog.Merge(previousRaw!, incoming, paths));
             var results = _scanner != null ? incoming : DesktopRawCatalog.Group(raw, options.MergeEquivalentShortcuts);
 
@@ -182,6 +193,8 @@ public class DesktopIconService : IDisposable, IDesktopCatalog, IDesktopActions
         catch (OperationCanceledException) when (_scanShutdown.IsCancellationRequested) { }
         catch (Exception ex)
         {
+            // A failure after reading finished (merge, grouping) was already counted as a read.
+            if (full is { } wasFull && reading.IsRunning) { reading.Stop(); RecordScan(wasFull, false, reading); }
             lock (_scanRequests) _rawSnapshot = null; // Next request repairs the complete baseline.
             Volatile.Write(ref _scanFailureDiagnostic, AppLogger.LimitText(ex.ToString()));
             AppLogger.Error(ex, "Desktop scan");

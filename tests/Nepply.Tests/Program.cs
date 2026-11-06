@@ -218,6 +218,7 @@ internal static class Program
         DesktopRecoveryJournalTests.Run(output, Check);
         ReleaseHardeningTests.Run(output, Check);
         CoreLogicTests.Run(Check);
+        DesktopScanStatisticsTests.Run(Check);
         TelemetrySoak.VerifyAcceptance(Check);
         if (args.Contains("--core-only"))
         {
