@@ -210,7 +210,8 @@ public partial class App : Application
         _tray.TrayBalloonTipClicked += (_, _) => window.OpenUpdateSettings();
         _updateService = new Modules.Updates.UpdateService();
         _updateCheck = new Modules.Updates.BackgroundUpdateCheck(() => window.Settings.AutoCheckUpdates, _updateService.CheckAsync, release =>
-            _tray.ShowBalloonTip("Nepply", LocalizationService.Render(UserMessage.FromKey("UpdateAutoFound", release.Tag.TrimStart('v'))), BalloonIcon.Info));
+            _tray.ShowBalloonTip("Nepply", LocalizationService.Render(UserMessage.FromKey("UpdateAutoFound", release.Tag.TrimStart('v'))), BalloonIcon.Info),
+            notifyFailures: () => _tray.ShowBalloonTip("Nepply", LocalizationService.Get("UpdateAutoFailed"), BalloonIcon.Warning));
         _ = _updateCheck.RunAsync();
     }
     internal static Action AttachTrayLanguage(TaskbarIcon tray)

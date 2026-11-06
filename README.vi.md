@@ -62,7 +62,7 @@ Chỉ tải từ kênh phát hành chính thức. Nếu Windows chặn file, ki�
 
 ## 🛡️ Quyền riêng tư & hỗ trợ
 
-Không quảng cáo, analytics hay tự gửi báo cáo lỗi. Kiểm tra cập nhật kết nối GitHub mỗi ngày một lần và khi bạn yêu cầu; bạn có thể tắt kiểm tra hằng ngày. [Quyền riêng tư — EN / VI](docs/legal/PRIVACY.md)
+Không quảng cáo, analytics hay tự gửi báo cáo lỗi. Kiểm tra cập nhật kết nối GitHub mỗi ngày một lần (thử lại sau 12 giờ nếu thất bại) và khi bạn yêu cầu; bạn có thể tắt kiểm tra hằng ngày. [Quyền riêng tư — EN / VI](docs/legal/PRIVACY.md)
 
 - [Báo lỗi hoặc đề xuất](https://github.com/minhquang0607/Nepply/issues): ghi phiên bản và bước tái hiện; che dữ liệu cá nhân trong ảnh/log.
 - Lỗ hổng bảo mật: dùng [kênh liên hệ riêng — EN / VI](docs/legal/SECURITY.md), không đăng cách khai thác công khai.

@@ -14,8 +14,11 @@ internal static class BackgroundUpdateCheckTests
         bool enabled = false;
         int requests = 0;
         var notified = new List<string>();
+        bool online = true;
+        int failureNotices = 0;
         Func<CancellationToken, Task<UpdateRelease?>> respond = _ => Task.FromResult<UpdateRelease?>(release);
-        using var job = new BackgroundUpdateCheck(() => enabled, token => { requests++; return respond(token); }, r => notified.Add(r.Tag), () => now);
+        using var job = new BackgroundUpdateCheck(() => enabled, token => { requests++; return respond(token); }, r => notified.Add(r.Tag), () => now,
+            () => online, () => failureNotices++);
 
         check("New settings turn the daily update check on", new AppSettings().AutoCheckUpdates);
         check("Turning the update check on needs no panel rebuild", SettingsChangeSet.Between(new AppSettings(), new AppSettings { AutoCheckUpdates = true }).CanPreviewWithoutRebuild);
@@ -40,22 +43,63 @@ internal static class BackgroundUpdateCheckTests
         check("A newer version gets its own notice", requests == 3 && notified.SequenceEqual(["v9.0.0", "v9.0.1"]));
 
         now += BackgroundUpdateCheck.Interval;
-        respond = _ => Task.FromException<UpdateRelease?>(new HttpRequestException("offline"));
+        online = false;
         await job.TickAsync(default);
-        check("A failed check stays silent", requests == 4 && notified.Count == 2);
+        check("Without a network nothing is sent", requests == 3);
+        now += TimeSpan.FromHours(30);
         await job.TickAsync(default);
-        check("A failed check waits for the next interval", requests == 4);
+        check("A long offline stretch is not a failure and sends nothing", requests == 3 && failureNotices == 0);
+        online = true;
+        now += TimeSpan.FromHours(1);
+        await job.TickAsync(default);
+        check("The check runs at the first poll after the network returns", requests == 4);
 
         now += BackgroundUpdateCheck.Interval;
+        respond = _ => Task.FromException<UpdateRelease?>(new HttpRequestException("unreachable"));
+        await job.TickAsync(default);
+        check("A first failure stays silent", requests == 5 && notified.Count == 2 && failureNotices == 0);
+        now += BackgroundUpdateCheck.RetryDelay - TimeSpan.FromHours(1);
+        await job.TickAsync(default);
+        check("A failed check waits twelve hours before trying again", requests == 5);
+        now += TimeSpan.FromHours(1);
         respond = _ => Task.FromException<UpdateRelease?>(new OperationCanceledException());
         await job.TickAsync(default);
-        check("A request timeout counts as a failed check", requests == 5 && notified.Count == 2);
+        check("A request timeout counts as a failure", requests == 6);
+        check("The second failure in a row is reported once", failureNotices == 1);
+        now += BackgroundUpdateCheck.RetryDelay;
+        await job.TickAsync(default);
+        check("Further failures keep retrying without repeating the report", requests == 7 && failureNotices == 1);
 
-        now += BackgroundUpdateCheck.Interval;
+        now += BackgroundUpdateCheck.RetryDelay;
+        respond = _ => Task.FromResult<UpdateRelease?>(release);
+        await job.TickAsync(default);
+        check("A success returns to the daily rhythm", requests == 8);
+        now += BackgroundUpdateCheck.RetryDelay;
+        await job.TickAsync(default);
+        check("After a success the next check waits a full day", requests == 8);
+
+        respond = _ => Task.FromException<UpdateRelease?>(new HttpRequestException("unreachable"));
+        now += BackgroundUpdateCheck.RetryDelay;
+        await job.TickAsync(default);
+        now += BackgroundUpdateCheck.RetryDelay;
+        await job.TickAsync(default);
+        check("A success resets the count, so a new pair of failures reports again", requests == 10 && failureNotices == 2);
+
+        now += BackgroundUpdateCheck.RetryDelay;
         release = release with { Tag = "v9.0.2" };
         respond = _ => { enabled = false; return Task.FromResult<UpdateRelease?>(release); };
         await job.TickAsync(default);
-        check("Turning the check off during a request drops the notice", requests == 6 && notified.Count == 2);
+        check("Turning the check off during a request drops the notice", requests == 11 && notified.Count == 2);
+
+        now += BackgroundUpdateCheck.Interval;
+        enabled = true;
+        respond = _ => Task.FromException<UpdateRelease?>(new HttpRequestException("unreachable"));
+        await job.TickAsync(default);
+        now += BackgroundUpdateCheck.RetryDelay;
+        respond = _ => { enabled = false; return Task.FromException<UpdateRelease?>(new HttpRequestException("unreachable")); };
+        await job.TickAsync(default);
+        check("No failure report once the check was turned off", requests == 13 && failureNotices == 2);
+        enabled = true;
 
         now += BackgroundUpdateCheck.Interval;
         enabled = true;
