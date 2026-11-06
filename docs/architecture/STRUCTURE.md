@@ -14,7 +14,7 @@ Nepply là modular monolith WPF: một assembly ứng dụng, nhóm mã theo tí
 | `src/Nepply/Features/Search` | Phiên tìm kiếm, chuẩn hóa từ khóa và trình bày |
 | `src/Nepply/Features/Settings` | Draft, persistence, onboarding và cửa sổ cài đặt |
 | `src/Nepply/Features/Telemetry` | Provider, sampling, snapshot và giao diện monitor |
-| `src/Nepply/Features/Updates` | Feed phiên bản, tải có giới hạn, xác minh chữ ký và UI cập nhật; không polling nền |
+| `src/Nepply/Features/Updates` | Feed phiên bản, tải có giới hạn, xác minh chữ ký và UI cập nhật; kiểm tra nền mỗi ngày khi bật (mặc định bật), chỉ báo ở khay, không tự tải hay cài |
 | `src/Nepply/Presentation` | Appearance, control dùng chung, converter và tray |
 | `src/Nepply/Platform/Windows` | Win32, COM menu, màn hình, hotkey, startup và process |
 | `src/Nepply/Diagnostics` | Logging |
