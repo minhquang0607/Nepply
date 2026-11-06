@@ -68,6 +68,7 @@ jobs:
       - run: ./scripts/Test-ReleaseManifest.ps1
       - run: ./scripts/Test-InstallerContract.ps1
       - run: ./scripts/Test-DesktopRuntimeContract.ps1
+      - run: ./scripts/Test-AppSoakReader.ps1
       - run: ./scripts/Test-ReleaseLayout.ps1
       - run: ./scripts/Test-CodeQlSarifFilter.ps1
       - run: ./scripts/Verify-Dependencies.ps1
