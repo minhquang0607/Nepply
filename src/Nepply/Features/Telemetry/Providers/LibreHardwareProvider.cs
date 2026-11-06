@@ -13,6 +13,22 @@ public sealed class LibreHardwareProvider : IHardwareProvider
     private (string Id, string Name)[] _gpuInventory = [];
     private Dictionary<string, GpuKind> _gpuKinds = [];
     public string Name => "LibreHardwareMonitor + AMD ADL";
+
+    /// <summary>
+    /// Indexes items by identifier, keeping the first of any duplicates, the same rule as
+    /// the <c>DistinctBy</c> on GPU readings. A duplicate identifier from the sensor library
+    /// must not throw and drop every reading; <paramref name="value"/> runs once per identifier.
+    /// </summary>
+    internal static Dictionary<string, TValue> FirstById<T, TValue>(IEnumerable<T> items, Func<T, string> id, Func<T, TValue> value)
+    {
+        var result = new Dictionary<string, TValue>();
+        foreach (var item in items)
+        {
+            var key = id(item);
+            if (!result.ContainsKey(key)) result[key] = value(item);
+        }
+        return result;
+    }
     public HardwareReading Read(AppSettings settings)
     {
         if (_computer == null)
@@ -24,7 +40,7 @@ public sealed class LibreHardwareProvider : IHardwareProvider
         foreach (var hardware in _computer.Hardware)
             UpdateTree(hardware, available);
         var cpu = available.FirstOrDefault(h => h.HardwareType == HardwareType.Cpu);
-        var amdSamples = available.Where(h => h.HardwareType == HardwareType.GpuAmd).ToDictionary(h => h.Identifier.ToString(), h => _amd.Read(h.Identifier.ToString()));
+        var amdSamples = FirstById(available.Where(h => h.HardwareType == HardwareType.GpuAmd), h => h.Identifier.ToString(), h => _amd.Read(h.Identifier.ToString()));
         var cpuCandidates = amdSamples.Values.Where(s => s?.CpuTemperature != null).ToArray();
         var cpuFallback = available.Count(h => h.HardwareType == HardwareType.Cpu) == 1 && cpu?.Name.Contains("AMD", StringComparison.OrdinalIgnoreCase) == true && cpuCandidates.Length == 1 ? cpuCandidates[0] : null;
         var cpuTemperatureSensor = SelectSensor(cpu, SensorType.Temperature, 1, 130, SensorSelection.CpuTemperatureNames);
@@ -35,7 +51,7 @@ public sealed class LibreHardwareProvider : IHardwareProvider
         {
             _gpuInventory = gpuHardware.Select(h => (h.Identifier.ToString(), h.Name)).ToArray();
             var adapters = GpuAdapterCatalog.Read();
-            _gpuKinds = _gpuInventory.ToDictionary(g => g.Id, g => GpuAdapterCatalog.Classify(g.Name, adapters));
+            _gpuKinds = FirstById(_gpuInventory, g => g.Id, g => GpuAdapterCatalog.Classify(g.Name, adapters));
         }
         var gpus = gpuHardware.Select(h => new GpuReading(h.Identifier.ToString(), h.Name,
             GpuLoad(h), Sensor(h, SensorType.Temperature, 1, 130, SensorSelection.GpuCoreNames),
