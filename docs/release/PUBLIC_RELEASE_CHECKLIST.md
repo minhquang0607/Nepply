@@ -1,6 +1,6 @@
 # Kế hoạch phát hành Nepply 2.0.0
 
-Cập nhật 05/11/2026. Đây là kế hoạch duy nhất từ hiện tại đến sau bản chính thức. Làm từng giai đoạn theo thứ tự; giai đoạn sau chỉ bắt đầu khi giai đoạn trước đạt điều kiện **Xong khi**.
+Cập nhật 06/11/2026. Đây là kế hoạch duy nhất từ hiện tại đến sau bản chính thức. Làm từng giai đoạn theo thứ tự; giai đoạn sau chỉ bắt đầu khi giai đoạn trước đạt điều kiện **Xong khi**.
 
 Đánh dấu một mục khi đã hoàn tất và kiểm chứng thật, không đánh dấu theo dự đoán. **[Bạn]** là việc chỉ Minh Quang làm được (tài khoản, duyệt, máy thật); **[AI]** là việc code hoặc tài liệu trong repo do đội ngũ AI (Codex, Claude) làm; **[Cả hai]** cần phối hợp.
 
@@ -14,7 +14,7 @@ Cập nhật 05/11/2026. Đây là kế hoạch duy nhất từ hiện tại đ�
 | 4 | Phát hành `2.0.0-rc.1` chưa ký | Đã công khai và đối chiếu ngày 02/11/2026; đang nhận phản hồi |
 | 5 | Xin chữ ký số | Xong: SignPath từ chối, đã chọn Microsoft Store |
 | 6 | Đưa Nepply lên Microsoft Store | Phần chuẩn bị của AI đã xong; chờ bạn tạo tài khoản |
-| 7 | Hoàn thiện chất lượng | Bài đo giao diện 24 giờ đạt; chưa đo app thật; còn các mục của bạn |
+| 7 | Hoàn thiện chất lượng | Bài đo giao diện 24 giờ đạt; chưa đo app thật; còn 5 mục nhỏ từ audit và các mục của bạn |
 | 8 | Nghiệm thu trên máy thật | Chưa làm |
 | 9 | Phát hành `2.0.0` | Đã tạo lại ảnh README; phần còn lại chờ bản Store |
 | 10 | Trả nợ kỹ thuật sau 2.0.0 | Chưa làm |
@@ -217,6 +217,17 @@ Không chặn việc xin chữ ký, có thể làm song song từ giai đoạn 4
 - [x] **[AI]** Chứng thực nguồn gốc build (`actions/attest-build-provenance`) trong bước `draft-release`, chỉ chạy khi repo Public. Đã chạy thật ở *Release build* #2; API công khai trả về attestation cho cả ba tệp của `2.0.0-rc.1`. Chưa chạy `gh attestation verify` vì máy chưa có `gh`.
 - [ ] **[Cả hai]** Xử lý các lỗi nhận được từ bản RC.
 
+### Mục từ audit kỹ thuật ngày 05/11/2026
+
+Audit trên `aa6cd17` chấm 6,9/10, không có lỗi P0, đánh mã F-01 đến F-23. Đã xong: F-16 (PR #12), lọc file sinh tự động khỏi CodeQL (PR #13), F-06 (PR #14), F-07 (PR #15), F-02 (PR #16). Bài đo 24 giờ trên app thật ở trên là F-01. Các mục dưới đây nhỏ và không đổi tính năng, nên làm trước `2.0.0`; mục lớn nằm ở giai đoạn 10.
+
+- [x] **[AI]** F-15: sửa tài liệu lệch code. `STRUCTURE.md` từng ghi Updates "không polling nền" trong khi kiểm tra mỗi ngày bật mặc định; chú thích đầu `release.yml` còn nói chờ SignPath; số dòng `MainWindow` và `SettingsWindow` ở giai đoạn 10 đã cũ.
+- [ ] **[AI]** F-08: script đo toàn app đếm thêm số lần quét đầy đủ và số tiến trình helper. Watcher hiện quét lại toàn bộ mỗi 5 phút (`repairIntervalMs = 300000`), mỗi lần sinh một tiến trình, dù đã có hai kênh báo thay đổi. Có số đo rồi mới quyết định nới chu kỳ hay so danh sách thư mục trước khi sinh helper.
+- [ ] **[AI]** F-18: kiểm tra cập nhật nền thất bại thì thử lại một lần sau 1 giờ, thay vì chờ 24 giờ. Hiện máy chưa có mạng trong phút đầu sau khi mở app sẽ bỏ lỡ cả ngày.
+- [ ] **[AI]** F-20: test và chế độ preview không ghi vào thư mục log thật `%LOCALAPPDATA%\Nepply\Logs`.
+- [ ] **[AI]** F-14: xác minh rồi gỡ nhánh không còn dùng. `DesktopGuardianConnection.DisarmAsync` không có nơi gọi trong `src`; `CopyToCache` chỉ chạy ở bản đóng gói, phải đối chiếu với bản Store trước khi gỡ.
+- [ ] **[AI]** F-21: `LibreHardwareProvider` dùng `ToDictionary` ở dòng 27 và 38, sẽ ném lỗi nếu trùng ID, trong khi dòng 45 lại dùng `DistinctBy`. Xác minh ID có thể trùng không, rồi thống nhất một cách.
+
 **Xong khi:** không còn lỗi nặng đang mở; bài đo 24 giờ trên app thật không có dấu hiệu rò rỉ.
 
 ## Giai đoạn 8. Nghiệm thu trên máy thật
@@ -266,23 +277,32 @@ Làm dần, mỗi mục một PR riêng. Không gộp với thay đổi tính n�
 - [ ] **[AI]** Chuyển test sang xUnit hoặc MSTest theo từng nhóm, để chạy được bằng `dotnet test` và báo giá trị thực tế so với mong đợi.
 - [ ] **[AI]** Tách `tests/Nepply.Tests/Program.cs` (hơn 1500 dòng) thành các file theo tính năng.
 - [ ] **[AI]** Thay các test phụ thuộc thời gian bằng đồng hồ giả hoặc chờ theo điều kiện.
+- [ ] **[AI]** Chạy coverage một lần trước khi chuyển framework, để biết vùng quan trọng nào chưa được test.
 
 ### Cấu trúc
 
 - [ ] **[AI]** Sửa namespace cho khớp thư mục (`Nepply.Features.*`, `Nepply.Platform.*`), một PR cơ học riêng.
-- [ ] **[AI]** Tách `MainWindow` (876 dòng): vị trí cửa sổ, kích hoạt từ cạnh, xem trước Settings, bố cục.
-- [ ] **[AI]** Tách `SettingsWindow` (745 dòng) theo từng nhóm cài đặt.
+- [ ] **[AI]** Tách `MainWindow` (966 dòng ở `8f6da30`): vị trí cửa sổ, kích hoạt từ cạnh, xem trước Settings, bố cục.
+- [ ] **[AI]** Tách `SettingsWindow` (753 dòng ở `8f6da30`) theo từng nhóm cài đặt.
 - [ ] **[AI]** Tách `AppSettings` thành dữ liệu thuần; bỏ phụ thuộc vào giao diện và kho lưu file.
 - [ ] **[AI]** Bỏ các lời gọi ngược lên `MainWindow` từ `IconPanel`, `MonitorPanel`, `TrayMenu`, `WelcomeWindow`.
 - [ ] **[AI]** Bỏ các constructor chỉ dành cho test trong `DesktopIconService`, dùng một interface scanner.
 - [ ] **[AI]** Tách các dòng dồn nhiều lệnh và bỏ biến `_settings` cục bộ che field trong `MainWindow`.
-- [ ] **[AI]** Giảm nhiễu CodeQL: bỏ file sinh tự động trong `obj` khỏi kết quả, đóng cảnh báo nhầm kèm lý do, dọn vài mục nhỏ có thật (`insideMonitor` thừa ở `PointerActivationGate.cs:37`, ép kiểu thừa ở `DesktopEntryReader.cs:194` và `WidgetDrag.cs:99`).
+- [ ] **[AI]** F-10: đưa móc kiểm thử ra khỏi `App.xaml.cs`, `MainWindow` và `AppSettings`, chỉ giữ một điểm vào mỏng như `--smoke-test`, để nhánh chạy khi test giống bản thật.
+- [ ] **[AI]** Giảm nhiễu CodeQL, phần còn lại (file sinh tự động trong `obj` đã được lọc ở PR #13): đóng cảnh báo nhầm kèm lý do, hỏi chủ dự án trước khi đóng hàng loạt; dọn vài mục nhỏ có thật (`insideMonitor` thừa ở `PointerActivationGate.cs:37`, ép kiểu thừa ở `DesktopEntryReader.cs:194` và `WidgetDrag.cs:99`).
 
 ### Đơn giản hóa và dung lượng
 
+- [ ] **[Cả hai]** F-05: thử dùng một cách ẩn icon (`ShowWindow`, như bản Store) cho cả bản Setup. Nếu đạt khi khởi động lại Explorer, khi dùng menu View và khi app bị crash, thì bỏ được guardian 70 MB cùng giao thức khôi phục. Kết quả là một văn bản quyết định, kể cả khi quyết định giữ guardian. Làm trước mục Guardian bên dưới.
 - [ ] **[Cả hai]** Xem lại Guardian: exe 70 MB và khoảng 770 dòng cho việc khôi phục icon. Thử bản biên dịch native để giảm dung lượng.
 - [ ] **[Cả hai]** Giảm dung lượng app: `Nepply.exe` 194 MB, Setup 78 MB. Thử nén single-file, đo ảnh hưởng tới thời gian khởi động.
 - [ ] **[AI]** Gom bớt script kiểm tra trùng lặp, thêm số phiên bản lấy tự động từ tag.
+
+### Độ bền và tài liệu
+
+- [ ] **[AI]** F-17: đo thời gian đóng app khi Explorer hoặc guardian treo. Hiện việc đóng chặn luồng giao diện; nếu thời gian đáng kể thì đặt một hạn chung.
+- [ ] **[AI]** F-22: tìm hiểu `SendMessageTimeout` hết hạn rồi thử lại có thể bật tắt icon hai lần không, rồi thử với Explorer treo.
+- [ ] **[AI]** Viết tài liệu kiến trúc tiếng Anh, có sơ đồ tiến trình và các trạng thái ẩn, khôi phục icon, vì repo đã Public.
 
 ### Phân phối và vận hành
 
