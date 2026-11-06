@@ -224,7 +224,7 @@ Audit trên `aa6cd17` chấm 6,9/10, không có lỗi P0, đánh mã F-01 đến
 - [x] **[AI]** F-15: sửa tài liệu lệch code. `STRUCTURE.md` từng ghi Updates "không polling nền" trong khi kiểm tra mỗi ngày bật mặc định; chú thích đầu `release.yml` còn nói chờ SignPath; số dòng `MainWindow` và `SettingsWindow` ở giai đoạn 10 đã cũ.
 - [ ] **[AI]** F-08: script đo toàn app đếm thêm số lần quét đầy đủ và số tiến trình helper. Watcher hiện quét lại toàn bộ mỗi 5 phút (`repairIntervalMs = 300000`), mỗi lần sinh một tiến trình, dù đã có hai kênh báo thay đổi. Có số đo rồi mới quyết định nới chu kỳ hay so danh sách thư mục trước khi sinh helper.
 - [ ] **[AI]** F-18: kiểm tra cập nhật nền thất bại thì thử lại một lần sau 1 giờ, thay vì chờ 24 giờ. Hiện máy chưa có mạng trong phút đầu sau khi mở app sẽ bỏ lỡ cả ngày.
-- [ ] **[AI]** F-20: test và chế độ preview không ghi vào thư mục log thật `%LOCALAPPDATA%\Nepply\Logs`.
+- [x] **[AI]** F-20: test và chế độ preview không ghi vào thư mục log thật `%LOCALAPPDATA%\Nepply\Logs`. Test ghi vào `test-logs` cạnh `Nepply.Tests.exe`, nhờ một cấu hình chỉ dự án test đặt; preview và smoke test ghi vào `%TEMP%\Nepply-preview\Logs`, cùng chỗ với cài đặt tạm của chúng. Đã kiểm: chạy hết core test, file log thật không đổi một byte.
 - [ ] **[AI]** F-14: xác minh rồi gỡ nhánh không còn dùng. `DesktopGuardianConnection.DisarmAsync` không có nơi gọi trong `src`; `CopyToCache` chỉ chạy ở bản đóng gói, phải đối chiếu với bản Store trước khi gỡ.
 - [ ] **[AI]** F-21: `LibreHardwareProvider` dùng `ToDictionary` ở dòng 27 và 38, sẽ ném lỗi nếu trùng ID, trong khi dòng 45 lại dùng `DistinctBy`. Xác minh ID có thể trùng không, rồi thống nhất một cách.
 

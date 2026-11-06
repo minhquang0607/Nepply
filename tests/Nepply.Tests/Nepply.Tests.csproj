@@ -1,4 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0-windows10.0.19041.0</TargetFramework><RuntimeFrameworkVersion></RuntimeFrameworkVersion><UseWPF>true</UseWPF><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><RuntimeIdentifier>win-x64</RuntimeIdentifier><SelfContained>true</SelfContained></PropertyGroup>
  <ItemGroup><ProjectReference Include="../../src/Nepply/Nepply.csproj"/></ItemGroup>
+ <!-- Tests and the child processes they start log here, never into the user's %LOCALAPPDATA%\Nepply\Logs. -->
+ <ItemGroup><RuntimeHostConfigurationOption Include="Nepply.LogDirectory" Value="test-logs" /></ItemGroup>
 </Project>
