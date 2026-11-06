@@ -226,7 +226,7 @@ Audit trên `aa6cd17` chấm 6,9/10, không có lỗi P0, đánh mã F-01 đến
 - [ ] **[AI]** F-18: kiểm tra cập nhật nền thất bại thì thử lại một lần sau 1 giờ, thay vì chờ 24 giờ. Hiện máy chưa có mạng trong phút đầu sau khi mở app sẽ bỏ lỡ cả ngày.
 - [ ] **[AI]** F-20: test và chế độ preview không ghi vào thư mục log thật `%LOCALAPPDATA%\Nepply\Logs`.
 - [ ] **[AI]** F-14: xác minh rồi gỡ nhánh không còn dùng. `DesktopGuardianConnection.DisarmAsync` không có nơi gọi trong `src`; `CopyToCache` chỉ chạy ở bản đóng gói, phải đối chiếu với bản Store trước khi gỡ.
-- [ ] **[AI]** F-21: `LibreHardwareProvider` dùng `ToDictionary` ở dòng 27 và 38, sẽ ném lỗi nếu trùng ID, trong khi dòng 45 lại dùng `DistinctBy`. Xác minh ID có thể trùng không, rồi thống nhất một cách.
+- [x] **[AI]** F-21: `LibreHardwareProvider` dùng `ToDictionary` ở dòng 27 và 38, sẽ ném lỗi nếu trùng ID, trong khi dòng 45 lại dùng `DistinctBy`. Đã thống nhất: cả ba chỗ giữ mục đầu tiên, mỗi ID chỉ đọc một lần, có test. Chưa xác minh thư viện cảm biến có bao giờ trả ID trùng không; nếu không thì hành vi không đổi.
 
 **Xong khi:** không còn lỗi nặng đang mở; bài đo 24 giờ trên app thật không có dấu hiệu rò rỉ.
 

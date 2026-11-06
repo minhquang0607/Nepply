@@ -23,5 +23,12 @@ internal static class SensorSelectionTests
         check("Ambiguous matching sensors are not chosen by order", Gpu(gpu, gpu with { Id = "second", Value = 60 }) == null);
         check("Repeated sensor identity is deduplicated", Gpu(gpu, gpu) == gpu);
         check("Zero load is retained while zero temperature rejected", SensorSelection.Select([gpu with { Value = 0 }], 0, 100, "GPU Core")?.Value == 0 && Gpu(gpu with { Value = 0 }) == null);
+
+        int reads = 0;
+        var adapters = new[] { ("/gpu-amd/0", "first"), ("/gpu-amd/1", "other"), ("/gpu-amd/0", "duplicate") };
+        var byId = LibreHardwareProvider.FirstById(adapters, a => a.Item1, a => { reads++; return a.Item2; });
+        check("A duplicate hardware ID keeps the first entry instead of throwing",
+            byId.Count == 2 && byId["/gpu-amd/0"] == "first" && byId["/gpu-amd/1"] == "other");
+        check("A duplicate hardware ID is read only once", reads == 2);
     }
 }
