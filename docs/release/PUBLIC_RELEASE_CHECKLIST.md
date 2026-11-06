@@ -14,7 +14,7 @@ Cập nhật 06/11/2026. Đây là kế hoạch duy nhất từ hiện tại đ�
 | 4 | Phát hành `2.0.0-rc.1` chưa ký | Đã công khai và đối chiếu ngày 02/11/2026; đang nhận phản hồi |
 | 5 | Xin chữ ký số | Xong: SignPath từ chối, đã chọn Microsoft Store |
 | 6 | Đưa Nepply lên Microsoft Store | Phần chuẩn bị của AI đã xong; chờ bạn tạo tài khoản |
-| 7 | Hoàn thiện chất lượng | Bài đo giao diện 24 giờ đạt; chưa đo app thật; còn 5 mục nhỏ từ audit và các mục của bạn |
+| 7 | Hoàn thiện chất lượng | Bài đo giao diện 24 giờ đạt; script đo app thật đã có, chờ chạy 24 giờ; F-08 chờ số đo, F-18 chờ bạn quyết; còn các mục của bạn |
 | 8 | Nghiệm thu trên máy thật | Chưa làm |
 | 9 | Phát hành `2.0.0` | Đã tạo lại ảnh README; phần còn lại chờ bản Store |
 | 10 | Trả nợ kỹ thuật sau 2.0.0 | Chưa làm |
@@ -223,10 +223,10 @@ Không chặn việc xin chữ ký, có thể làm song song từ giai đoạn 4
 Audit trên `aa6cd17` chấm 6,9/10, không có lỗi P0, đánh mã F-01 đến F-23. Đã xong: F-16 (PR #12), lọc file sinh tự động khỏi CodeQL (PR #13), F-06 (PR #14), F-07 (PR #15), F-02 (PR #16). Bài đo 24 giờ trên app thật ở trên là F-01. Các mục dưới đây nhỏ và không đổi tính năng, nên làm trước `2.0.0`; mục lớn nằm ở giai đoạn 10.
 
 - [x] **[AI]** F-15: sửa tài liệu lệch code. `STRUCTURE.md` từng ghi Updates "không polling nền" trong khi kiểm tra mỗi ngày bật mặc định; chú thích đầu `release.yml` còn nói chờ SignPath; số dòng `MainWindow` và `SettingsWindow` ở giai đoạn 10 đã cũ.
-- [ ] **[AI]** F-08: script đo toàn app đếm thêm số lần quét đầy đủ và số tiến trình helper. Watcher hiện quét lại toàn bộ mỗi 5 phút (`repairIntervalMs = 300000`), mỗi lần sinh một tiến trình, dù đã có hai kênh báo thay đổi. Có số đo rồi mới quyết định nới chu kỳ hay so danh sách thư mục trước khi sinh helper.
-- [ ] **[AI]** F-18: kiểm tra cập nhật nền thất bại thì thử lại một lần sau 1 giờ, thay vì chờ 24 giờ. Hiện máy chưa có mạng trong phút đầu sau khi mở app sẽ bỏ lỡ cả ngày.
+- [ ] **[AI]** F-08: script đo toàn app đếm thêm số lần quét đầy đủ và số tiến trình helper. Watcher hiện quét lại toàn bộ mỗi 5 phút (`repairIntervalMs = 300000`), mỗi lần sinh một tiến trình, dù đã có hai kênh báo thay đổi. Có số đo rồi mới quyết định nới chu kỳ hay so danh sách thư mục trước khi sinh helper. Phần đếm đã có từ PR #18: app ghi mỗi giờ một dòng log với số lần quét, `Read-AppSoak.ps1` cộng lại. Còn chờ số đo từ bài đo 24 giờ.
+- [ ] **[AI]** F-18: kiểm tra cập nhật nền thất bại thì thử lại một lần sau 1 giờ, thay vì chờ 24 giờ. Hiện máy chưa có mạng trong phút đầu sau khi mở app sẽ bỏ lỡ cả ngày. Chờ chủ dự án quyết: chính sách quyền riêng tư, README và hướng dẫn cập nhật đều hứa liên hệ GitHub "tối đa một lần mỗi ngày", nên thử lại phải sửa cả lời hứa đó.
 - [x] **[AI]** F-20: test và chế độ preview không ghi vào thư mục log thật `%LOCALAPPDATA%\Nepply\Logs`. Test ghi vào `test-logs` cạnh `Nepply.Tests.exe`, nhờ một cấu hình chỉ dự án test đặt; preview và smoke test ghi vào `%TEMP%\Nepply-preview\Logs`, cùng chỗ với cài đặt tạm của chúng. Đã kiểm: chạy hết core test, file log thật không đổi một byte.
-- [ ] **[AI]** F-14: xác minh rồi gỡ nhánh không còn dùng. `DesktopGuardianConnection.DisarmAsync` không có nơi gọi trong `src`; `CopyToCache` chỉ chạy ở bản đóng gói, phải đối chiếu với bản Store trước khi gỡ.
+- [x] **[AI]** F-14: đã xác minh ngày 06/11/2026. Kết quả lớn hơn audit ghi, nên chuyển sang giai đoạn 10, làm cùng F-05; xem mục ở đó.
 - [x] **[AI]** F-21: `LibreHardwareProvider` dùng `ToDictionary` ở dòng 27 và 38, sẽ ném lỗi nếu trùng ID, trong khi dòng 45 lại dùng `DistinctBy`. Đã thống nhất: cả ba chỗ giữ mục đầu tiên, mỗi ID chỉ đọc một lần, có test. Chưa xác minh thư viện cảm biến có bao giờ trả ID trùng không; nếu không thì hành vi không đổi.
 
 **Xong khi:** không còn lỗi nặng đang mở; bài đo 24 giờ trên app thật không có dấu hiệu rò rỉ.
@@ -295,6 +295,12 @@ Làm dần, mỗi mục một PR riêng. Không gộp với thay đổi tính n�
 ### Đơn giản hóa và dung lượng
 
 - [ ] **[Cả hai]** F-05: thử dùng một cách ẩn icon (`ShowWindow`, như bản Store) cho cả bản Setup. Nếu đạt khi khởi động lại Explorer, khi dùng menu View và khi app bị crash, thì bỏ được guardian 70 MB cùng giao thức khôi phục. Kết quả là một văn bản quyết định, kể cả khi quyết định giữ guardian. Làm trước mục Guardian bên dưới.
+- [ ] **[AI]** F-14: gỡ đường guardian không còn chạy, sau khi có quyết định F-05. Đã xác minh ngày 06/11/2026 trên `e6eadb1`:
+  - Từ `aa6cd17`, `DesktopIconService` chỉ tạo guardian khi app không đóng gói. Vì vậy nhánh đóng gói trong `DesktopGuardianDeployment.StartAsync` và `CopyToCache` không bao giờ chạy.
+  - `PackagedGuardianTests` (`--packaged-production-guardian`, `--verify-guardian-removal`) vẫn giả định bản đóng gói có guardian, nên đã cũ.
+  - `Build-Msix.ps1` vẫn đưa guardian vào gói MSIX nội bộ (bản Store thì không), và `verify.yml` vẫn đưa guardian vào payload MSIX của CI.
+  - `DesktopGuardianConnection.DisarmAsync` không có nơi gọi trong `src`, nhưng là lệnh `Disarm` trong giao thức guardian và có test riêng.
+  - Gỡ cho sạch phải đụng script MSIX, CI và giao thức của tính năng ẩn icon, nên không làm ngay trước `2.0.0`. Nếu F-05 bỏ hẳn guardian thì các phần này mất theo.
 - [ ] **[Cả hai]** Xem lại Guardian: exe 70 MB và khoảng 770 dòng cho việc khôi phục icon. Thử bản biên dịch native để giảm dung lượng.
 - [ ] **[Cả hai]** Giảm dung lượng app: `Nepply.exe` 194 MB, Setup 78 MB. Thử nén single-file, đo ảnh hưởng tới thời gian khởi động.
 - [ ] **[AI]** Gom bớt script kiểm tra trùng lặp, thêm số phiên bản lấy tự động từ tag.
