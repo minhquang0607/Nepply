@@ -162,6 +162,19 @@ Bạn góp ý ngày 02/11/2026. Lần rà mặc định trước được làm l
 - [x] **[AI]** Tải file từ trang Release về máy và cài thử. Ngày 02/11/2026 cả ba tệp khớp mã GitHub và `SHA256.json`, `Verify-Release.ps1 -ExpectedVersion 2.0.0-rc.1` đạt trên bản portable và Setup. Chạy ẩn bằng Setup công khai: cài lần đầu ghi `AutoStart=1` và ngôn ngữ, cài đè không ghi lại `AutoStart`, gỡ xong sạch. Đây là chạy ẩn và không mở app; lượt cài qua trình duyệt có SmartScreen thuộc giai đoạn 8.
 - [ ] **[Cả hai]** Nhận phản hồi trong lúc chờ SignPath, nên từ 2 đến 4 tuần. Lỗi nặng được sửa ở `2.0.0-rc.2`, tăng `FileVersion` thành `2.0.0.2`.
 
+### Bản `2.0.0-rc.2`
+
+Đưa tới người dùng các sửa lỗi từ rc.1 và runtime .NET đã vá (`10.0.14`), trong lúc Partner Center còn chờ. Không cần Partner Center.
+
+- [x] **[AI]** Ngày 10/11/2026: đổi mã nguồn sang `2.0.0-rc.2` / `2.0.0.2` (app và guardian), chuyển mục "Chưa phát hành" của CHANGELOG thành rc.2, viết [RELEASE_2.0.0-rc.2.md](RELEASE_2.0.0-rc.2.md), bỏ số phiên bản cố định khỏi bảng tải trong README và thêm hướng dẫn kiểm file tải về.
+- [ ] **[Bạn]** Trên đúng commit sẽ gắn tag: build Release, chạy `pwsh scripts/Test-DesktopRuntime.ps1 -Live -ReleaseTag v2.0.0-rc.2`, chỉ tiếp tục khi script báo `ACCEPTED`.
+- [ ] **[Bạn]** Đồng ý cho AI tạo và push tag `v2.0.0-rc.2`. *Release build* tự chạy, kể cả cổng runtime .NET.
+- [ ] **[Bạn]** Duyệt bước `release` của *Release build*.
+- [ ] **[AI]** Điền ghi chú song ngữ vào Release nháp, chọn *Pre-release*, lưu nháp.
+- [ ] **[Bạn]** Xem lại Release nháp rồi bấm Publish.
+- [ ] **[AI]** Đối chiếu sau khi công khai: `SHA256.json`, mã GitHub, attestation, `Verify-Release.ps1 -ExpectedVersion 2.0.0-rc.2`; ghi ngày phát hành vào CHANGELOG.
+- [ ] **[Bạn]** Gỡ rc.1 theo ghi chú phát hành rồi cài rc.2 qua trình duyệt: ẩn icon, thoát, icon trở lại.
+
 **Xong khi:** Release công khai tải được, cài được, không có lỗi chặn.
 
 ## Giai đoạn 5. Xin chữ ký số

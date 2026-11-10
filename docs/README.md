@@ -1,6 +1,6 @@
 # 📚 Nepply documentation · Tài liệu
 
-**2.0.0-rc.1 · November / tháng 11 năm 2026**
+**2.0.0-rc.2 · November / tháng 11 năm 2026**
 
 Author / Tác giả: Minh Quang · AI team / Đội ngũ AI: Codex, Claude
 
@@ -36,6 +36,7 @@ Các tài liệu triển khai chi tiết dưới đây hiện bằng tiếng Vi�
 
 ## 📦 For maintainers · Dành cho người phát hành
 
+- [Release 2.0.0-rc.2 — English / Tiếng Việt](release/RELEASE_2.0.0-rc.2.md)
 - [Release 2.0.0-rc.1 — English / Tiếng Việt](release/RELEASE_2.0.0-rc.1.md)
 - [Release 2.0.0 draft — English / Tiếng Việt](release/RELEASE_2.0.0.md)
 - [SignPath application / Đơn SignPath](release/SIGNPATH_APPLICATION.md) · [Microsoft Store listing / Nội dung Store](release/STORE_LISTING.md)

@@ -2,7 +2,9 @@
 
 [English](CHANGELOG.en.md) · **Tiếng Việt** · [Trang chính](README.vi.md)
 
-## Chưa phát hành
+## 2.0.0-rc.2 — chưa phát hành
+
+Bản phát hành thử thứ hai, chưa ký số. Ngày phát hành được ghi khi bản này lên trang Releases.
 
 ### Nâng cấp từ 2.0.0-rc.1
 
@@ -19,6 +21,8 @@
 
 ### Độ tin cậy
 
+- Kiểm tra cập nhật hằng ngày thất bại khi có mạng sẽ thử lại sau 12 giờ thay vì đợi một ngày. Hai lần thất bại liên tiếp thì Nepply báo một lần ở khay hệ thống; bấm vào để mở Cài đặt cập nhật. Khi Windows báo không có mạng, Nepply không gửi gì và không tính là thất bại.
+- Hai cảm biến trùng mã phần cứng không còn làm hỏng lượt đọc số đo: Nepply giữ cảm biến đầu tiên.
 - Nếu tiến trình bảo vệ icon Desktop đang ẩn dừng đột ngột, panel giờ có thông báo và log ghi lại kèm mã thoát. Các lần ẩn hoặc khôi phục icon thất bại cũng được ghi log.
 
 ### Desktop và thao tác

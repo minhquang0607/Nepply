@@ -4,7 +4,7 @@
 <p align="center"><a href="README.md">English</a> · <strong>Tiếng Việt</strong></p>
 <p align="center"><a href="#-tải-ứng-dụng">Tải ứng dụng</a> · <a href="docs/USER_GUIDE.md">Hướng dẫn</a> · <a href="CHANGELOG.md">Có gì mới</a> · <a href="docs/README.md">Tài liệu</a></p>
 
-> **2.0.0-rc.1 · Bản phát hành thử, đã có bản tải (chưa ký số)**
+> **Bản phát hành thử của 2.0.0 · đã có bản tải (chưa ký số)**
 >
 > Bản này chưa ký số nên Windows có thể cảnh báo. 2.0.0 sẽ là bản ký đầu tiên.
 
@@ -41,14 +41,37 @@ Nepply nằm ở cạnh màn hình Windows. Mở mục Desktop, tìm theo tên v
 
 | Lựa chọn | Tệp | Cách dùng |
 | --- | --- | --- |
-| **Setup — khuyên dùng** | `Nepply-2.0.0-rc.1-Setup.exe` | Chạy bộ cài; gỡ qua danh sách ứng dụng của Windows. |
-| **Portable** | `Nepply-2.0.0-rc.1-win-x64-portable.zip` | Giải nén toàn bộ rồi chạy `Nepply.exe`. Giữ `guardian` và các file đi kèm. |
+| **Setup — khuyên dùng** | `Nepply-<phiên bản>-Setup.exe` | Chạy bộ cài; gỡ qua danh sách ứng dụng của Windows. |
+| **Portable** | `Nepply-<phiên bản>-win-x64-portable.zip` | Giải nén toàn bộ rồi chạy `Nepply.exe`. Giữ `guardian` và các file đi kèm. |
 
 [Mở GitHub Releases →](https://github.com/minhquang0607/Nepply/releases)
 
-Chọn tệp trong **Assets** ở trang Releases. Các gói “Source code” của GitHub là mã nguồn cho người phát triển, không phải app chạy ngay. Cả hai bản đóng gói sẵn .NET, không cần cài SDK. Portable vẫn lưu cấu hình trong tài khoản Windows.
+`<phiên bản>` là số phiên bản ghi trên trang Releases. Chọn tệp trong **Assets**. Các gói “Source code” của GitHub là mã nguồn cho người phát triển, không phải app chạy ngay. Cả hai bản đóng gói sẵn .NET, không cần cài SDK. Portable vẫn lưu cấu hình trong tài khoản Windows.
 
 Chỉ tải từ kênh phát hành chính thức. Nếu Windows chặn file, kiểm tra nguồn và thông tin release. **Không tắt bảo vệ Windows để chạy Nepply.**
+
+<details>
+<summary><strong>Kiểm tra file tải về (tùy chọn)</strong></summary>
+
+Khi Nepply chưa có chữ ký số, hai cách sau cho biết file đúng là bản repo này phát hành:
+
+1. **File không hỏng khi tải.** Mở PowerShell ở thư mục chứa file:
+
+   ```powershell
+   Get-FileHash .\Nepply-<phiên bản>-Setup.exe -Algorithm SHA256
+   ```
+
+   So kết quả với dòng của file trong `SHA256.json`, hoặc với giá trị `sha256:` GitHub hiện cạnh file trong **Assets**. Cả hai nằm cùng trang Release, nên cách này phát hiện file tải hỏng, không phát hiện được một bản phát hành giả.
+
+2. **File do repo này build.** Cần [GitHub CLI](https://cli.github.com/) đã đăng nhập:
+
+   ```powershell
+   gh attestation verify .\Nepply-<phiên bản>-Setup.exe --repo minhquang0607/Nepply
+   ```
+
+   Lệnh chỉ đạt với file do quy trình phát hành của repo này build và chứng thực. Mọi file trên trang Releases đều có chứng thực.
+
+</details>
 
 ## 🚀 Bắt đầu
 
