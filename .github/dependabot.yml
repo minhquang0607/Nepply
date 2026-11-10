@@ -1,10 +1,15 @@
 version: 2
 updates:
+  # One pull request for every action: CodeQL refuses to run when init, analyze and
+  # upload-sarif differ in version, and separate pull requests also conflict.
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
     open-pull-requests-limit: 3
+    groups:
+      github-actions:
+        patterns: ['*']
   # Lock files run in --locked-mode on CI, so a pull request whose lock file
   # does not match fails verification instead of merging silently.
   - package-ecosystem: nuget
