@@ -167,12 +167,12 @@ Bạn góp ý ngày 02/11/2026. Lần rà mặc định trước được làm l
 Đưa tới người dùng các sửa lỗi từ rc.1 và runtime .NET đã vá (`10.0.14`), trong lúc Partner Center còn chờ. Không cần Partner Center.
 
 - [x] **[AI]** Ngày 10/11/2026: đổi mã nguồn sang `2.0.0-rc.2` / `2.0.0.2` (app và guardian), chuyển mục "Chưa phát hành" của CHANGELOG thành rc.2, viết [RELEASE_2.0.0-rc.2.md](RELEASE_2.0.0-rc.2.md), bỏ số phiên bản cố định khỏi bảng tải trong README và thêm hướng dẫn kiểm file tải về.
-- [ ] **[Bạn]** Trên đúng commit sẽ gắn tag: build Release, chạy `pwsh scripts/Test-DesktopRuntime.ps1 -Live -ReleaseTag v2.0.0-rc.2`, chỉ tiếp tục khi script báo `ACCEPTED`.
-- [ ] **[Bạn]** Đồng ý cho AI tạo và push tag `v2.0.0-rc.2`. *Release build* tự chạy, kể cả cổng runtime .NET.
-- [ ] **[Bạn]** Duyệt bước `release` của *Release build*.
-- [ ] **[AI]** Điền ghi chú song ngữ vào Release nháp, chọn *Pre-release*, lưu nháp.
-- [ ] **[Bạn]** Xem lại Release nháp rồi bấm Publish.
-- [ ] **[AI]** Đối chiếu sau khi công khai: `SHA256.json`, mã GitHub, attestation, `Verify-Release.ps1 -ExpectedVersion 2.0.0-rc.2`; ghi ngày phát hành vào CHANGELOG.
+- [x] **[Bạn]** Trên đúng commit sẽ gắn tag: build Release, chạy `pwsh scripts/Test-DesktopRuntime.ps1 -Live -ReleaseTag v2.0.0-rc.2`, chỉ tiếp tục khi script báo `ACCEPTED`. Chủ dự án chạy ngày 10/11/2026 trên `5b2e723`, Windows 26300.9818: `ACCEPTED`, đạt cả sáu chặng, không chặng nào phải cứu icon. Dòng kết quả ở nhật ký cuối giai đoạn 9.
+- [x] **[Bạn]** Đồng ý cho AI tạo và push tag `v2.0.0-rc.2`. *Release build* tự chạy, kể cả cổng runtime .NET. Tag có chú thích `v2.0.0-rc.2` trên `5b2e723` được push ngày 10/11/2026.
+- [x] **[Bạn]** Duyệt bước `release` của *Release build*. *Release build* trên tag (run 42757823699) xanh cả hai job, gồm cổng runtime .NET; Release nháp có Setup, portable và `SHA256.json`.
+- [x] **[AI]** Điền ghi chú song ngữ vào Release nháp, chọn *Pre-release*, lưu nháp.
+- [x] **[Bạn]** Xem lại Release nháp rồi bấm Publish. Đã công khai ngày 10/11/2026 ở dạng pre-release: <https://github.com/minhquang0607/Nepply/releases/tag/v2.0.0-rc.2>.
+- [x] **[AI]** Đối chiếu sau khi công khai: `SHA256.json`, mã GitHub, attestation, `Verify-Release.ps1 -ExpectedVersion 2.0.0-rc.2`; ghi ngày phát hành vào CHANGELOG. Ngày 10/11/2026, tải ẩn danh: cả ba tệp khớp mã GitHub, Setup và portable khớp `SHA256.json`, cả ba có attestation công khai. `Verify-Release.ps1 -ExpectedVersion 2.0.0-rc.2` đạt trên Setup và portable; `Nepply.exe` mang `2.0.0-rc.2+5b2e723`, guardian `2.0.0.2`.
 - [ ] **[Bạn]** Gỡ rc.1 theo ghi chú phát hành rồi cài rc.2 qua trình duyệt: ẩn icon, thoát, icon trở lại.
 
 **Xong khi:** Release công khai tải được, cài được, không có lỗi chặn.
@@ -287,6 +287,7 @@ Mỗi lần chạy cho một tag, chép vào đây dòng `scripts/Test-DesktopRu
 | Tag | Ngày | Commit | Windows | Kết quả | SHA-256 của `summary.json` |
 |---|---|---|---|---|---|
 | - | 2026-11-05 | `b48a465` | 26300.9818 | PASS | `5C2EAA4D451567722A5B66AC45F04C9CDEFA8AF2CD34146B5E97BFF6ABD29EA7` |
+| `v2.0.0-rc.2` | 2026-11-10 | `5b2e723` | 26300.9818 | PASS | `18967F94E06C687C3C99F45ACE8777934657E22DFBE40F892735595EA966E2F2` |
 
 ## Giai đoạn 10. Trả nợ kỹ thuật sau 2.0.0
 
