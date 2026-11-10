@@ -209,6 +209,7 @@ internal static class Program
         StartHangWatchdog(output);
         LogIsolationTests.Run(Check);
         UpdateTests.Run(Check);
+        ReleaseSummaryTests.Run(Check);
         UpdateDownloadTests.Run(output, Check);
         SignerRuleTests.Run(Check);
         LocalizationKeyTests.Run(Check);

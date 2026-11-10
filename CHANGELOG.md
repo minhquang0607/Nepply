@@ -2,6 +2,12 @@
 
 [English](CHANGELOG.en.md) · **Tiếng Việt** · [Trang chính](README.vi.md)
 
+## Chưa phát hành
+
+### Cập nhật
+
+- Mục **Có gì mới** trong cửa sổ cập nhật giờ là bản tóm tắt ngắn theo ngôn ngữ đang dùng trong Nepply, gom mọi phiên bản mới hơn bản bạn đang dùng. Bản phát hành trước khi có tóm tắt vẫn hiện ghi chú như cũ. Áp dụng từ bản phát hành sau bản này.
+
 ## 2.0.0-rc.2 — 10/11/2026
 
 Bản phát hành thử thứ hai, phát hành ngày **10/11/2026**, chưa ký số.

@@ -4,7 +4,7 @@
 
 ## Tiếng Việt
 
-Cập nhật: 06/11/2026 · Nepply 2.0.0
+Cập nhật: 10/11/2026 · Nepply 2.0.0
 
 Nhà phát triển: Minh Quang  
 Hỗ trợ: https://github.com/minhquang0607/Nepply/issues
@@ -47,7 +47,7 @@ Nếu người dùng tự gửi log, ảnh chụp hoặc báo cáo qua GitHub Is
 
 ## Kiểm tra và tải cập nhật
 
-Khi bạn bấm **Kiểm tra cập nhật**, bản EXE/portable gửi yêu cầu HTTPS đến GitHub API của repo `minhquang0607/Nepply` để đọc phiên bản, ghi chú phát hành và thông tin bộ cài. Không gửi cấu hình, danh sách Desktop, số đo phần cứng hoặc log. GitHub vẫn nhận địa chỉ IP và User-Agent `Nepply-Updater/1.0` theo cơ chế kết nối thông thường. Phiên bản hiện tại được so sánh cục bộ.
+Khi bạn bấm **Kiểm tra cập nhật**, bản EXE/portable gửi yêu cầu HTTPS đến GitHub API của repo `minhquang0607/Nepply` để đọc phiên bản, ghi chú phát hành và thông tin bộ cài. Cửa sổ cập nhật còn tải từ GitHub/CDN GitHub file tóm tắt nhỏ (`release-notes.json`, tối đa 64 KiB) của tối đa 10 phiên bản mới hơn để hiện mục Có gì mới; ngôn ngữ được chọn trên máy, không gửi đi. Không gửi cấu hình, danh sách Desktop, số đo phần cứng hoặc log. GitHub vẫn nhận địa chỉ IP và User-Agent `Nepply-Updater/1.0` theo cơ chế kết nối thông thường. Phiên bản hiện tại được so sánh cục bộ.
 
 Chỉ khi bạn chọn **Cập nhật ngay**, bản cài EXE mới tải Setup từ GitHub/CDN GitHub vào `%LOCALAPPDATA%/Nepply/Updates`. Windows có thể kết nối tới dịch vụ chứng thư để kiểm tra độ tin cậy/thu hồi chữ ký. Việc tự cài bị khóa nếu chưa cấu hình nhà phát hành tin cậy. Bản Store dùng cơ chế của Microsoft Store; portable chưa tự thay file.
 
@@ -55,7 +55,7 @@ Tùy chọn **Tự kiểm tra cập nhật mỗi ngày** mặc định bật. B�
 
 ## English
 
-Updated: 6 November 2026 · Nepply 2.0.0. Developer: Minh Quang. Support: https://github.com/minhquang0607/Nepply/issues
+Updated: 10 November 2026 · Nepply 2.0.0. Developer: Minh Quang. Support: https://github.com/minhquang0607/Nepply/issues
 
 ### Summary
 
@@ -95,7 +95,7 @@ Sending logs, screenshots or reports through GitHub Issues or GitHub Private vul
 
 ### Update checks and downloads
 
-Choosing Check for updates sends an HTTPS request from the EXE/portable app to the GitHub API for `minhquang0607/Nepply`, retrieving versions, release notes and installer metadata. It does not send settings, Desktop inventory, hardware readings or logs. GitHub receives your IP address and `Nepply-Updater/1.0` User-Agent through normal networking. Version comparison is local.
+Choosing Check for updates sends an HTTPS request from the EXE/portable app to the GitHub API for `minhquang0607/Nepply`, retrieving versions, release notes and installer metadata. The update window also downloads from GitHub/CDN the small summary file (`release-notes.json`, at most 64 KiB) of up to 10 newer versions for What's new; the language is chosen on your PC and never sent. It does not send settings, Desktop inventory, hardware readings or logs. GitHub receives your IP address and `Nepply-Updater/1.0` User-Agent through normal networking. Version comparison is local.
 
 Only choosing Update now starts a Setup download for the installed EXE edition from GitHub/CDN into `%LOCALAPPDATA%/Nepply/Updates`. Windows may contact certificate services for trust/revocation checks. Automatic installation is blocked without a configured trusted publisher. Store packages use Microsoft Store updates; portable does not replace its own files.
 

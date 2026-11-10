@@ -1,0 +1,61 @@
+{
+  "version": "2.0.0-rc.2",
+  "notes": {
+    "vi": [
+      "Cập nhật bộ .NET đóng kèm lên 10.0.14, gồm các bản vá bảo mật của Microsoft tháng 10/2026.",
+      "Kiểm tra cập nhật thất bại sẽ thử lại sau 12 giờ. Hai lần thất bại liên tiếp, Nepply báo một lần ở khay hệ thống.",
+      "Nếu tiến trình bảo vệ icon Desktop đang ẩn dừng đột ngột, panel sẽ báo cho bạn.",
+      "Một mục Desktop không đọc được không còn làm trống cả danh sách.",
+      "Hai cảm biến trùng mã phần cứng không còn làm hỏng số đo."
+    ],
+    "en": [
+      "The bundled .NET runtime is now 10.0.14, with Microsoft's October 2026 security fixes.",
+      "A failed update check retries after 12 hours. After two failures in a row, Nepply tells you once in the notification area.",
+      "If the process that protects hidden Desktop icons stops unexpectedly, the panel tells you.",
+      "One unreadable Desktop item no longer empties the whole list.",
+      "Two sensors that share a hardware ID no longer break the readings."
+    ],
+    "ja": [
+      "同梱の .NET ランタイムを 10.0.14 に更新しました。Microsoft の 2026 年 10 月のセキュリティ修正を含みます。",
+      "更新の確認に失敗した場合は 12 時間後に再試行します。2 回続けて失敗すると、通知領域で一度だけお知らせします。",
+      "非表示のデスクトップ アイコンを保護するプロセスが突然停止した場合、パネルでお知らせします。",
+      "読み取れないデスクトップ項目が 1 つあっても、一覧全体が空になることはなくなりました。",
+      "同じハードウェア ID を持つ 2 つのセンサーがあっても、測定値が壊れなくなりました。"
+    ],
+    "de": [
+      "Die mitgelieferte .NET-Laufzeit ist jetzt 10.0.14 mit den Sicherheitskorrekturen von Microsoft vom Oktober 2026.",
+      "Eine fehlgeschlagene Update-Suche wird nach 12 Stunden wiederholt. Nach zwei Fehlschlägen in Folge meldet Nepply dies einmal im Infobereich.",
+      "Wenn der Prozess, der ausgeblendete Desktopsymbole schützt, unerwartet endet, meldet das Panel dies.",
+      "Ein nicht lesbares Desktopelement leert nicht mehr die ganze Liste.",
+      "Zwei Sensoren mit derselben Hardware-ID verfälschen die Messwerte nicht mehr."
+    ],
+    "zh": [
+      "内置的 .NET 运行时已更新到 10.0.14，包含 Microsoft 2026 年 10 月的安全修复。",
+      "检查更新失败后会在 12 小时后重试。连续失败两次时，Nepply 会在通知区域提示一次。",
+      "如果保护已隐藏桌面图标的进程意外停止，面板会提示你。",
+      "某个无法读取的桌面项目不再导致整个列表为空。",
+      "两个硬件 ID 相同的传感器不再导致读数出错。"
+    ],
+    "ru": [
+      "Встроенная среда .NET обновлена до 10.0.14 с исправлениями безопасности Microsoft за октябрь 2026 года.",
+      "Неудачная проверка обновлений повторяется через 12 часов. После двух неудач подряд Nepply один раз сообщит об этом в области уведомлений.",
+      "Если процесс, защищающий скрытые значки рабочего стола, неожиданно остановится, панель сообщит об этом.",
+      "Один нечитаемый элемент рабочего стола больше не опустошает весь список.",
+      "Два датчика с одинаковым идентификатором оборудования больше не портят показания."
+    ],
+    "fr": [
+      "Le runtime .NET inclus passe à la version 10.0.14, avec les correctifs de sécurité Microsoft d'octobre 2026.",
+      "Une recherche de mises à jour qui échoue est relancée après 12 heures. Après deux échecs consécutifs, Nepply vous prévient une fois dans la zone de notification.",
+      "Si le processus qui protège les icônes du Bureau masquées s'arrête brusquement, le panneau vous le signale.",
+      "Un élément du Bureau illisible ne vide plus toute la liste.",
+      "Deux capteurs partageant le même identifiant matériel ne faussent plus les mesures."
+    ],
+    "th": [
+      ".NET ที่มาพร้อมแอปอัปเดตเป็น 10.0.14 แล้ว รวมการแก้ไขด้านความปลอดภัยของ Microsoft เดือนตุลาคม 2026",
+      "หากตรวจสอบการอัปเดตไม่สำเร็จ จะลองใหม่หลัง 12 ชั่วโมง หากไม่สำเร็จสองครั้งติดกัน Nepply จะแจ้งหนึ่งครั้งในพื้นที่แจ้งเตือน",
+      "หากโปรเซสที่ปกป้องไอคอนเดสก์ท็อปที่ซ่อนอยู่หยุดทำงานกะทันหัน แผงจะแจ้งให้คุณทราบ",
+      "รายการเดสก์ท็อปที่อ่านไม่ได้หนึ่งรายการจะไม่ทำให้รายการทั้งหมดว่างเปล่าอีกต่อไป",
+      "เซ็นเซอร์สองตัวที่มีรหัสฮาร์ดแวร์เดียวกันจะไม่ทำให้ค่าที่อ่านได้ผิดพลาดอีกต่อไป"
+    ]
+  }
+}

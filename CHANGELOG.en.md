@@ -2,6 +2,12 @@
 
 **English** · [Tiếng Việt](CHANGELOG.md) · [Home](README.md)
 
+## Unreleased
+
+### Updates
+
+- **What's new** in the update window is now a short summary in the language Nepply uses, covering every version newer than yours. Releases made before summaries existed still show their notes as before. Takes effect from the release after this one.
+
 ## 2.0.0-rc.2 — 10 November 2026
 
 Second release candidate, published **10 November 2026**, not code-signed.

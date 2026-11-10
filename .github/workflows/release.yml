@@ -61,6 +61,8 @@ jobs:
       - run: ./scripts/Test-PublicSource.ps1
       - run: ./scripts/Test-LanguageResources.ps1
       - run: ./scripts/Test-InstallerContract.ps1
+      - name: Update window summary exists for this version
+        run: ./scripts/Test-ReleaseNotes.ps1 -RequireCurrent
       - name: Build Setup and portable
         run: ./scripts/Build-Distribution.ps1 -OutputDirectory artifacts/release-ci -InternalOnly
       - name: Collect release files
@@ -68,6 +70,9 @@ jobs:
           $out = 'artifacts/release-upload'
           New-Item -ItemType Directory -Path $out | Out-Null
           Copy-Item artifacts/release-ci/installer/*.exe, artifacts/release-ci/*.zip, artifacts/release-ci/SHA256.json -Destination $out
+          # The update window of later versions reads this by its fixed name.
+          [xml]$project = Get-Content src/Nepply/Nepply.csproj -Raw
+          Copy-Item -LiteralPath "packaging/release-notes/$([string]$project.Project.PropertyGroup.Version).json" -Destination (Join-Path $out 'release-notes.json')
           Get-ChildItem $out | ForEach-Object { Get-FileHash $_.FullName -Algorithm SHA256 } | Format-Table -AutoSize | Out-String | Write-Output
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:

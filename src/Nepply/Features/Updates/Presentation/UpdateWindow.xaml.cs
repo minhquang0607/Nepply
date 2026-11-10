@@ -80,7 +80,12 @@ internal sealed partial class UpdateWindow : Window
             ReleaseVersionLabel.Text = release.Tag; VersionBadge.Visibility = Visibility.Visible;
             DownloadSizeLabel.Text = release.Bytes < 1024 * 1024
                 ? $"{release.Bytes / 1024d:0.#} KiB" : $"{release.Bytes / (1024d * 1024):0.#} MiB";
-            string notes = ReleaseNotesText.ToPlain(release.Notes);
+            // Short summaries in the app's language for every version since this one; releases
+            // made before summaries existed fall back to the release page's own notes.
+            var summaries = await _service.GetSummariesAsync(release, _cancel.Token);
+            if (_closed) return;
+            string notes = ReleaseSummaryFile.Build(summaries, LocalizationService.CurrentLanguage, LocalizationService.Get("UpdateNotesOnPage"))
+                ?? ReleaseNotesText.ToPlain(release.Notes);
             _notes.Text = notes.Length == 0 ? LocalizationService.Get("UpdateNoNotes") : notes;
             NotesSection.Visibility = Visibility.Visible;
             _install.IsEnabled = false;

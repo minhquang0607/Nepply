@@ -272,6 +272,7 @@ Với bản Store: cài từ Store, thử mở panel, monitor, ẩn icon, tự k
 ## Giai đoạn 9. Phát hành `2.0.0`
 
 - [ ] **[AI]** Đổi `Version`/`InformationalVersion` thành `2.0.0` và `FileVersion` thành `2.0.0.100` trong `Nepply.csproj` và `Nepply.DesktopGuardian.csproj`.
+- [ ] **[AI]** Viết `packaging/release-notes/2.0.0.json`: tóm tắt 8 ngôn ngữ cho mục Có gì mới của cửa sổ cập nhật. `release.yml` dừng nếu thiếu. Áp dụng cho mọi bản sau, kể cả bản RC.
 - [ ] **[Bạn]** Trước mỗi tag, kể cả bản RC: build Release đúng commit sẽ gắn tag, chạy `pwsh scripts/Test-DesktopRuntime.ps1 -Live -ReleaseTag <tag>`, chỉ gắn tag khi script báo `ACCEPTED`. Nên chạy thêm trên bản Insider nếu có, vì script ghi lại số bản Windows.
 - [ ] **[AI]** Bỏ trang thông báo khỏi bộ cài (`packaging/inno/Notices`, `InfoBeforeFile` trong `[Languages]`), bỏ `RELEASE_NOTICE.txt` khỏi `[Files]` và hai script đóng gói, bỏ banner RC trong README, hướng dẫn, ghi chú phát hành.
 - [x] **[AI]** Tạo lại ảnh README theo `docs/images/README.md`. Đã làm ngày 02/11/2026 từ mã nguồn của `2fa1e78`; làm lại nếu giao diện đổi trước `2.0.0`.

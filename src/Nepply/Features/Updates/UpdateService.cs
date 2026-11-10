@@ -9,7 +9,9 @@ using Nepply.Services;
 
 namespace Nepply.Modules.Updates;
 
-internal sealed record UpdateRelease(string Tag, ReleaseVersion Version, string Notes, Uri Asset, long Bytes, string Sha256);
+/// <param name="Summaries">Every release newer than the running one up to this one, newest first.</param>
+internal sealed record UpdateRelease(string Tag, ReleaseVersion Version, string Notes, Uri Asset, long Bytes, string Sha256,
+    IReadOnlyList<SummarySource>? Summaries = null);
 
 internal sealed class PreparedUpdate(string path, string directory, FileStream guard) : IDisposable
 {
@@ -62,6 +64,7 @@ internal sealed class UpdateService : IDisposable
         using var document = JsonDocument.Parse(json, new JsonDocumentOptions { MaxDepth = 16 });
         if (document.RootElement.ValueKind != JsonValueKind.Array) throw new FormatException("Invalid release feed.");
         UpdateRelease? latest = null;
+        var summaries = new List<SummarySource>();
         foreach (var entry in document.RootElement.EnumerateArray().Take(30))
         {
             if (entry.GetProperty("draft").GetBoolean()) continue;
@@ -70,7 +73,9 @@ internal sealed class UpdateService : IDisposable
             ReleaseVersion version;
             try { version = ReleaseVersion.Parse(tag); } catch (Exception ex) when (ex is FormatException or OverflowException) { continue; }
             if (current.Pre.Length == 0 && (prerelease || version.Pre.Length > 0)) continue;
-            if (version.CompareTo(current) <= 0 || (latest != null && version.CompareTo(latest.Version) <= 0)) continue;
+            if (version.CompareTo(current) <= 0) continue;
+            if (summaries.All(known => known.Version.CompareTo(version) != 0)) summaries.Add(Summary(entry, tag, version));
+            if (latest != null && version.CompareTo(latest.Version) <= 0) continue;
             string name = "Nepply-" + tag.TrimStart('v') + "-Setup.exe";
             var assets = entry.GetProperty("assets").EnumerateArray().Where(a => a.GetProperty("name").GetString() == name).ToArray();
             if (assets.Length != 1) continue;
@@ -84,7 +89,57 @@ internal sealed class UpdateService : IDisposable
             string notes = entry.TryGetProperty("body", out var body) ? body.GetString() ?? "" : "";
             latest = new(tag, version, notes.Length > 20000 ? notes[..20000] : notes, url, size, digest[7..]);
         }
-        return latest;
+        return latest == null ? null : latest with
+        {
+            Summaries = summaries.Where(source => source.Version.CompareTo(latest.Version) <= 0)
+                .OrderByDescending(source => source.Version).Take(ReleaseSummaryFile.MaximumReleases).ToArray()
+        };
+    }
+    // Same rules as the installer: exact name and path under this release, bounded size, SHA-256.
+    private static SummarySource Summary(JsonElement entry, string tag, ReleaseVersion version)
+    {
+        var assets = entry.GetProperty("assets").EnumerateArray().Where(a => a.GetProperty("name").GetString() == ReleaseSummaryFile.AssetName).ToArray();
+        if (assets.Length != 1) return new(tag, version, null, 0, null);
+        var asset = assets[0];
+        long size = asset.GetProperty("size").GetInt64();
+        string digest = asset.TryGetProperty("digest", out var d) ? d.GetString() ?? "" : "";
+        string expectedPath = $"/{UpdatePolicy.Repository}/releases/download/{Uri.EscapeDataString(tag)}/{ReleaseSummaryFile.AssetName}";
+        if (size <= 0 || size > ReleaseSummaryFile.MaximumBytes || !digest.StartsWith("sha256:", StringComparison.Ordinal) || digest.Length != 71 || !digest[7..].All(char.IsAsciiHexDigit)
+            || !Uri.TryCreate(asset.GetProperty("browser_download_url").GetString(), UriKind.Absolute, out var url) || !UpdatePolicy.IsAssetUri(url) || url.AbsolutePath != expectedPath)
+            return new(tag, version, null, 0, null);
+        return new(tag, version, url, size, digest[7..]);
+    }
+    /// <summary>
+    /// Reads each newer release's summary. A summary that is missing, too large, altered or
+    /// malformed only loses its own text; it never fails the update check.
+    /// </summary>
+    internal async Task<IReadOnlyList<ReleaseSummary>> GetSummariesAsync(UpdateRelease release, CancellationToken cancellation)
+    {
+        var result = new List<ReleaseSummary>();
+        using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellation);
+        timeout.CancelAfter(TimeSpan.FromSeconds(30));
+        foreach (var source in release.Summaries ?? [])
+        {
+            IReadOnlyDictionary<string, string[]>? notes = null;
+            if (source.Asset != null && source.Sha256 != null)
+            {
+                try
+                {
+                    using var response = await GetDownloadAsync(source.Asset, timeout.Token).ConfigureAwait(false);
+                    await using var stream = await response.Content.ReadAsStreamAsync(timeout.Token).ConfigureAwait(false);
+                    using var bytes = new MemoryStream();
+                    await CopyBoundedAsync(stream, bytes, source.Bytes, null, timeout.Token).ConfigureAwait(false);
+                    byte[] data = bytes.ToArray();
+                    if (data.Length != source.Bytes || !Convert.ToHexString(SHA256.HashData(data)).Equals(source.Sha256, StringComparison.OrdinalIgnoreCase))
+                        throw new CryptographicException("Release summary checksum mismatch.");
+                    notes = ReleaseSummaryFile.Parse(data, source.Version);
+                }
+                catch (Exception ex) when (ex is not OperationCanceledException || !cancellation.IsCancellationRequested)
+                { AppLogger.Error(ex, "Read release summary " + source.Tag); }
+            }
+            result.Add(new(source.Tag, source.Version, notes));
+        }
+        return result;
     }
     internal async Task<PreparedUpdate> DownloadAsync(UpdateRelease release, IProgress<double> progress, CancellationToken cancellation)
     {
