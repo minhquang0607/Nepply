@@ -70,6 +70,8 @@ jobs:
       - run: ./scripts/Test-DesktopRuntimeContract.ps1
       - run: ./scripts/Test-AppSoakReader.ps1
       - run: ./scripts/Test-RuntimeCurrencyGate.ps1
+      - run: ./scripts/Test-ReleaseNotesGate.ps1
+      - run: ./scripts/Test-ReleaseNotes.ps1
       - run: ./scripts/Test-ReleaseLayout.ps1
       - run: ./scripts/Test-CodeQlSarifFilter.ps1
       - run: ./scripts/Verify-Dependencies.ps1

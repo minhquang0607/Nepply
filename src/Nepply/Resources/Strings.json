@@ -3,6 +3,7 @@
   "UpdateCurrent": ["Đang sử dụng","Current version","現在のバージョン","Aktuelle Version","当前版本","Текущая версия","Version actuelle","เวอร์ชันปัจจุบัน"],
   "UpdateWhatsNew": ["Có gì mới","What's new","更新内容","Was ist neu","更新内容","Что нового","Nouveautés","มีอะไรใหม่"],
   "UpdateNoNotes": ["Bản phát hành này chưa có ghi chú thay đổi.","No release notes were provided.","リリースノートはありません。","Keine Versionshinweise vorhanden.","此版本尚无更新说明。","Примечания к выпуску отсутствуют.","Aucune note de version disponible.","ยังไม่มีบันทึกประจำรุ่น"],
+  "UpdateNotesOnPage": ["Tóm tắt của bản này chỉ có trên trang Releases.","This version's summary is only on the Releases page.","このバージョンの概要はリリースページにのみあります。","Die Zusammenfassung dieser Version gibt es nur auf der Releases-Seite.","此版本的摘要仅在 Releases 页面提供。","Сводка этой версии есть только на странице Releases.","Le résumé de cette version se trouve uniquement sur la page Releases.","สรุปของเวอร์ชันนี้มีเฉพาะในหน้า Releases"],
   "UpdateRetry": ["Thử lại","Try again","再試行","Erneut versuchen","重试","Повторить","Réessayer","ลองอีกครั้ง"],
   "UpdateVerifying": ["Đang xác minh gói cập nhật…","Verifying the update…","更新を検証中…","Update wird geprüft…","正在验证更新…","Проверка обновления…","Vérification de la mise à jour…","กำลังตรวจสอบแพ็กเกจอัปเดต…"],
   "UpdateCheck": ["Kiểm tra cập nhật","Check for updates","更新を確認","Nach Updates suchen","检查更新","Проверить обновления","Rechercher des mises à jour","ตรวจสอบการอัปเดต"],

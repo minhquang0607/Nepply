@@ -24,6 +24,8 @@ Trước khi commit thay đổi C#, chạy `dotnet format whitespace Nepply.slnx
 
 Phiên bản nguồn hiện tại là `2.0.0-rc.2` trong `src/Nepply/Nepply.csproj`; metadata Windows dùng `2.0.0.2`. Lặp lại cả hai giá trị trong `src/Nepply.DesktopGuardian/Nepply.DesktopGuardian.csproj`, vì app từ chối Guardian khác file version. Mỗi bản RC tăng số thứ tư (`rc.3` sẽ là `2.0.0.3`); bản ổn định dùng `2.0.0.100` để Windows luôn thấy nó mới hơn. Không thay phiên bản thư viện hoặc các dữ liệu test giả lập khi đổi phiên bản sản phẩm. Quy tắc tag/prerelease và chuyển từ bản thử cũ nằm trong [chính sách cập nhật](docs/release/EXE_UPDATES.md#phiên-bản-hiện-hành).
 
+Mỗi bản phát hành cần `packaging/release-notes/<phiên bản>.json`: vài dòng tóm tắt bằng đủ 8 ngôn ngữ, cùng số dòng, mỗi dòng tối đa 400 ký tự, văn bản thuần. Cửa sổ cập nhật của các bản sau hiện file này theo ngôn ngữ người dùng chọn. `scripts/Test-ReleaseNotes.ps1` kiểm tra định dạng; `release.yml` dừng nếu thiếu file của phiên bản đang tag và đính kèm nó vào Release với tên `release-notes.json`.
+
 - Mã nghiệp vụ đặt trong feature sở hữu nó; interop ở `Platform/Windows`, giao diện dùng chung ở `Presentation`.
 - Không thêm dependency, timer, process hay project chỉ để chia thư mục.
 - Test hồi quy nằm trong `tests/Nepply.Tests`. Công cụ chẩn đoán không nằm trong payload phát hành.

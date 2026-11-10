@@ -23,6 +23,7 @@ Use Windows x64 and the .NET SDK pinned in `global.json`. Open `Nepply.slnx`. Co
 - Product version `2.0.0-rc.2` and Windows file version `2.0.0.2` come from `src/Nepply/Nepply.csproj`; repeat both in `src/Nepply.DesktopGuardian/Nepply.DesktopGuardian.csproj`, because the app refuses a guardian with another file version. Each release candidate raises the fourth number (`rc.3` would be `2.0.0.3`); the stable release uses `2.0.0.100`, so Windows always sees it as newer. Do not change dependency versions or simulated test versions just to match the product.
 - Put logic in its owning feature, interop in Platform/Windows and shared UI in Presentation. Do not add projects, timers, processes or dependencies solely to split folders.
 - Keep regression tests in tests/Nepply.Tests. Diagnostic tools do not belong in the release payload.
+- Every release needs `packaging/release-notes/<version>.json`: a few plain-text summary lines in all 8 languages, the same number of lines in each, at most 400 characters per line. The update window of later versions shows it in the user's language. `scripts/Test-ReleaseNotes.ps1` checks the format; `release.yml` stops when the tagged version has no file and attaches it to the release as `release-notes.json`.
 - Never commit bin/obj/artifacts, personal logs/settings, signing keys or private certificates.
 - Do not copy reference-repository source. Review licenses/notices when dependencies change.
 - Do not disable Windows protection or anti-cheat to make tests pass. Record blocked tests honestly.
