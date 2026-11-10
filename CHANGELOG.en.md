@@ -2,9 +2,9 @@
 
 **English** · [Tiếng Việt](CHANGELOG.md) · [Home](README.md)
 
-## 2.0.0-rc.2 — not yet released
+## 2.0.0-rc.2 — 10 November 2026
 
-Second release candidate, not code-signed. The release date is added when it reaches the Releases page.
+Second release candidate, published **10 November 2026**, not code-signed.
 
 ### Upgrading from 2.0.0-rc.1
 

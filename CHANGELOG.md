@@ -2,9 +2,9 @@
 
 [English](CHANGELOG.en.md) · **Tiếng Việt** · [Trang chính](README.vi.md)
 
-## 2.0.0-rc.2 — chưa phát hành
+## 2.0.0-rc.2 — 10/11/2026
 
-Bản phát hành thử thứ hai, chưa ký số. Ngày phát hành được ghi khi bản này lên trang Releases.
+Bản phát hành thử thứ hai, phát hành ngày **10/11/2026**, chưa ký số.
 
 ### Nâng cấp từ 2.0.0-rc.1
 
