@@ -1,0 +1,21 @@
+name: Bundled runtime security
+# Nepply bundles .NET, so users only get .NET security fixes when the pin in
+# Directory.Build.props moves and a new build ships. Dependabot does not watch that
+# pin. This run fails, and GitHub emails the maintainer, once Microsoft ships a .NET
+# security release newer than the pin. Release builds run the same check as a gate.
+on:
+  schedule:
+    - cron: '17 3 * * 3' # Weekly; .NET security releases usually land on a Tuesday.
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: ./scripts/Verify-RuntimeCurrency.ps1
+        shell: pwsh

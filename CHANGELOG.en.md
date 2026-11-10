@@ -13,6 +13,10 @@
 
 - Preparing a Microsoft Store edition: Microsoft signs the package after certification and the Store updates it. This edition still hides Desktop icons, but it hides the icon window instead of changing a Windows setting, so removing the app leaves nothing behind. It does not check GitHub for updates. Setup and portable are unchanged.
 
+### Security
+
+- Updated the bundled .NET runtime to 10.0.14, which includes Microsoft's October 2026 security fixes. rc.1 shipped 10.0.12.
+
 ### Reliability
 
 - If the process that protects hidden Desktop icons stops unexpectedly, the panel now says so and the log records it with the exit code. Failed attempts to hide or restore icons are logged as well.

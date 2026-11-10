@@ -54,6 +54,8 @@ jobs:
           if ($process.ExitCode -ne 0) { throw "Inno Setup install failed: $($process.ExitCode)" }
           $compiler = 'C:\Program Files\Inno Setup 7\ISCC.exe'
           if ((Get-AuthenticodeSignature -LiteralPath $compiler).Status -ne 'Valid') { throw 'Installed compiler signature is not valid.' }
+      - name: Bundled .NET runtime has every security release
+        run: ./scripts/Verify-RuntimeCurrency.ps1
       - run: dotnet restore Nepply.slnx --locked-mode
       - run: ./scripts/Test-BuildBoundary.ps1
       - run: ./scripts/Test-PublicSource.ps1
