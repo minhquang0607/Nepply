@@ -2,7 +2,7 @@
 
 **English** · [Tiếng Việt](USER_GUIDE.md) · [Home](../README.md) · [Troubleshooting](TROUBLESHOOTING.en.md)
 
-For **Nepply 2.0.0-rc.1**, a release candidate that is not code-signed. 2.0.0 will be the first signed release.
+For **Nepply 2.0.0-rc.2**, a release candidate that is not code-signed. 2.0.0 will be the first signed release.
 
 ## 🖱️ Open and close the panel
 

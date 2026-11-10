@@ -22,7 +22,7 @@ Trước khi commit thay đổi C#, chạy `dotnet format whitespace Nepply.slnx
 
 ## Quy tắc thay đổi
 
-Phiên bản nguồn hiện tại là `2.0.0-rc.1` trong `src/Nepply/Nepply.csproj`; metadata Windows dùng `2.0.0.1`. Lặp lại cả hai giá trị trong `src/Nepply.DesktopGuardian/Nepply.DesktopGuardian.csproj`, vì app từ chối Guardian khác file version. Mỗi bản RC tăng số thứ tư (`rc.2` là `2.0.0.2`); bản ổn định dùng `2.0.0.100` để Windows luôn thấy nó mới hơn. Không thay phiên bản thư viện hoặc các dữ liệu test giả lập khi đổi phiên bản sản phẩm. Quy tắc tag/prerelease và chuyển từ bản thử cũ nằm trong [chính sách cập nhật](docs/release/EXE_UPDATES.md#phiên-bản-hiện-hành).
+Phiên bản nguồn hiện tại là `2.0.0-rc.2` trong `src/Nepply/Nepply.csproj`; metadata Windows dùng `2.0.0.2`. Lặp lại cả hai giá trị trong `src/Nepply.DesktopGuardian/Nepply.DesktopGuardian.csproj`, vì app từ chối Guardian khác file version. Mỗi bản RC tăng số thứ tư (`rc.3` sẽ là `2.0.0.3`); bản ổn định dùng `2.0.0.100` để Windows luôn thấy nó mới hơn. Không thay phiên bản thư viện hoặc các dữ liệu test giả lập khi đổi phiên bản sản phẩm. Quy tắc tag/prerelease và chuyển từ bản thử cũ nằm trong [chính sách cập nhật](docs/release/EXE_UPDATES.md#phiên-bản-hiện-hành).
 
 - Mã nghiệp vụ đặt trong feature sở hữu nó; interop ở `Platform/Windows`, giao diện dùng chung ở `Presentation`.
 - Không thêm dependency, timer, process hay project chỉ để chia thư mục.

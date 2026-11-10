@@ -4,7 +4,7 @@
 <p align="center"><strong>English</strong> · <a href="README.vi.md">Tiếng Việt</a></p>
 <p align="center"><a href="#-download">Download</a> · <a href="docs/USER_GUIDE.en.md">User guide</a> · <a href="CHANGELOG.en.md">What's new</a> · <a href="docs/README.md">Documentation</a></p>
 
-> **2.0.0-rc.1 · Release candidate, available now (unsigned)**
+> **2.0.0 release candidate · available now (unsigned)**
 >
 > This build is not code-signed, so Windows may warn you. 2.0.0 will be the first signed release.
 
@@ -41,14 +41,37 @@ Fresh renders from a **Release build**, source `2fa1e78`. These are real WPF vie
 
 | Choose | File | How to use |
 | --- | --- | --- |
-| **Setup — recommended** | `Nepply-2.0.0-rc.1-Setup.exe` | Run the installer. Uninstall through Windows Installed apps. |
-| **Portable** | `Nepply-2.0.0-rc.1-win-x64-portable.zip` | Extract everything, then run `Nepply.exe`. Keep `guardian` and all companion files. |
+| **Setup — recommended** | `Nepply-<version>-Setup.exe` | Run the installer. Uninstall through Windows Installed apps. |
+| **Portable** | `Nepply-<version>-win-x64-portable.zip` | Extract everything, then run `Nepply.exe`. Keep `guardian` and all companion files. |
 
 [Open GitHub Releases →](https://github.com/minhquang0607/Nepply/releases)
 
-Choose the file under **Assets** on the Releases page. GitHub's “Source code” archives are for developers, not ready-to-run apps. Both distributions bundle .NET; no SDK installation is needed. Portable still stores settings in your Windows user profile.
+`<version>` is the version shown on the Releases page. Choose the file under **Assets**. GitHub's “Source code” archives are for developers, not ready-to-run apps. Both distributions bundle .NET; no SDK installation is needed. Portable still stores settings in your Windows user profile.
 
 Only use the official release channel. If Windows blocks a file, check its source and release information. **Do not disable Windows protection to run Nepply.**
+
+<details>
+<summary><strong>Check a download (optional)</strong></summary>
+
+Until Nepply is code-signed, these checks show that a file is the one this repository published:
+
+1. **Not damaged in transfer.** In PowerShell, in the folder with the file:
+
+   ```powershell
+   Get-FileHash .\Nepply-<version>-Setup.exe -Algorithm SHA256
+   ```
+
+   Compare the result with the file's line in `SHA256.json`, or with the `sha256:` value GitHub shows next to the file under **Assets**. Both come from the same release page, so this catches a damaged download, not a forged release.
+
+2. **Built by this repository.** With the [GitHub CLI](https://cli.github.com/) signed in:
+
+   ```powershell
+   gh attestation verify .\Nepply-<version>-Setup.exe --repo minhquang0607/Nepply
+   ```
+
+   It succeeds only for a file that this repository's release workflow built and attested. Every file on the Releases page has an attestation.
+
+</details>
 
 ## 🚀 Get started
 

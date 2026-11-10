@@ -2,7 +2,9 @@
 
 **English** · [Tiếng Việt](CHANGELOG.md) · [Home](README.md)
 
-## Unreleased
+## 2.0.0-rc.2 — not yet released
+
+Second release candidate, not code-signed. The release date is added when it reaches the Releases page.
 
 ### Upgrading from 2.0.0-rc.1
 
@@ -19,6 +21,8 @@
 
 ### Reliability
 
+- A failed daily update check retries after 12 hours instead of waiting a day while the network is up. After two failures in a row Nepply says so once in the notification area; click it to open the update settings. When Windows reports no network, Nepply sends nothing and does not count a failure.
+- Two sensors that share a hardware ID no longer break the readings: Nepply keeps the first one.
 - If the process that protects hidden Desktop icons stops unexpectedly, the panel now says so and the log records it with the exit code. Failed attempts to hide or restore icons are logged as well.
 
 ### Desktop & interaction

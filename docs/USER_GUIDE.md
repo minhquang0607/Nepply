@@ -2,7 +2,7 @@
 
 [English](USER_GUIDE.en.md) · **Tiếng Việt** · [Trang chính](../README.vi.md) · [Xử lý sự cố](TROUBLESHOOTING.md)
 
-Hướng dẫn cho **Nepply 2.0.0-rc.1**, bản phát hành thử chưa ký số. Bản ký số đầu tiên sẽ là 2.0.0.
+Hướng dẫn cho **Nepply 2.0.0-rc.2**, bản phát hành thử chưa ký số. Bản ký số đầu tiên sẽ là 2.0.0.
 
 ## Mở và đóng panel
 
