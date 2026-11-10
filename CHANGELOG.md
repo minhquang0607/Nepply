@@ -13,6 +13,10 @@
 
 - Chuẩn bị bản Microsoft Store: Microsoft ký gói sau khi duyệt, cập nhật qua Store. Bản này vẫn ẩn được icon Desktop, nhưng ẩn trực tiếp cửa sổ icon thay vì đổi cài đặt Windows, nên gỡ app không để lại gì. Bản Store không kiểm tra cập nhật qua GitHub. Setup và portable giữ nguyên.
 
+### Bảo mật
+
+- Cập nhật bộ .NET đóng kèm lên 10.0.14, gồm các bản vá bảo mật của Microsoft từ tháng 10/2026. Bản rc.1 dùng 10.0.12.
+
 ### Độ tin cậy
 
 - Nếu tiến trình bảo vệ icon Desktop đang ẩn dừng đột ngột, panel giờ có thông báo và log ghi lại kèm mã thoát. Các lần ẩn hoặc khôi phục icon thất bại cũng được ghi log.

@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-    <NepplyRuntimeVersion>10.0.12</NepplyRuntimeVersion>
+    <NepplyRuntimeVersion>10.0.14</NepplyRuntimeVersion>
     <NepplyILLinkVersion>10.0.10</NepplyILLinkVersion>
     <RuntimeFrameworkVersion>$(NepplyRuntimeVersion)</RuntimeFrameworkVersion>
     <Deterministic>true</Deterministic>

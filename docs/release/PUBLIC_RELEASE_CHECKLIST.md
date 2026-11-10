@@ -217,6 +217,7 @@ Không chặn việc xin chữ ký, có thể làm song song từ giai đoạn 4
 - [x] **[AI]** Tùy chọn tự kiểm tra cập nhật mỗi ngày, chỉ báo ở khay hệ thống. Mặc định đổi thành bật ở giai đoạn 3A. Đã cập nhật chính sách quyền riêng tư và hướng dẫn. Bản dịch hai chuỗi mới thuộc mục duyệt bản dịch bên dưới.
 - [x] **[AI]** Chứng thực nguồn gốc build (`actions/attest-build-provenance`) trong bước `draft-release`, chỉ chạy khi repo Public. Đã chạy thật ở *Release build* #2; API công khai trả về attestation cho cả ba tệp của `2.0.0-rc.1`. Chưa chạy `gh attestation verify` vì máy chưa có `gh`.
 - [ ] **[Cả hai]** Xử lý các lỗi nhận được từ bản RC.
+- [x] **[AI]** Runtime .NET đóng kèm: ngày 10/11/2026 nâng từ `10.0.12` lên `10.0.14`, vì Microsoft đã ra hai bản vá bảo mật (13/10 và 25/10) mà người dùng chỉ nhận được khi app được build lại. Dependabot không theo dõi số ghim này, nên thêm `scripts/Verify-RuntimeCurrency.ps1`: chặn `release.yml` khi có bản vá bảo mật mới hơn, và chạy mỗi tuần bằng `runtime-currency.yml` để GitHub gửi mail khi số ghim bị tụt lại. CI chạy `scripts/Test-RuntimeCurrencyGate.ps1` trên dữ liệu giả.
 
 ### Mục từ audit kỹ thuật ngày 05/11/2026
 
