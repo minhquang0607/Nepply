@@ -1,6 +1,9 @@
 # Windows-only project: store LF in Git, check out CRLF for every contributor
 # regardless of their core.autocrlf setting.
 * text=auto eol=crlf
+# Except GitHub configuration: Dependabot commits files exactly as its checkout reads
+# them, so a CRLF checkout turned every line of a workflow into a change.
+/.github/** text eol=lf
 
 # Binary assets: never touch line endings or diff as text.
 *.png binary
