@@ -1,0 +1,87 @@
+name: Test report · Báo cáo dùng thử
+description: Share what you tried and what happened, including things that worked. · Chia sẻ bạn đã thử gì và kết quả, kể cả phần chạy đúng.
+labels: [test-report]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for testing. See the [testing guide](https://github.com/minhquang0607/Nepply/blob/main/docs/TESTING.en.md) for scenarios. For a single bug with steps, the bug report form is better. Redact paths, account names and personal data.
+        Cảm ơn bạn đã thử. Xem [hướng dẫn dùng thử](https://github.com/minhquang0607/Nepply/blob/main/docs/TESTING.md). Với một lỗi cụ thể có bước tái hiện, hãy dùng form Báo lỗi. Hãy che đường dẫn, tên tài khoản và dữ liệu cá nhân.
+  - type: input
+    id: version
+    attributes:
+      label: Nepply version · Phiên bản Nepply
+      description: Settings → App → About. · Cài đặt → Ứng dụng → Giới thiệu.
+      placeholder: "2.0.0-rc.2"
+    validations:
+      required: true
+  - type: dropdown
+    id: distribution
+    attributes:
+      label: Distribution · Kiểu cài
+      options:
+        - Setup (installer)
+        - Portable
+    validations:
+      required: true
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version and language · Phiên bản và ngôn ngữ Windows
+      description: "Run winver. · Chạy winver."
+      placeholder: "Windows 11 24H2 (26100), English"
+    validations:
+      required: true
+  - type: input
+    id: hardware
+    attributes:
+      label: CPU / GPU / device type · CPU / GPU / loại máy
+      placeholder: "Intel Core i5-1235U / Iris Xe, laptop"
+  - type: input
+    id: displays
+    attributes:
+      label: Displays and scaling · Màn hình và tỉ lệ
+      placeholder: "2 monitors: 1920×1080 100 %, 2560×1440 150 %"
+  - type: checkboxes
+    id: tried
+    attributes:
+      label: Scenarios tried · Tình huống đã thử
+      description: Numbers match the testing guide. · Số thứ tự theo hướng dẫn dùng thử.
+      options:
+        - label: "1. Browser download + Setup · Tải bằng trình duyệt + Setup"
+        - label: "2. First run · Lần chạy đầu"
+        - label: "3. Hide icons → Exit · Ẩn icon → Thoát"
+        - label: "4. Restart Explorer while hidden · Khởi động lại Explorer khi đang ẩn"
+        - label: "5. End Nepply.exe while hidden · End task Nepply.exe khi đang ẩn"
+        - label: "6. Uninstall while hidden · Gỡ khi đang ẩn"
+        - label: "7. Multiple monitors / mixed scaling · Nhiều màn hình / tỉ lệ khác nhau"
+        - label: "8. Sensors · Cảm biến"
+        - label: "9. Games / full screen · Game / toàn màn hình"
+        - label: "10. Shortcuts · Phím tắt"
+        - label: "11. Running for a day · Chạy một ngày"
+        - label: "12. Windows 10 / non-English / standard account · Windows 10 / không phải tiếng Anh / tài khoản thường"
+        - label: "13. Narrator / High Contrast"
+  - type: textarea
+    id: results
+    attributes:
+      label: Results · Kết quả
+      description: For each scenario, what happened. Note anything unexpected. · Mỗi tình huống xảy ra gì; ghi rõ điều bất thường.
+      placeholder: |
+        1. SmartScreen showed "Windows protected your PC"; More info → Run anyway worked.
+        3. OK.
+        8. GPU temperature empty on NVIDIA RTX 3060.
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Diagnostics (optional) · Chẩn đoán (tùy chọn)
+      description: "Settings → App → Copy diagnostics; review it before posting. · Cài đặt → Ứng dụng → Sao chép chẩn đoán; hãy xem lại trước khi đăng."
+      render: text
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Confirmation · Xác nhận
+      options:
+        - label: I removed personal data and did not disable Windows protection to run Nepply. · Tôi đã che dữ liệu cá nhân và không tắt bảo vệ Windows để chạy Nepply.
+          required: true

@@ -15,9 +15,11 @@ Chọn ngôn ngữ bên dưới. Hai bản hướng dẫn người dùng giữ c
 | Overview & downloads / Giới thiệu & tải | [Home](../README.md) | [Trang chính](../README.vi.md) |
 | Getting started / Sử dụng | [User guide](USER_GUIDE.en.md) | [Hướng dẫn](USER_GUIDE.md) |
 | Help / Trợ giúp | [Troubleshooting](TROUBLESHOOTING.en.md) | [Xử lý sự cố](TROUBLESHOOTING.md) |
+| Testing / Dùng thử | [Testing guide](TESTING.en.md) | [Hướng dẫn dùng thử](TESTING.md) |
 | What's new / Thay đổi | [Changelog](../CHANGELOG.en.md) | [Changelog](../CHANGELOG.md) |
 | Privacy / Quyền riêng tư | [English](legal/PRIVACY.md#english) | [Tiếng Việt](legal/PRIVACY.md#tiếng-việt) |
 | Security / Bảo mật | [English](legal/SECURITY.md#english) | [Tiếng Việt](legal/SECURITY.md#tiếng-việt) |
+| Terms / Điều khoản | [English](legal/TERMS.md#english) | [Tiếng Việt](legal/TERMS.md#tiếng-việt) |
 
 ## 🧩 For contributors · Dành cho người đóng góp
 

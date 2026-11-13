@@ -4,9 +4,9 @@
 <p align="center"><a href="README.md">English</a> · <strong>Tiếng Việt</strong></p>
 <p align="center"><a href="#-tải-ứng-dụng">Tải ứng dụng</a> · <a href="docs/USER_GUIDE.md">Hướng dẫn</a> · <a href="CHANGELOG.md">Có gì mới</a> · <a href="docs/README.md">Tài liệu</a></p>
 
-> **Bản phát hành thử của 2.0.0 · đã có bản tải (chưa ký số)**
+> **Bản phát hành thử của 2.0.0 · cần người dùng thử**
 >
-> Bản này chưa ký số nên Windows có thể cảnh báo. 2.0.0 sẽ là bản ký đầu tiên.
+> Bản này chưa ký số nên Windows có thể cảnh báo. Dev và người dùng am hiểu máy tính: hãy thử trên máy bạn và cho biết kết quả. [Hướng dẫn dùng thử →](docs/TESTING.md)
 
 ## ✨ Panel nhỏ, tiện ngay bên cạnh
 
@@ -85,9 +85,10 @@ Khi Nepply chưa có chữ ký số, hai cách sau cho biết file đúng là b�
 
 ## 🛡️ Quyền riêng tư & hỗ trợ
 
-Không quảng cáo, analytics hay tự gửi báo cáo lỗi. Kiểm tra cập nhật kết nối GitHub mỗi ngày một lần (thử lại sau 12 giờ nếu thất bại) và khi bạn yêu cầu; bạn có thể tắt kiểm tra hằng ngày. [Quyền riêng tư — EN / VI](docs/legal/PRIVACY.md)
+Không quảng cáo, analytics hay tự gửi báo cáo lỗi. Kiểm tra cập nhật kết nối GitHub mỗi ngày một lần (thử lại sau 12 giờ nếu thất bại) và khi bạn yêu cầu; bạn có thể tắt kiểm tra hằng ngày. [Quyền riêng tư — EN / VI](docs/legal/PRIVACY.md) · [Điều khoản sử dụng — EN / VI](docs/legal/TERMS.md)
 
 - [Báo lỗi hoặc đề xuất](https://github.com/minhquang0607/Nepply/issues): ghi phiên bản và bước tái hiện; che dữ liệu cá nhân trong ảnh/log.
+- Đã thử bản phát hành thử? Chia sẻ phần chạy đúng và chưa đúng qua [form Báo cáo dùng thử](https://github.com/minhquang0607/Nepply/issues/new?template=test_report.yml). Xem [hướng dẫn dùng thử](docs/TESTING.md).
 - Lỗ hổng bảo mật: dùng [kênh liên hệ riêng — EN / VI](docs/legal/SECURITY.md), không đăng cách khai thác công khai.
 - Tự cài cập nhật EXE chưa mở cho phát hành; portable chưa tự thay file. Chưa công bố bản Microsoft Store.
 

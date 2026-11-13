@@ -1,6 +1,6 @@
 # Kế hoạch phát hành Nepply 2.0.0
 
-Cập nhật 06/11/2026. Đây là kế hoạch duy nhất từ hiện tại đến sau bản chính thức. Làm từng giai đoạn theo thứ tự; giai đoạn sau chỉ bắt đầu khi giai đoạn trước đạt điều kiện **Xong khi**.
+Cập nhật 14/11/2026. Đây là kế hoạch duy nhất từ hiện tại đến sau bản chính thức. Làm từng giai đoạn theo thứ tự; giai đoạn sau chỉ bắt đầu khi giai đoạn trước đạt điều kiện **Xong khi**.
 
 Đánh dấu một mục khi đã hoàn tất và kiểm chứng thật, không đánh dấu theo dự đoán. **[Bạn]** là việc chỉ Minh Quang làm được (tài khoản, duyệt, máy thật); **[AI]** là việc code hoặc tài liệu trong repo do đội ngũ AI (Codex, Claude) làm; **[Cả hai]** cần phối hợp.
 
@@ -13,10 +13,11 @@ Cập nhật 06/11/2026. Đây là kế hoạch duy nhất từ hiện tại đ�
 | 3A | Sửa lỗi từ các lượt cài thử | Xong; bạn báo đạt ngày 02/11/2026 |
 | 4 | Phát hành `2.0.0-rc.1` chưa ký | Đã công khai và đối chiếu ngày 02/11/2026; đang nhận phản hồi |
 | 5 | Xin chữ ký số | Xong: SignPath từ chối, đã chọn Microsoft Store |
-| 6 | Đưa Nepply lên Microsoft Store | Phần chuẩn bị của AI đã xong; chờ bạn tạo tài khoản |
+| 6 | Đưa Nepply lên Microsoft Store | **Tạm gác** từ 14/11/2026; phần chuẩn bị của AI giữ nguyên trong repo |
+| 6A | Cộng đồng dev dùng thử bản RC | Đang làm: tài liệu và form đã có; chờ bạn mở Discussions và đăng lời mời |
 | 7 | Hoàn thiện chất lượng | Bài đo giao diện 24 giờ đạt; script đo app thật đã có, chờ chạy 24 giờ; F-08 chờ số đo; các mục audit nhỏ khác đã xong; còn các mục của bạn |
 | 8 | Nghiệm thu trên máy thật | Chưa làm |
-| 9 | Phát hành `2.0.0` | Đã tạo lại ảnh README; phần còn lại chờ bản Store |
+| 9 | Phát hành `2.0.0` | Đã tạo lại ảnh README; phần còn lại chờ hướng phát hành chốt sau giai đoạn 6A |
 | 10 | Trả nợ kỹ thuật sau 2.0.0 | Chưa làm |
 
 ## Quyết định đã chốt
@@ -25,6 +26,7 @@ Cập nhật 06/11/2026. Đây là kế hoạch duy nhất từ hiện tại đ�
 - Phương án không chọn: phát hành `2.0.0` chưa ký rồi ký từ `2.0.1`, vì bản ổn định chưa ký sẽ bị Smart App Control chặn.
 - Ngày 02/11/2026, sau khi SignPath từ chối, bạn chọn Microsoft Store làm kênh có chữ ký. Bản `2.0.0` có chữ ký phát hành qua Store. Setup và portable trên GitHub vẫn chưa ký; cách ghi nhãn chúng ở `2.0.0` chốt tại giai đoạn 9.
 - Tag cũ `v1.0.0-beta.1` đã xóa ngày 30/10/2026. Chỉ tạo tag mới lúc phát hành.
+- Ngày 14/11/2026 bạn chốt: **tạm gác bản MSIX/Microsoft Store**, cho cộng đồng dev dùng thử bản RC trên GitHub trước rồi mới tính tiếp. Mã và tài liệu Store (`Build-Msix.ps1`, `packaging/msix`, `STORE_LISTING.md`) giữ nguyên, không xóa. Vì Store từng là kênh có chữ ký của `2.0.0`, cách phát hành và ghi nhãn `2.0.0` (chờ Store, hay ra bản chưa ký) phải chốt lại sau giai đoạn 6A.
 - `FileVersion`: RC thứ N dùng `2.0.0.N`, bản ổn định dùng `2.0.0.100`. Luôn đổi đồng thời trong `Nepply.csproj` và `Nepply.DesktopGuardian.csproj`.
 - Bản dịch tiếng Việt của bộ cài do repo tự giữ, dịch từ `Default.isl` của Inno Setup 7.1.0.
 
@@ -197,6 +199,8 @@ Bạn góp ý ngày 02/11/2026. Lần rà mặc định trước được làm l
 
 ## Giai đoạn 6. Đưa Nepply lên Microsoft Store
 
+> **Tạm gác từ 14/11/2026** theo quyết định của bạn. Các mục chưa đánh dấu bên dưới không làm cho tới khi bạn mở lại giai đoạn này. Ngày 14/11/2026 đã sửa ghi chú cho người duyệt trong `STORE_LISTING.md`: trước đây ghi icon hiện lại khi Explorer khởi động lại, trong khi `MainWindow` ẩn lại icon sau sự kiện `TaskbarCreated` nếu app đang chạy.
+
 Microsoft ký gói MSIX sau khi duyệt, nên bản Store không cần chứng thư riêng. Tài khoản cá nhân miễn phí, xác minh bằng giấy tờ tùy thân và selfie. Trang của Microsoft không nêu giới hạn quốc gia, nhưng cũng không nhắc Việt Nam, nên phải thử mới biết.
 
 - [x] **[AI]** Giữ tính năng ẩn icon Desktop trong bản Store, vì đây là mục đích chính của app. Lệnh `0x7402` của Explorer không được tài liệu hóa (chính sách 10.2.8) và đổi cài đặt lưu lâu dài, còn gói MSIX không có bước khôi phục khi gỡ (10.2.7). API công khai `SHGetSetSettings` đổi được cờ nhưng thử thật cho thấy Explorer không cập nhật ngay, nên không dùng. Bản Store dùng `ShowWindow` trên cửa sổ icon: thử thật ngày 02/11/2026, icon ẩn ngay, registry không đổi, refresh Desktop không làm hiện lại, bấm menu *Xem* hai lần là icon về. Setup và portable giữ cách cũ. Gói Store không có tiến trình bảo vệ nên nhẹ hơn khoảng 70 MB. Chưa thử trong gói thật.
@@ -212,6 +216,23 @@ Microsoft ký gói MSIX sau khi duyệt, nên bản Store không cần chứng t
 **Xong khi:** Nepply cài được từ Microsoft Store, gói do Microsoft ký.
 
 Nếu sau này có chứng thư cho bản Setup: thêm bước ký vào `release.yml`, dựng lại Setup với `-SignedUninstallerDirectory`, đưa `Get-SignerPolicy.ps1` vào `UpdatePolicy.Signers`, mở public mode trong `Build-Distribution.ps1`, rồi chạy `Verify-Release.ps1 -RequireSigned`.
+
+## Giai đoạn 6A. Cộng đồng dev dùng thử bản RC
+
+Mục tiêu: có người ngoài thử bản Setup/portable chưa ký trên phần cứng khác máy bạn, gom lỗi trước `2.0.0`. Phản hồi công khai (sao, issue, thảo luận) cũng là điều kiện SignPath Foundation nêu khi từ chối, nên giai đoạn này giúp luôn việc nộp lại.
+
+- [x] **[AI]** Viết [Điều khoản sử dụng](../legal/TERMS.md) song ngữ: tóm tắt MIT, không bảo hành, bản RC, bản chưa ký, thay đổi trên máy, dữ liệu, đóng góp. Link từ README và mục lục tài liệu. Đây không phải ý kiến pháp lý.
+- [x] **[AI]** Viết hướng dẫn dùng thử song ngữ ([English](../TESTING.en.md), [Tiếng Việt](../TESTING.md)): 13 tình huống lấy từ giai đoạn 7–8, cách khôi phục icon, cách báo.
+- [x] **[AI]** Thêm form `.github/ISSUE_TEMPLATE/test_report.yml` để người thử ghi cả kết quả đạt, gắn nhãn `test-report`.
+- [x] **[AI]** Đổi banner README: bỏ câu "2.0.0 sẽ là bản ký đầu tiên" vì Store đã tạm gác, thay bằng lời mời dùng thử.
+- [ ] **[Bạn]** Tạo nhãn `test-report` ở *Issues → Labels*. Nếu chưa có nhãn, GitHub vẫn nhận báo cáo nhưng không gắn nhãn.
+- [ ] **[Bạn]** Bật *Settings → General → Features → Discussions* nếu muốn có chỗ hỏi đáp ngoài Issue. Báo AI để thêm link vào `config.yml` và README.
+- [ ] **[Bạn]** Tự cài rc.2 qua trình duyệt theo mục cuối giai đoạn 4 trước khi mời người khác.
+- [ ] **[Bạn]** Đăng lời mời dùng thử ở cộng đồng dev bạn chọn. AI soạn sẵn nội dung khi bạn yêu cầu; AI không tự đăng.
+- [ ] **[Cả hai]** Nhận phản hồi 2 đến 4 tuần. AI phân loại issue; lỗi nặng sửa ở `2.0.0-rc.3` (`FileVersion` `2.0.0.3`).
+- [ ] **[Bạn]** Sau đợt dùng thử, chốt hướng cho `2.0.0`: mở lại Store, nộp lại SignPath, mua chứng thư, hay ra `2.0.0` chưa ký trên GitHub.
+
+**Xong khi:** có báo cáo từ máy khác máy bạn, không còn lỗi nặng đang mở, và hướng phát hành `2.0.0` đã chốt.
 
 ## Giai đoạn 7. Hoàn thiện chất lượng
 
@@ -279,7 +300,7 @@ Với bản Store: cài từ Store, thử mở panel, monitor, ẩn icon, tự k
 - [ ] **[AI]** Hoàn thiện `RELEASE_2.0.0.md` và CHANGELOG; cập nhật mục giới hạn về tự cài cập nhật.
 - [ ] **[Cả hai]** Chốt cách phát hành Setup và portable chưa ký cho `2.0.0` trên GitHub, tạo tag `v2.0.0`. README đưa người dùng tới bản Store trước.
 
-**Xong khi:** `2.0.0` có trên Microsoft Store và trang Releases ghi rõ bản nào đã ký.
+**Xong khi:** `2.0.0` có trên Microsoft Store và trang Releases ghi rõ bản nào đã ký. (Điều kiện này viết khi Store là kênh có chữ ký; Store đang tạm gác nên sẽ viết lại theo hướng chốt ở cuối giai đoạn 6A.)
 
 ### Nhật ký test trên Explorer thật
 

@@ -4,9 +4,9 @@
 <p align="center"><strong>English</strong> · <a href="README.vi.md">Tiếng Việt</a></p>
 <p align="center"><a href="#-download">Download</a> · <a href="docs/USER_GUIDE.en.md">User guide</a> · <a href="CHANGELOG.en.md">What's new</a> · <a href="docs/README.md">Documentation</a></p>
 
-> **2.0.0 release candidate · available now (unsigned)**
+> **2.0.0 release candidate · testers wanted**
 >
-> This build is not code-signed, so Windows may warn you. 2.0.0 will be the first signed release.
+> This build is not code-signed, so Windows may warn you. Developers and power users: try it on your hardware and tell us what happened. [Testing guide →](docs/TESTING.en.md)
 
 ## ✨ A small panel, close at hand
 
@@ -85,9 +85,10 @@ Until Nepply is code-signed, these checks show that a file is the one this repos
 
 ## 🛡️ Privacy & support
 
-No ads, analytics or automatic crash uploads. Update checks contact GitHub once a day (again after 12 hours if a check fails) and when requested; you can turn the daily check off. [Privacy policy — EN / VI](docs/legal/PRIVACY.md)
+No ads, analytics or automatic crash uploads. Update checks contact GitHub once a day (again after 12 hours if a check fails) and when requested; you can turn the daily check off. [Privacy policy — EN / VI](docs/legal/PRIVACY.md) · [Terms of use — EN / VI](docs/legal/TERMS.md#english)
 
 - [Report a bug or suggest a feature](https://github.com/minhquang0607/Nepply/issues). Include your version and steps; redact personal data from screenshots/logs.
+- Tried a release candidate? Share what worked and what did not with the [test report form](https://github.com/minhquang0607/Nepply/issues/new?template=test_report.yml). See the [testing guide](docs/TESTING.en.md).
 - Security concerns: use the [private reporting channel — EN / VI](docs/legal/SECURITY.md), not a public exploit report.
 - Automatic EXE installation is not enabled for public release; portable cannot replace its own files yet. Microsoft Store distribution is not published.
 

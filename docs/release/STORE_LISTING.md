@@ -28,7 +28,7 @@ Dán nguyên văn tiếng Anh vào ô giải trình:
 
 ## Ghi chú cho người duyệt (Notes for certification)
 
-> Nepply opens from the screen edge: move the pointer to the left edge of the screen, or use the notification area icon. No account or test data is needed. No hotkey is preset; one can be set in Settings > Shortcuts. Some temperature readings depend on hardware and can show a dash. The app starts with Windows only if the user turns that on. Hiding the Windows Desktop icons is an option the user turns on in Settings; it hides the icon window for the current session, changes no Windows setting, and is undone when the app exits or Explorer restarts. The Store edition updates only through the Store and does not contact GitHub for updates.
+> Nepply opens from the screen edge: move the pointer to the left edge of the screen, or use the notification area icon. No account or test data is needed. No hotkey is preset; one can be set in Settings > Shortcuts. Some temperature readings depend on hardware and can show a dash. The app starts with Windows only if the user turns that on. Hiding the Windows Desktop icons is an option the user turns on in Settings; it hides the icon window for the current session, changes no Windows setting, and is undone when the app exits. If Explorer restarts while the app is running, the app hides the icons again; if the app is not running, a restarted Explorer shows them. The Store edition updates only through the Store and does not contact GitHub for updates.
 
 ## Nội dung theo ngôn ngữ
 
