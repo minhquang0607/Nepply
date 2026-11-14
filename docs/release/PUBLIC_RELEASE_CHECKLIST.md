@@ -351,7 +351,7 @@ Làm dần, mỗi mục một PR riêng. Không gộp với thay đổi tính n�
 
 - [ ] **[AI]** F-17: đo thời gian đóng app khi Explorer hoặc guardian treo. Hiện việc đóng chặn luồng giao diện; nếu thời gian đáng kể thì đặt một hạn chung.
 - [ ] **[AI]** F-22: tìm hiểu `SendMessageTimeout` hết hạn rồi thử lại có thể bật tắt icon hai lần không, rồi thử với Explorer treo.
-- [ ] **[AI]** Viết tài liệu kiến trúc tiếng Anh, có sơ đồ tiến trình và các trạng thái ẩn, khôi phục icon, vì repo đã Public.
+- [x] **[AI]** Viết tài liệu kiến trúc tiếng Anh ([STRUCTURE.en.md](../architecture/STRUCTURE.en.md), [MODULES.en.md](../architecture/MODULES.en.md)), bổ sung sơ đồ tiến trình và sơ đồ các trạng thái ẩn, khôi phục icon vào cả bản Anh và Việt, vì repo đã Public.
 
 ### Phân phối và vận hành
 

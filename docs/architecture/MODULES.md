@@ -1,10 +1,89 @@
 # Ranh giới module Nepply
 
-Kiến trúc hiện hành của **2.0.0**, rà soát 17/10/2026. Xem [cây thư mục](STRUCTURE.md). Đây là bản đồ trách nhiệm và giới hạn, không phải nhật ký refactor hay chứng nhận runtime.
+[English](MODULES.en.md) · **Tiếng Việt** · [Tài liệu](../README.md) · [Cấu trúc](STRUCTURE.md)
+
+Kiến trúc hiện hành của **2.0.0**, cập nhật 14/11/2026. Xem [cây thư mục](STRUCTURE.md). Đây là bản đồ trách nhiệm, ranh giới tiến trình và chuyển trạng thái, không phải nhật ký refactor hay chứng nhận runtime.
 
 ## Nguyên tắc
 
 Nepply là modular monolith WPF, không phải hệ thống plugin. Tách theo trách nhiệm và vòng đời; không tạo project, timer hoặc dependency chỉ để chia lớp. Namespace tương thích như Services/Views/Modules không có nghĩa là assembly độc lập.
+
+## Ranh giới tiến trình lúc chạy
+
+Lúc chạy, Nepply tách công việc ra tối đa bốn tiến trình dưới cùng tài khoản người dùng Windows hiện tại. Mọi giao tiếp liên tiến trình dùng named pipe `CurrentUserOnly` (`Nepply-*`) có xác thực PID và thời điểm khởi động hai chiều (`HelperPipeIdentity`).
+
+```mermaid
+flowchart LR
+    subgraph UI["Nepply.exe (tiến trình UI)"]
+        MW["MainWindow / Panel UI"]
+        DIS["DesktopIconService"]
+        HMS["HardwareMonitorService"]
+    end
+
+    subgraph DH["Nepply.exe --desktop-host"]
+        Scan["Đọc Shell / Desktop &\ntrích xuất icon (theo từng lượt)"]
+    end
+
+    subgraph SH["Nepply.exe --sensor-host"]
+        LHM["LibreHardwareMonitor\n(tái sử dụng, tự tắt sau 10 phút nghỉ)"]
+    end
+
+    subgraph GD["Nepply.DesktopGuardian.exe"]
+        Guard["Canh tiến trình chủ thoát &\nkhôi phục Desktop qua 0x7402"]
+    end
+
+    EXP["Windows Explorer\n(SHELLDLL_DefView / SysListView32)"]
+    LEASE[("%LOCALAPPDATA%\\Nepply\\\ndesktop-visibility.lease")]
+
+    DIS -- "Named pipe (giới hạn JSON + PNG,\nhạn 25–30 giây)" --> Scan
+    HMS -- "Named pipe (đọc theo yêu cầu\nkhi mở panel/preview)" --> LHM
+    DIS -- "Named pipe (1 byte Arm / Restore,\nchỉ bản Setup & portable)" --> Guard
+    DIS -- "Ghi trước khi ẩn /\nxóa sau khi khôi phục" --> LEASE
+    DIS -- "Bật tắt 0x7402 (Setup/portable)\nhoặc ShowWindow (Store)" --> EXP
+    Guard -- "WaitForExitAsync(owner)\n→ khôi phục 0x7402 + xóa lease" --> EXP
+    Guard -. "Xóa lease đã hoàn tất" .-> LEASE
+```
+
+- **`Nepply.exe` (tiến trình UI):** Chạy giao diện WPF, Cài đặt, khay hệ thống, polling con trỏ ở cạnh, hotkey và kiểm tra cập nhật. Không nạp Shell extension bên thứ ba khi quét nền và không nạp `LibreHardwareMonitorLib` trong tiến trình giao diện.
+- **`Nepply.exe --desktop-host` (`DesktopScanProcess`):** Tiến trình con sống ngắn cho mỗi lượt quét Desktop đầy đủ hoặc từng phần. Một Shell extension lỗi bị cô lập trong lượt quét đó; mục đơn lẻ bị lỗi được bỏ qua và ghi log thay vì làm hỏng cả danh sách.
+- **`Nepply.exe --sensor-host` (`SensorProcessProvider`):** Tiến trình đọc cảm biến phần cứng. Được khởi động sẵn khi con trỏ tiến gần cạnh màn hình và giữ sống tối đa 10 phút giữa các lần mở panel; ngủ khi panel ẩn.
+- **`Nepply.DesktopGuardian.exe` (`GuardedDesktopVisibility`, chỉ bản Setup và portable):** Tiến trình phụ không WPF, chỉ chạy trong lúc Nepply đang ẩn icon Desktop. Xác thực tiến trình chủ theo PID, `StartTime` (UTC ticks) và session ID, giữ khóa liên tiến trình `DesktopGuardianFence`, và chờ lệnh `Restore` hoặc chờ tiến trình chủ kết thúc.
+
+## Các trạng thái ẩn và khôi phục icon Desktop
+
+Nepply không bao giờ nhận quyền sở hữu nếu người dùng đã tự ẩn icon Desktop từ trước. Tùy cách đóng gói, ứng dụng dùng một trong hai cơ chế:
+
+1. **Bản Setup và portable (`ExplorerDesktopVisibility` + `GuardedDesktopVisibility`):** Gửi `WM_COMMAND` `0x7402` tới `SHELLDLL_DefView` của Explorer. Vì Explorer lưu cài đặt này qua các lần đăng nhập, Nepply ghi `%LOCALAPPDATA%\Nepply\desktop-visibility.lease` (`restore-visible-v1`) *trước* khi ẩn và giữ `Nepply.DesktopGuardian.exe` ở trạng thái armed suốt phiên ẩn.
+2. **Bản Microsoft Store / MSIX (`WindowDesktopVisibility`, hiện tạm gác):** Gọi `ShowWindow` lên cửa sổ icon (`SysListView32`) mà không đổi cài đặt lưu lâu dài của Explorer và không dùng guardian. Nếu Explorer khởi động lại lúc Nepply đang chạy (`TaskbarCreated`), `MainWindow` ẩn lại cửa sổ icon.
+
+```mermaid
+stateDiagram-v2
+    [*] --> Visible: Icon Desktop đang hiện
+    [*] --> UserHidden: Người dùng đã tự ẩn trong Windows\n(không ghi lease, Nepply không nhận quyền sở hữu)
+
+    Visible --> ArmingGuardian: Bật "Ẩn icon Desktop"\n(Setup / portable)
+    ArmingGuardian --> LeaseWritten: Guardian kết nối & Arm qua pipe\n(Nepply-guardian-<guid>)
+    ArmingGuardian --> Visible: Guardian không khởi động/Arm được\n(hủy ẩn, ghi log lỗi)
+
+    LeaseWritten --> HiddenOwned: Ghi desktop-visibility.lease (Flush xuống đĩa)\nrồi gửi 0x7402 ẩn icon
+    LeaseWritten --> Restoring: Gửi 0x7402 thất bại hoặc guardian thoát giữa chừng
+
+    HiddenOwned --> Restoring: Người dùng tắt tùy chọn / Thoát app bình thường
+    HiddenOwned --> GuardianRecovery: Nepply.exe bị crash hoặc End task\n(guardian phát hiện chủ thoát)
+    HiddenOwned --> UnexpectedGuardianExit: Guardian bị tắt khi app vẫn chạy\n(ObserveExitAsync khôi phục & báo trên panel)
+
+    Restoring --> Visible: Guardian hoặc nhánh dự phòng cục bộ hiện lại icon\nvà xóa desktop-visibility.lease
+    GuardianRecovery --> Visible: Guardian gửi 0x7402 hiện icon (thử lại trong 10 giây)\nvà xóa desktop-visibility.lease
+    UnexpectedGuardianExit --> Visible: Nhánh cục bộ hiện lại icon\nvà ghi log cảnh báo
+
+    note right of HiddenOwned
+        Dự phòng khi mở lại / gỡ cài đặt:
+        Lần mở Nepply tiếp theo (RestorePreviousSession)
+        và bộ gỡ Inno Setup đều kiểm tra
+        desktop-visibility.lease dưới DesktopGuardianFence
+        nếu cả app và guardian bị dừng cùng lúc.
+    end note
+```
 
 ## Desktop: đọc → đối chiếu → trình bày
 

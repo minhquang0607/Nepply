@@ -25,16 +25,14 @@ Chọn ngôn ngữ bên dưới. Hai bản hướng dẫn người dùng giữ c
 
 [Contributing — English](../CONTRIBUTING.en.md) · [Đóng góp — Tiếng Việt](../CONTRIBUTING.md)
 
-Detailed implementation references below are currently in Vietnamese. Dependency notices retain their original license language.
+Dependency notices retain their original license language. · Thông báo thư viện giữ nguyên ngôn ngữ giấy phép gốc.
 
-Các tài liệu triển khai chi tiết dưới đây hiện bằng tiếng Việt. Thông báo thư viện giữ nguyên ngôn ngữ giấy phép gốc.
-
-| Reference / Tài liệu | Purpose / Nội dung |
-| --- | --- |
-| [Structure / Cấu trúc](architecture/STRUCTURE.md) | Source folders & ownership / Thư mục và trách nhiệm |
-| [Modules / Module](architecture/MODULES.md) | Boundaries & lifecycle / Ranh giới và vòng đời |
-| [Image provenance / Nguồn ảnh](images/README.md) | Build, render sizes & hashes / Build, kích thước và hash |
-| [Third-party notices / Thư viện](legal/THIRD_PARTY_NOTICES.md) | Dependencies & license evidence / Dependency và bằng chứng giấy phép |
+| Reference / Tài liệu | English | Tiếng Việt |
+| --- | --- | --- |
+| Structure — source folders & ownership / Thư mục và trách nhiệm | [Structure](architecture/STRUCTURE.en.md) | [Cấu trúc](architecture/STRUCTURE.md) |
+| Modules — boundaries, processes & states / Ranh giới, tiến trình và trạng thái | [Modules](architecture/MODULES.en.md) | [Module](architecture/MODULES.md) |
+| Image provenance / Nguồn ảnh | [Image provenance](images/README.md) | — |
+| Third-party notices / Thư viện | [Third-party notices](legal/THIRD_PARTY_NOTICES.md) | — |
 
 ## 📦 For maintainers · Dành cho người phát hành
 

@@ -16,7 +16,7 @@ Before committing C# changes, run `dotnet format whitespace Nepply.slnx`; CI rej
 
 ## Start here
 
-Use Windows x64 and the .NET SDK pinned in `global.json`. Open `Nepply.slnx`. Consult the [source structure](docs/architecture/STRUCTURE.md) and [module boundaries](docs/architecture/MODULES.md); these detailed architecture references are currently in Vietnamese.
+Use Windows x64 and the .NET SDK pinned in `global.json`. Open `Nepply.slnx`. Consult the [source structure](docs/architecture/STRUCTURE.en.md) and [module boundaries](docs/architecture/MODULES.en.md).
 
 ## Change guidelines
 

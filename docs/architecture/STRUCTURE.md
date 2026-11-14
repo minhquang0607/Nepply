@@ -1,5 +1,7 @@
 # Cấu trúc Nepply
 
+[English](STRUCTURE.en.md) · **Tiếng Việt** · [Tài liệu](../README.md) · [Ranh giới module](MODULES.md)
+
 Repository chứa mã sản phẩm, kiểm thử, công cụ phát triển và tài liệu hiện hành. Nhật ký và đầu ra QA được lưu ngoài repository.
 
 Xem [bản đồ tài liệu](../README.md) để chọn hướng dẫn người dùng, phát triển hoặc phát hành. Telemetry hiện hỗ trợ CPU/RAM/GPU/mạng; không có nhiệt độ bo mạch chủ hoặc RPM.
