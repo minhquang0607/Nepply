@@ -76,12 +76,15 @@ public partial class SettingsWindow : Window
         GpuChoice.ItemsSource = gpuChoices; IntegratedGpuChoice.ItemsSource = gpuChoices;
         PaletteSwatches.ItemsSource = Services.ThemeService.Palettes.Where(p => p.Key != "Custom" && p.Key != "Blue" && p.Key != "Violet" && p.Key != "Jade").Select(p => new Palette(p.Key, p.Value)).ToArray();
         ScreenChoice.ItemsSource = BuildScreenChoices(ScreenManager.GetScreens(), settings.MonitorDevice);
-        var adapters = new List<Choice> { new("", Services.LocalizationService.Get("AutoNetwork")) };
-        try { adapters.AddRange(NetworkInterface.GetAllNetworkInterfaces().Select(n => new Choice(n.Id, n.Name))); }
+        NetworkAdapterOption[] networkAdapters = [];
+        try
+        {
+            networkAdapters = NetworkInterface.GetAllNetworkInterfaces()
+                .Select(n => new NetworkAdapterOption(n.Id, n.Name, n.Description, n.NetworkInterfaceType, n.OperationalStatus))
+                .ToArray();
+        }
         catch (NetworkInformationException ex) { Services.AppLogger.Error(ex, "Enumerate network choices"); }
-        if (!string.IsNullOrEmpty(settings.NetworkInterfaceId) && !adapters.Any(a => a.Id == settings.NetworkInterfaceId))
-            adapters.Add(new(settings.NetworkInterfaceId, settings.NetworkInterfaceId));
-        NetworkChoice.ItemsSource = adapters;
+        NetworkChoice.ItemsSource = BuildNetworkChoices(networkAdapters, settings.NetworkInterfaceId);
         LanguageChoice.ItemsSource = Services.LocalizationService.Languages;
         Services.LocalizationService.Apply(settings.Language);
         Services.LocalizationService.Changed += RefreshLanguageChoices;
@@ -136,12 +139,69 @@ public partial class SettingsWindow : Window
         SettingsNavigation.Margin = rail ? new Thickness(20, 0, 8, 0) : new Thickness(16, 0, 16, 4);
         SettingsContent.Margin = rail ? new Thickness(0, 0, 22, 0) : new Thickness(16, 0, 16, 0);
     }
+    internal sealed record NetworkAdapterOption(string Id, string Name, string Description, NetworkInterfaceType Type, OperationalStatus Status);
+    internal static bool IsSelectableNetworkAdapter(NetworkAdapterOption adapter)
+    {
+        if (string.IsNullOrWhiteSpace(adapter.Id) || string.IsNullOrWhiteSpace(adapter.Name)) return false;
+        if (adapter.Status != OperationalStatus.Up || adapter.Type == NetworkInterfaceType.Loopback) return false;
+        if (adapter.Name.Contains("vEthernet", StringComparison.OrdinalIgnoreCase)
+            || adapter.Name.Contains("Loopback", StringComparison.OrdinalIgnoreCase))
+            return false;
+        string description = adapter.Description ?? "";
+        return !description.Contains("Loopback", StringComparison.OrdinalIgnoreCase)
+            && !description.Contains("Hyper-V Virtual", StringComparison.OrdinalIgnoreCase)
+            && !description.Contains("Wi-Fi Direct Virtual", StringComparison.OrdinalIgnoreCase)
+            && !description.Contains("Hosted Network Virtual", StringComparison.OrdinalIgnoreCase)
+            && !description.Contains("Kernel Debug", StringComparison.OrdinalIgnoreCase)
+            && !description.Contains("VirtualBox Host-Only", StringComparison.OrdinalIgnoreCase)
+            && !description.Contains("VMware Virtual", StringComparison.OrdinalIgnoreCase)
+            && !description.Contains("Teredo", StringComparison.OrdinalIgnoreCase)
+            && !description.Contains("ISATAP", StringComparison.OrdinalIgnoreCase)
+            && !description.Contains("6to4", StringComparison.OrdinalIgnoreCase);
+    }
+    internal static Choice[] BuildNetworkChoices(IEnumerable<NetworkAdapterOption> adapters, string selectedId)
+    {
+        var all = adapters.Where(a => !string.IsNullOrWhiteSpace(a.Id)).DistinctBy(a => a.Id, StringComparer.OrdinalIgnoreCase).ToArray();
+        var choices = new List<Choice> { Choice.FromMessage("", UserMessage.FromKey("AutoNetwork")) };
+        choices.AddRange(all.Where(IsSelectableNetworkAdapter).Select(a => new Choice(a.Id, a.Name)));
+        if (!string.IsNullOrEmpty(selectedId))
+        {
+            int index = choices.FindIndex(c => string.Equals(c.Id, selectedId, StringComparison.OrdinalIgnoreCase));
+            if (index < 0)
+            {
+                var saved = all.FirstOrDefault(a => string.Equals(a.Id, selectedId, StringComparison.OrdinalIgnoreCase));
+                string label = saved != null && !string.IsNullOrWhiteSpace(saved.Name) ? saved.Name : selectedId;
+                choices.Add(saved is { Status: OperationalStatus.Up }
+                    ? new Choice(selectedId, label)
+                    : Choice.FromMessage(selectedId, UserMessage.FromKey("DisconnectedDevice", label)));
+            }
+            else choices[index] = choices[index] with { Id = selectedId };
+        }
+        return choices.ToArray();
+    }
     internal static Choice[] BuildScreenChoices(IEnumerable<DisplayScreen> screens, string selectedDevice)
     {
+        var distinct = screens.Where(s => !string.IsNullOrWhiteSpace(s.Device)).DistinctBy(s => s.Device, StringComparer.OrdinalIgnoreCase).ToArray();
+        var duplicateNames = distinct
+            .Select(s => (s.Name ?? "").Trim())
+            .Where(name => name.Length > 0)
+            .GroupBy(name => name, StringComparer.OrdinalIgnoreCase)
+            .Where(group => group.Count() > 1)
+            .Select(group => group.Key)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
         var choices = new List<Choice> { Choice.FromMessage("", UserMessage.FromKey("PrimaryScreen")) };
-        choices.AddRange(screens.DistinctBy(s => s.Device, StringComparer.OrdinalIgnoreCase).Select(s => s.Primary
-            ? Choice.FromMessage(s.Device, UserMessage.FromKey("PrimaryDisplayLabel", s.Device.Replace(@"\\.\", "")))
-            : new Choice(s.Device, s.Device.Replace(@"\\.\", ""))));
+        foreach (var screen in distinct)
+        {
+            string shortDevice = screen.Device.Replace(@"\\.\", "");
+            string friendly = (screen.Name ?? "").Trim();
+            string label = friendly.Length == 0 ? shortDevice
+                : duplicateNames.Contains(friendly) && !string.Equals(friendly, shortDevice, StringComparison.OrdinalIgnoreCase)
+                    ? $"{friendly} ({shortDevice})"
+                    : friendly;
+            choices.Add(screen.Primary
+                ? Choice.FromMessage(screen.Device, UserMessage.FromKey("PrimaryDisplayLabel", label))
+                : new Choice(screen.Device, label));
+        }
         if (!string.IsNullOrEmpty(selectedDevice))
         {
             int index = choices.FindIndex(c => string.Equals(c.Id, selectedDevice, StringComparison.OrdinalIgnoreCase));
