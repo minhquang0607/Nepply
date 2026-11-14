@@ -42,7 +42,7 @@ public sealed class DesktopWatcherService : IDisposable
         _probe = probe ?? (path => Directory.Exists(path) ? Directory.GetCreationTimeUtc(path) : null);
         _createWatcher = createWatcher ?? (path => new FileSystemWatcher(path)
         {
-            NotifyFilter = NotifyFilters.FileName | NotifyFilters.DirectoryName | NotifyFilters.LastWrite | NotifyFilters.Attributes,
+            NotifyFilter = NotifyFilters.FileName | NotifyFilters.DirectoryName | NotifyFilters.Attributes,
             InternalBufferSize = 32768
         });
         _timer = new Timer(_ => Flush(), null, Timeout.Infinite, Timeout.Infinite);

@@ -172,7 +172,7 @@ internal static class DesktopEntryReader
 
         try
         {
-            // 1. Lấy Icon Index từ SHGetFileInfo
+            // 1. Get the icon index from SHGetFileInfo
             if (SHGetFileInfo(path, 0, ref shinfo, (uint)Marshal.SizeOf(shinfo), SHGFI_SYSICONINDEX) == IntPtr.Zero) return null;
 
             if (cache != null && cache.TryGetValue(shinfo.iIcon, out var cachedIcon))
@@ -189,50 +189,50 @@ internal static class DesktopEntryReader
 
             if (imageList != null)
             {
-                // 3. Extract hIcon từ IImageList
+                // 3. Extract hIcon from IImageList
                 imageList.GetIcon(shinfo.iIcon, ILD_TRANSPARENT, out hIcon);
             }
 
             // --- FALLBACK ---
             if (hIcon == IntPtr.Zero)
             {
-                // Nếu SHGetImageList thất bại, gọi lại SHGetFileInfo chuẩn mặc định (32x32)
+                // If SHGetImageList fails, fall back to the default SHGetFileInfo icon (32x32)
                 SHGetFileInfo(path, 0, ref shinfo, (uint)Marshal.SizeOf(shinfo), SHGFI_ICON | SHGFI_LARGEICON);
                 hIcon = shinfo.hIcon;
 
-                // Đánh dấu hIcon trong shinfo về Zero để avoid double-free vì ta đã gán nó vào hIcon
+                // Clear shinfo.hIcon after taking ownership in hIcon to avoid a double-free
                 shinfo.hIcon = IntPtr.Zero;
             }
 
             if (hIcon == IntPtr.Zero) return null;
 
-            // 4. Tạo BitmapSource
+            // 4. Create the BitmapSource
             var iconSource = Imaging.CreateBitmapSourceFromHIcon(
                 hIcon, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
             iconSource.Freeze();
 
             if (cache != null)
             {
-                cache[shinfo.iIcon] = (BitmapSource)iconSource;
+                cache[shinfo.iIcon] = iconSource;
             }
             return iconSource;
         }
         catch { return null; }
         finally
         {
-            // Giải phóng GDI Object (hIcon)
+            // Release the GDI object (hIcon)
             if (hIcon != IntPtr.Zero)
             {
                 DestroyIcon(hIcon);
             }
 
-            // Đảm bảo không quên giải phóng shinfo.hIcon trong trường hợp ngoại lệ giữa chừng
+            // Ensure shinfo.hIcon is released if an exception occurred before ownership was transferred
             if (shinfo.hIcon != IntPtr.Zero)
             {
                 DestroyIcon(shinfo.hIcon);
             }
 
-            // Giải phóng COM Object (IImageList)
+            // Release the COM object (IImageList)
             if (localImageList && imageList != null)
             {
                 Marshal.ReleaseComObject(imageList);

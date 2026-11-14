@@ -78,21 +78,23 @@ public static class ShellDesktopReader
             {
                 instance = new ShellLink(); var link = (IShellLinkW)instance;
                 ((System.Runtime.InteropServices.ComTypes.IPersistFile)link).Load(item.Path, 0);
-                var target = new StringBuilder(32768); var args = new StringBuilder(32768); var dir = new StringBuilder(32768);
-                link.GetPath(target, target.Capacity, IntPtr.Zero, 0); link.GetArguments(args, args.Capacity); link.GetWorkingDirectory(dir, dir.Capacity);
+                var buffer = new StringBuilder(32768);
+                link.GetPath(buffer, buffer.Capacity, IntPtr.Zero, 0);
                 // Unresolved/MSI/UWP links retain their original identity; never merge by display name alone.
-                if (target.Length > 0)
+                if (buffer.Length > 0)
                 {
-                    var iconPath = new StringBuilder(32768);
-                    link.GetIconLocation(iconPath, iconPath.Capacity, out var iconIndex);
+                    string target = buffer.ToString();
+                    buffer.Clear(); link.GetArguments(buffer, buffer.Capacity); string args = buffer.ToString();
+                    buffer.Clear(); link.GetWorkingDirectory(buffer, buffer.Capacity); string dir = buffer.ToString();
+                    buffer.Clear(); link.GetIconLocation(buffer, buffer.Capacity, out var iconIndex); string iconPath = buffer.ToString();
                     link.GetShowCmd(out var show); link.GetHotkey(out var hotkey);
                     using var file = File.OpenRead(item.Path);
                     Span<byte> header = stackalloc byte[24]; file.ReadExactly(header);
                     uint flags = System.Buffers.Binary.BinaryPrimitives.ReadUInt32LittleEndian(header[20..]);
                     // Run-as-admin, window mode, hotkey and custom icon change behavior.
                     // Keep those shortcuts separate even when target/arguments match.
-                    return ShortcutIdentity(item.Name, target.ToString(), args.ToString(), dir.ToString())
-                        + $"\0{flags & 0x2000}\0{show}\0{hotkey}\0{iconPath.ToString().ToUpperInvariant()}\0{iconIndex}";
+                    return ShortcutIdentity(item.Name, target, args, dir)
+                        + $"\0{flags & 0x2000}\0{show}\0{hotkey}\0{iconPath.ToUpperInvariant()}\0{iconIndex}";
                 }
             }
             catch (Exception ex) { AppLogger.Error(ex, "Shortcut identity"); }

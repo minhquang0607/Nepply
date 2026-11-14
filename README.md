@@ -18,6 +18,7 @@ Nepply sits at the edge of your Windows screen. Open Desktop items, search by na
 | 🔎 Desktop search | Find and launch items, with the Windows context menu. Your files stay where they are. |
 | 🎨 Make it yours | Light/dark/system theme, colors, neon and metallic effects, with live preview before saving. |
 | 📐 Flexible layout | Choose columns × rows with the dot grid; scroll through additional items. |
+| 🙈 Clean Desktop | Hide Desktop icons to keep your wallpaper clear while still opening items from the panel; icons return when you exit. |
 | 📊 System overview | CPU, RAM, GPU/iGPU and upload/download rates. Sensor availability depends on your hardware. |
 | 🎮 Game-aware edges | Avoid automatic edge opening while a game hides the pointer for character control. Behavior depends on the game. |
 
@@ -33,7 +34,7 @@ The app supports Vietnamese, English, Japanese, German, Simplified Chinese, Russ
 </tr>
 </table>
 
-Fresh renders from a **Release build**, source `2fa1e78`. These are real WPF views rendered in an isolated UI fixture, not personal desktop screenshots. Panel items, icons and metrics are illustrative; the screenshots show the Vietnamese UI. Settings switches to horizontal tabs in narrow windows. [Image provenance →](docs/images/README.md)
+Rendered directly from Nepply using sample items and illustrative numbers (Vietnamese UI). Settings switches to horizontal tabs in narrow windows. [About these screenshots →](docs/images/README.md)
 
 ## 📦 Download
 

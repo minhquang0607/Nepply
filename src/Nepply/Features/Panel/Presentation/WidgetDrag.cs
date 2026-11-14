@@ -96,7 +96,7 @@ public static class WidgetDrag
     {
         var element = (FrameworkElement)sender;
         element.ClearValue(StartProperty);
-        if (CanStartFrom(element, e.OriginalSource as DependencyObject)) element.SetValue(StartProperty, (Point?)e.GetPosition(element));
+        if (CanStartFrom(element, e.OriginalSource as DependencyObject)) element.SetValue(StartProperty, e.GetPosition(element));
     }
     private static void Move(object sender, MouseEventArgs e)
     {

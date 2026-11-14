@@ -15,7 +15,7 @@ Windows tạm ẩn con trỏ khi bạn gõ phím. Panel chưa ghim coi đó là 
 
 ## Không thấy một mục Desktop
 
-Xóa từ khóa tìm kiếm và kiểm tra bộ lọc file ẩn/system icon. Nepply hiển thị các mục trực tiếp trên Desktop, không liệt kê toàn bộ nội dung mọi thư mục con. Nếu vừa thay đổi nhiều file, thử nút làm mới.
+Xóa từ khóa tìm kiếm và kiểm tra tùy chọn hiện file ẩn hoặc biểu tượng hệ thống (như Thùng rác, This PC). Nepply hiển thị các mục trực tiếp trên Desktop, không liệt kê toàn bộ nội dung mọi thư mục con. Nếu vừa thay đổi nhiều file, thử nút làm mới.
 
 Nếu mục đã bị xóa hoặc đổi tên bên ngoài app, không thể mở bằng đường dẫn cũ. Kiểm tra lại trong File Explorer trước khi báo lỗi.
 
@@ -47,13 +47,13 @@ Nepply có tiến trình hỗ trợ phục hồi, nhưng không bảo đảm n�
 
 1. Thử mở lại Nepply rồi chọn **Thoát** từ khay hệ thống.
 2. Nếu icon vẫn ẩn, nhấp chuột phải lên Desktop → **View/Xem → Show desktop icons/Hiển thị biểu tượng màn hình nền**.
-3. Không xóa dấu khôi phục hoặc dữ liệu app khi Desktop vẫn ở trạng thái sai. Gửi báo lỗi nếu tình trạng lặp lại.
+3. Không xóa thư mục dữ liệu của Nepply khi icon Desktop vẫn đang ẩn. Gửi báo lỗi nếu tình trạng lặp lại.
 
 ## Windows chặn tệp hoặc cập nhật không thành công
 
 Bản hiện tại chưa ký số nên Windows có thể cảnh báo. Không tắt SmartScreen, App Control hay antivirus để vượt chặn. Kiểm tra đúng nguồn tải và thông tin tại [Releases](https://github.com/minhquang0607/Nepply/releases).
 
-Nếu kiểm tra cập nhật báo lỗi, kiểm tra kết nối Internet rồi thử lại. Chưa hỗ trợ tự cài production hoặc tự thay tệp portable ở giai đoạn hiện tại.
+Nếu kiểm tra cập nhật báo lỗi, kiểm tra kết nối Internet rồi thử lại. Tự động cài đặt bản cập nhật chưa mở ở giai đoạn này; cửa sổ cập nhật sẽ mở trang phát hành chính thức để bạn tải bản mới.
 
 ## Đặt lại cấu hình
 
@@ -61,7 +61,7 @@ Trong Cài đặt, chọn **Mặc định**, kiểm tra các tùy chọn rồi b
 
 Nếu cần sao lưu trước, thoát app rồi sao chép `%APPDATA%\Nepply\settings.json` sang nơi riêng. Không chỉ xóa file này để đặt lại: app có thể phục hồi từ bản `.bak`. Nếu Cài đặt không mở được, hãy báo lỗi trước khi tự xóa các file khôi phục.
 
-Nhật ký ở `%LOCALAPPDATA%\Nepply\Logs`. Không cần xóa log để đặt lại giao diện. Dấu khôi phục Desktop ở `%LOCALAPPDATA%\Nepply\desktop-visibility.lease`; không xóa file này khi icon chưa được phục hồi. Xem [quyền riêng tư](legal/PRIVACY.md) để biết dữ liệu nào được lưu.
+Nhật ký ở `%LOCALAPPDATA%\Nepply\Logs`. Không cần xóa log để đặt lại giao diện. Nepply ghi nhận việc đã ẩn icon ở `%LOCALAPPDATA%\Nepply\desktop-visibility.lease` để tự hiện lại ở lần mở sau; không xóa file này khi icon vẫn đang ẩn. Xem [quyền riêng tư](legal/PRIVACY.md) để biết dữ liệu nào được lưu.
 
 ## Báo lỗi hữu ích và an toàn
 

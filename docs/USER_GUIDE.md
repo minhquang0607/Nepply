@@ -2,7 +2,7 @@
 
 [English](USER_GUIDE.en.md) · **Tiếng Việt** · [Trang chính](../README.vi.md) · [Xử lý sự cố](TROUBLESHOOTING.md)
 
-Hướng dẫn cho **Nepply 2.0.0-rc.2**, bản phát hành thử chưa ký số. Bản ký số đầu tiên sẽ là 2.0.0.
+Hướng dẫn cho **Nepply 2.0.0-rc.2**, bản phát hành thử chưa ký số để dùng thử và góp ý.
 
 ## Mở và đóng panel
 
@@ -53,6 +53,16 @@ Trong **Cài đặt**, dùng bảng chấm tròn để chọn số **cột × h�
 
 Kích thước panel có thể điều chỉnh theo tỷ lệ màn hình. Chọn bố cục vừa đủ đọc tên và thao tác thuận tiện; không cần mở panel hết màn hình để chứa tất cả icon.
 
+## Ẩn icon Desktop
+
+Nepply có thể ẩn các biểu tượng ngoài màn hình nền để giữ hình nền thoáng, trong khi mọi tệp, thư mục và lối tắt vẫn mở bình thường từ panel.
+
+- Bật hoặc tắt ngay ở màn chào, menu khay hệ thống, trong **Cài đặt**, hoặc bằng phím tắt **Ẩn / hiện icon Desktop**.
+- Tính năng này chỉ đổi chế độ hiển thị icon trên màn hình nền của Windows, không di chuyển hay sửa đổi tệp của bạn.
+- Nếu bạn đã tự ẩn icon bằng menu của Windows từ trước khi mở Nepply, ứng dụng sẽ giữ nguyên trạng thái đó.
+- Khi chính Nepply đã ẩn icon, chọn **Thoát** sẽ tự hiện lại icon. Tiến trình đi kèm (`Nepply.DesktopGuardian.exe`) cũng tự khôi phục icon nếu Nepply dừng bất ngờ, hoặc ngay ở lần mở Nepply tiếp theo sau khi khởi động lại máy.
+- Bạn luôn có thể tự bật lại bất cứ lúc nào bằng cách nhấp chuột phải lên màn hình nền → **View/Xem → Show desktop icons/Hiển thị biểu tượng màn hình nền**.
+
 ## Thử giao diện trước khi lưu
 
 Bạn có thể đổi cạnh, kích thước, lưới, màu, chế độ sáng/tối và hiệu ứng trong Cài đặt. Panel phản ánh các tùy chọn có hỗ trợ xem trước để bạn quan sát.
@@ -90,4 +100,4 @@ Mở **Cài đặt → Ứng dụng → Kiểm tra cập nhật** để chủ đ
 - **Bản Setup:** thoát Nepply, kiểm tra icon Desktop đã trở lại nếu từng cho app ẩn chúng, rồi gỡ trong danh sách ứng dụng đã cài của Windows.
 - **Bản portable:** tắt tự khởi động và lưu, thoát Nepply, kiểm tra Desktop rồi xóa riêng thư mục đã giải nén.
 
-Khi gỡ bản Setup, Nepply hỏi có xóa luôn cài đặt và nhật ký không. Chọn **Không** nếu định cài lại và muốn giữ cài đặt. Với bản portable hoặc nếu muốn tự đặt lại dữ liệu, xem [xử lý sự cố](TROUBLESHOOTING.md). Đừng xóa dấu khôi phục khi icon Desktop vẫn bị ẩn.
+Khi gỡ bản Setup, Nepply hỏi có xóa luôn cài đặt và nhật ký không. Chọn **Không** nếu định cài lại và muốn giữ cài đặt. Với bản portable hoặc nếu muốn tự đặt lại dữ liệu, xem [xử lý sự cố](TROUBLESHOOTING.md). Nếu icon Desktop vẫn đang ẩn, hãy cho hiện lại trước khi xóa thư mục dữ liệu của Nepply.

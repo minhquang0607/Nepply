@@ -3,6 +3,7 @@
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <NepplyRuntimeVersion>10.0.14</NepplyRuntimeVersion>
     <NepplyILLinkVersion>10.0.10</NepplyILLinkVersion>
+    <!-- Projects targeting net10.0-windows10.0.19041.0 clear this so Microsoft.Windows.SDK.NET.Ref keeps its own SDK version while Directory.Build.targets pins .NET/WPF packs. -->
     <RuntimeFrameworkVersion>$(NepplyRuntimeVersion)</RuntimeFrameworkVersion>
     <Deterministic>true</Deterministic>
     <Authors>Minh Quang</Authors>

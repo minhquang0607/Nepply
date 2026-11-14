@@ -645,7 +645,7 @@ public partial class MainWindow : Window
     {
         if (_editingLayout || _finishingLayout) return;
         try { if (!_preview) _settings.Save(); }
-        catch (Exception ex) { AppLogger.Error(ex, "Save layout"); MessageBox.Show(LocalizationService.Get("LayoutSaveError") + LocalizationService.Render(UserMessage.From(ex))); }
+        catch (Exception ex) { AppLogger.Error(ex, "Save layout"); MessageBox.Show(this, LocalizationService.Get("LayoutSaveError") + LocalizationService.Render(UserMessage.From(ex)), "Nepply", MessageBoxButton.OK, MessageBoxImage.Warning); }
     }
     private void EditLayout_Click(object sender, RoutedEventArgs e)
     {

@@ -75,6 +75,12 @@ internal static class DesktopWatcherTests
             string renamed = Path.Combine(path, "đổi 日本語.txt"); File.Move(file, renamed);
             check("Real rename batch retains old and new path", ready.WaitOne(3000) && batches.TryDequeue(out var changed)
                 && changed?.Contains(file) == true && changed.Contains(renamed));
+            File.AppendAllText(renamed, "-append");
+            check("Content-only write does not trigger watcher batch", !ready.WaitOne(400) && batches.IsEmpty);
+            File.SetAttributes(renamed, FileAttributes.Hidden);
+            check("Attribute change triggers watcher batch", ready.WaitOne(3000) && batches.TryDequeue(out var attr) && attr?.Contains(renamed) == true);
+            File.SetAttributes(renamed, FileAttributes.Normal);
+            ready.WaitOne(3000); batches.TryDequeue(out _);
             now = 299900; watcher.RequestChanges([renamed]);
             check("Partial activity before repair deadline stays incremental", ready.WaitOne(3000) && batches.TryDequeue(out var recent) && recent != null);
             now = 300001; watcher.ReconcileAsync().GetAwaiter().GetResult();

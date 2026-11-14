@@ -640,7 +640,7 @@ public partial class SettingsWindow : Window
     }
     private void OpenSupport_Click(object sender, RoutedEventArgs e)
     {
-        try { System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("https://github.com/minhquang0607/Nepply/issues") { UseShellExecute = true }); InfoStatus.Text = ""; }
+        try { OpenLink(new Uri($"https://github.com/{Modules.Updates.UpdatePolicy.Repository}/issues")); InfoStatus.Text = ""; }
         catch (Exception ex) { Services.AppLogger.Error(ex, "Open support link"); InfoStatus.SetResourceReference(TextBlock.TextProperty, "Loc.OpenBrowserError"); }
     }
     private void Reset_Click(object sender, RoutedEventArgs e) { _draft.ResetToDefaults(); LoadDraft(); SetError(null); ProfileStatus.Text = ""; }

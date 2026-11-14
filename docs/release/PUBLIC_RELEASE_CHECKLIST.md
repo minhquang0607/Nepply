@@ -225,7 +225,7 @@ Mục tiêu: có người ngoài thử bản Setup/portable chưa ký trên ph�
 - [x] **[AI]** Viết hướng dẫn dùng thử song ngữ ([English](../TESTING.en.md), [Tiếng Việt](../TESTING.md)): 13 tình huống lấy từ giai đoạn 7–8, cách khôi phục icon, cách báo.
 - [x] **[AI]** Thêm form `.github/ISSUE_TEMPLATE/test_report.yml` để người thử ghi cả kết quả đạt, gắn nhãn `test-report`.
 - [x] **[AI]** Đổi banner README: bỏ câu "2.0.0 sẽ là bản ký đầu tiên" vì Store đã tạm gác, thay bằng lời mời dùng thử.
-- [ ] **[Bạn]** Tạo nhãn `test-report` ở *Issues → Labels*. Nếu chưa có nhãn, GitHub vẫn nhận báo cáo nhưng không gắn nhãn.
+- [x] **[Bạn]** Tạo nhãn `test-report` ở *Issues → Labels*. Nếu chưa có nhãn, GitHub vẫn nhận báo cáo nhưng không gắn nhãn. (Đã tạo ngày 14/11/2026.)
 - [ ] **[Bạn]** Bật *Settings → General → Features → Discussions* nếu muốn có chỗ hỏi đáp ngoài Issue. Báo AI để thêm link vào `config.yml` và README.
 - [ ] **[Bạn]** Tự cài rc.2 qua trình duyệt theo mục cuối giai đoạn 4 trước khi mời người khác.
 - [ ] **[Bạn]** Đăng lời mời dùng thử ở cộng đồng dev bạn chọn. AI soạn sẵn nội dung khi bạn yêu cầu; AI không tự đăng.
@@ -268,6 +268,19 @@ Audit trên `aa6cd17` chấm 6,9/10, không có lỗi P0, đánh mã F-01 đến
 - [x] **[AI]** F-20: test và chế độ preview không ghi vào thư mục log thật `%LOCALAPPDATA%\Nepply\Logs`. Test ghi vào `test-logs` cạnh `Nepply.Tests.exe`, nhờ một cấu hình chỉ dự án test đặt; preview và smoke test ghi vào `%TEMP%\Nepply-preview\Logs`, cùng chỗ với cài đặt tạm của chúng. Đã kiểm: chạy hết core test, file log thật không đổi một byte.
 - [x] **[AI]** F-14: đã xác minh ngày 06/11/2026. Kết quả lớn hơn audit ghi, nên chuyển sang giai đoạn 10, làm cùng F-05; xem mục ở đó.
 - [x] **[AI]** F-21: `LibreHardwareProvider` dùng `ToDictionary` ở dòng 27 và 38, sẽ ném lỗi nếu trùng ID, trong khi dòng 45 lại dùng `DistinctBy`. Đã thống nhất: cả ba chỗ giữ mục đầu tiên, mỗi ID chỉ đọc một lần, có test. Chưa xác minh thư viện cảm biến có bao giờ trả ID trùng không; nếu không thì hành vi không đổi.
+
+### Mục từ audit cuối ngày 10/11/2026
+
+Audit toàn diện trên `5b2e723` (`v2.0.0-rc.2`) đánh mã `A-01` đến `A-16`. Không có lỗi chặn phát hành. Các mục nhỏ, gọn làm ngay trước `2.0.0`; mục kiến trúc lớn nằm ở giai đoạn 10.
+
+- [x] **[AI]** A-01: đưa tính năng "Ẩn icon Desktop" lên bảng tính năng ở `README.md`/`README.vi.md` và thêm một mục riêng trong `docs/USER_GUIDE.en.md`/`docs/USER_GUIDE.md` giải thích cách bật/tắt, cơ chế tự hiện lại khi thoát hoặc dừng bất ngờ, và cách bật lại bằng tay.
+- [x] **[AI]** A-02 (phần nhỏ): bỏ `NotifyFilters.LastWrite` trong `DesktopWatcherService.cs` để việc sửa nội dung tệp trên Desktop không kích hoạt tiến trình quét lại mỗi 2 giây; giữ `FileName | DirectoryName | Attributes` và thêm kiểm thử trong `DesktopWatcherTests.cs`. Phần gộp hai kênh thông báo (`SHChangeNotifyRegister` và `FileSystemWatcher`) nằm ở giai đoạn 10.
+- [x] **[AI]** A-05: truyền cửa sổ chủ (`this`), tiêu đề `"Nepply"` và biểu tượng cảnh báo cho `MessageBox.Show` khi lưu bố cục thất bại ở `MainWindow.xaml.cs`.
+- [x] **[AI]** A-06: dịch 8 chú thích tiếng Việt còn sót trong `DesktopEntryReader.cs` sang tiếng Anh cho đồng nhất toàn bộ `src/`.
+- [x] **[AI]** A-07: kiểm tra thẻ `<RuntimeFrameworkVersion></RuntimeFrameworkVersion>` rỗng trong `Nepply.csproj` và `Nepply.Tests.csproj`: đây là thiết kế có chủ đích để xóa giá trị kế thừa từ `Directory.Build.props` trên các dự án `net10.0-windows10.0.19041.0` (tránh ép `Microsoft.Windows.SDK.NET.Ref` nhận số phiên bản `10.0.14` gây lỗi `NETSDK1112`), trong khi `Directory.Build.targets` ghim riêng `.NET` và `WPF`. Đã ghi chú rõ trong `Directory.Build.props`.
+- [x] **[AI]** A-09: dùng lại một `StringBuilder(32768)` duy nhất trong `ShellDesktopReader.DestinationIdentity` thay vì cấp phát bốn bộ đệm 32 KB cho mỗi tệp `.lnk`.
+- [x] **[AI]** A-11: bỏ thuật ngữ kỹ thuật nội bộ (`source 2fa1e78`, `UI fixture`, `production automatic installation`, `system icon`, `recovery marker`) trong `README*`, `USER_GUIDE*` và `TROUBLESHOOTING*`, thay bằng lời giải thích dễ hiểu cho người dùng cuối.
+- [x] **[AI]** A-15: dùng `UpdatePolicy.Repository` thay cho chuỗi cứng trong `SettingsWindow.OpenSupport_Click`.
 
 **Xong khi:** không còn lỗi nặng đang mở; bài đo 24 giờ trên app thật không có dấu hiệu rò rỉ.
 
@@ -332,7 +345,11 @@ Làm dần, mỗi mục một PR riêng. Không gộp với thay đổi tính n�
 - [ ] **[AI]** Bỏ các constructor chỉ dành cho test trong `DesktopIconService`, dùng một interface scanner.
 - [ ] **[AI]** Tách các dòng dồn nhiều lệnh và bỏ biến `_settings` cục bộ che field trong `MainWindow`.
 - [ ] **[AI]** F-10: đưa móc kiểm thử ra khỏi `App.xaml.cs`, `MainWindow` và `AppSettings`, chỉ giữ một điểm vào mỏng như `--smoke-test`, để nhánh chạy khi test giống bản thật.
-- [ ] **[AI]** Giảm nhiễu CodeQL, phần còn lại (file sinh tự động trong `obj` đã được lọc ở PR #13): đóng cảnh báo nhầm kèm lý do, hỏi chủ dự án trước khi đóng hàng loạt; dọn vài mục nhỏ có thật (`insideMonitor` thừa ở `PointerActivationGate.cs:37`, ép kiểu thừa ở `DesktopEntryReader.cs:194` và `WidgetDrag.cs:99`).
+- [ ] **[AI]** Giảm nhiễu CodeQL, phần còn lại (file sinh tự động trong `obj` đã được lọc ở PR #13; ép kiểu thừa ở `DesktopEntryReader.cs` và `WidgetDrag.cs` đã dọn): đóng cảnh báo nhầm kèm lý do, hỏi chủ dự án trước khi đóng hàng loạt; xét thêm `insideMonitor` ở `PointerActivationGate.cs:37`.
+- [ ] **[AI]** A-02 (phần lớn): gộp hoặc điều phối hai kênh theo dõi Desktop (`DesktopShellNotifications` dùng `SHChangeNotifyRegister` và `DesktopWatcherService` dùng `FileSystemWatcher`) để một thao tác đổi tệp không kích hoạt hai đợt quét chồng nhau; dọn nhánh `_lastRefresh` dự phòng trong `DesktopWatcherService`.
+- [ ] **[AI]** A-03: khi người dùng tự ẩn icon bằng menu chuột phải của Windows trong lúc Nepply đang giữ trạng thái ẩn (`HiddenOwned`), cập nhật lease hoặc đồng bộ lại trạng thái để tránh hiện lại icon ngoài ý muốn ở lần khởi động sau.
+- [ ] **[AI]** A-04: tách luồng tự đóng khi mất tiêu điểm và khi con trỏ ẩn lúc gõ phím trong `MainWindow.xaml.cs` thành các hàm nhỏ có tên rõ ràng.
+- [ ] **[AI]** A-08: gom việc đọc danh sách màn hình trong `ScreenManager` về một lệnh gọi Win32/WMI thay vì lặp `AllScreens` nhiều lần mỗi khi mở Cài đặt.
 
 ### Đơn giản hóa và dung lượng
 

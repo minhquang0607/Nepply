@@ -2,7 +2,7 @@
 
 **English** · [Tiếng Việt](USER_GUIDE.md) · [Home](../README.md) · [Troubleshooting](TROUBLESHOOTING.en.md)
 
-For **Nepply 2.0.0-rc.2**, a release candidate that is not code-signed. 2.0.0 will be the first signed release.
+For **Nepply 2.0.0-rc.2**, an unsigned release candidate for testing and feedback.
 
 ## 🖱️ Open and close the panel
 
@@ -53,6 +53,16 @@ In **Settings**, use the dot grid to choose **columns × rows**:
 
 Panel dimensions adjust relative to the screen. Choose a comfortable size for reading and clicking; the panel need not fill your screen to hold all items.
 
+## 🙈 Hide Desktop icons
+
+Nepply can hide the icons on your Windows Desktop so your wallpaper stays clean while every file, folder and shortcut remains accessible from the panel.
+
+- Toggle it from the welcome screen, the tray menu, **Settings**, or the **Hide / show desktop icons** shortcut.
+- Hiding icons only changes Windows' Desktop icon visibility; your files are not moved or modified.
+- If you already hid Desktop icons through Windows before opening Nepply, Nepply leaves that setting alone.
+- When Nepply hid the icons, exiting Nepply restores them automatically. A small helper process (`Nepply.DesktopGuardian.exe`) also restores them if Nepply closes unexpectedly or if you reopen Nepply after a reboot.
+- You can always show them manually by right-clicking the Desktop → **View → Show desktop icons**.
+
 ## 🎨 Preview before saving
 
 Change edge, dimensions, grid, colors, theme and effects in Settings. Supported preview options appear on the panel before you save.
@@ -90,4 +100,4 @@ Open **Settings → Application → Check for updates**. A suitable release show
 - **Setup:** exit Nepply, confirm Desktop icons have returned if the app hid them, then uninstall through Windows Installed apps.
 - **Portable:** disable startup and save, exit, check the Desktop, then remove only the extracted application folder.
 
-When you uninstall the Setup edition, Nepply asks whether to remove its settings and logs too. Choose **No** if you plan to reinstall and want to keep your settings. For the portable edition, or to reset data yourself, see [Troubleshooting](TROUBLESHOOTING.en.md). Do not delete recovery markers while Desktop icons are still hidden.
+When you uninstall the Setup edition, Nepply asks whether to remove its settings and logs too. Choose **No** if you plan to reinstall and want to keep your settings. For the portable edition, or to reset data yourself, see [Troubleshooting](TROUBLESHOOTING.en.md). If Desktop icons are still hidden, show them again before deleting Nepply's app data folder.

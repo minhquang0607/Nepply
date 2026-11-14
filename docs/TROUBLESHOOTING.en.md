@@ -15,7 +15,7 @@ Windows hides the pointer while you type. An unpinned panel treats that as anoth
 
 ## A Desktop item is missing
 
-Clear the search and check hidden-file/system-icon filters. Nepply lists items directly on the Desktop, not all contents of every subfolder. After many file changes, try Refresh.
+Clear the search and check the options to show hidden files or system icons (such as Recycle Bin and This PC). Nepply lists items directly on the Desktop, not all contents of every subfolder. After many file changes, try Refresh.
 
 An externally deleted or renamed item cannot open at its old path. Check File Explorer before reporting the issue.
 
@@ -47,13 +47,13 @@ Nepply has a recovery helper, but recovery is not guaranteed if that process is 
 
 1. Reopen Nepply and choose Exit from the tray.
 2. If still hidden, right-click the Desktop → View → Show desktop icons.
-3. Do not remove recovery markers or app data while the Desktop remains in the wrong state. Report recurring failures.
+3. Do not delete Nepply's app data folders while Desktop icons are still hidden. Report recurring failures.
 
 ## Windows blocks the file, or updates fail
 
 The current build is not code-signed, so Windows may warn you. Do not disable SmartScreen, App Control or antivirus to bypass a block. Verify the source and information on [Releases](https://github.com/minhquang0607/Nepply/releases).
 
-For update-check errors, check connectivity and retry. Production automatic installation and portable self-replacement are not currently enabled.
+For update-check errors, check connectivity and retry. Automatic update installation is not yet enabled; the update window opens the official release page so you can download the new version.
 
 ## Reset settings
 
@@ -61,7 +61,7 @@ In Settings choose Defaults, review the options, then Apply or OK. Choose Cancel
 
 To back up first, exit and copy `%APPDATA%\Nepply\settings.json` elsewhere. Deleting only this file may restore a `.bak` instead of resetting. If Settings cannot open, report the problem before deleting recovery files.
 
-Logs are in `%LOCALAPPDATA%\Nepply\Logs`; deleting them is not necessary for a visual reset. The Desktop recovery marker is `%LOCALAPPDATA%\Nepply\desktop-visibility.lease`; do not remove it before icons are restored. See the [privacy policy](legal/PRIVACY.md).
+Logs are in `%LOCALAPPDATA%\Nepply\Logs`; deleting them is not necessary for a visual reset. Nepply records whether it hid your Desktop icons in `%LOCALAPPDATA%\Nepply\desktop-visibility.lease` so it can restore them on the next run; do not delete this file while icons are still hidden. See the [privacy policy](legal/PRIVACY.md).
 
 ## Report an issue safely
 

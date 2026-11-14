@@ -18,6 +18,7 @@ Nepply nằm ở cạnh màn hình Windows. Mở mục Desktop, tìm theo tên v
 | 🔎 Tìm trên Desktop | Tìm và mở mục, dùng menu chuột phải Windows. File vẫn ở vị trí cũ. |
 | 🎨 Cá nhân hóa | Sáng/tối/theo hệ thống, bảng màu, neon và ánh kim; xem trước trước khi lưu. |
 | 📐 Bố cục linh hoạt | Chọn cột × hàng bằng lưới chấm tròn; cuộn để xem các mục còn lại. |
+| 🙈 Gọn màn hình nền | Ẩn các biểu tượng trên Desktop để giữ hình nền thoáng nhưng vẫn mở mọi mục từ panel; tự hiện lại khi thoát. |
 | 📊 Theo dõi máy | CPU, RAM, GPU/iGPU và tốc độ tải lên/xuống. Cảm biến tùy phần cứng. |
 | 🎮 Hạn chế làm phiền game | Không tự mở cạnh khi game ẩn chuột để điều khiển nhân vật. Hành vi tùy từng game. |
 
@@ -33,7 +34,7 @@ Nepply nằm ở cạnh màn hình Windows. Mở mục Desktop, tìm theo tên v
 </tr>
 </table>
 
-Ảnh render mới từ **build Release**, source `2fa1e78`. Đây là các view WPF thật trong fixture UI cô lập, không phải ảnh Desktop cá nhân. Tên mục, icon và số đo panel là dữ liệu minh họa; ảnh dùng giao diện tiếng Việt. Settings chuyển sang tab ngang khi cửa sổ hẹp. [Nguồn ảnh →](docs/images/README.md)
+Ảnh chụp giao diện thật của Nepply với các mục và số liệu minh họa (giao diện tiếng Việt). Cửa sổ Cài đặt tự chuyển sang thanh mục ngang khi thu hẹp. [Chi tiết về ảnh →](docs/images/README.md)
 
 ## 📦 Tải ứng dụng
 
