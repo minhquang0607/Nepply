@@ -21,11 +21,11 @@ Nếu mục đã bị xóa hoặc đổi tên bên ngoài app, không thể mở
 
 ## Thiếu nhiệt độ hoặc số đo GPU
 
-Không phải máy nào cũng cung cấp đủ cảm biến. Kiểm tra tùy chọn monitor/cảm biến và GPU đang chọn. Phần trăm sử dụng và nhiệt độ có thể đến từ các nguồn khác nhau, nên có phần trăm không đồng nghĩa chắc chắn có nhiệt độ.
+Không phải máy nào cũng cung cấp đủ số đo. Kiểm tra tùy chọn theo dõi hệ thống và GPU đang chọn. Phần trăm sử dụng và nhiệt độ có thể đến từ các nguồn khác nhau, nên có phần trăm không đồng nghĩa chắc chắn có nhiệt độ.
 
 ### Vì sao nhiệt độ CPU hiện "chưa khả dụng"?
 
-Đây là giới hạn đã biết, không phải lỗi cài đặt. Trên nhiều CPU Intel và AMD, nhiệt độ CPU chỉ đọc được qua driver cấp nhân (LibreHardwareMonitor dùng PawnIO), thường cần quyền quản trị. Nepply chạy bằng quyền người dùng thông thường và **không cài driver**, nên trên các máy này thẻ CPU vẫn hiện mức sử dụng và xung nhịp nhưng không có nhiệt độ.
+Đây là giới hạn đã biết, không phải lỗi cài đặt. Trên nhiều CPU Intel và AMD, nhiệt độ CPU chỉ đọc được qua driver cấp nhân, thường cần quyền quản trị. Nepply chạy bằng quyền người dùng thông thường và **không cài driver**, nên trên các máy này thẻ CPU vẫn hiện mức sử dụng và xung nhịp nhưng không có nhiệt độ.
 
 - Một số máy AMD có đồ họa Radeon tích hợp (APU) đọc được nhiệt độ qua AMD ADL; nguồn này được ghi là *dự phòng* trong chi tiết thẻ.
 - Nhiệt độ GPU thường đến từ API của driver đồ họa, nên có thể có nhiệt độ GPU dù thiếu nhiệt độ CPU.
@@ -35,11 +35,11 @@ Không tắt Vanguard, antivirus hoặc bảo vệ Windows, và không tự cài
 
 ## Tốc độ mạng bằng 0 hoặc khác ứng dụng tải xuống
 
-Kiểm tra adapter được chọn có phải kết nối đang dùng không, đặc biệt khi có VPN hoặc nhiều card mạng. Số đo là lưu lượng toàn adapter trong một khoảng lấy mẫu; khác đơn vị hoặc chu kỳ cập nhật có thể cho giá trị khác phần mềm tải file.
+Kiểm tra kết nối mạng được chọn có phải kết nối đang dùng không, đặc biệt khi có VPN hoặc nhiều kết nối. Số đo là lưu lượng toàn kết nối trong một khoảng lấy mẫu; khác đơn vị hoặc chu kỳ cập nhật có thể cho giá trị khác phần mềm tải file.
 
 ## Hiệu ứng hoặc chuyển động chưa mượt
 
-Thử tắt bớt neon/ánh kim hoặc giảm chuyển động, tăng thời gian giữa các lần đo và bật tạm ngừng monitor khi panel ẩn. Nếu vẫn bị giật, báo lại thao tác gây lỗi, độ phân giải, scaling Windows, GPU và video ngắn đã che thông tin cá nhân.
+Thử tắt bớt neon/ánh kim hoặc giảm chuyển động, tăng thời gian giữa các lần đo và bật tạm ngừng theo dõi khi panel ẩn. Nếu vẫn bị giật, báo lại thao tác gây lỗi, độ phân giải, scaling Windows, GPU và video ngắn đã che thông tin cá nhân.
 
 ## Icon Desktop chưa trở lại sau khi app đóng bất thường
 

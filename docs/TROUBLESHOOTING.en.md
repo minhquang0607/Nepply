@@ -21,11 +21,11 @@ An externally deleted or renamed item cannot open at its old path. Check File Ex
 
 ## Temperature or GPU readings are missing
 
-Not all hardware exposes every sensor. Check monitoring/sensor options and the selected GPU. Usage and temperature may come from different sources; a usage reading does not guarantee a temperature reading.
+Not all hardware exposes every reading. Check the system monitoring options and the selected GPU. Usage percentage and temperature may come from different sources; a usage reading does not guarantee a temperature reading.
 
 ### Why does CPU temperature show "unavailable"?
 
-This is a known limitation, not an installation fault. On many Intel and AMD CPUs, CPU temperature is only readable through a kernel driver (LibreHardwareMonitor uses PawnIO), which usually requires administrator rights. Nepply runs as a normal user and **does not install drivers**, so on these machines the CPU card still shows usage and clock but no temperature.
+This is a known limitation, not an installation fault. On many Intel and AMD CPUs, CPU temperature is only readable through a kernel driver, which usually requires administrator rights. Nepply runs as a normal user and **does not install drivers**, so on these machines the CPU card still shows usage and clock but no temperature.
 
 - Some AMD machines with integrated Radeon graphics (APUs) can read it through AMD ADL; the card details mark that source as *fallback*.
 - GPU temperature usually comes from the graphics driver's API, so it can be present while CPU temperature is missing.
@@ -35,7 +35,7 @@ Do not disable Vanguard, antivirus or Windows protection, or install drivers to 
 
 ## Network rates are zero or differ from a download app
 
-Select the adapter carrying the traffic, especially with VPNs or multiple adapters. Readings cover the whole adapter over a sampling interval; different units and intervals can differ from a downloader's display.
+Select the network connection carrying the traffic, especially with VPNs or multiple connections. Readings cover the whole connection over a sampling interval; different units and intervals can differ from a downloader's display.
 
 ## Effects or motion feel slow
 

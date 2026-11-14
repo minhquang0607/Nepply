@@ -57,10 +57,10 @@ Panel dimensions adjust relative to the screen. Choose a comfortable size for re
 
 Nepply can hide the icons on your Windows Desktop so your wallpaper stays clean while every file, folder and shortcut remains accessible from the panel.
 
-- Toggle it from the welcome screen, the tray menu, **Settings**, or the **Hide / show desktop icons** shortcut.
+- Toggle it from the welcome screen, **Settings**, or the **Hide / show desktop icons** shortcut.
 - Hiding icons only changes Windows' Desktop icon visibility; your files are not moved or modified.
 - If you already hid Desktop icons through Windows before opening Nepply, Nepply leaves that setting alone.
-- When Nepply hid the icons, exiting Nepply restores them automatically. A small helper process (`Nepply.DesktopGuardian.exe`) also restores them if Nepply closes unexpectedly or if you reopen Nepply after a reboot.
+- When Nepply hid the icons, exiting Nepply restores them automatically. A small helper process (`Nepply.DesktopGuardian.exe`) restores them if Nepply closes unexpectedly, and if both stop together (such as a power loss or forced reboot), reopening Nepply restores them on startup.
 - You can always show them manually by right-clicking the Desktop → **View → Show desktop icons**.
 
 ## 🎨 Preview before saving
@@ -81,9 +81,9 @@ The look follows Windows' light or dark mode by default. Neon and metallic effec
 
 Cards show CPU, RAM, GPU/iGPU and network rates. Temperature and clock readings require suitable system data; on many Intel/AMD machines CPU temperature is unavailable because Nepply installs no driver ([why](TROUBLESHOOTING.en.md#why-does-cpu-temperature-show-unavailable)). Motherboard temperature and fan RPM are not supported in this version.
 
-Disable monitoring or network rates when not needed. Advanced options control sampling interval and pausing while the panel is hidden. Select the appropriate network adapter, especially with VPNs or multiple connections.
+Disable monitoring or network rates when not needed. Advanced options control sampling interval and pausing while the panel is hidden. Select the appropriate network connection, especially with VPNs or multiple connections.
 
-Upload/download figures describe adapter traffic, not an Internet speed test. Do not disable antivirus/anti-cheat or install unfamiliar drivers to obtain extra readings.
+Upload/download figures describe traffic on the selected network connection, not an Internet speed test. Do not disable antivirus/anti-cheat or install unfamiliar drivers to obtain extra readings.
 
 ## ⚡ Start with Windows
 

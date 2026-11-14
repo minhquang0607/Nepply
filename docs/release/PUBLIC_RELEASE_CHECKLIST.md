@@ -271,15 +271,18 @@ Audit trên `aa6cd17` chấm 6,9/10, không có lỗi P0, đánh mã F-01 đến
 
 ### Mục từ audit cuối ngày 10/11/2026
 
-Audit toàn diện trên `5b2e723` (`v2.0.0-rc.2`) đánh mã `A-01` đến `A-16`. Không có lỗi chặn phát hành. Các mục nhỏ, gọn làm ngay trước `2.0.0`; mục kiến trúc lớn nằm ở giai đoạn 10.
+Audit toàn diện trên `980d80f` (`main`, sau `v2.0.0-rc.2`) đánh mã `A-01` đến `A-16` (không có `A-13` vì trùng `F-05`). Không có lỗi P0/P1 mới. Các mục nhỏ, gọn làm ngay trước `2.0.0`; mục kiến trúc lớn nằm ở giai đoạn 10.
 
-- [x] **[AI]** A-01: đưa tính năng "Ẩn icon Desktop" lên bảng tính năng ở `README.md`/`README.vi.md` và thêm một mục riêng trong `docs/USER_GUIDE.en.md`/`docs/USER_GUIDE.md` giải thích cách bật/tắt, cơ chế tự hiện lại khi thoát hoặc dừng bất ngờ, và cách bật lại bằng tay.
-- [x] **[AI]** A-02 (phần nhỏ): bỏ `NotifyFilters.LastWrite` trong `DesktopWatcherService.cs` để việc sửa nội dung tệp trên Desktop không kích hoạt tiến trình quét lại mỗi 2 giây; giữ `FileName | DirectoryName | Attributes` và thêm kiểm thử trong `DesktopWatcherTests.cs`. Phần gộp hai kênh thông báo (`SHChangeNotifyRegister` và `FileSystemWatcher`) nằm ở giai đoạn 10.
+- [x] **[AI]** A-01: đưa tính năng "Ẩn icon Desktop" lên bảng tính năng ở `README.md`/`README.vi.md` và thêm một mục riêng trong `docs/USER_GUIDE.en.md`/`docs/USER_GUIDE.md` giải thích cách bật/tắt, cơ chế tự hiện lại khi thoát, dừng bất ngờ hoặc mở lại sau khi mất điện/khởi động lại, và cách bật lại bằng tay.
+- [x] **[AI]** A-02 (phần nhỏ): bỏ `NotifyFilters.LastWrite` trong `DesktopWatcherService.cs` để việc sửa nội dung tệp trên Desktop không kích hoạt tiến trình quét lại mỗi 2 giây; giữ `FileName | DirectoryName | Attributes` và thêm kiểm thử trong `DesktopWatcherTests.cs`. Phần rẽ nhánh `--desktop-host` trước khi khởi tạo WPF và giữ tiến trình sống giữa các lần quét (`A-02` phần lớn) nằm ở giai đoạn 10.
+- [ ] **[AI]** A-04: hiển thị tên màn hình thân thiện thay vì tên kỹ thuật `"DISPLAY1"`, `"DISPLAY2"` ở `SettingsWindow.xaml.cs:139`, và lọc bớt các card mạng ảo/đang tắt/loopback trong danh sách kết nối mạng ở `SettingsWindow.xaml.cs:80` (`A-04b`).
 - [x] **[AI]** A-05: truyền cửa sổ chủ (`this`), tiêu đề `"Nepply"` và biểu tượng cảnh báo cho `MessageBox.Show` khi lưu bố cục thất bại ở `MainWindow.xaml.cs`.
 - [x] **[AI]** A-06: dịch 8 chú thích tiếng Việt còn sót trong `DesktopEntryReader.cs` sang tiếng Anh cho đồng nhất toàn bộ `src/`.
 - [x] **[AI]** A-07: kiểm tra thẻ `<RuntimeFrameworkVersion></RuntimeFrameworkVersion>` rỗng trong `Nepply.csproj` và `Nepply.Tests.csproj`: đây là thiết kế có chủ đích để xóa giá trị kế thừa từ `Directory.Build.props` trên các dự án `net10.0-windows10.0.19041.0` (tránh ép `Microsoft.Windows.SDK.NET.Ref` nhận số phiên bản `10.0.14` gây lỗi `NETSDK1112`), trong khi `Directory.Build.targets` ghim riêng `.NET` và `WPF`. Đã ghi chú rõ trong `Directory.Build.props`.
+- [ ] **[Cả hai]** A-08: timer theo dõi cạnh màn hình (`EdgeHitTest.cs:54`) chạy ở chu kỳ `125 ms` khi chuột ở xa cạnh, kể cả khi khóa máy hay tắt màn hình; đo cùng bài đo 24 giờ rồi quyết định tạm dừng khi khóa phiên hoặc màn hình tắt để tiết kiệm pin laptop.
 - [x] **[AI]** A-09: dùng lại một `StringBuilder(32768)` duy nhất trong `ShellDesktopReader.DestinationIdentity` thay vì cấp phát bốn bộ đệm 32 KB cho mỗi tệp `.lnk`.
-- [x] **[AI]** A-11: bỏ thuật ngữ kỹ thuật nội bộ (`source 2fa1e78`, `UI fixture`, `production automatic installation`, `system icon`, `recovery marker`) trong `README*`, `USER_GUIDE*` và `TROUBLESHOOTING*`, thay bằng lời giải thích dễ hiểu cho người dùng cuối.
+- [x] **[AI]** A-11: bỏ thuật ngữ kỹ thuật nội bộ (`source 2fa1e78`, `UI fixture`, `production automatic installation`, `system icon`, `adapter`, `recovery marker`) trong `README*`, `USER_GUIDE*` và `TROUBLESHOOTING*`, thay bằng lời giải thích dễ hiểu cho người dùng cuối.
+- [ ] **[Cả hai]** A-12: rà soát thống nhất cách gọi `"icon"` và `"biểu tượng"` trong tiếng Việt (như giữa màn chào, Cài đặt và hướng dẫn), làm cùng đợt duyệt bản dịch ở giai đoạn 7.
 - [x] **[AI]** A-15: dùng `UpdatePolicy.Repository` thay cho chuỗi cứng trong `SettingsWindow.OpenSupport_Click`.
 
 **Xong khi:** không còn lỗi nặng đang mở; bài đo 24 giờ trên app thật không có dấu hiệu rò rỉ.
@@ -342,14 +345,13 @@ Làm dần, mỗi mục một PR riêng. Không gộp với thay đổi tính n�
 - [ ] **[AI]** Tách `SettingsWindow` (753 dòng ở `8f6da30`) theo từng nhóm cài đặt.
 - [ ] **[AI]** Tách `AppSettings` thành dữ liệu thuần; bỏ phụ thuộc vào giao diện và kho lưu file.
 - [ ] **[AI]** Bỏ các lời gọi ngược lên `MainWindow` từ `IconPanel`, `MonitorPanel`, `TrayMenu`, `WelcomeWindow`.
-- [ ] **[AI]** Bỏ các constructor chỉ dành cho test trong `DesktopIconService`, dùng một interface scanner.
+- [ ] **[AI]** A-14: bỏ các thành viên chỉ dành cho test trong code sản phẩm (5 constructor test trong `DesktopIconService` bằng một interface scanner, cùng `HideDesktopIcons()`, `AreDesktopIconsHidden`, `ShellDesktopReader.Read`, `DesktopCatalogStore.Add/Remove`, `PanelDimensions.OnlyDimensionsChanged`), làm cùng F-10/F-14.
 - [ ] **[AI]** Tách các dòng dồn nhiều lệnh và bỏ biến `_settings` cục bộ che field trong `MainWindow`.
 - [ ] **[AI]** F-10: đưa móc kiểm thử ra khỏi `App.xaml.cs`, `MainWindow` và `AppSettings`, chỉ giữ một điểm vào mỏng như `--smoke-test`, để nhánh chạy khi test giống bản thật.
-- [ ] **[AI]** Giảm nhiễu CodeQL, phần còn lại (file sinh tự động trong `obj` đã được lọc ở PR #13; ép kiểu thừa ở `DesktopEntryReader.cs` và `WidgetDrag.cs` đã dọn): đóng cảnh báo nhầm kèm lý do, hỏi chủ dự án trước khi đóng hàng loạt; xét thêm `insideMonitor` ở `PointerActivationGate.cs:37`.
-- [ ] **[AI]** A-02 (phần lớn): gộp hoặc điều phối hai kênh theo dõi Desktop (`DesktopShellNotifications` dùng `SHChangeNotifyRegister` và `DesktopWatcherService` dùng `FileSystemWatcher`) để một thao tác đổi tệp không kích hoạt hai đợt quét chồng nhau; dọn nhánh `_lastRefresh` dự phòng trong `DesktopWatcherService`.
-- [ ] **[AI]** A-03: khi người dùng tự ẩn icon bằng menu chuột phải của Windows trong lúc Nepply đang giữ trạng thái ẩn (`HiddenOwned`), cập nhật lease hoặc đồng bộ lại trạng thái để tránh hiện lại icon ngoài ý muốn ở lần khởi động sau.
-- [ ] **[AI]** A-04: tách luồng tự đóng khi mất tiêu điểm và khi con trỏ ẩn lúc gõ phím trong `MainWindow.xaml.cs` thành các hàm nhỏ có tên rõ ràng.
-- [ ] **[AI]** A-08: gom việc đọc danh sách màn hình trong `ScreenManager` về một lệnh gọi Win32/WMI thay vì lặp `AllScreens` nhiều lần mỗi khi mở Cài đặt.
+- [ ] **[AI]** Giảm nhiễu CodeQL, phần còn lại (file sinh tự động trong `obj` đã được lọc ở PR #13; ép kiểu thừa ở `DesktopEntryReader.cs` và `WidgetDrag.cs` đã dọn; `insideMonitor` ở `PointerActivationGate.cs:37` đã xác minh là nhánh cần thiết khi `besideEdge == true && insideMonitor == false`): đóng cảnh báo nhầm kèm lý do, hỏi chủ dự án trước khi đóng hàng loạt.
+- [ ] **[AI]** A-02 (phần lớn): rẽ nhánh `--desktop-host` trước khi khởi tạo `Application` của WPF để giảm chi phí khởi động (~0,3 giây CPU mỗi lần quét), hoặc giữ tiến trình đọc Desktop sống giữa các lần quét tương tự `--sensor-host` (sau khi có số đo từ bài đo 24 giờ F-08).
+- [ ] **[AI]** A-10: dọn các đường dẫn đã xóa khỏi Desktop còn lưu mãi trong `IconOrder` (hiện giữ tối đa 10 000 mục) và dọn các tệp cài đặt lỗi `settings.json.broken-*` cũ.
+- [ ] **[AI]** A-16: thay đoạn so tay 5 trường cài đặt theo dõi trong `MainWindow.xaml.cs:89` bằng `SettingsChangeSet` (làm cùng F-04 khi tách `MainWindow`).
 
 ### Đơn giản hóa và dung lượng
 
@@ -360,8 +362,8 @@ Làm dần, mỗi mục một PR riêng. Không gộp với thay đổi tính n�
   - `Build-Msix.ps1` vẫn đưa guardian vào gói MSIX nội bộ (bản Store thì không), và `verify.yml` vẫn đưa guardian vào payload MSIX của CI.
   - `DesktopGuardianConnection.DisarmAsync` không có nơi gọi trong `src`, nhưng là lệnh `Disarm` trong giao thức guardian và có test riêng.
   - Gỡ cho sạch phải đụng script MSIX, CI và giao thức của tính năng ẩn icon, nên không làm ngay trước `2.0.0`. Nếu F-05 bỏ hẳn guardian thì các phần này mất theo.
-- [ ] **[Cả hai]** Xem lại Guardian: exe 70 MB và khoảng 770 dòng cho việc khôi phục icon. Thử bản biên dịch native để giảm dung lượng.
-- [ ] **[Cả hai]** Giảm dung lượng app: `Nepply.exe` 194 MB, Setup 78 MB. Thử nén single-file, đo ảnh hưởng tới thời gian khởi động.
+- [ ] **[Cả hai]** A-03 (Guardian): xem lại `Nepply.DesktopGuardian.exe` 70 MB (`Program.cs` 124 dòng, toàn cụm `Visibility` + `Nepply.DesktopGuardian` 841 dòng C#) cho việc khôi phục icon. Thử bản biên dịch NativeAOT để giảm dung lượng xuống dưới 10 MB nếu giữ guardian sau quyết định F-05.
+- [ ] **[Cả hai]** A-03 (App): giảm dung lượng app (`Nepply.exe` 194 MB, tổng sau cài khoảng 265 MB, Setup 78 MB). Thử nén single-file (`EnableCompressionInSingleFile`), đo ảnh hưởng tới thời gian khởi động.
 - [ ] **[AI]** Gom bớt script kiểm tra trùng lặp, thêm số phiên bản lấy tự động từ tag.
 
 ### Độ bền và tài liệu

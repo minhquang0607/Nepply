@@ -52,4 +52,4 @@ WPF resource dictionaries live under `src/Nepply/Presentation/Appearance` and ar
 
 ## Output hygiene
 
-Do not run destructive `git clean` without a tracked baseline. Clean `bin`/`obj` only when no build or Nepply process is running. Reference and research repositories live outside this repository and are never build dependencies.
+Do not run destructive `git clean` without a tracked baseline. Clean `bin`/`obj` only when no build or Nepply process is running. Before removing binaries from a QA pass, preserve the required reports and screenshots in the verified archive and keep one portable baseline for comparison. Reference and research repositories live outside this repository and are never build dependencies.

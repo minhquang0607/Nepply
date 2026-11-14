@@ -10,7 +10,7 @@ Nepply is a WPF modular monolith, not a plugin framework. Boundaries follow runt
 
 ## Runtime process boundaries
 
-At runtime, Nepply splits work across up to four processes under the current Windows user account. All inter-process communication uses `CurrentUserOnly` named pipes (`Nepply-*`) with two-way PID and process start-time verification (`HelperPipeIdentity`).
+At runtime, Nepply splits work across up to four processes under the current Windows user account. All inter-process communication uses `CurrentUserOnly` named pipes (`Nepply-*`) with two-way PID verification and parent-handle pinning (`HelperPipeIdentity`), plus one-way owner UTC `StartTime` and session ID verification inside `Nepply.DesktopGuardian.exe`.
 
 ```mermaid
 flowchart LR
@@ -25,7 +25,7 @@ flowchart LR
     end
 
     subgraph SH["Nepply.exe --sensor-host"]
-        LHM["LibreHardwareMonitor\n(reused, idle timeout 10 min)"]
+        LHM["LibreHardwareMonitor\n(reused, 10 min hidden grace /\n11 min host idle limit)"]
     end
 
     subgraph GD["Nepply.DesktopGuardian.exe"]
@@ -46,14 +46,15 @@ flowchart LR
 
 - **`Nepply.exe` (UI process):** Hosts the WPF panel, Settings, tray icon, edge pointer polling, hotkeys and update checks. Never loads third-party Shell context-menu handlers during background scans and never loads `LibreHardwareMonitorLib` in-process.
 - **`Nepply.exe --desktop-host` (`DesktopScanProcess`):** Short-lived child process spawned per full or incremental Desktop scan. Reads user/Public Desktop folders and Shell namespace items, renders icon bitmaps within `DesktopImageBudget` and returns a bounded payload. A faulty Shell extension is isolated to one scan attempt; bad individual entries are skipped and logged rather than aborting the entire snapshot.
-- **`Nepply.exe --sensor-host` (`SensorProcessProvider`):** Out-of-process hardware reader hosting `LibreHardwareMonitorLib`. Pre-warmed when the pointer approaches the active screen edge and kept alive for up to 10 minutes between opens so opening the panel does not pay cold-start cost. Sleeps when the panel is hidden.
+- **`Nepply.exe --sensor-host` (`SensorProcessProvider`):** Out-of-process hardware reader hosting `LibreHardwareMonitorLib`. Pre-warmed when the pointer approaches the active screen edge; when `SuspendMonitorWhenHidden` is enabled, `HardwareMonitorService` releases the provider after 10 minutes hidden (`DefaultHiddenProviderGraceMs`), and the host itself exits after 11 minutes of pipe inactivity (`HostIdleLimit`).
 - **`Nepply.DesktopGuardian.exe` (`GuardedDesktopVisibility`, Setup & portable only):** Lightweight non-WPF helper started only while Nepply hides Desktop icons. Authenticates the owner process by PID, UTC `StartTime` ticks and session ID, acquires the cross-process `DesktopGuardianFence` and waits for either a `Restore` pipe command or owner process termination.
+- **`Nepply.exe --restore-desktop` (`App.xaml.cs`):** Short-lived recovery mode invoked by Inno Setup before upgrade or uninstall to restore Desktop icons from `desktop-visibility.lease` under `DesktopGuardianFence`.
 
 ## Desktop icon hiding and recovery states
 
 Nepply never claims ownership of a Desktop that the user had already hidden before Nepply hid it. Two mechanisms exist depending on how the app is packaged:
 
-1. **Setup and portable (`ExplorerDesktopVisibility` + `GuardedDesktopVisibility`):** Toggles Explorer's `SHELLDLL_DefView` via `WM_COMMAND` `0x7402`. Because Explorer persists that setting across logoffs, Nepply writes `%LOCALAPPDATA%\Nepply\desktop-visibility.lease` (`restore-visible-v1`) *before* hiding and keeps `Nepply.DesktopGuardian.exe` armed while hidden.
+1. **Setup and portable (`ExplorerDesktopVisibility` + `GuardedDesktopVisibility`):** Toggles Explorer's `SHELLDLL_DefView` via `WM_COMMAND` `0x7402`. Because Explorer persists that setting across logoffs, Nepply arms `Nepply.DesktopGuardian.exe` first and writes `%LOCALAPPDATA%\Nepply\desktop-visibility.lease` (`restore-visible-v1`) *before* sending `0x7402`.
 2. **Microsoft Store / MSIX (`WindowDesktopVisibility`, currently parked):** Calls `ShowWindow` on Explorer's icon list window (`SysListView32`) without changing persistent Explorer settings or spawning a guardian. If Explorer restarts while Nepply is running (`TaskbarCreated`), `MainWindow` hides the icon window again.
 
 ```mermaid
@@ -62,11 +63,11 @@ stateDiagram-v2
     [*] --> UserHidden: User already hid icons in Windows\n(no lease written, Nepply does not claim ownership)
 
     Visible --> ArmingGuardian: User enables "Hide Desktop icons"\n(Setup / portable)
-    ArmingGuardian --> LeaseWritten: Guardian connected & armed on pipe\n(Nepply-guardian-<guid>)
+    ArmingGuardian --> GuardianArmed: Guardian connected & armed on pipe\n(Nepply-guardian-hex32)
     ArmingGuardian --> Visible: Guardian failed to start or arm\n(abort hide, log error)
 
-    LeaseWritten --> HiddenOwned: Write desktop-visibility.lease (Flush to disk)\nthen send 0x7402 hide to Explorer
-    LeaseWritten --> Restoring: 0x7402 hide failed or guardian exited mid-hide
+    GuardianArmed --> HiddenOwned: Write desktop-visibility.lease (Flush to disk)\nthen send 0x7402 hide to Explorer
+    GuardianArmed --> Restoring: Desktop already hidden, 0x7402 hide failed,\nor guardian exited mid-hide
 
     HiddenOwned --> Restoring: User turns option off / normal app Exit
     HiddenOwned --> GuardianRecovery: Nepply.exe crashes or is killed\n(guardian detects owner exit)
@@ -74,14 +75,15 @@ stateDiagram-v2
 
     Restoring --> Visible: Guardian or local fallback restores visibility\nand deletes desktop-visibility.lease
     GuardianRecovery --> Visible: Guardian sends 0x7402 show (10 s retry loop)\nand deletes desktop-visibility.lease
-    UnexpectedGuardianExit --> Visible: Local fallback restores icons\nand logs warning
+    UnexpectedGuardianExit --> Visible: Local fallback restores icons, deletes lease,\nlogs error & notifies panel
+    UnexpectedGuardianExit --> HiddenOwned: Local restore failed\n(keeps lease for next retry, logs error & notifies panel)
 
     note right of HiddenOwned
         Startup / installer fallback:
         Next Nepply launch (RestorePreviousSession)
-        and Inno Setup uninstall both check
+        and Inno Setup (--restore-desktop) check
         desktop-visibility.lease under DesktopGuardianFence
-        if both app and guardian were terminated together.
+        (Inno falls back to direct script recovery if Nepply.exe is missing).
     end note
 ```
 
@@ -93,6 +95,8 @@ stateDiagram-v2
 - `DesktopIconViewModel` filters/sorts items and surfaces status messages to the UI. `DesktopIconCollection` batches collection updates; `IconGridPanel` handles virtualization and scroll anchoring; `IconGridGeometry` shares arrange/drop math.
 - `ShellContextMenu` in `Platform/Windows/Shell` owns COM pointers and native menus for a single invocation. Views never release service-owned native handles directly.
 
+Stable snapshot membership does not imply models holding `ImageSource` are deeply immutable. Having a watcher does not mean every change is O(1); scan and reconcile behavior under event storms must still be measured.
+
 ## Lifecycle ownership and shutdown
 
 `WindowServices` wires the Desktop, watcher and telemetry services and transfers ownership to `MainWindow`. On exit, the host detaches UI subscriptions before disposing services. `CleanupSequence` runs every cleanup step even if an earlier step throws. Recovery is best-effort and cannot be guaranteed if both `Nepply.exe` and `Nepply.DesktopGuardian.exe` are killed simultaneously while Explorer is unresponsive, though the next launch or uninstaller will retry from `desktop-visibility.lease`.
@@ -101,13 +105,13 @@ stateDiagram-v2
 
 `PanelGeometry` computes physical and DPI-scaled bounds from monitor work areas; `MainWindow` selects the target display and applies WPF/Win32 window placement. `PanelDimensions` holds sizing rules; gates under `Features/Panel/Interaction` (`PointerActivationGate`, `EdgeHitTest`, `GameModeDetector`) decide edge reveal, taskbar-corner avoidance, pointer capture suppression during full-screen games and auto-collapse.
 
-`LayoutEditSession` manages snapshot, dirty tracking, commit and cancel for in-panel widget arrangement. Do not confuse it with the icon grid row/column setting in Settings.
+`LayoutEditSession` manages snapshot, dirty tracking (`LayoutProfile.SameLayout`), commit and cancel for the layout editing session (widget order, icon order, section swap, splitter dimensions, grid and appearance). Do not confuse this session with changing the icon grid row/column setting directly in Settings.
 
 ## Settings
 
 `SettingsEditSession` holds a mutable draft and validates candidates before publishing to the live `AppSettings` instance; `SettingsChangeSet` classifies which subsystems need live preview vs save-time application. **Apply** saves and stays open; **OK** saves and closes; **Cancel** reverts unsaved preview changes.
 
-`SettingsStore` handles atomic JSON writes (`Flush(true)` + `File.Replace` + `.bak`), corrupt-file quarantine and forward-compatible read-only mode when encountering a newer schema version. `InstallerChoices` reads one-time language and auto-start handoff keys written by Inno Setup (`HKCU\Software\Nepply\Setup`).
+`SettingsStore` handles atomic JSON writes (`Flush(true)` + `File.Replace` + `.bak`), corrupt-file quarantine and forward-compatible read-only mode when encountering a newer schema version. `InstallerChoices` reads one-time language and auto-start handoff keys written by Inno Setup (`HKCU\Software\Nepply\Setup`). Developer-only tools are not release features for end users.
 
 ## Telemetry
 
@@ -125,8 +129,10 @@ Localization lives in `Resources/Strings.json` across 8 languages (`vi`, `en`, `
 
 ## Updates
 
-`Features/Updates` handles version comparison, GitHub Releases feed parsing, `release-notes.json` multi-version summaries, bounded downloads and native `WinVerifyTrust` + SPKI certificate pinning (`AuthenticodeVerifier`, `SignerRule`). `UpdateWindow.xaml` renders plain-text notes and never executes downloaded content while `UpdatePolicy.Signers` is empty (unsigned release candidates open the GitHub Release page in the browser instead).
+`Features/Updates` handles version comparison, GitHub Releases feed parsing, `release-notes.json` multi-version summaries, bounded downloads and native `WinVerifyTrust` + SPKI certificate pinning (`AuthenticodeVerifier`, `SignerRule`). `UpdateWindow.xaml` renders plain-text notes and never executes downloaded content while `UpdatePolicy.Signers` is empty (unsigned release candidates open the GitHub Release page in the browser instead). See [EXE updates](../release/EXE_UPDATES.md).
 
 ## Known coupling and planned refactors
 
-`MainWindow` (~966 lines) and `SettingsWindow` (~753 lines) still coordinate too many UI concerns directly, and `AppSettings` still calls into presentation services. Planned post-RC cleanups are tracked under Phase 10 of [PUBLIC_RELEASE_CHECKLIST.md](../release/PUBLIC_RELEASE_CHECKLIST.md): extracting focused controllers (`PanelActivationController`, `SettingsPreviewCoordinator`), making `AppSettings` pure data, aligning legacy `Nepply.Services` namespaces with folder paths, and migrating the custom test runner in `tests/Nepply.Tests/Program.cs` to xUnit/MSTest incrementally.
+`MainWindow` (~966 lines), `SettingsWindow` (~753 lines) and `DesktopIconService` still coordinate too many concerns directly, and `AppSettings` still calls into presentation services. Planned post-RC cleanups are tracked under Phase 10 of [PUBLIC_RELEASE_CHECKLIST.md](../release/PUBLIC_RELEASE_CHECKLIST.md): extracting focused controllers (`PanelActivationController`, `SettingsPreviewCoordinator`), making `AppSettings` pure data, aligning legacy `Nepply.Services` namespaces with folder paths, and migrating the custom test runner in `tests/Nepply.Tests/Program.cs` to xUnit/MSTest incrementally.
+
+Tests live in `tests/Nepply.Tests` as an executable fixture rather than a `dotnet test` suite. Green CI/builds do not replace long-running soak validation, native resource checks across hardware, or signed-installer acceptance testing. Historical QA archives live outside the product repository.

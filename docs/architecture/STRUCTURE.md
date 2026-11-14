@@ -6,11 +6,11 @@ Repository chứa mã sản phẩm, kiểm thử, công cụ phát triển và t
 
 Xem [bản đồ tài liệu](../README.md) để chọn hướng dẫn người dùng, phát triển hoặc phát hành. Telemetry hiện hỗ trợ CPU/RAM/GPU/mạng; không có nhiệt độ bo mạch chủ hoặc RPM.
 
-Nepply là modular monolith WPF: một assembly ứng dụng, nhóm mã theo tính năng và vòng đời. Mở `Nepply.slnx` ở root để làm việc với ứng dụng, bộ kiểm thử và công cụ chẩn đoán.
+Nepply là modular monolith WPF: một assembly ứng dụng chính, nhóm mã theo tính năng và vòng đời, kèm một helper khôi phục không WPF (`Nepply.DesktopGuardian`). Mở `Nepply.slnx` ở root để làm việc với ứng dụng, bộ kiểm thử và công cụ chẩn đoán.
 
 | Thư mục | Trách nhiệm |
 |---|---|
-| `src/Nepply/Composition` | Lắp ghép dịch vụ và cleanup |
+| `src/Nepply/Composition` | Lắp ghép dịch vụ (`WindowServices`) và dọn dẹp theo thứ tự (`CleanupSequence`) |
 | `src/Nepply/Features/Desktop` | Discovery, catalog, watcher, visibility và giao diện icon |
 | `src/Nepply/Features/Panel` | Cửa sổ chính, vị trí, bố cục và tương tác cạnh |
 | `src/Nepply/Features/Search` | Phiên tìm kiếm, chuẩn hóa từ khóa và trình bày |
@@ -19,18 +19,20 @@ Nepply là modular monolith WPF: một assembly ứng dụng, nhóm mã theo tí
 | `src/Nepply/Features/Updates` | Feed phiên bản, tải có giới hạn, xác minh chữ ký và UI cập nhật; kiểm tra nền mỗi ngày khi bật (mặc định bật), chỉ báo ở khay, không tự tải hay cài |
 | `src/Nepply/Presentation` | Appearance, control dùng chung, converter và tray |
 | `src/Nepply/Platform/Windows` | Win32, COM menu, màn hình, hotkey, startup và process |
-| `src/Nepply/Diagnostics` | Logging |
+| `src/Nepply/Diagnostics` | Ghi nhật ký giới hạn dung lượng trên đĩa và trong bộ nhớ (`AppLogger`) |
 | `src/Nepply.DesktopGuardian` | Helper không WPF, tồn tại theo phiên ẩn Desktop; chờ owner thoát và phục hồi, không đăng ký persistence |
 | `tests/Nepply.Tests` | Chương trình kiểm thử và fixture WPF |
 | `tools/SensorDumper` | Công cụ chẩn đoán cảm biến độc lập; không thuộc payload ứng dụng |
 | `packaging/inno` | Cấu hình bộ cài chính, ảnh, thông điệp và trang thông báo theo từng ngôn ngữ |
-| `scripts` | Kiểm tra build, dependency, notice, manifest và ký mã |
-| `docs` | Hướng dẫn người dùng, xử lý sự cố, ảnh minh họa, architecture, release và legal |
+| `packaging/msix` | Manifest MSIX, tài nguyên và mô tả Store (hiện đang tạm gác) |
+| `packaging/release-notes` | Tóm tắt thay đổi 8 ngôn ngữ (`<version>.json`) cho cửa sổ Có gì mới |
+| `scripts` | Kiểm tra build, dependency, notice, manifest và ký mã (`Test-BuildBoundary.ps1`, v.v.) |
+| `docs` | Hướng dẫn người dùng, xử lý sự cố, hướng dẫn dùng thử, ảnh minh họa, architecture, release và legal |
 | `artifacts` | Kết quả build/test có thể tái tạo, không commit |
 
 ## Định danh và tương thích
 
-Phiên bản hiện hành là `2.0.0-rc.2`. Việc nhóm file theo feature không đồng nghĩa mọi lớp đã tách trách nhiệm hoàn chỉnh; xem các boundary và giới hạn trong [MODULES.md](MODULES.md).
+Phiên bản hiện hành là `2.0.0-rc.2` (`FileVersion` `2.0.0.2`). Việc nhóm file theo feature không đồng nghĩa mọi lớp đã tách trách nhiệm hoàn chỉnh; xem các boundary và giới hạn trong [MODULES.md](MODULES.md).
 
 Namespace gốc/assembly, solution, project và source dùng tên Nepply. Các namespace `Services`, `Views`, `Modules` chưa phải boundary assembly riêng. Khóa phiên chạy và journal Desktop cũng mang tên Nepply; không đổi chúng chỉ để đồng bộ số phiên bản.
 
@@ -49,7 +51,6 @@ Namespace gốc/assembly, solution, project và source dùng tên Nepply. Các n
 WPF resource dictionary hiện ở `Presentation/Appearance`; App.xaml dùng đường dẫn mới. XAML và code-behind luôn được chuyển cùng nhau. Icon ứng dụng giữ URI `Resources/icon.ico` trong assembly. Tài liệu legal được project link từ `docs/legal`, vẫn xuất ra gốc payload với tên cũ.
 
 ## Dọn đầu ra
-
 
 Không xóa source bằng `git clean` khi chưa có baseline được theo dõi. `bin/obj` chỉ dọn khi không có build hoặc tiến trình đang sử dụng. Trước khi bỏ binary của một đợt QA, giữ báo cáo và ảnh cần thiết trong archive đã kiểm tra; giữ một portable baseline để đối chiếu.
 

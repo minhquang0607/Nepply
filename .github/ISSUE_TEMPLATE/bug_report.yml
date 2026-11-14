@@ -11,7 +11,7 @@ body:
     id: version
     attributes:
       label: Nepply version · Phiên bản Nepply
-      description: Settings → App → About. · Cài đặt → Ứng dụng → Giới thiệu.
+      description: Settings → Application → About & privacy. · Cài đặt → Ứng dụng → Thông tin & quyền riêng tư.
       placeholder: "2.0.0-rc.2"
     validations:
       required: true
@@ -57,7 +57,7 @@ body:
     id: diagnostics
     attributes:
       label: Diagnostics (optional) · Chẩn đoán (tùy chọn)
-      description: "Settings → App → Report a problem copies this; review it before posting. · Cài đặt → Ứng dụng → Báo lỗi tự chép phần này; hãy xem lại trước khi đăng."
+      description: "Settings → Application → Report a problem copies this; review it before posting. · Cài đặt → Ứng dụng → Báo lỗi tự chép phần này; hãy xem lại trước khi đăng."
       render: text
   - type: textarea
     id: logs

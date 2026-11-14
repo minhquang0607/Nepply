@@ -76,7 +76,7 @@ internal static class DesktopWatcherTests
             check("Real rename batch retains old and new path", ready.WaitOne(3000) && batches.TryDequeue(out var changed)
                 && changed?.Contains(file) == true && changed.Contains(renamed));
             File.AppendAllText(renamed, "-append");
-            check("Content-only write does not trigger watcher batch", !ready.WaitOne(400) && batches.IsEmpty);
+            check("Content-only write does not trigger watcher batch", !ready.WaitOne(650) && batches.IsEmpty);
             File.SetAttributes(renamed, FileAttributes.Hidden);
             check("Attribute change triggers watcher batch", ready.WaitOne(3000) && batches.TryDequeue(out var attr) && attr?.Contains(renamed) == true);
             File.SetAttributes(renamed, FileAttributes.Normal);

@@ -57,10 +57,10 @@ Kích thước panel có thể điều chỉnh theo tỷ lệ màn hình. Chọn
 
 Nepply có thể ẩn các biểu tượng ngoài màn hình nền để giữ hình nền thoáng, trong khi mọi tệp, thư mục và lối tắt vẫn mở bình thường từ panel.
 
-- Bật hoặc tắt ngay ở màn chào, menu khay hệ thống, trong **Cài đặt**, hoặc bằng phím tắt **Ẩn / hiện icon Desktop**.
+- Bật hoặc tắt ngay ở màn chào, trong **Cài đặt**, hoặc bằng phím tắt **Ẩn / hiện icon Desktop**.
 - Tính năng này chỉ đổi chế độ hiển thị icon trên màn hình nền của Windows, không di chuyển hay sửa đổi tệp của bạn.
 - Nếu bạn đã tự ẩn icon bằng menu của Windows từ trước khi mở Nepply, ứng dụng sẽ giữ nguyên trạng thái đó.
-- Khi chính Nepply đã ẩn icon, chọn **Thoát** sẽ tự hiện lại icon. Tiến trình đi kèm (`Nepply.DesktopGuardian.exe`) cũng tự khôi phục icon nếu Nepply dừng bất ngờ, hoặc ngay ở lần mở Nepply tiếp theo sau khi khởi động lại máy.
+- Khi chính Nepply đã ẩn icon, chọn **Thoát** sẽ tự hiện lại icon. Tiến trình đi kèm (`Nepply.DesktopGuardian.exe`) tự khôi phục icon nếu Nepply dừng bất ngờ, và nếu cả máy tắt đột ngột hoặc khởi động lại thì chính Nepply sẽ tự hiện lại icon ngay ở lần mở tiếp theo.
 - Bạn luôn có thể tự bật lại bất cứ lúc nào bằng cách nhấp chuột phải lên màn hình nền → **View/Xem → Show desktop icons/Hiển thị biểu tượng màn hình nền**.
 
 ## Thử giao diện trước khi lưu
@@ -81,9 +81,9 @@ Giao diện mặc định theo chế độ sáng/tối của Windows. Có thể 
 
 Các thẻ hiển thị mức sử dụng CPU, RAM, GPU/iGPU và tốc độ mạng. Nhiệt độ, xung nhịp chỉ có khi hệ thống cung cấp dữ liệu phù hợp; trên nhiều máy Intel/AMD nhiệt độ CPU không khả dụng vì Nepply không cài driver ([giải thích](TROUBLESHOOTING.md#vì-sao-nhiệt-độ-cpu-hiện-chưa-khả-dụng)). Nepply không hiển thị nhiệt độ bo mạch chủ hay tốc độ quạt trong bản hiện tại.
 
-Trong Cài đặt, có thể tắt monitor hoặc tốc độ mạng khi không cần. Phần nâng cao cho phép chỉnh chu kỳ cập nhật và tạm ngừng đo khi panel ẩn. Chọn đúng adapter mạng nếu máy có nhiều kết nối hoặc VPN.
+Trong Cài đặt, có thể tắt theo dõi hệ thống hoặc tốc độ mạng khi không cần. Phần nâng cao cho phép chỉnh chu kỳ cập nhật và tạm ngừng đo khi panel ẩn. Chọn đúng kết nối mạng nếu máy có nhiều kết nối hoặc VPN.
 
-Tốc độ tải xuống/tải lên là lưu lượng của adapter, không phải bài kiểm tra tốc độ Internet. Không cần tắt antivirus/anti-cheat hoặc cài driver lạ để có thêm số đo.
+Tốc độ tải xuống/tải lên là lưu lượng qua kết nối mạng đang chọn, không phải bài kiểm tra tốc độ Internet. Không cần tắt antivirus/anti-cheat hoặc cài driver lạ để có thêm số đo.
 
 ## Khởi động cùng Windows
 

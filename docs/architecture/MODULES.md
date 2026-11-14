@@ -10,7 +10,7 @@ Nepply là modular monolith WPF, không phải hệ thống plugin. Tách theo t
 
 ## Ranh giới tiến trình lúc chạy
 
-Lúc chạy, Nepply tách công việc ra tối đa bốn tiến trình dưới cùng tài khoản người dùng Windows hiện tại. Mọi giao tiếp liên tiến trình dùng named pipe `CurrentUserOnly` (`Nepply-*`) có xác thực PID và thời điểm khởi động hai chiều (`HelperPipeIdentity`).
+Lúc chạy, Nepply tách công việc ra tối đa bốn tiến trình dưới cùng tài khoản người dùng Windows hiện tại. Mọi giao tiếp liên tiến trình dùng named pipe `CurrentUserOnly` (`Nepply-*`) có xác thực PID hai chiều và ghim handle tiến trình cha (`HelperPipeIdentity`), kèm xác thực một chiều `StartTime` (UTC ticks) và session ID của tiến trình chủ bên trong `Nepply.DesktopGuardian.exe`.
 
 ```mermaid
 flowchart LR
@@ -25,7 +25,7 @@ flowchart LR
     end
 
     subgraph SH["Nepply.exe --sensor-host"]
-        LHM["LibreHardwareMonitor\n(tái sử dụng, tự tắt sau 10 phút nghỉ)"]
+        LHM["LibreHardwareMonitor\n(tái sử dụng, 10 phút chờ khi ẩn /\n11 phút tự tắt host)"]
     end
 
     subgraph GD["Nepply.DesktopGuardian.exe"]
@@ -46,14 +46,15 @@ flowchart LR
 
 - **`Nepply.exe` (tiến trình UI):** Chạy giao diện WPF, Cài đặt, khay hệ thống, polling con trỏ ở cạnh, hotkey và kiểm tra cập nhật. Không nạp Shell extension bên thứ ba khi quét nền và không nạp `LibreHardwareMonitorLib` trong tiến trình giao diện.
 - **`Nepply.exe --desktop-host` (`DesktopScanProcess`):** Tiến trình con sống ngắn cho mỗi lượt quét Desktop đầy đủ hoặc từng phần. Một Shell extension lỗi bị cô lập trong lượt quét đó; mục đơn lẻ bị lỗi được bỏ qua và ghi log thay vì làm hỏng cả danh sách.
-- **`Nepply.exe --sensor-host` (`SensorProcessProvider`):** Tiến trình đọc cảm biến phần cứng. Được khởi động sẵn khi con trỏ tiến gần cạnh màn hình và giữ sống tối đa 10 phút giữa các lần mở panel; ngủ khi panel ẩn.
+- **`Nepply.exe --sensor-host` (`SensorProcessProvider`):** Tiến trình đọc cảm biến phần cứng. Được khởi động sẵn khi con trỏ tiến gần cạnh màn hình; khi bật `SuspendMonitorWhenHidden`, `HardwareMonitorService` giải phóng provider sau 10 phút panel ẩn (`DefaultHiddenProviderGraceMs`), và chính tiến trình host tự thoát sau 11 phút không có lệnh trên pipe (`HostIdleLimit`).
 - **`Nepply.DesktopGuardian.exe` (`GuardedDesktopVisibility`, chỉ bản Setup và portable):** Tiến trình phụ không WPF, chỉ chạy trong lúc Nepply đang ẩn icon Desktop. Xác thực tiến trình chủ theo PID, `StartTime` (UTC ticks) và session ID, giữ khóa liên tiến trình `DesktopGuardianFence`, và chờ lệnh `Restore` hoặc chờ tiến trình chủ kết thúc.
+- **`Nepply.exe --restore-desktop` (`App.xaml.cs`):** Chế độ khôi phục ngắn hạn do Inno Setup gọi trước khi nâng cấp hoặc gỡ cài đặt để hiện lại icon Desktop từ `desktop-visibility.lease` dưới khóa `DesktopGuardianFence`.
 
 ## Các trạng thái ẩn và khôi phục icon Desktop
 
 Nepply không bao giờ nhận quyền sở hữu nếu người dùng đã tự ẩn icon Desktop từ trước. Tùy cách đóng gói, ứng dụng dùng một trong hai cơ chế:
 
-1. **Bản Setup và portable (`ExplorerDesktopVisibility` + `GuardedDesktopVisibility`):** Gửi `WM_COMMAND` `0x7402` tới `SHELLDLL_DefView` của Explorer. Vì Explorer lưu cài đặt này qua các lần đăng nhập, Nepply ghi `%LOCALAPPDATA%\Nepply\desktop-visibility.lease` (`restore-visible-v1`) *trước* khi ẩn và giữ `Nepply.DesktopGuardian.exe` ở trạng thái armed suốt phiên ẩn.
+1. **Bản Setup và portable (`ExplorerDesktopVisibility` + `GuardedDesktopVisibility`):** Gửi `WM_COMMAND` `0x7402` tới `SHELLDLL_DefView` của Explorer. Vì Explorer lưu cài đặt này qua các lần đăng nhập, Nepply arm `Nepply.DesktopGuardian.exe` trước rồi ghi `%LOCALAPPDATA%\Nepply\desktop-visibility.lease` (`restore-visible-v1`) *trước* khi gửi `0x7402`.
 2. **Bản Microsoft Store / MSIX (`WindowDesktopVisibility`, hiện tạm gác):** Gọi `ShowWindow` lên cửa sổ icon (`SysListView32`) mà không đổi cài đặt lưu lâu dài của Explorer và không dùng guardian. Nếu Explorer khởi động lại lúc Nepply đang chạy (`TaskbarCreated`), `MainWindow` ẩn lại cửa sổ icon.
 
 ```mermaid
@@ -62,11 +63,11 @@ stateDiagram-v2
     [*] --> UserHidden: Người dùng đã tự ẩn trong Windows\n(không ghi lease, Nepply không nhận quyền sở hữu)
 
     Visible --> ArmingGuardian: Bật "Ẩn icon Desktop"\n(Setup / portable)
-    ArmingGuardian --> LeaseWritten: Guardian kết nối & Arm qua pipe\n(Nepply-guardian-<guid>)
+    ArmingGuardian --> GuardianArmed: Guardian kết nối & Arm qua pipe\n(Nepply-guardian-hex32)
     ArmingGuardian --> Visible: Guardian không khởi động/Arm được\n(hủy ẩn, ghi log lỗi)
 
-    LeaseWritten --> HiddenOwned: Ghi desktop-visibility.lease (Flush xuống đĩa)\nrồi gửi 0x7402 ẩn icon
-    LeaseWritten --> Restoring: Gửi 0x7402 thất bại hoặc guardian thoát giữa chừng
+    GuardianArmed --> HiddenOwned: Ghi desktop-visibility.lease (Flush xuống đĩa)\nrồi gửi 0x7402 ẩn icon
+    GuardianArmed --> Restoring: Desktop đã ẩn sẵn, gửi 0x7402 thất bại,\nhoặc guardian thoát giữa chừng
 
     HiddenOwned --> Restoring: Người dùng tắt tùy chọn / Thoát app bình thường
     HiddenOwned --> GuardianRecovery: Nepply.exe bị crash hoặc End task\n(guardian phát hiện chủ thoát)
@@ -74,14 +75,15 @@ stateDiagram-v2
 
     Restoring --> Visible: Guardian hoặc nhánh dự phòng cục bộ hiện lại icon\nvà xóa desktop-visibility.lease
     GuardianRecovery --> Visible: Guardian gửi 0x7402 hiện icon (thử lại trong 10 giây)\nvà xóa desktop-visibility.lease
-    UnexpectedGuardianExit --> Visible: Nhánh cục bộ hiện lại icon\nvà ghi log cảnh báo
+    UnexpectedGuardianExit --> Visible: Nhánh cục bộ hiện lại icon, xóa lease,\nghi log lỗi & báo trên panel
+    UnexpectedGuardianExit --> HiddenOwned: Khôi phục cục bộ thất bại\n(giữ lease cho lần thử sau, ghi log lỗi & báo trên panel)
 
     note right of HiddenOwned
         Dự phòng khi mở lại / gỡ cài đặt:
         Lần mở Nepply tiếp theo (RestorePreviousSession)
-        và bộ gỡ Inno Setup đều kiểm tra
+        và Inno Setup (--restore-desktop) kiểm tra
         desktop-visibility.lease dưới DesktopGuardianFence
-        nếu cả app và guardian bị dừng cùng lúc.
+        (Inno có nhánh dự phòng trực tiếp nếu thiếu Nepply.exe).
     end note
 ```
 
@@ -113,7 +115,7 @@ Con trỏ bị ẩn/chặn trong game được xét trước tự mở cạnh. K
 
 `SettingsEditSession` giữ draft và lưu candidate trước khi công bố vào target; `SettingsChangeSet` phân loại thay đổi cho preview và commit. Apply lưu và giữ mở; OK lưu rồi đóng; Cancel chỉ bỏ phần chưa lưu.
 
-`SettingsStore` phụ trách persistence/backup/migration. `InstallerChoices` đọc một lần lựa chọn ngôn ngữ và tự khởi động do Setup để lại. SettingsWindow trình bày controls và lỗi; preview không được tạo scanner hoặc collector thứ hai. Startup/hotkey/Desktop visibility chỉ áp dụng khi lưu theo nhóm thay đổi. Công cụ chỉ dành cho phát triển không phải tính năng Release cho người dùng.
+`SettingsStore` phụ trách persistence/backup/migration. `InstallerChoices` đọc một lần lựa chọn ngôn ngữ và tự khởi động do Setup để lại (`HKCU\Software\Nepply\Setup`). SettingsWindow trình bày controls và lỗi; preview không được tạo scanner hoặc collector thứ hai. Startup/hotkey/Desktop visibility chỉ áp dụng khi lưu theo nhóm thay đổi. Công cụ chỉ dành cho phát triển không phải tính năng Release cho người dùng.
 
 ## Telemetry
 
@@ -137,6 +139,6 @@ Settings bàn giao gói đã xác minh cho MainWindow để thoát bình thườ
 
 ## Giới hạn và refactor có ích
 
-MainWindow và DesktopIconService vẫn điều phối nhiều trách nhiệm. Chỉ tách thêm khi giảm coupling hoặc tạo test boundary thực sự; không rewrite toàn bộ hay thêm DI container theo hình thức. Giữ ownership, exception cleanup, migration và hành vi người dùng khi refactor.
+`MainWindow` (~966 dòng), `SettingsWindow` (~753 dòng) và `DesktopIconService` vẫn điều phối nhiều trách nhiệm, và `AppSettings` còn gọi vào dịch vụ trình bày. Các mục dọn dẹp sau bản RC được theo dõi ở Giai đoạn 10 của [PUBLIC_RELEASE_CHECKLIST.md](../release/PUBLIC_RELEASE_CHECKLIST.md) (tách `PanelActivationController`, `SettingsPreviewCoordinator`, làm thuần `AppSettings`, đồng bộ namespace `Nepply.Services` với thư mục, và chuyển dần sang xUnit/MSTest). Chỉ tách thêm khi giảm coupling hoặc tạo test boundary thực sự; không rewrite toàn bộ hay thêm DI container theo hình thức. Giữ ownership, exception cleanup, migration và hành vi người dùng khi refactor.
 
 Test nằm ở `tests/Nepply.Tests`; đây là executable fixture, không phải suite dotnet test. CI/build xanh không chứng minh độ ổn định dài hạn, tài nguyên native trên mọi máy, hay nghiệm thu bộ cài đã ký. Các báo cáo QA lịch sử nằm ngoài repository sản phẩm.
