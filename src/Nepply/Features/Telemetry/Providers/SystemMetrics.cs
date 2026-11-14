@@ -54,7 +54,7 @@ public sealed class SystemMetrics
             if (_networks.Length == 0 || Stopwatch.GetElapsedTime(_lastInventory, now).TotalSeconds >= 10)
             { _networks = NetworkInterface.GetAllNetworkInterfaces(); _lastInventory = now; }
             var adapter = !string.IsNullOrEmpty(selectedId)
-                ? _networks.FirstOrDefault(n => n.Id == selectedId && n.OperationalStatus == OperationalStatus.Up)
+                ? _networks.FirstOrDefault(n => string.Equals(n.Id, selectedId, StringComparison.OrdinalIgnoreCase) && n.OperationalStatus == OperationalStatus.Up)
                 : _networks.Where(n => n.OperationalStatus == OperationalStatus.Up && n.NetworkInterfaceType is NetworkInterfaceType.Ethernet or NetworkInterfaceType.Wireless80211)
                     .Where(n => !n.Description.Contains("virtual", StringComparison.OrdinalIgnoreCase) && !n.Name.Contains("vEthernet", StringComparison.OrdinalIgnoreCase))
                     .OrderByDescending(n => n.GetIPProperties().GatewayAddresses.Count > 0).ThenByDescending(n => n.Speed).FirstOrDefault();

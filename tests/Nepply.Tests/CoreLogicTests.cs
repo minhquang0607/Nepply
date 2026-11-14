@@ -55,6 +55,43 @@ internal static class CoreLogicTests
         check("Disk percentage derived", new DiskDriveInfo("C:", "System", 50, 200).UsagePercent == 25);
         var screen = new Nepply.Helpers.DisplayScreen("test", -1920, 0, 0, 1080, 1, false);
         check("Edge rectangle excludes adjacent display", screen.Contains(-1, 200) && !screen.Contains(0, 200) && !screen.Contains(-1921, 200));
+        var friendlyScreens = SettingsWindow.BuildScreenChoices(
+            [
+                new Nepply.Helpers.DisplayScreen(@"\\.\DISPLAY1", 0, 0, 1920, 1080, 1, true) { Name = "Dell U2720Q" },
+                new Nepply.Helpers.DisplayScreen(@"\\.\DISPLAY2", 1920, 0, 3840, 1080, 1, false) { Name = "LG UltraGear" },
+                new Nepply.Helpers.DisplayScreen(@"\\.\DISPLAY3", 3840, 0, 5760, 1080, 1, false) { Name = null! }
+            ], "");
+        check("Display settings show friendly monitor names when distinct and fall back to device name when unnamed",
+            friendlyScreens.Length == 4 && friendlyScreens[1].Id == @"\\.\DISPLAY1"
+            && friendlyScreens[1].Name == "Dell U2720Q · Chính"
+            && friendlyScreens[2].Id == @"\\.\DISPLAY2" && friendlyScreens[2].Name == "LG UltraGear"
+            && friendlyScreens[3].Id == @"\\.\DISPLAY3" && friendlyScreens[3].Name == "DISPLAY3");
+        var duplicateFriendlyScreens = SettingsWindow.BuildScreenChoices(
+            [
+                new Nepply.Helpers.DisplayScreen(@"\\.\DISPLAY1", 0, 0, 1920, 1080, 1, true) { Name = "Dell U2720Q" },
+                new Nepply.Helpers.DisplayScreen(@"\\.\DISPLAY2", 1920, 0, 3840, 1080, 1, false) { Name = "Dell U2720Q" }
+            ], "");
+        check("Display settings disambiguate identical friendly monitor names",
+            duplicateFriendlyScreens.Length == 3
+            && duplicateFriendlyScreens[1].Name == "Dell U2720Q (DISPLAY1) · Chính"
+            && duplicateFriendlyScreens[2].Name == "Dell U2720Q (DISPLAY2)");
+        SettingsWindow.NetworkAdapterOption[] networkFixtures =
+        [
+            new("wifi", "Wi-Fi", "Intel(R) Dual Band Wireless-AC 8260", System.Net.NetworkInformation.NetworkInterfaceType.Wireless80211, System.Net.NetworkInformation.OperationalStatus.Up),
+            new("vpn", "WireGuard", "WireGuard Tunnel", System.Net.NetworkInformation.NetworkInterfaceType.Tunnel, System.Net.NetworkInformation.OperationalStatus.Up),
+            new("loop", "Loopback Pseudo-Interface 1", "Software Loopback Interface 1", System.Net.NetworkInformation.NetworkInterfaceType.Loopback, System.Net.NetworkInformation.OperationalStatus.Up),
+            new("npcap-loop", "Ethernet 2", "Npcap Loopback Adapter", System.Net.NetworkInformation.NetworkInterfaceType.Ethernet, System.Net.NetworkInformation.OperationalStatus.Up),
+            new("wsl", "vEthernet (WSL)", "Hyper-V Virtual Ethernet Adapter", System.Net.NetworkInformation.NetworkInterfaceType.Ethernet, System.Net.NetworkInformation.OperationalStatus.Up),
+            new("wifidirect", "Local Area Connection* 1", "Microsoft Wi-Fi Direct Virtual Adapter", System.Net.NetworkInformation.NetworkInterfaceType.Wireless80211, System.Net.NetworkInformation.OperationalStatus.Up),
+            new("eth-down", "Ethernet", "Realtek Gaming 2.5GbE Family Controller", System.Net.NetworkInformation.NetworkInterfaceType.Ethernet, System.Net.NetworkInformation.OperationalStatus.Down)
+        ];
+        var networkChoices = SettingsWindow.BuildNetworkChoices(networkFixtures, "eth-down");
+        check("Network settings keep active physical and VPN adapters while filtering down, loopback and virtual host switches",
+            networkChoices.Select(c => c.Id).SequenceEqual(["", "wifi", "vpn", "eth-down"])
+            && networkChoices.Single(c => c.Id == "eth-down").Name == "Ethernet · chưa kết nối");
+        var savedVirtualChoices = SettingsWindow.BuildNetworkChoices(networkFixtures, "WSL");
+        check("Saved active virtual network adapter retains its friendly name without disconnected label",
+            savedVirtualChoices.Single(c => c.Id == "WSL").Name == "vEthernet (WSL)");
         check("Snapshot collection immutable", typeof(HardwareInfoSnapshot).GetProperty("Drives")!.PropertyType == typeof(ImmutableArray<DiskDriveInfo>));
 
         var memory = SystemMetrics.ReadMemory();

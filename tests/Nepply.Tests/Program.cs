@@ -493,6 +493,34 @@ internal static class Program
         var caseChoices = SettingsWindow.BuildScreenChoices(
             [new Nepply.Helpers.DisplayScreen("DISPLAY1", 0, 0, 1920, 1080, 1, true)], "display1");
         Check("Display settings preserve selected ID casing without duplicate screen", caseChoices.Length == 2 && caseChoices[1].Id == "display1" && !caseChoices[1].Name.Contains("chưa kết nối"));
+        var friendlyScreens = SettingsWindow.BuildScreenChoices(
+            [
+                new Nepply.Helpers.DisplayScreen(@"\\.\DISPLAY1", 0, 0, 1920, 1080, 1, true) { Name = "Dell U2720Q" },
+                new Nepply.Helpers.DisplayScreen(@"\\.\DISPLAY2", 1920, 0, 3840, 1080, 1, false) { Name = "LG UltraGear" }
+            ], "");
+        Check("Display settings show friendly monitor names when distinct",
+            friendlyScreens.Length == 3 && friendlyScreens[1].Id == @"\\.\DISPLAY1" && friendlyScreens[1].Name == "Dell U2720Q · Chính"
+            && friendlyScreens[2].Id == @"\\.\DISPLAY2" && friendlyScreens[2].Name == "LG UltraGear");
+        var duplicateFriendlyScreens = SettingsWindow.BuildScreenChoices(
+            [
+                new Nepply.Helpers.DisplayScreen(@"\\.\DISPLAY1", 0, 0, 1920, 1080, 1, true) { Name = "Dell U2720Q" },
+                new Nepply.Helpers.DisplayScreen(@"\\.\DISPLAY2", 1920, 0, 3840, 1080, 1, false) { Name = "Dell U2720Q" }
+            ], "");
+        Check("Display settings disambiguate identical friendly monitor names",
+            duplicateFriendlyScreens.Length == 3 && duplicateFriendlyScreens[1].Name == "Dell U2720Q (DISPLAY1) · Chính"
+            && duplicateFriendlyScreens[2].Name == "Dell U2720Q (DISPLAY2)");
+        var networkChoices = SettingsWindow.BuildNetworkChoices(
+            [
+                new("wifi", "Wi-Fi", "Intel(R) Dual Band Wireless-AC 8260", System.Net.NetworkInformation.NetworkInterfaceType.Wireless80211, System.Net.NetworkInformation.OperationalStatus.Up),
+                new("vpn", "WireGuard", "WireGuard Tunnel", System.Net.NetworkInformation.NetworkInterfaceType.Tunnel, System.Net.NetworkInformation.OperationalStatus.Up),
+                new("loop", "Loopback Pseudo-Interface 1", "Software Loopback Interface 1", System.Net.NetworkInformation.NetworkInterfaceType.Loopback, System.Net.NetworkInformation.OperationalStatus.Up),
+                new("wsl", "vEthernet (WSL)", "Hyper-V Virtual Ethernet Adapter", System.Net.NetworkInformation.NetworkInterfaceType.Ethernet, System.Net.NetworkInformation.OperationalStatus.Up),
+                new("wifidirect", "Local Area Connection* 1", "Microsoft Wi-Fi Direct Virtual Adapter", System.Net.NetworkInformation.NetworkInterfaceType.Wireless80211, System.Net.NetworkInformation.OperationalStatus.Up),
+                new("eth-down", "Ethernet", "Realtek Gaming 2.5GbE Family Controller", System.Net.NetworkInformation.NetworkInterfaceType.Ethernet, System.Net.NetworkInformation.OperationalStatus.Down)
+            ], "eth-down");
+        Check("Network settings keep active physical and VPN adapters while filtering down, loopback and virtual host switches",
+            networkChoices.Select(c => c.Id).SequenceEqual(["", "wifi", "vpn", "eth-down"])
+            && networkChoices.Single(c => c.Id == "eth-down").Name == "Ethernet · chưa kết nối");
         Check("Keyboard interaction keeps dock open with pointer outside",
             AutoHidePolicy.Decide(false, false, false, false, true) == AutoHideAction.Cancel);
         Check("Ending keyboard interaction allows normal auto-hide",
