@@ -111,7 +111,10 @@ public static class ScreenManager
                     names[device] = friendly;
             }
         }
-        catch (Exception ex) when (ex is DllNotFoundException or EntryPointNotFoundException or BadImageFormatException) { }
+        catch (Exception ex) when (ex is DllNotFoundException or EntryPointNotFoundException or BadImageFormatException)
+        {
+            Services.AppLogger.Error(ex, "DisplayConfig monitor names");
+        }
         return names;
     }
     public static DisplayScreen Select(string device)

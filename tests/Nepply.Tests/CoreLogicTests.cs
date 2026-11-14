@@ -63,7 +63,7 @@ internal static class CoreLogicTests
             ], "");
         check("Display settings show friendly monitor names when distinct and fall back to device name when unnamed",
             friendlyScreens.Length == 4 && friendlyScreens[1].Id == @"\\.\DISPLAY1"
-            && friendlyScreens[1].Name == string.Format(LocalizationService.Get("PrimaryDisplayLabel"), "Dell U2720Q")
+            && friendlyScreens[1].Name == "Dell U2720Q · Chính"
             && friendlyScreens[2].Id == @"\\.\DISPLAY2" && friendlyScreens[2].Name == "LG UltraGear"
             && friendlyScreens[3].Id == @"\\.\DISPLAY3" && friendlyScreens[3].Name == "DISPLAY3");
         var duplicateFriendlyScreens = SettingsWindow.BuildScreenChoices(
@@ -73,7 +73,7 @@ internal static class CoreLogicTests
             ], "");
         check("Display settings disambiguate identical friendly monitor names",
             duplicateFriendlyScreens.Length == 3
-            && duplicateFriendlyScreens[1].Name == string.Format(LocalizationService.Get("PrimaryDisplayLabel"), "Dell U2720Q (DISPLAY1)")
+            && duplicateFriendlyScreens[1].Name == "Dell U2720Q (DISPLAY1) · Chính"
             && duplicateFriendlyScreens[2].Name == "Dell U2720Q (DISPLAY2)");
         SettingsWindow.NetworkAdapterOption[] networkFixtures =
         [
@@ -88,7 +88,7 @@ internal static class CoreLogicTests
         var networkChoices = SettingsWindow.BuildNetworkChoices(networkFixtures, "eth-down");
         check("Network settings keep active physical and VPN adapters while filtering down, loopback and virtual host switches",
             networkChoices.Select(c => c.Id).SequenceEqual(["", "wifi", "vpn", "eth-down"])
-            && networkChoices.Single(c => c.Id == "eth-down").Name == string.Format(LocalizationService.Get("DisconnectedDevice"), "Ethernet"));
+            && networkChoices.Single(c => c.Id == "eth-down").Name == "Ethernet · chưa kết nối");
         var savedVirtualChoices = SettingsWindow.BuildNetworkChoices(networkFixtures, "WSL");
         check("Saved active virtual network adapter retains its friendly name without disconnected label",
             savedVirtualChoices.Single(c => c.Id == "WSL").Name == "vEthernet (WSL)");
