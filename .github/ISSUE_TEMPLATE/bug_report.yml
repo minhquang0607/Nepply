@@ -12,7 +12,7 @@ body:
     attributes:
       label: Nepply version · Phiên bản Nepply
       description: Settings → Application → About & privacy. · Cài đặt → Ứng dụng → Thông tin & quyền riêng tư.
-      placeholder: "2.0.0-rc.2"
+      placeholder: "2.0.0-rc.3"
     validations:
       required: true
   - type: dropdown

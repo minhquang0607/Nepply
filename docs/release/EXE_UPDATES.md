@@ -78,13 +78,15 @@ cấu hình ký hoặc nghiệm thu cập nhật có chữ ký trên máy thật
 
 ## Phiên bản hiện hành
 
-Phiên bản hiện tại là `2.0.0-rc.2`, metadata Windows `2.0.0.2`: bản phát hành
-thử công khai **chưa ký**, phát hành ngày 10/11/2026 với tag `v2.0.0-rc.2`, asset
-`Nepply-2.0.0-rc.2-Setup.exe`, đánh dấu prerelease trên GitHub. Bản trước là
-`2.0.0-rc.1` (metadata `2.0.0.1`), phát hành ngày 02/11/2026; bản đó đáp ứng
-điều kiện "đã phát hành" của SignPath. `2.0.0-rc.2` cao hơn `2.0.0-rc.1` theo
-SemVer, nhưng người dùng rc.1 phải gỡ bản cũ trước khi cài (xem CHANGELOG). Bản ký đầu tiên là `2.0.0` (metadata `2.0.0.100`),
-cao hơn `2.0.0-rc.1` theo SemVer nên updater nhận đúng thứ tự. Nhãn cũ
+Phiên bản nguồn hiện tại là `2.0.0-rc.3` (chốt 15/11/2026), metadata Windows
+`2.0.0.3`, chưa ký và chưa phát hành. Bản công khai gần nhất là `2.0.0-rc.2`
+(metadata `2.0.0.2`), phát hành ngày 10/11/2026 với tag `v2.0.0-rc.2`, asset
+`Nepply-2.0.0-rc.2-Setup.exe`, đánh dấu prerelease trên GitHub; bản trước đó là
+`2.0.0-rc.1` (metadata `2.0.0.1`), phát hành ngày 02/11/2026, đáp ứng
+điều kiện "đã phát hành" của SignPath. `2.0.0-rc.3` cao hơn `2.0.0-rc.2` theo
+SemVer và giữ cùng khóa phiên chạy/journal như `rc.2`; chỉ người dùng `rc.1` phải
+gỡ bản cũ trước khi cài (xem CHANGELOG). Bản ổn định đầu tiên là `2.0.0` (metadata `2.0.0.100`),
+cao hơn `2.0.0-rc.3` theo SemVer nên updater nhận đúng thứ tự. Nhãn cũ
 `1.0.0-beta.1` và `1.0.0-17.10.26` chưa từng phát hành. Chỉ bật `-RequireStable`
 khi mọi điều kiện ký và nghiệm thu đều đạt.
 

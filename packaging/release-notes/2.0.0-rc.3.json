@@ -1,0 +1,61 @@
+{
+  "version": "2.0.0-rc.3",
+  "notes": {
+    "vi": [
+      "Cập nhật bộ .NET đóng kèm lên 10.0.15, gồm các bản vá bảo mật của Microsoft tháng 11/2026.",
+      "Mục Có gì mới trong cửa sổ cập nhật hiện tóm tắt ngắn theo ngôn ngữ đang dùng trong Nepply cho các bản mới hơn.",
+      "Danh sách màn hình trong Cài đặt hiện tên màn hình Windows dễ đọc thay cho tên kỹ thuật như DISPLAY1, và chỉ gắn mã màn hình khi hai màn hình trùng tên.",
+      "Danh sách mạng trong Cài đặt ẩn bớt card đang tắt, loopback và switch ảo nội bộ, đồng thời vẫn giữ các kết nối VPN đang hoạt động.",
+      "Chỉnh sửa nội dung tệp trên Desktop không còn kích hoạt quét lại nền; hộp thoại báo lỗi lưu bố cục cũng gắn đúng cửa sổ panel."
+    ],
+    "en": [
+      "The bundled .NET runtime is now 10.0.15, with Microsoft's November 2026 security fixes.",
+      "What's new in the update window now shows short summaries in your selected Nepply language across newer releases.",
+      "The display list in Settings shows readable Windows monitor names instead of technical codes like DISPLAY1, adding the display code only when names match.",
+      "The network adapter list in Settings hides disabled, loopback and internal virtual adapters while keeping active VPN connections.",
+      "Editing file contents on the Desktop no longer triggers a background rescan, and the layout save warning now attaches properly to the panel."
+    ],
+    "ja": [
+      "同梱の .NET ランタイムを 10.0.15 に更新しました。Microsoft の 2026 年 11 月のセキュリティ修正を含みます。",
+      "更新ウィンドウの「新機能」に、選択中の Nepply の言語で新しいバージョンの短い要約が表示されるようになりました。",
+      "設定のディスプレイ一覧に DISPLAY1 などの技術的な名前ではなく分かりやすい Windows モニター名を表示し、同名がある場合のみ識別コードを追加します。",
+      "設定のネットワーク アダプター一覧で無効・ループバック・内部仮想アダプターを非表示にし、使用中の VPN 接続は残すようにしました。",
+      "デスクトップ上のファイル内容を編集してもバックグラウンドの再スキャンが発生しなくなり、レイアウト保存の警告ダイアログがパネルに正しく紐づくようになりました。"
+    ],
+    "de": [
+      "Die mitgelieferte .NET-Laufzeit ist jetzt 10.0.15 mit den Sicherheitskorrekturen von Microsoft vom November 2026.",
+      "„Neuigkeiten“ im Update-Fenster zeigt für neuere Versionen nun kurze Zusammenfassungen in Ihrer gewählten Nepply-Sprache an.",
+      "Die Anzeigeliste in den Einstellungen zeigt lesbare Windows-Monitornamen statt technischer Kürzel wie DISPLAY1 und hängt den Code nur bei gleichen Namen an.",
+      "Die Netzwerkadapter-Liste in den Einstellungen blendet deaktivierte, Loopback- und interne virtuelle Adapter aus, behält aber aktive VPN-Verbindungen bei.",
+      "Das Bearbeiten von Dateiinhalten auf dem Desktop löst keinen Hintergrund-Scan mehr aus, und die Layout-Speicherwarnung wird korrekt am Panel angezeigt."
+    ],
+    "zh": [
+      "内置的 .NET 运行时已更新到 10.0.15，包含 Microsoft 2026 年 11 月的安全修复。",
+      "更新窗口中的“新增内容”现已以你所选的 Nepply 语言显示各较新版本的简短摘要。",
+      "设置中的显示器列表现显示易读的 Windows 显示器名称，不再显示 DISPLAY1 等技术代码；仅在名称相同时附加区分编号。",
+      "设置中的网络适配器列表现隐藏已禁用、环回和内部虚拟适配器，同时保留正在使用的 VPN 连接。",
+      "编辑桌面文件内容不再触发后台重新扫描，保存布局的错误提示框现已正确归属面板窗口。"
+    ],
+    "ru": [
+      "Встроенная среда .NET обновлена до 10.0.15 с исправлениями безопасности Microsoft за ноябрь 2026 года.",
+      "Раздел «Что нового» в окне обновлений теперь показывает краткие сводки по более новым версиям на выбранном языке Nepply.",
+      "Список экранов в настройках показывает понятные названия мониторов Windows вместо кодов вроде DISPLAY1, добавляя код только при совпадении имен.",
+      "Список сетевых адаптеров в настройках скрывает отключенные, loopback и внутренние виртуальные адаптеры, сохраняя активные VPN-подключения.",
+      "Редактирование содержимого файлов на рабочем столе больше не запускает фоновое пересканирование, а предупреждение об ошибке сохранения макета корректно привязано к панели."
+    ],
+    "fr": [
+      "Le runtime .NET inclus passe à la version 10.0.15, avec les correctifs de sécurité Microsoft de novembre 2026.",
+      "La section Nouveautés de la fenêtre de mise à jour affiche désormais de brefs résumés dans la langue choisie pour Nepply.",
+      "La liste des écrans dans les Paramètres affiche des noms de moniteurs Windows lisibles au lieu de codes techniques comme DISPLAY1, en ajoutant le code uniquement en cas de doublon.",
+      "La liste des cartes réseau dans les Paramètres masque les cartes désactivées, de bouclage et virtuelles internes tout en conservant les connexions VPN actives.",
+      "La modification du contenu d'un fichier sur le Bureau ne déclenche plus de nouvelle analyse en arrière-plan, et l'alerte d'échec d'enregistrement de la disposition est correctement rattachée au panneau."
+    ],
+    "th": [
+      ".NET ที่มาพร้อมแอปอัปเดตเป็น 10.0.15 แล้ว รวมการแก้ไขด้านความปลอดภัยของ Microsoft เดือนพฤศจิกายน 2026",
+      "ส่วน มีอะไรใหม่ ในหน้าต่างอัปเดตจะแสดงสรุปสั้น ๆ ตามภาษาที่เลือกใน Nepply สำหรับเวอร์ชันที่ใหม่กว่า",
+      "รายการจอภาพใน การตั้งค่า แสดงชื่อจอของ Windows ที่อ่านง่ายแทนรหัสอย่าง DISPLAY1 และต่อท้ายรหัสเฉพาะเมื่อมีชื่อซ้ำกัน",
+      "รายการอะแดปเตอร์เครือข่ายใน การตั้งค่า จะซ่อนการ์ดที่ปิดอยู่ loopback และอะแดปเตอร์เสมือนภายใน โดยยังคงการเชื่อมต่อ VPN ที่ใช้งานอยู่ไว้",
+      "การแก้ไขเนื้อหาไฟล์บนเดสก์ท็อปจะไม่กระตุ้นการสแกนพื้นหลังซ้ำอีก และหน้าต่างแจ้งเตือนการบันทึกเลย์เอาต์จะผูกกับแผงอย่างถูกต้อง"
+    ]
+  }
+}
