@@ -2,11 +2,37 @@
 
 [English](CHANGELOG.en.md) · **Tiếng Việt** · [Trang chính](README.vi.md)
 
-## Chưa phát hành
+## 2.0.0-rc.3 — chưa phát hành
+
+Bản phát hành thử thứ ba, chưa ký số. Ngày phát hành được ghi khi bản này lên trang Releases.
+
+### Nâng cấp
+
+- Nâng cấp từ `2.0.0-rc.2` có thể cài thẳng đè lên bản cũ (nên thoát rc.2 trước hoặc để Setup chờ app đóng). Nếu vẫn đang dùng `2.0.0-rc.1`, hãy gỡ rc.1 trước rồi mới cài bản này.
+
+### Bảo mật
+
+- Cập nhật bộ .NET đóng kèm lên 10.0.15 (từ 10.0.14), gồm các bản vá bảo mật của Microsoft từ tháng 11/2026.
 
 ### Cập nhật
 
 - Mục **Có gì mới** trong cửa sổ cập nhật giờ là bản tóm tắt ngắn theo ngôn ngữ đang dùng trong Nepply, gom mọi phiên bản mới hơn bản bạn đang dùng. Bản phát hành trước khi có tóm tắt vẫn hiện ghi chú như cũ. Áp dụng từ bản phát hành sau bản này.
+
+### Cài đặt và giao diện
+
+- Danh sách màn hình trong Cài đặt hiển thị tên màn hình Windows dễ đọc thay cho tên kỹ thuật như `DISPLAY1`, `DISPLAY2` (chỉ gắn kèm mã màn hình khi hai màn hình trùng tên).
+- Danh sách chọn card mạng trong Cài đặt ẩn các card đang tắt, loopback và switch ảo nội bộ (`vEthernet`, Hyper-V, Wi-Fi Direct, VirtualBox host-only, VMware, Teredo/ISATAP/6to4), đồng thời vẫn giữ các kết nối VPN đang hoạt động.
+- Hộp thoại báo lỗi lưu bố cục giờ gắn đúng cửa sổ chủ, tiêu đề `Nepply` và biểu tượng cảnh báo.
+
+### Desktop và hiệu năng
+
+- Bỏ theo dõi sự kiện `LastWrite` trong bộ theo dõi Desktop để việc chỉnh sửa nội dung tệp trên Desktop không còn kích hoạt tiến trình quét lại mỗi 2 giây.
+- Giảm cấp phát bộ nhớ tạm khi phân giải đường dẫn shortcut `.lnk`.
+
+### Tài liệu và dùng thử cộng đồng
+
+- Bổ sung [Điều khoản sử dụng](docs/legal/TERMS.md) song ngữ, [Hướng dẫn dùng thử](docs/TESTING.md) cho cộng đồng dev, mẫu báo cáo dùng thử `test-report`, và hướng dẫn chi tiết cách hoạt động/khôi phục khi ẩn icon Desktop trong [Hướng dẫn sử dụng](docs/USER_GUIDE.md).
+- Thêm tài liệu kiến trúc tiếng Anh và sơ đồ tiến trình, trạng thái ẩn/khôi phục icon Desktop.
 
 ## 2.0.0-rc.2 — 10/11/2026
 

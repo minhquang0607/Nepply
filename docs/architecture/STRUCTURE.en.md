@@ -32,7 +32,7 @@ Nepply is a WPF modular monolith: one main application assembly organized by fea
 
 ## Identity and compatibility
 
-The current source version is `2.0.0-rc.2` (`FileVersion` `2.0.0.2`). Grouping files by feature does not mean every class is fully decoupled; see [MODULES.en.md](MODULES.en.md) for current boundaries and known coupling.
+The current source version is `2.0.0-rc.3` (`FileVersion` `2.0.0.3`). Grouping files by feature does not mean every class is fully decoupled; see [MODULES.en.md](MODULES.en.md) for current boundaries and known coupling.
 
 The root namespace, assembly name, solution, project files, session locks and Desktop recovery journal all use the `Nepply` name. Compatibility namespaces such as `Nepply.Services`, `Nepply.Views` and `Nepply.Modules` are not separate assemblies. Do not rename session mutexes or the recovery journal just to match a version bump.
 

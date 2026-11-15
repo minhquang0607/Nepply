@@ -2,7 +2,7 @@
 
 [English](USER_GUIDE.en.md) · **Tiếng Việt** · [Trang chính](../README.vi.md) · [Xử lý sự cố](TROUBLESHOOTING.md)
 
-Hướng dẫn cho **Nepply 2.0.0-rc.2**, bản phát hành thử chưa ký số để dùng thử và góp ý.
+Hướng dẫn cho **Nepply 2.0.0-rc.3**, bản phát hành thử chưa ký số để dùng thử và góp ý.
 
 ## Mở và đóng panel
 

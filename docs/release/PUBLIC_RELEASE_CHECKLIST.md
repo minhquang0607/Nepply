@@ -1,6 +1,6 @@
 # Kế hoạch phát hành Nepply 2.0.0
 
-Cập nhật 14/11/2026. Đây là kế hoạch duy nhất từ hiện tại đến sau bản chính thức. Làm từng giai đoạn theo thứ tự; giai đoạn sau chỉ bắt đầu khi giai đoạn trước đạt điều kiện **Xong khi**.
+Cập nhật 15/11/2026. Đây là kế hoạch duy nhất từ hiện tại đến sau bản chính thức. Làm từng giai đoạn theo thứ tự; giai đoạn sau chỉ bắt đầu khi giai đoạn trước đạt điều kiện **Xong khi**.
 
 Đánh dấu một mục khi đã hoàn tất và kiểm chứng thật, không đánh dấu theo dự đoán. **[Bạn]** là việc chỉ Minh Quang làm được (tài khoản, duyệt, máy thật); **[AI]** là việc code hoặc tài liệu trong repo do đội ngũ AI (Codex, Claude) làm; **[Cả hai]** cần phối hợp.
 
@@ -11,10 +11,10 @@ Cập nhật 14/11/2026. Đây là kế hoạch duy nhất từ hiện tại đ�
 | 2 | Đưa code lên GitHub | Xong |
 | 3 | Chuẩn bị repo công khai | Xong; còn tùy chọn thêm CodeQL vào ruleset |
 | 3A | Sửa lỗi từ các lượt cài thử | Xong; bạn báo đạt ngày 02/11/2026 |
-| 4 | Phát hành `2.0.0-rc.1` chưa ký | Đã công khai và đối chiếu ngày 02/11/2026; đang nhận phản hồi |
+| 4 | Phát hành `2.0.0-rc.1` và `2.0.0-rc.2` chưa ký | Xong (`rc.1` công khai ngày 02/11/2026, `rc.2` ngày 10/11/2026); vòng dùng thử cộng đồng chuyển sang giai đoạn 6A |
 | 5 | Xin chữ ký số | Xong: SignPath từ chối, đã chọn Microsoft Store |
 | 6 | Đưa Nepply lên Microsoft Store | **Tạm gác** từ 14/11/2026; phần chuẩn bị của AI giữ nguyên trong repo |
-| 6A | Cộng đồng dev dùng thử bản RC | Đang làm: tài liệu và form đã có; chờ bạn mở Discussions và đăng lời mời |
+| 6A | Cộng đồng dev dùng thử bản RC | Đang làm: tài liệu, form và mã nguồn `2.0.0-rc.3` đã chuẩn bị; chờ bạn test Live `rc.3`, tạo tag, mở Discussions và đăng lời mời |
 | 7 | Hoàn thiện chất lượng | Bài đo giao diện 24 giờ đạt; script đo app thật đã có, chờ chạy 24 giờ; F-08 chờ số đo; các mục audit nhỏ khác đã xong; còn các mục của bạn |
 | 8 | Nghiệm thu trên máy thật | Chưa làm |
 | 9 | Phát hành `2.0.0` | Đã tạo lại ảnh README; phần còn lại chờ hướng phát hành chốt sau giai đoạn 6A |
@@ -162,7 +162,7 @@ Bạn góp ý ngày 02/11/2026. Lần rà mặc định trước được làm l
 - [x] **[Bạn]** Xem lại Release nháp rồi bấm Publish. Đã công khai ngày 02/11/2026 ở dạng pre-release: <https://github.com/minhquang0607/Nepply/releases/tag/v2.0.0-rc.1>.
 - [x] **[AI]** Đối chiếu ẩn danh sau khi công khai: `SHA256.json` khớp mã GitHub ghi cho Setup và portable, cả hai tệp tải được, cả ba tệp có attestation.
 - [x] **[AI]** Tải file từ trang Release về máy và cài thử. Ngày 02/11/2026 cả ba tệp khớp mã GitHub và `SHA256.json`, `Verify-Release.ps1 -ExpectedVersion 2.0.0-rc.1` đạt trên bản portable và Setup. Chạy ẩn bằng Setup công khai: cài lần đầu ghi `AutoStart=1` và ngôn ngữ, cài đè không ghi lại `AutoStart`, gỡ xong sạch. Đây là chạy ẩn và không mở app; lượt cài qua trình duyệt có SmartScreen thuộc giai đoạn 8.
-- [ ] **[Cả hai]** Nhận phản hồi trong lúc chờ SignPath, nên từ 2 đến 4 tuần. Lỗi nặng được sửa ở `2.0.0-rc.2`, tăng `FileVersion` thành `2.0.0.2`.
+- [x] **[Cả hai]** Nhận phản hồi trong lúc chờ SignPath, nên từ 2 đến 4 tuần. Lỗi nặng được sửa ở `2.0.0-rc.2`, tăng `FileVersion` thành `2.0.0.2`. Không còn chờ riêng SignPath: SignPath từ chối ngày 02/11/2026 ở giai đoạn 5, `2.0.0-rc.2` đã phát hành ngày 10/11/2026, và vòng nhận phản hồi tiếp tục ở giai đoạn 6A.
 
 ### Bản `2.0.0-rc.2`
 
@@ -175,7 +175,7 @@ Bạn góp ý ngày 02/11/2026. Lần rà mặc định trước được làm l
 - [x] **[AI]** Điền ghi chú song ngữ vào Release nháp, chọn *Pre-release*, lưu nháp.
 - [x] **[Bạn]** Xem lại Release nháp rồi bấm Publish. Đã công khai ngày 10/11/2026 ở dạng pre-release: <https://github.com/minhquang0607/Nepply/releases/tag/v2.0.0-rc.2>.
 - [x] **[AI]** Đối chiếu sau khi công khai: `SHA256.json`, mã GitHub, attestation, `Verify-Release.ps1 -ExpectedVersion 2.0.0-rc.2`; ghi ngày phát hành vào CHANGELOG. Ngày 10/11/2026, tải ẩn danh: cả ba tệp khớp mã GitHub, Setup và portable khớp `SHA256.json`, cả ba có attestation công khai. `Verify-Release.ps1 -ExpectedVersion 2.0.0-rc.2` đạt trên Setup và portable; `Nepply.exe` mang `2.0.0-rc.2+5b2e723`, guardian `2.0.0.2`.
-- [ ] **[Bạn]** Gỡ rc.1 theo ghi chú phát hành rồi cài rc.2 qua trình duyệt: ẩn icon, thoát, icon trở lại.
+- [x] **[Bạn]** Gỡ rc.1 theo ghi chú phát hành rồi cài rc.2 qua trình duyệt: ẩn icon, thoát, icon trở lại. Không còn cần cài riêng `rc.2`: đã gộp bước tự cài bản RC mới nhất (`2.0.0-rc.3`) qua trình duyệt vào mục `2.0.0-rc.3` và giai đoạn 6A bên dưới.
 
 **Xong khi:** Release công khai tải được, cài được, không có lỗi chặn.
 
@@ -227,10 +227,20 @@ Mục tiêu: có người ngoài thử bản Setup/portable chưa ký trên ph�
 - [x] **[AI]** Đổi banner README: bỏ câu "2.0.0 sẽ là bản ký đầu tiên" vì Store đã tạm gác, thay bằng lời mời dùng thử.
 - [x] **[Bạn]** Tạo nhãn `test-report` ở *Issues → Labels*. Nếu chưa có nhãn, GitHub vẫn nhận báo cáo nhưng không gắn nhãn. (Đã tạo ngày 14/11/2026.)
 - [ ] **[Bạn]** Bật *Settings → General → Features → Discussions* nếu muốn có chỗ hỏi đáp ngoài Issue. Báo AI để thêm link vào `config.yml` và README.
-- [ ] **[Bạn]** Tự cài rc.2 qua trình duyệt theo mục cuối giai đoạn 4 trước khi mời người khác.
+- [ ] **[Bạn]** Tự cài `2.0.0-rc.3` qua trình duyệt (gỡ `rc.1` trước nếu đang cài) và thử ẩn icon, thoát, icon trở lại trước khi mời người khác.
 - [ ] **[Bạn]** Đăng lời mời dùng thử ở cộng đồng dev bạn chọn. AI soạn sẵn nội dung khi bạn yêu cầu; AI không tự đăng.
-- [ ] **[Cả hai]** Nhận phản hồi 2 đến 4 tuần. AI phân loại issue; lỗi nặng sửa ở `2.0.0-rc.3` (`FileVersion` `2.0.0.3`).
+- [ ] **[Cả hai]** Nhận phản hồi 2 đến 4 tuần. AI phân loại issue; lỗi nặng sửa ở bản RC tiếp theo (ví dụ `2.0.0-rc.4` / `FileVersion` `2.0.0.4`).
 - [ ] **[Bạn]** Sau đợt dùng thử, chốt hướng cho `2.0.0`: mở lại Store, nộp lại SignPath, mua chứng thư, hay ra `2.0.0` chưa ký trên GitHub.
+
+### Bản `2.0.0-rc.3`
+
+Gom các sửa lỗi/hoàn thiện sau `rc.2` (`Có gì mới` đa ngôn ngữ, A-01, A-02 phần nhỏ, A-04/A-04b, A-05, A-09) và runtime .NET `10.0.15` (vá bảo mật Microsoft 10/11/2026) để phát hành bản RC mời cộng đồng dùng thử.
+
+- [x] **[AI]** Ngày 15/11/2026: đổi mã nguồn sang `2.0.0-rc.3` / `2.0.0.3` (app và guardian), nâng runtime .NET đóng kèm lên `10.0.15`, viết `packaging/release-notes/2.0.0-rc.3.json`, cập nhật CHANGELOG, form/tài liệu và viết [RELEASE_2.0.0-rc.3.md](RELEASE_2.0.0-rc.3.md).
+- [ ] **[Bạn]** Trên đúng commit trên `main` sẽ gắn tag: build Release, chạy `pwsh scripts/Test-DesktopRuntime.ps1 -Live -ReleaseTag v2.0.0-rc.3`, chỉ tiếp tục khi script báo `ACCEPTED`.
+- [ ] **[Bạn]** Đồng ý cho AI (hoặc tự) tạo và push tag `v2.0.0-rc.3`. *Release build* tự chạy, kể cả cổng runtime .NET.
+- [ ] **[Bạn]** Duyệt bước `release` của *Release build*, điền ghi chú song ngữ từ `RELEASE_2.0.0-rc.3.md`, chọn *Pre-release* rồi bấm Publish.
+- [ ] **[AI]** Đối chiếu sau khi công khai: `SHA256.json`, `release-notes.json`, mã GitHub, attestation, `Verify-Release.ps1 -ExpectedVersion 2.0.0-rc.3`; ghi ngày phát hành vào CHANGELOG và `EXE_UPDATES.md`.
 
 **Xong khi:** có báo cáo từ máy khác máy bạn, không còn lỗi nặng đang mở, và hướng phát hành `2.0.0` đã chốt.
 
@@ -251,7 +261,7 @@ Không chặn việc xin chữ ký, có thể làm song song từ giai đoạn 4
 - [x] **[AI]** Tùy chọn tự kiểm tra cập nhật mỗi ngày, chỉ báo ở khay hệ thống. Mặc định đổi thành bật ở giai đoạn 3A. Đã cập nhật chính sách quyền riêng tư và hướng dẫn. Bản dịch hai chuỗi mới thuộc mục duyệt bản dịch bên dưới.
 - [x] **[AI]** Chứng thực nguồn gốc build (`actions/attest-build-provenance`) trong bước `draft-release`, chỉ chạy khi repo Public. Đã chạy thật ở *Release build* #2; API công khai trả về attestation cho cả ba tệp của `2.0.0-rc.1`. Chưa chạy `gh attestation verify` vì máy chưa có `gh`.
 - [ ] **[Cả hai]** Xử lý các lỗi nhận được từ bản RC.
-- [x] **[AI]** Runtime .NET đóng kèm: ngày 10/11/2026 nâng từ `10.0.12` lên `10.0.14`, vì Microsoft đã ra hai bản vá bảo mật (13/10 và 25/10) mà người dùng chỉ nhận được khi app được build lại. Dependabot không theo dõi số ghim này, nên thêm `scripts/Verify-RuntimeCurrency.ps1`: chặn `release.yml` khi có bản vá bảo mật mới hơn, và chạy mỗi tuần bằng `runtime-currency.yml` để GitHub gửi mail khi số ghim bị tụt lại. CI chạy `scripts/Test-RuntimeCurrencyGate.ps1` trên dữ liệu giả.
+- [x] **[AI]** Runtime .NET đóng kèm: ngày 10/11/2026 nâng từ `10.0.12` lên `10.0.14`, vì Microsoft đã ra hai bản vá bảo mật (13/10 và 25/10) mà người dùng chỉ nhận được khi app được build lại. Dependabot không theo dõi số ghim này, nên thêm `scripts/Verify-RuntimeCurrency.ps1`: chặn `release.yml` khi có bản vá bảo mật mới hơn, và chạy mỗi tuần bằng `runtime-currency.yml` để GitHub gửi mail khi số ghim bị tụt lại. CI chạy `scripts/Test-RuntimeCurrencyGate.ps1` trên dữ liệu giả. Ngày 15/11/2026 tiếp tục nâng lên `10.0.15` sau khi `runtime-currency.yml` báo bản vá bảo mật ngày 10/11/2026.
 
 ### Mục từ audit kỹ thuật ngày 05/11/2026
 

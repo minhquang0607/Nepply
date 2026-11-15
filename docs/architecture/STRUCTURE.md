@@ -32,7 +32,7 @@ Nepply là modular monolith WPF: một assembly ứng dụng chính, nhóm mã t
 
 ## Định danh và tương thích
 
-Phiên bản hiện hành là `2.0.0-rc.2` (`FileVersion` `2.0.0.2`). Việc nhóm file theo feature không đồng nghĩa mọi lớp đã tách trách nhiệm hoàn chỉnh; xem các boundary và giới hạn trong [MODULES.md](MODULES.md).
+Phiên bản hiện hành là `2.0.0-rc.3` (`FileVersion` `2.0.0.3`). Việc nhóm file theo feature không đồng nghĩa mọi lớp đã tách trách nhiệm hoàn chỉnh; xem các boundary và giới hạn trong [MODULES.md](MODULES.md).
 
 Namespace gốc/assembly, solution, project và source dùng tên Nepply. Các namespace `Services`, `Views`, `Modules` chưa phải boundary assembly riêng. Khóa phiên chạy và journal Desktop cũng mang tên Nepply; không đổi chúng chỉ để đồng bộ số phiên bản.
 

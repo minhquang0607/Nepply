@@ -2,7 +2,7 @@
 
 **English** · [Tiếng Việt](USER_GUIDE.md) · [Home](../README.md) · [Troubleshooting](TROUBLESHOOTING.en.md)
 
-For **Nepply 2.0.0-rc.2**, an unsigned release candidate for testing and feedback.
+For **Nepply 2.0.0-rc.3**, an unsigned release candidate for testing and feedback.
 
 ## 🖱️ Open and close the panel
 

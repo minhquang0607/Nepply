@@ -2,11 +2,37 @@
 
 **English** · [Tiếng Việt](CHANGELOG.md) · [Home](README.md)
 
-## Unreleased
+## 2.0.0-rc.3 — not yet released
+
+Third release candidate, not code-signed. The release date is added when it reaches the Releases page.
+
+### Upgrading
+
+- Upgrading from `2.0.0-rc.2` installs directly over the existing setup (exit rc.2 first or let Setup wait for it to close). If you are still on `2.0.0-rc.1`, uninstall rc.1 before installing this build.
+
+### Security
+
+- Updated the bundled .NET runtime to 10.0.15 (from 10.0.14), which includes Microsoft's November 2026 security fixes.
 
 ### Updates
 
 - **What's new** in the update window is now a short summary in the language Nepply uses, covering every version newer than yours. Releases made before summaries existed still show their notes as before. Takes effect from the release after this one.
+
+### Settings & interface
+
+- The display selector in Settings shows friendly Windows monitor names instead of technical names like `DISPLAY1` or `DISPLAY2`, appending the device code only when two displays share a name.
+- The network adapter selector in Settings hides disabled, loopback and internal virtual switches (`vEthernet`, Hyper-V, Wi-Fi Direct, VirtualBox host-only, VMware, Teredo/ISATAP/6to4) while keeping active VPN adapters.
+- The layout save failure prompt now opens with the panel as owner, the `Nepply` title and a warning icon.
+
+### Desktop & performance
+
+- Stopped watching `LastWrite` file-content events in `DesktopWatcherService` so modifying an existing file on the Desktop no longer triggers background rescans every 2 seconds.
+- Reduced temporary string allocations when reading `.lnk` shortcut destinations.
+
+### Documentation & community testing
+
+- Added bilingual [Terms of use](docs/legal/TERMS.md), the community [Testing guide](docs/TESTING.en.md), a `test-report` issue form and clearer Desktop icon hide/recovery explanations in the [User guide](docs/USER_GUIDE.en.md).
+- Added English architecture documentation with process boundary and Desktop icon recovery diagrams.
 
 ## 2.0.0-rc.2 — 10 November 2026
 
