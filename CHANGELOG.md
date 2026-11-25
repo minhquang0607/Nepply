@@ -13,6 +13,8 @@ Bản phát hành thử thứ ba, chưa ký số. Ngày phát hành được ghi
 ### Bảo mật
 
 - Cập nhật bộ .NET đóng kèm lên 10.0.15 (từ 10.0.14), gồm các bản vá bảo mật của Microsoft từ tháng 11/2026.
+- Chuyển **Tự kiểm tra cập nhật mỗi ngày** sang cơ chế chủ động bật (**mặc định tắt**) và khóa kiểm tra nền trước khi hoàn tất màn hình chào để không phát sinh kết nối mạng khi chưa có sự đồng ý.
+- Đóng gói kèm `TERMS.md` trong cả bộ cài Setup và bản portable, bổ sung nút mở nhanh Điều khoản / Bảo mật trong Cài đặt và Điều khoản / Quyền riêng tư ngay trên màn hình chào.
 
 ### Cập nhật
 

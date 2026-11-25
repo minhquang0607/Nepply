@@ -81,6 +81,7 @@ Source: "{#PayloadRoot}\*.dll"; DestDir: "{app}"; Flags: ignoreversion skipifsou
 Source: "{#PayloadRoot}\*.pdb"; DestDir: "{app}"; Flags: ignoreversion skipifsourcedoesntexist
 Source: "{#PayloadRoot}\THIRD_PARTY_NOTICES.md"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#PayloadRoot}\LICENSE"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#PayloadRoot}\TERMS.md"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#PayloadRoot}\PRIVACY.md"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#PayloadRoot}\SECURITY.md"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#PayloadRoot}\release-manifest.json"; DestDir: "{app}"; Flags: ignoreversion

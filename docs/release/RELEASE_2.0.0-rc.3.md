@@ -35,7 +35,7 @@ Extract the complete portable archive and run `Nepply.exe`; keep `guardian` and 
 - **Updates:** **What's new** in the update window now shows short summaries in your selected Nepply language across newer releases that include `release-notes.json`.
 - **Settings:** the display list shows friendly Windows monitor names instead of technical codes like `DISPLAY1` (adding the code only when two monitors share a name), and the network adapter list hides disabled, loopback and internal virtual adapters while keeping active VPN connections.
 - **Desktop & reliability:** editing file contents on the Desktop no longer triggers background rescans, layout save error dialogs attach properly to the panel with the Nepply title/warning icon, and resolving `.lnk` shortcuts allocates less memory.
-- **Testing & terms:** added [Terms of use](https://github.com/minhquang0607/Nepply/blob/main/docs/legal/TERMS.md#english), the [Testing guide](https://github.com/minhquang0607/Nepply/blob/main/docs/TESTING.en.md), clearer Desktop icon hiding/recovery docs, and English architecture docs.
+- **Testing & terms:** packaged [Terms of use](https://github.com/minhquang0607/Nepply/blob/main/docs/legal/TERMS.md#english) with Setup/portable and linked Terms/Privacy directly from the welcome screen and Settings; made daily background update checks opt-in (off by default and blocked until onboarding completes); added the [Testing guide](https://github.com/minhquang0607/Nepply/blob/main/docs/TESTING.en.md), clearer Desktop icon hiding/recovery docs, and English architecture docs.
 
 Full list: [CHANGELOG](https://github.com/minhquang0607/Nepply/blob/main/CHANGELOG.en.md).
 
@@ -82,7 +82,7 @@ Với portable, giải nén **toàn bộ** và chạy `Nepply.exe`; không tách
 - **Cập nhật:** mục **Có gì mới** trong cửa sổ cập nhật giờ hiện tóm tắt ngắn theo ngôn ngữ đang dùng trong Nepply cho các bản mới hơn có `release-notes.json`.
 - **Cài đặt:** danh sách màn hình hiện tên màn hình Windows dễ đọc thay cho tên kỹ thuật như `DISPLAY1` (chỉ gắn mã màn hình khi hai màn hình trùng tên), và danh sách mạng ẩn bớt card đang tắt, loopback và switch ảo nội bộ trong khi vẫn giữ các kết nối VPN đang hoạt động.
 - **Desktop & độ tin cậy:** chỉnh sửa nội dung tệp trên Desktop không còn kích hoạt quét lại nền; hộp thoại lỗi lưu bố cục gắn đúng cửa sổ panel kèm tiêu đề và biểu tượng Nepply; giảm cấp phát bộ nhớ khi đọc shortcut `.lnk`.
-- **Dùng thử & điều khoản:** bổ sung [Điều khoản sử dụng](https://github.com/minhquang0607/Nepply/blob/main/docs/legal/TERMS.md), [Hướng dẫn dùng thử](https://github.com/minhquang0607/Nepply/blob/main/docs/TESTING.md), làm rõ hướng dẫn ẩn/khôi phục icon Desktop và thêm tài liệu kiến trúc tiếng Anh.
+- **Dùng thử, quyền riêng tư & điều khoản:** đóng gói kèm [Điều khoản sử dụng](https://github.com/minhquang0607/Nepply/blob/main/docs/legal/TERMS.md) trong Setup/portable và gắn nút mở Điều khoản/Quyền riêng tư trên màn hình chào & Cài đặt; chuyển kiểm tra cập nhật hằng ngày sang mặc định tắt (chỉ chạy sau khi hoàn tất màn hình chào và khi bạn chủ động bật); bổ sung [Hướng dẫn dùng thử](https://github.com/minhquang0607/Nepply/blob/main/docs/TESTING.md), làm rõ hướng dẫn ẩn/khôi phục icon Desktop và thêm tài liệu kiến trúc tiếng Anh.
 
 Danh sách đầy đủ: [CHANGELOG](https://github.com/minhquang0607/Nepply/blob/main/CHANGELOG.md).
 

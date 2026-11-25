@@ -8,4 +8,4 @@ Never turn off Windows security features to install or run Nepply.
 - Privacy: no ads, analytics or automatic crash uploads.
 
 Report a problem: https://github.com/minhquang0607/Nepply/issues
-License: MIT (see LICENSE). Third-party components keep their own licenses (THIRD_PARTY_NOTICES.md).
+License: MIT (see LICENSE and TERMS.md). Third-party components keep their own licenses (THIRD_PARTY_NOTICES.md).

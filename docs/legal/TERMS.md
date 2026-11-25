@@ -4,12 +4,12 @@
 
 ## Tiếng Việt
 
-Cập nhật: 14/11/2026 · Nepply 2.0.0 (bản phát hành thử)
+Cập nhật: 25/11/2026 · Nepply 2.0.0 (bản phát hành thử)
 
 Nhà phát triển: Minh Quang  
 Hỗ trợ: https://github.com/minhquang0607/Nepply/issues
 
-Trang này tóm tắt điều kiện khi bạn tải, cài và dùng Nepply. Nó không thay thế giấy phép: mã nguồn và bản build của Nepply dùng [MIT License](../../LICENSE); thư viện bên thứ ba giữ [giấy phép riêng](THIRD_PARTY_NOTICES.md). Nếu trang này và giấy phép khác nhau, giấy phép được áp dụng.
+Trang này tóm tắt điều kiện khi bạn tải, cài và dùng Nepply. Nó không thay thế giấy phép: mã nguồn và bản build của Nepply dùng [MIT License](https://github.com/minhquang0607/Nepply/blob/main/LICENSE) (kèm file `LICENSE` cạnh ứng dụng); thư viện bên thứ ba giữ [giấy phép riêng](THIRD_PARTY_NOTICES.md). Nếu trang này và giấy phép khác nhau, giấy phép được áp dụng.
 
 ### Dùng miễn phí, không bảo hành
 
@@ -25,7 +25,7 @@ Setup và portable trên GitHub Releases hiện **chưa ký số**, nên Windows
 
 ### Thay đổi trên máy bạn
 
-- Khi bạn bật tùy chọn ẩn icon Desktop, Nepply yêu cầu Windows ẩn các icon đó. File của bạn không bị di chuyển hay xóa. Icon trở lại khi bạn tắt tùy chọn hoặc thoát Nepply. Nếu chúng không trở lại, xem [Xử lý sự cố](../TROUBLESHOOTING.md).
+- Khi bạn bật tùy chọn ẩn icon Desktop, Nepply yêu cầu Windows ẩn các icon đó. File của bạn không bị di chuyển hay xóa. Icon trở lại khi bạn tắt tùy chọn hoặc thoát Nepply. Nếu chúng không trở lại, xem [Xử lý sự cố](https://github.com/minhquang0607/Nepply/blob/main/docs/TROUBLESHOOTING.md).
 - Nepply chỉ thêm mục tự khởi động khi bạn bật, hoặc khi ô đó được chọn sẵn trong bộ cài và bạn giữ nguyên.
 - Nepply chạy với quyền người dùng thường, không cài driver và không yêu cầu quyền quản trị.
 - Mở file, shortcut hay trang web từ Nepply là hành động do bạn yêu cầu; chương trình hoặc trang được mở chịu điều khoản riêng của chúng.
@@ -38,7 +38,7 @@ Nepply không có quảng cáo, analytics hay tự gửi báo cáo lỗi. Nhữn
 
 - Issue, thảo luận và pull request trên GitHub là **công khai**. Hãy che đường dẫn, tên tài khoản và dữ liệu cá nhân trước khi đăng.
 - Lỗ hổng bảo mật: báo riêng theo [chính sách bảo mật](SECURITY.md), không đăng công khai.
-- Khi gửi đóng góp, bạn đồng ý đóng góp đó được phát hành theo MIT License như phần còn lại của dự án. Tham gia cộng đồng theo [Quy tắc ứng xử](../../CODE_OF_CONDUCT.md).
+- Khi gửi đóng góp, bạn đồng ý đóng góp đó được phát hành theo MIT License như phần còn lại của dự án. Tham gia cộng đồng theo [Quy tắc ứng xử](https://github.com/minhquang0607/Nepply/blob/main/CODE_OF_CONDUCT.md).
 
 ### Tên và biểu tượng
 
@@ -50,9 +50,9 @@ Trang này có thể được cập nhật khi Nepply thay đổi. Ngày cập n
 
 ## English
 
-Updated: 14 November 2026 · Nepply 2.0.0 (release candidate). Developer: Minh Quang. Support: https://github.com/minhquang0607/Nepply/issues
+Updated: 25 November 2026 · Nepply 2.0.0 (release candidate). Developer: Minh Quang. Support: https://github.com/minhquang0607/Nepply/issues
 
-This page summarizes the conditions for downloading, installing and using Nepply. It does not replace the license: Nepply's source code and builds use the [MIT License](../../LICENSE); third-party libraries keep their [own licenses](THIRD_PARTY_NOTICES.md). Where this page and a license differ, the license applies.
+This page summarizes the conditions for downloading, installing and using Nepply. It does not replace the license: Nepply's source code and builds use the [MIT License](https://github.com/minhquang0607/Nepply/blob/main/LICENSE) (also shipped as `LICENSE` beside the app); third-party libraries keep their [own licenses](THIRD_PARTY_NOTICES.md). Where this page and a license differ, the license applies.
 
 ### Free, without warranty
 
@@ -68,7 +68,7 @@ Setup and portable on GitHub Releases are currently **not code-signed**, so Wind
 
 ### Changes to your computer
 
-- When you turn on hiding Desktop icons, Nepply asks Windows to hide them. Your files are not moved or deleted. Icons return when you turn the option off or exit Nepply. If they do not, see [Troubleshooting](../TROUBLESHOOTING.en.md).
+- When you turn on hiding Desktop icons, Nepply asks Windows to hide them. Your files are not moved or deleted. Icons return when you turn the option off or exit Nepply. If they do not, see [Troubleshooting](https://github.com/minhquang0607/Nepply/blob/main/docs/TROUBLESHOOTING.en.md).
 - Nepply only adds a startup entry when you turn it on, or when that box is preselected in Setup and you keep it.
 - Nepply runs as a standard user, installs no drivers and does not require administrator rights.
 - Opening files, shortcuts or websites from Nepply is an action you request; the opened program or site has its own terms.
@@ -81,7 +81,7 @@ Nepply has no ads, analytics or automatic crash uploads. What it processes, stor
 
 - Issues, discussions and pull requests on GitHub are **public**. Redact paths, account names and personal data before posting.
 - Security vulnerabilities: report privately under the [security policy](SECURITY.md#english), not in public.
-- By submitting a contribution, you agree that it is released under the MIT License like the rest of the project. Community participation follows the [Code of conduct](../../CODE_OF_CONDUCT.md).
+- By submitting a contribution, you agree that it is released under the MIT License like the rest of the project. Community participation follows the [Code of conduct](https://github.com/minhquang0607/Nepply/blob/main/CODE_OF_CONDUCT.md).
 
 ### Name and logo
 

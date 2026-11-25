@@ -13,6 +13,8 @@ Third release candidate, not code-signed. The release date is added when it reac
 ### Security
 
 - Updated the bundled .NET runtime to 10.0.15 (from 10.0.14), which includes Microsoft's November 2026 security fixes.
+- Changed **Check for updates daily** to opt-in (**off by default**) and blocked background update checks before first-run onboarding completes, so no network request runs without explicit consent.
+- Packaged `TERMS.md` alongside Setup and portable builds, and added quick-open buttons for Terms/Security in Settings and Terms/Privacy on the welcome screen.
 
 ### Updates
 

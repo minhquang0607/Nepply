@@ -49,7 +49,7 @@ internal static class SettingsSearch
         new("Ứng dụng · Tự kiểm tra cập nhật",4,"AutoCheckUpdates","update phiên bản mới định kỳ hằng ngày"),
         new("Ứng dụng · Bố cục mẫu",4,"PresetCards","preset gọn thoáng dải ngang mẫu"),
         new("Ứng dụng · Bố cục",4,"ProfileStatus","profile nhập xuất bố cục chia sẻ"),
-        new("Ứng dụng · Quyền riêng tư",4,"AboutVersion","privacy dữ liệu analytics hỗ trợ tác giả phiên bản")
+        new("Ứng dụng · Quyền riêng tư",4,"AboutVersion","privacy dữ liệu điều khoản terms bảo mật security analytics hỗ trợ tác giả phiên bản")
     ];
     internal static Entry[] Find(string query) => Find(query, ProcessPackageIdentity.IsPackaged);
     internal static Entry[] Find(string query, bool packaged)

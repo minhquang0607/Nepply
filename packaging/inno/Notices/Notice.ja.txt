@@ -8,4 +8,4 @@ Nepply をインストールまたは実行するために Windows のセキュ�
 - プライバシー: 広告、分析、クラッシュ情報の自動送信はありません。
 
 問題の報告: https://github.com/minhquang0607/Nepply/issues
-ライセンス: MIT (LICENSE を参照)。第三者のコンポーネントにはそれぞれのライセンスが適用されます (THIRD_PARTY_NOTICES.md)。
+ライセンス: MIT (LICENSE と TERMS.md を参照)。第三者のコンポーネントにはそれぞれのライセンスが適用されます (THIRD_PARTY_NOTICES.md)。

@@ -237,6 +237,7 @@ Mục tiêu: có người ngoài thử bản Setup/portable chưa ký trên ph�
 Gom các sửa lỗi/hoàn thiện sau `rc.2` (`Có gì mới` đa ngôn ngữ, A-01, A-02 phần nhỏ, A-04/A-04b, A-05, A-09) và runtime .NET `10.0.15` (vá bảo mật Microsoft 10/11/2026) để phát hành bản RC mời cộng đồng dùng thử.
 
 - [x] **[AI]** Ngày 15/11/2026: đổi mã nguồn sang `2.0.0-rc.3` / `2.0.0.3` (app và guardian), nâng runtime .NET đóng kèm lên `10.0.15`, viết `packaging/release-notes/2.0.0-rc.3.json`, cập nhật CHANGELOG, form/tài liệu và viết [RELEASE_2.0.0-rc.3.md](RELEASE_2.0.0-rc.3.md).
+- [x] **[AI]** Ngày 25/11/2026: đóng gói kèm `TERMS.md` vào Setup/portable/MSIX + thêm nút mở tài liệu pháp lý trên `WelcomeWindow`/`SettingsWindow` + khóa gate kiểm tra đủ 5 file pháp lý; khóa `BackgroundUpdateCheck` sau `HasCompletedOnboarding` và đổi mặc định `AutoCheckUpdates = false` (opt-in theo Luật BVDLCN `91/2025/QH15`).
 - [ ] **[Bạn]** Trên đúng commit trên `main` sẽ gắn tag: build Release, chạy `pwsh scripts/Test-DesktopRuntime.ps1 -Live -ReleaseTag v2.0.0-rc.3`, chỉ tiếp tục khi script báo `ACCEPTED`.
 - [ ] **[Bạn]** Đồng ý cho AI (hoặc tự) tạo và push tag `v2.0.0-rc.3`. *Release build* tự chạy, kể cả cổng runtime .NET.
 - [ ] **[Bạn]** Duyệt bước `release` của *Release build*, điền ghi chú song ngữ từ `RELEASE_2.0.0-rc.3.md`, chọn *Pre-release* rồi bấm Publish.

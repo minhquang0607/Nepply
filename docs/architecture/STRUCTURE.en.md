@@ -16,7 +16,7 @@ Nepply is a WPF modular monolith: one main application assembly organized by fea
 | `src/Nepply/Features/Search` | Search session, query normalization and reveal animation |
 | `src/Nepply/Features/Settings` | Draft/preview session, persistence, welcome onboarding and Settings window |
 | `src/Nepply/Features/Telemetry` | Sensor/counter providers, sampling loop, snapshots and monitor UI |
-| `src/Nepply/Features/Updates` | Release feed, bounded download, Authenticode/SPKI verification, daily background check (on by default, tray notification only) and update UI |
+| `src/Nepply/Features/Updates` | Release feed, bounded download, Authenticode/SPKI verification, opt-in daily background check after onboarding (off by default, tray notification only) and update UI |
 | `src/Nepply/Presentation` | Theme/appearance resources, shared controls, converters and system tray |
 | `src/Nepply/Platform/Windows` | Win32 interop, Shell context menu, display enumeration, global hotkeys, startup registry and helper process pipes |
 | `src/Nepply/Diagnostics` | Bounded file and in-memory logging (`AppLogger`) |
@@ -48,7 +48,7 @@ The root namespace, assembly name, solution, project files, session locks and De
 
 ## Resources and legal files
 
-WPF resource dictionaries live under `src/Nepply/Presentation/Appearance` and are merged in `App.xaml`. Move `.xaml` and `.xaml.cs` files together. The application icon keeps the assembly resource URI `Resources/icon.ico`. Legal documents (`PRIVACY.md`, `SECURITY.md`, `THIRD_PARTY_NOTICES.md`) are linked from `docs/legal` into the build output root.
+WPF resource dictionaries live under `src/Nepply/Presentation/Appearance` and are merged in `App.xaml`. Move `.xaml` and `.xaml.cs` files together. The application icon keeps the assembly resource URI `Resources/icon.ico`. Legal documents (`TERMS.md`, `PRIVACY.md`, `SECURITY.md`, `THIRD_PARTY_NOTICES.md`) are linked from `docs/legal` into the build output root.
 
 ## Output hygiene
 

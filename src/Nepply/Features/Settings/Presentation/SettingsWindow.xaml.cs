@@ -653,7 +653,7 @@ public partial class SettingsWindow : Window
     }
     internal static string? FindLocalDocument(string fileName, string? baseDirectory = null)
     {
-        if (fileName is not ("PRIVACY.md" or "SECURITY.md" or "THIRD_PARTY_NOTICES.md")) return null;
+        if (fileName is not ("LICENSE" or "TERMS.md" or "PRIVACY.md" or "SECURITY.md" or "THIRD_PARTY_NOTICES.md")) return null;
         string root = baseDirectory ?? AppContext.BaseDirectory;
         string path = System.IO.Path.GetFullPath(System.IO.Path.Combine(root, fileName));
         return System.IO.File.Exists(path) ? path : null;

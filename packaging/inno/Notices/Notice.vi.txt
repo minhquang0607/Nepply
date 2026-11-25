@@ -8,4 +8,4 @@ Không tắt các tính năng bảo mật của Windows để cài hoặc chạy
 - Quyền riêng tư: không quảng cáo, không analytics, không tự gửi báo cáo lỗi.
 
 Báo lỗi: https://github.com/minhquang0607/Nepply/issues
-Giấy phép: MIT (xem LICENSE). Thành phần bên thứ ba giữ giấy phép riêng (THIRD_PARTY_NOTICES.md).
+Giấy phép: MIT (xem LICENSE và TERMS.md). Thành phần bên thứ ba giữ giấy phép riêng (THIRD_PARTY_NOTICES.md).

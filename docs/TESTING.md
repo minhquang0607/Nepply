@@ -10,7 +10,7 @@ Nepply 2.0.0 đang ở giai đoạn phát hành thử. Người phát triển c�
 - Chỉ tải từ [GitHub Releases](https://github.com/minhquang0607/Nepply/releases). Chọn bản mới nhất có nhãn *Pre-release*.
 - Bản build **chưa ký số** nên SmartScreen có thể cảnh báo. Đừng tắt SmartScreen, Smart App Control hay antivirus để chạy; nếu Windows chặn hẳn, đó cũng là kết quả đáng báo.
 - Nếu đã cài `2.0.0-rc.1`, hãy gỡ trước. Cài đặt được giữ lại trừ khi bạn chọn xóa dữ liệu.
-- Đọc [Điều khoản sử dụng](legal/TERMS.md) và [Quyền riêng tư](legal/PRIVACY.md). Nepply không tự gửi gì, ngoài việc kiểm tra cập nhật qua GitHub, và bạn tắt được việc này.
+- Đọc [Điều khoản sử dụng](legal/TERMS.md) và [Quyền riêng tư](legal/PRIVACY.md). Nepply không tự gửi gì ra mạng khi chưa được bạn bật; kiểm tra cập nhật hằng ngày mặc định tắt và chỉ chạy khi bạn chủ động chọn.
 
 ## Nếu icon Desktop không hiện lại
 

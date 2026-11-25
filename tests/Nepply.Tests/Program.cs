@@ -1151,7 +1151,9 @@ internal static class Program
         Check("Settings identifies version and publisher without choosing a source license",
             ((System.Windows.Controls.TextBlock)profileWindow.FindName("AboutVersion")).Text == "Nepply " + aboutVersion + " · Minh Quang");
         Check("Documentation resolver rejects arbitrary files", SettingsWindow.FindLocalDocument("settings.json", AppContext.BaseDirectory) == null);
-        Check("Packaged privacy document is discoverable", SettingsWindow.FindLocalDocument("PRIVACY.md", AppContext.BaseDirectory) != null);
+        Check("All five packaged legal documents are discoverable",
+            new[] { "LICENSE", "TERMS.md", "PRIVACY.md", "SECURITY.md", "THIRD_PARTY_NOTICES.md" }
+                .All(doc => SettingsWindow.FindLocalDocument(doc, AppContext.BaseDirectory) != null));
         profileWindow.ShowSettingsSection(4);
         Render((FrameworkElement)profileWindow.Content, 520, 500, Path.Combine(output, "settings-profiles.png"));
         profileWindow.Close();
@@ -1159,6 +1161,10 @@ internal static class Program
         var welcomeWindow = new WelcomeWindow(new AppSettings());
         Render((FrameworkElement)welcomeWindow.Content, 560, 650, Path.Combine(output, "welcome.png"));
         Check("Welcome does not preselect Desktop hiding", ((System.Windows.Controls.CheckBox)welcomeWindow.FindName("HideIcons")).IsChecked == false);
+        Check("Welcome does not preselect daily update checks", ((System.Windows.Controls.CheckBox)welcomeWindow.FindName("CheckUpdates")).IsChecked == false);
+        Check("Welcome exposes terms and privacy links",
+            welcomeWindow.FindName("WelcomeTermsButton") is System.Windows.Controls.Button { Tag: "TERMS.md" }
+            && welcomeWindow.FindName("WelcomePrivacyButton") is System.Windows.Controls.Button { Tag: "PRIVACY.md" });
         Render((FrameworkElement)welcomeWindow.Content, 460, 480, Path.Combine(output, "welcome-small.png"));
         Check("Welcome supports compact window", welcomeWindow.MinWidth == 460 && welcomeWindow.MinHeight == 480);
         var startButton = (FrameworkElement)welcomeWindow.FindName("StartButton");

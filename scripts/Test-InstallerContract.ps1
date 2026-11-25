@@ -1,7 +1,8 @@
-$ErrorActionPreference='Stop'
+﻿$ErrorActionPreference='Stop'
 $source=Get-Content -LiteralPath (Join-Path (Split-Path $PSScriptRoot -Parent) 'packaging/inno/Nepply.iss') -Raw
 $repo=Split-Path $PSScriptRoot -Parent
-[xml]$appProject=Get-Content -LiteralPath (Join-Path $repo 'src/Nepply/Nepply.csproj') -Raw
+$appProjectText=Get-Content -LiteralPath (Join-Path $repo 'src/Nepply/Nepply.csproj') -Raw
+[xml]$appProject=$appProjectText
 [xml]$packageManifest=Get-Content -LiteralPath (Join-Path $repo 'packaging/msix/AppxManifest.xml') -Raw
 $minimumMatch=[regex]::Match($source,'(?m)^MinVersion=(\d+\.\d+\.\d+)\s*$')
 $minimum=if($minimumMatch.Success){[version]($minimumMatch.Groups[1].Value+'.0')}else{$null}
@@ -51,6 +52,10 @@ $checks=[ordered]@{
     'Failed recovery resets persisted HideIcons'=$source.Contains("RegWriteDWordValue(HKCU, ExplorerAdvancedKey, 'HideIcons', 0)") -and $uninstall.Contains('ClearPersistedHiddenDesktop();') -and $prepare.Contains('ClearPersistedHiddenDesktop();')
     'Recovery only applies to owned journal'=$source.Contains("DesktopLease = '{localappdata}\Nepply\desktop-visibility.lease';")
     'Manifest and optional symbols are both packaged'=$source.Contains('release-manifest.json') -and $source.Contains('*.pdb')
+    'All five legal documents are linked by the app and packaged by Setup'=@(@('LICENSE','TERMS.md','PRIVACY.md','SECURITY.md','THIRD_PARTY_NOTICES.md') | Where-Object {
+        -not $source.Contains("Source: `"{#PayloadRoot}\$_`"; DestDir: `"{app}`"; Flags: ignoreversion") -or
+        -not $appProjectText.Contains("Link=`"$_`"")
+    }).Count -eq 0
     'Guardian executable is required in its own directory'=$source.Contains('Source: "{#PayloadRoot}\guardian\Nepply.DesktopGuardian.exe"; DestDir: "{app}\guardian"; Flags: ignoreversion')
     'Startup cleanup checks ownership'=$source.Contains('CompareText(CurrentCommand, OwnedCommand) = 0')
     'Update waits for normal exit without killing app'=$source.Contains("CheckForMutexes('Local\Nepply-SetupGuard')") -and $source.Contains('Attempts < 600') -and $source.Contains('CloseApplications=no')
