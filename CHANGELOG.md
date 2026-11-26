@@ -23,12 +23,15 @@ Bản phát hành thử thứ ba, chưa ký số. Ngày phát hành được ghi
 ### Cài đặt và giao diện
 
 - Danh sách màn hình trong Cài đặt hiển thị tên màn hình Windows dễ đọc thay cho tên kỹ thuật như `DISPLAY1`, `DISPLAY2` (chỉ gắn kèm mã màn hình khi hai màn hình trùng tên).
-- Danh sách chọn card mạng trong Cài đặt ẩn các card đang tắt, loopback và switch ảo nội bộ (`vEthernet`, Hyper-V, Wi-Fi Direct, VirtualBox host-only, VMware, Teredo/ISATAP/6to4), đồng thời vẫn giữ các kết nối VPN đang hoạt động.
+- Danh sách chọn card mạng trong Cài đặt và chế độ tự chọn card mạng cùng dùng một bộ lọc: ẩn các card đang tắt, loopback và switch ảo nội bộ (`vEthernet`, Hyper-V, Wi-Fi Direct, VirtualBox host-only, VMware, Kernel Debug, Teredo/ISATAP/6to4), ưu tiên card vật lý có gateway và dự phòng sang VPN đang hoạt động.
 - Hộp thoại báo lỗi lưu bố cục giờ gắn đúng cửa sổ chủ, tiêu đề `Nepply` và biểu tượng cảnh báo.
+- Định vị panel trên hệ thống nhiều màn hình khác tỷ lệ DPI giờ gọi thẳng `SetWindowPos` theo tọa độ vật lý khi cửa sổ đã có handle để tránh bước nhảy trung gian sai DPI.
 
 ### Desktop và hiệu năng
 
 - Bỏ theo dõi sự kiện `LastWrite` trong bộ theo dõi Desktop để việc chỉnh sửa nội dung tệp trên Desktop không còn kích hoạt tiến trình quét lại mỗi 2 giây.
+- Một icon đơn lẻ vượt kích thước cho phép không còn làm cạn ngân sách ảnh của toàn bộ các icon Desktop đứng sau.
+- Menu chuột phải Shell của mục Desktop hỗ trợ `Shift + chuột phải` để hiện các lệnh mở rộng (như *Copy as path* / *Open in Terminal*) và truyền tọa độ `ptInvoke` cùng cờ Unicode khi thực thi lệnh.
 - Giảm cấp phát bộ nhớ tạm khi phân giải đường dẫn shortcut `.lnk`.
 
 ### Tài liệu và dùng thử cộng đồng

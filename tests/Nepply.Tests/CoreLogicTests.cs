@@ -92,6 +92,35 @@ internal static class CoreLogicTests
         var savedVirtualChoices = SettingsWindow.BuildNetworkChoices(networkFixtures, "WSL");
         check("Saved active virtual network adapter retains its friendly name without disconnected label",
             savedVirtualChoices.Single(c => c.Id == "WSL").Name == "vEthernet (WSL)");
+        SystemMetrics.NetworkAdapterCandidate[] autoNetworkFixtures =
+        [
+            new("npcap", "Ethernet 2", "Npcap Loopback Adapter", System.Net.NetworkInformation.NetworkInterfaceType.Ethernet, System.Net.NetworkInformation.OperationalStatus.Up, true, 10_000_000_000),
+            new("kdnet", "Ethernet 3", "Microsoft Kernel Debug Network Adapter", System.Net.NetworkInformation.NetworkInterfaceType.Ethernet, System.Net.NetworkInformation.OperationalStatus.Up, true, 10_000_000_000),
+            new("wsl", "vEthernet (WSL)", "Hyper-V Virtual Ethernet Adapter", System.Net.NetworkInformation.NetworkInterfaceType.Ethernet, System.Net.NetworkInformation.OperationalStatus.Up, true, 10_000_000_000),
+            new("vpn", "WireGuard", "WireGuard Tunnel", System.Net.NetworkInformation.NetworkInterfaceType.Tunnel, System.Net.NetworkInformation.OperationalStatus.Up, true, 100_000_000_000),
+            new("wifi", "Wi-Fi", "Intel(R) Dual Band Wireless-AC 8260", System.Net.NetworkInformation.NetworkInterfaceType.Wireless80211, System.Net.NetworkInformation.OperationalStatus.Up, true, 866_000_000),
+            new("eth-down", "Ethernet", "Realtek Gaming 2.5GbE Family Controller", System.Net.NetworkInformation.NetworkInterfaceType.Ethernet, System.Net.NetworkInformation.OperationalStatus.Down, true, 2_500_000_000)
+        ];
+        check("Auto network selection excludes loopback, kernel debug and virtual host switches and prefers physical adapter with gateway over high-speed tunnel",
+            SystemMetrics.SelectNetworkAdapterId(autoNetworkFixtures, "") == "wifi");
+        check("Auto network selection falls back to active VPN when no physical adapter is up",
+            SystemMetrics.SelectNetworkAdapterId(autoNetworkFixtures.Where(a => a.Id != "wifi"), "") == "vpn");
+        check("Explicit network selection honors case-insensitive active ID and rejects down adapter",
+            SystemMetrics.SelectNetworkAdapterId(autoNetworkFixtures, "VPN") == "vpn"
+            && SystemMetrics.SelectNetworkAdapterId(autoNetworkFixtures, "eth-down") == null);
+        check("Shell context menu query flags add CMF_EXTENDEDVERBS only when requested",
+            Nepply.Helpers.ShellContextMenu.BuildQueryFlags(false) == Nepply.Helpers.ShellContextMenu.CMF_NORMAL
+            && Nepply.Helpers.ShellContextMenu.BuildQueryFlags(true) == Nepply.Helpers.ShellContextMenu.CMF_EXTENDEDVERBS);
+        var invokePoint = new Nepply.Helpers.NativeInterop.POINT { X = 320, Y = 480 };
+        var normalInvoke = Nepply.Helpers.ShellContextMenu.BuildInvokeInfo((IntPtr)42, 7, invokePoint, System.Windows.Input.ModifierKeys.None);
+        var modifiedInvoke = Nepply.Helpers.ShellContextMenu.BuildInvokeInfo((IntPtr)42, 7, invokePoint, System.Windows.Input.ModifierKeys.Shift | System.Windows.Input.ModifierKeys.Control);
+        check("Shell context menu invoke sets Unicode, ptInvoke, verb offset and modifier masks",
+            normalInvoke.cbSize == System.Runtime.InteropServices.Marshal.SizeOf<Nepply.Helpers.NativeInterop.CMINVOKECOMMANDINFOEX>()
+            && normalInvoke.fMask == (Nepply.Helpers.ShellContextMenu.CMIC_MASK_UNICODE | Nepply.Helpers.ShellContextMenu.CMIC_MASK_PTINVOKE)
+            && normalInvoke.lpVerb == (IntPtr)6 && normalInvoke.lpVerbW == (IntPtr)6
+            && normalInvoke.ptInvoke.X == 320 && normalInvoke.ptInvoke.Y == 480
+            && modifiedInvoke.fMask == (Nepply.Helpers.ShellContextMenu.CMIC_MASK_UNICODE | Nepply.Helpers.ShellContextMenu.CMIC_MASK_PTINVOKE
+                | Nepply.Helpers.ShellContextMenu.CMIC_MASK_SHIFT_DOWN | Nepply.Helpers.ShellContextMenu.CMIC_MASK_CONTROL_DOWN));
         check("Snapshot collection immutable", typeof(HardwareInfoSnapshot).GetProperty("Drives")!.PropertyType == typeof(ImmutableArray<DiskDriveInfo>));
 
         var memory = SystemMetrics.ReadMemory();

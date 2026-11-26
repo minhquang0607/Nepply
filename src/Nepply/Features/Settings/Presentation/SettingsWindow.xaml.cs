@@ -140,25 +140,8 @@ public partial class SettingsWindow : Window
         SettingsContent.Margin = rail ? new Thickness(0, 0, 22, 0) : new Thickness(16, 0, 16, 0);
     }
     internal sealed record NetworkAdapterOption(string Id, string Name, string Description, NetworkInterfaceType Type, OperationalStatus Status);
-    internal static bool IsSelectableNetworkAdapter(NetworkAdapterOption adapter)
-    {
-        if (string.IsNullOrWhiteSpace(adapter.Id) || string.IsNullOrWhiteSpace(adapter.Name)) return false;
-        if (adapter.Status != OperationalStatus.Up || adapter.Type == NetworkInterfaceType.Loopback) return false;
-        if (adapter.Name.Contains("vEthernet", StringComparison.OrdinalIgnoreCase)
-            || adapter.Name.Contains("Loopback", StringComparison.OrdinalIgnoreCase))
-            return false;
-        string description = adapter.Description ?? "";
-        return !description.Contains("Loopback", StringComparison.OrdinalIgnoreCase)
-            && !description.Contains("Hyper-V Virtual", StringComparison.OrdinalIgnoreCase)
-            && !description.Contains("Wi-Fi Direct Virtual", StringComparison.OrdinalIgnoreCase)
-            && !description.Contains("Hosted Network Virtual", StringComparison.OrdinalIgnoreCase)
-            && !description.Contains("Kernel Debug", StringComparison.OrdinalIgnoreCase)
-            && !description.Contains("VirtualBox Host-Only", StringComparison.OrdinalIgnoreCase)
-            && !description.Contains("VMware Virtual", StringComparison.OrdinalIgnoreCase)
-            && !description.Contains("Teredo", StringComparison.OrdinalIgnoreCase)
-            && !description.Contains("ISATAP", StringComparison.OrdinalIgnoreCase)
-            && !description.Contains("6to4", StringComparison.OrdinalIgnoreCase);
-    }
+    internal static bool IsSelectableNetworkAdapter(NetworkAdapterOption adapter) =>
+        Services.SystemMetrics.IsSelectableNetworkAdapter(adapter.Id, adapter.Name, adapter.Description, adapter.Type, adapter.Status);
     internal static Choice[] BuildNetworkChoices(IEnumerable<NetworkAdapterOption> adapters, string selectedId)
     {
         var all = adapters.Where(a => !string.IsNullOrWhiteSpace(a.Id)).DistinctBy(a => a.Id, StringComparer.OrdinalIgnoreCase).ToArray();

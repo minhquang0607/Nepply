@@ -114,8 +114,14 @@ internal static class DesktopEntryReader
     internal static ImageSource? RetainImage(ImageSource? image, Dictionary<int, BitmapSource> cache, ref long remaining)
     {
         if (image is not BitmapSource bitmap) return null;
+        if (bitmap.PixelWidth is <= 0 or > DesktopImageBudget.MaximumDimension
+            || bitmap.PixelHeight is <= 0 or > DesktopImageBudget.MaximumDimension)
+        {
+            cache.Clear(); // Release any newly cached image rejected by dimension limits without exhausting remaining budget.
+            return null;
+        }
         long bytes = (long)bitmap.PixelWidth * bitmap.PixelHeight * 4;
-        if (bitmap.PixelWidth is <= 0 or > DesktopImageBudget.MaximumDimension || bitmap.PixelHeight is <= 0 or > DesktopImageBudget.MaximumDimension || bytes > remaining)
+        if (bytes > remaining)
         {
             cache.Clear(); // Release any newly cached image rejected by the producer budget.
             remaining = 0;

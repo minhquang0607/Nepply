@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using System.Windows.Input;
 using Nepply.Services;
 using DesktopIconModel = Nepply.Models.DesktopIcon;
 using static Nepply.Helpers.NativeInterop;
@@ -8,6 +9,34 @@ namespace Nepply.Helpers;
 /// <summary>Owns the Shell menu, COM references and PIDL for one synchronous invocation.</summary>
 internal static class ShellContextMenu
 {
+    internal const uint CMF_NORMAL = 0x00000000;
+    internal const uint CMF_EXTENDEDVERBS = 0x00000100;
+    internal const uint CMIC_MASK_UNICODE = 0x00004000;
+    internal const uint CMIC_MASK_SHIFT_DOWN = 0x10000000;
+    internal const uint CMIC_MASK_PTINVOKE = 0x20000000;
+    internal const uint CMIC_MASK_CONTROL_DOWN = 0x40000000;
+
+    internal static uint BuildQueryFlags(bool extendedVerbs) =>
+        extendedVerbs ? CMF_EXTENDEDVERBS : CMF_NORMAL;
+
+    internal static CMINVOKECOMMANDINFOEX BuildInvokeInfo(IntPtr hwnd, int cmd, POINT pt, ModifierKeys modifiers)
+    {
+        uint mask = CMIC_MASK_UNICODE | CMIC_MASK_PTINVOKE;
+        if ((modifiers & ModifierKeys.Shift) != 0) mask |= CMIC_MASK_SHIFT_DOWN;
+        if ((modifiers & ModifierKeys.Control) != 0) mask |= CMIC_MASK_CONTROL_DOWN;
+        IntPtr verb = (IntPtr)(cmd - 1);
+        return new CMINVOKECOMMANDINFOEX
+        {
+            cbSize = Marshal.SizeOf<CMINVOKECOMMANDINFOEX>(),
+            fMask = mask,
+            hwnd = hwnd,
+            lpVerb = verb,
+            lpVerbW = verb,
+            nShow = 1, // SW_SHOWNORMAL
+            ptInvoke = pt
+        };
+    }
+
     internal static UserMessage? Show(DesktopIconModel icon, IntPtr hwnd, System.Windows.Point? screenAnchor = null)
     {
         try
@@ -52,8 +81,9 @@ internal static class ShellContextMenu
                                 try
                                 {
                                     using var menuSession = new ShellMenuSession(hwnd, contextMenu);
-                                    // Populate the menu
-                                    int menuResult = contextMenu.QueryContextMenu(hMenu, 0, 1, 0x7FFF, 0); // CMF_NORMAL
+                                    // Populate the menu; only Shift+Right-click requests extended verbs (not Shift+F10 keyboard anchor).
+                                    uint queryFlags = BuildQueryFlags(screenAnchor == null && (Keyboard.Modifiers & ModifierKeys.Shift) != 0);
+                                    int menuResult = contextMenu.QueryContextMenu(hMenu, 0, 1, 0x7FFF, queryFlags);
                                     if (menuResult < 0) Marshal.ThrowExceptionForHR(menuResult);
 
                                     // Show the menu
@@ -69,15 +99,7 @@ internal static class ShellContextMenu
                                     if (cmd > 0)
                                     {
                                         // Execute the selected command
-                                        var cmi = new CMINVOKECOMMANDINFOEX
-                                        {
-                                            cbSize = Marshal.SizeOf<CMINVOKECOMMANDINFOEX>(),
-                                            fMask = 0,
-                                            hwnd = hwnd,
-                                            lpVerb = (IntPtr)(cmd - 1),
-                                            lpVerbW = (IntPtr)(cmd - 1),
-                                            nShow = 1 // SW_SHOWNORMAL
-                                        };
+                                        var cmi = BuildInvokeInfo(hwnd, cmd, pt, Keyboard.Modifiers);
                                         contextMenu.InvokeCommand(ref cmi);
                                     }
                                 }

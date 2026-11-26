@@ -23,12 +23,15 @@ Third release candidate, not code-signed. The release date is added when it reac
 ### Settings & interface
 
 - The display selector in Settings shows friendly Windows monitor names instead of technical names like `DISPLAY1` or `DISPLAY2`, appending the device code only when two displays share a name.
-- The network adapter selector in Settings hides disabled, loopback and internal virtual switches (`vEthernet`, Hyper-V, Wi-Fi Direct, VirtualBox host-only, VMware, Teredo/ISATAP/6to4) while keeping active VPN adapters.
+- Settings and automatic network selection now share one filter: hiding disabled, loopback and internal virtual switches (`vEthernet`, Hyper-V, Wi-Fi Direct, VirtualBox host-only, VMware, Kernel Debug, Teredo/ISATAP/6to4), preferring physical adapters with a gateway and falling back to active VPN connections.
 - The layout save failure prompt now opens with the panel as owner, the `Nepply` title and a warning icon.
+- Repositioning the panel across mixed-DPI monitors now calls `SetWindowPos` directly in physical coordinates once the window handle exists, avoiding an intermediate logical jump.
 
 ### Desktop & performance
 
 - Stopped watching `LastWrite` file-content events in `DesktopWatcherService` so modifying an existing file on the Desktop no longer triggers background rescans every 2 seconds.
+- A single oversized icon exceeding dimension limits no longer exhausts the decoded image budget for remaining Desktop icons.
+- The Desktop item Shell context menu now supports `Shift + right-click` for extended verbs (such as *Copy as path* / *Open in Terminal*) and passes `CMIC_MASK_UNICODE`, `CMIC_MASK_PTINVOKE` and `ptInvoke` when invoking commands.
 - Reduced temporary string allocations when reading `.lnk` shortcut destinations.
 
 ### Documentation & community testing

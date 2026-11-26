@@ -38,8 +38,20 @@ internal static class SecurityRegressionTests
         try { DesktopEntryReader.ReadBoundedEntries(Endless()); } catch (InvalidDataException) { capped = true; }
         check("Enumeration aborts at budget plus one", capped && visited == DesktopImageBudget.MaximumEntries + 1);
         var bitmap = System.Windows.Media.Imaging.BitmapSource.Create(2, 2, 96, 96, System.Windows.Media.PixelFormats.Bgra32, null, new byte[16], 8);
-        var cache = new Dictionary<int, System.Windows.Media.Imaging.BitmapSource> { { 1, bitmap } };
-        long remaining = 16;
+        var oversized = System.Windows.Media.Imaging.BitmapSource.Create(
+            DesktopImageBudget.MaximumDimension + 1, 1, 96, 96, System.Windows.Media.PixelFormats.Bgra32, null,
+            new byte[(DesktopImageBudget.MaximumDimension + 1) * 4], (DesktopImageBudget.MaximumDimension + 1) * 4);
+        var cache = new Dictionary<int, System.Windows.Media.Imaging.BitmapSource> { { 1, oversized } };
+        long remaining = 24;
+        check("Oversized single icon is rejected without exhausting remaining budget",
+            DesktopEntryReader.RetainImage(oversized, cache, ref remaining) == null && cache.Count == 0 && remaining == 24);
+        cache[2] = bitmap;
+        check("Producer retains valid icon after an oversized icon was skipped",
+            DesktopEntryReader.RetainImage(bitmap, cache, ref remaining) == bitmap && remaining == 8);
+        check("Producer rejects image exceeding partial remaining budget and stops further icon loads",
+            DesktopEntryReader.RetainImage(bitmap, cache, ref remaining) == null && cache.Count == 0 && remaining == 0);
+        cache[3] = bitmap;
+        remaining = 16;
         check("Producer retains image fitting exact pixel budget", DesktopEntryReader.RetainImage(bitmap, cache, ref remaining) == bitmap && remaining == 0);
         check("Producer rejects and releases cached image over budget", DesktopEntryReader.RetainImage(bitmap, cache, ref remaining) == null && cache.Count == 0);
         VerifyDrag(check);
