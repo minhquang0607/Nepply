@@ -3,11 +3,12 @@
 ## Phạm vi hiện tại
 
 Settings → Ứng dụng → Kiểm tra cập nhật. Tùy chọn **Tự kiểm tra cập nhật mỗi
-ngày** mặc định bật: mỗi ngày một yêu cầu, không gửi khi Windows báo không có
-mạng, thất bại thì thử lại sau 12 giờ và báo một lần ở khay sau hai lần thất bại
-liên tiếp. Chỉ báo ở khay hệ thống, không tải hay cài. Bản cài EXE có
-luồng tải/xác minh/bàn giao Setup; portable chỉ xem thông tin, chưa thay file;
-MSIX dùng Store và không gọi feed EXE.
+ngày** mặc định tắt (chỉ chạy sau khi hoàn tất màn hình chào và khi người dùng
+chủ động bật): mỗi ngày một yêu cầu, không gửi khi Windows báo không có mạng,
+thất bại thì thử lại sau 12 giờ và báo một lần ở khay sau hai lần thất bại liên
+tiếp. Chỉ báo ở khay hệ thống, không tải hay cài. Bản cài EXE có luồng
+tải/xác minh/bàn giao Setup; portable chỉ xem thông tin, chưa thay file; MSIX
+dùng Store và không gọi feed EXE.
 
 Feed cố định: `https://api.github.com/repos/minhquang0607/Nepply/releases?per_page=30`.
 Chỉ chọn bản mới hơn; stable không nhận prerelease, prerelease nhận cả hai. Chọn

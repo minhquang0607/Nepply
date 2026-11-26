@@ -448,10 +448,10 @@ public partial class MainWindow : Window
         }
         int width = placement.PixelWidth, height = placement.PixelHeight;
         int x = placement.X, y = placement.Y;
-        Left = x / scale; Top = y / scale;
         MainPanel.CornerRadius = new(26);
         var handle = new WindowInteropHelper(this).Handle;
         if (handle != IntPtr.Zero) ScreenManager.SetWindowPos(handle, IntPtr.Zero, x, y, width, height, 0x0014);
+        else { Left = x / scale; Top = y / scale; }
 
         return true;
     }

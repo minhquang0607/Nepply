@@ -127,8 +127,11 @@ internal static class ReleaseHardeningTests
         var resetLanguage = new AppSettings { Language = "fr", PanelWidth = 500 }; resetLanguage.ResetToDefaults();
         check("Reset preferences keeps the chosen language", resetLanguage.Language == "fr" && resetLanguage.PanelWidth == new AppSettings().PanelWidth);
         var welcomeChoice = new AppSettings();
-        OnboardingService.Complete(welcomeChoice, EdgePosition.Left, false, false, _ => { }, "de");
-        check("Welcome can turn the daily update check off", !welcomeChoice.AutoCheckUpdates);
+        OnboardingService.Complete(welcomeChoice, EdgePosition.Left, false, true, _ => { }, "de");
+        check("Welcome can opt in to the daily update check", welcomeChoice.AutoCheckUpdates);
+        var welcomeOptOut = new AppSettings { AutoCheckUpdates = true };
+        OnboardingService.Complete(welcomeOptOut, EdgePosition.Left, false, false, _ => { }, "de");
+        check("Welcome can turn the daily update check off", !welcomeOptOut.AutoCheckUpdates);
         SetupChoices(check);
         check("Windows startup off state is recognised", AutoStartService.IsStartupStateOff(new byte[] { 3, 0, 0, 0 }));
         check("Windows startup on state is recognised", !AutoStartService.IsStartupStateOff(new byte[] { 2, 0, 0, 0 }));

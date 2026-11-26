@@ -86,7 +86,7 @@ Khi Nepply chưa có chữ ký số, hai cách sau cho biết file đúng là b�
 
 ## 🛡️ Quyền riêng tư & hỗ trợ
 
-Không quảng cáo, analytics hay tự gửi báo cáo lỗi. Kiểm tra cập nhật kết nối GitHub mỗi ngày một lần (thử lại sau 12 giờ nếu thất bại) và khi bạn yêu cầu; bạn có thể tắt kiểm tra hằng ngày. [Quyền riêng tư — EN / VI](docs/legal/PRIVACY.md) · [Điều khoản sử dụng — EN / VI](docs/legal/TERMS.md)
+Không quảng cáo, analytics hay tự gửi báo cáo lỗi. Kiểm tra cập nhật chỉ kết nối GitHub khi bạn bấm kiểm tra hoặc chủ động bật kiểm tra hằng ngày (mặc định tắt; thử lại sau 12 giờ nếu thất bại). [Quyền riêng tư — EN / VI](docs/legal/PRIVACY.md) · [Điều khoản sử dụng — EN / VI](docs/legal/TERMS.md)
 
 - [Báo lỗi hoặc đề xuất](https://github.com/minhquang0607/Nepply/issues): ghi phiên bản và bước tái hiện; che dữ liệu cá nhân trong ảnh/log.
 - Đã thử bản phát hành thử? Chia sẻ phần chạy đúng và chưa đúng qua [form Báo cáo dùng thử](https://github.com/minhquang0607/Nepply/issues/new?template=test_report.yml). Xem [hướng dẫn dùng thử](docs/TESTING.md).

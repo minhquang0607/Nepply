@@ -1,4 +1,5 @@
 using System.Net.Http;
+using Nepply;
 using Nepply.Models;
 using Nepply.Modules.Settings;
 using Nepply.Modules.Updates;
@@ -20,7 +21,11 @@ internal static class BackgroundUpdateCheckTests
         using var job = new BackgroundUpdateCheck(() => enabled, token => { requests++; return respond(token); }, r => notified.Add(r.Tag), () => now,
             () => online, () => failureNotices++);
 
-        check("New settings turn the daily update check on", new AppSettings().AutoCheckUpdates);
+        check("New settings leave the daily update check off until opted in", !new AppSettings().AutoCheckUpdates);
+        check("Background update checks stay blocked before onboarding completes",
+            !App.CanRunBackgroundUpdateCheck(new AppSettings { AutoCheckUpdates = true, HasCompletedOnboarding = false })
+            && !App.CanRunBackgroundUpdateCheck(new AppSettings { AutoCheckUpdates = false, HasCompletedOnboarding = true })
+            && App.CanRunBackgroundUpdateCheck(new AppSettings { AutoCheckUpdates = true, HasCompletedOnboarding = true }));
         check("Turning the update check on needs no panel rebuild", SettingsChangeSet.Between(new AppSettings(), new AppSettings { AutoCheckUpdates = true }).CanPreviewWithoutRebuild);
         await job.TickAsync(default);
         check("Update check off sends no request", requests == 0 && notified.Count == 0);

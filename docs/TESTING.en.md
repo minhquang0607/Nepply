@@ -10,7 +10,7 @@ Nepply 2.0.0 is in release-candidate stage and the maintainer is looking for dev
 - Download only from [GitHub Releases](https://github.com/minhquang0607/Nepply/releases). Pick the newest version marked *Pre-release*.
 - The build is **not code-signed**, so SmartScreen may warn you. Do not disable SmartScreen, Smart App Control or antivirus to run it; if Windows blocks it completely, that is a result worth reporting.
 - If you installed `2.0.0-rc.1`, uninstall it first. Settings are kept unless you choose to remove data.
-- Read the [Terms of use](legal/TERMS.md#english) and [Privacy policy](legal/PRIVACY.md#english). Nepply sends nothing automatically except update checks to GitHub, which you can turn off.
+- Read the [Terms of use](legal/TERMS.md#english) and [Privacy policy](legal/PRIVACY.md#english). Nepply sends nothing over the network unless you ask for it; daily update checks are off by default until you opt in.
 
 ## If Desktop icons stay hidden
 

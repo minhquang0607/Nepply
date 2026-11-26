@@ -87,6 +87,14 @@ public partial class WelcomeWindow : Window
             ErrorText.SetResourceReference(System.Windows.Controls.TextBlock.TextProperty, "Loc.WelcomeSaveError");
         }
     }
+    private void OpenLocalDocument_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not System.Windows.Controls.Button { Tag: string fileName }) return;
+        string? path = SettingsWindow.FindLocalDocument(fileName);
+        if (path == null) { ErrorText.SetResourceReference(System.Windows.Controls.TextBlock.TextProperty, "Loc.LocalDocumentMissing"); return; }
+        try { System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(path) { UseShellExecute = true }); ErrorText.Text = ""; }
+        catch (Exception ex) { AppLogger.Error(ex, "Open local documentation"); ErrorText.SetResourceReference(System.Windows.Controls.TextBlock.TextProperty, "Loc.LocalDocumentError"); }
+    }
     private void Close_Click(object sender, RoutedEventArgs e) => Close();
     private void DragTitle(object sender, MouseButtonEventArgs e)
     {

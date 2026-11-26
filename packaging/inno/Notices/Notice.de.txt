@@ -8,4 +8,4 @@ Deaktivieren Sie niemals Sicherheitsfunktionen von Windows, um Nepply zu install
 - Datenschutz: keine Werbung, keine Analysen und kein automatisches Hochladen von Absturzberichten.
 
 Problem melden: https://github.com/minhquang0607/Nepply/issues
-Lizenz: MIT (siehe LICENSE). Komponenten von Drittanbietern behalten ihre eigenen Lizenzen (THIRD_PARTY_NOTICES.md).
+Lizenz: MIT (siehe LICENSE und TERMS.md). Komponenten von Drittanbietern behalten ihre eigenen Lizenzen (THIRD_PARTY_NOTICES.md).

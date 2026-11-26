@@ -8,4 +8,4 @@ Ne désactivez jamais les fonctions de sécurité de Windows pour installer ou e
 - Confidentialité : ni publicité, ni statistiques, ni envoi automatique de rapports de plantage.
 
 Signaler un problème : https://github.com/minhquang0607/Nepply/issues
-Licence : MIT (voir LICENSE). Les composants tiers conservent leurs propres licences (THIRD_PARTY_NOTICES.md).
+Licence : MIT (voir LICENSE et TERMS.md). Les composants tiers conservent leurs propres licences (THIRD_PARTY_NOTICES.md).

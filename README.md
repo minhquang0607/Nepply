@@ -86,7 +86,7 @@ Until Nepply is code-signed, these checks show that a file is the one this repos
 
 ## 🛡️ Privacy & support
 
-No ads, analytics or automatic crash uploads. Update checks contact GitHub once a day (again after 12 hours if a check fails) and when requested; you can turn the daily check off. [Privacy policy — EN / VI](docs/legal/PRIVACY.md) · [Terms of use — EN / VI](docs/legal/TERMS.md#english)
+No ads, analytics or automatic crash uploads. Update checks contact GitHub only when you request one or opt in to daily checks (retries after 12 hours if a check fails); daily checks are off by default. [Privacy policy — EN / VI](docs/legal/PRIVACY.md) · [Terms of use — EN / VI](docs/legal/TERMS.md#english)
 
 - [Report a bug or suggest a feature](https://github.com/minhquang0607/Nepply/issues). Include your version and steps; redact personal data from screenshots/logs.
 - Tried a release candidate? Share what worked and what did not with the [test report form](https://github.com/minhquang0607/Nepply/issues/new?template=test_report.yml). See the [testing guide](docs/TESTING.en.md).

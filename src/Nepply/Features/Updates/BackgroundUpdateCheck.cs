@@ -4,12 +4,13 @@ using Nepply.Services;
 namespace Nepply.Modules.Updates;
 
 /// <summary>
-/// The daily check, on by default and off in Settings. It only reports that a version
-/// exists: downloading and installing stay in the update window, behind explicit
-/// consent. When Windows reports no network, nothing is sent and nothing counts as a
-/// failure, so the check runs within an hour of the network coming back. A check that
-/// fails while the network is up is logged and retried after <see cref="RetryDelay"/>;
-/// the second failure in a row is reported once, until a check succeeds again.
+/// The daily check, off by default until opted in on the welcome screen or in Settings.
+/// It only reports that a version exists: downloading and installing stay in the update
+/// window, behind explicit consent. When Windows reports no network, nothing is sent and
+/// nothing counts as a failure, so the check runs within an hour of the network coming
+/// back. A check that fails while the network is up is logged and retried after
+/// <see cref="RetryDelay"/>; the second failure in a row is reported once, until a check
+/// succeeds again.
 /// </summary>
 internal sealed class BackgroundUpdateCheck(
     Func<bool> enabled,
